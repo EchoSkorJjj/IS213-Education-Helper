@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~shared/*": ["./src/shared/*"],
+      "~models/*": ["./src/shared/models/*"],
+      "~features/*": ["./src/features/*"],
+      "~locales/*": ["./src/shared/locales/*"],
+      "~api": ["./src/features/api/api"],
+      "~types": ["./src/shared/types"],
+      "~auth/*": ["./src/features/auth/*"]
+    }
+  }
+}

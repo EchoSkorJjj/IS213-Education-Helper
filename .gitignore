@@ -1,0 +1,4 @@
+.vscode
+**/*_password.txt
+.DS_Store
+node_modules

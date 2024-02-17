@@ -1,0 +1,21 @@
+{
+  "name": "esdtemplate",
+  "version": "1.0.0",
+  "description": "Root folder",
+  "main": "null",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "@commitlint/travis-cli": "^18.4.3",
+    "husky": "^8.0.3"
+  },
+  "author": "",
+  "license": "ISC"
+}

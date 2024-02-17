@@ -1,0 +1,10 @@
+# .eslintignore
+**/node_modules/**
+build/
+dev-dist/**
+// .eslintignore
+**/node_modules/*
+build/
+*eslintrc*
+.eslintrc.cjs
+vite.config.ts

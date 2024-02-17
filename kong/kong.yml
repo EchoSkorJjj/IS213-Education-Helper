@@ -1,0 +1,83 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: auth-service
+    url: http://auth-service
+    routes:
+      - name: auth
+        paths:
+          - /auth
+        strip_path: false
+
+  - name: service-one
+    url: http://service-one
+    routes:
+      - name: one
+        paths:
+          - /one
+        strip_path: false
+
+  - name: service-two
+    url: http://service-two
+    routes:
+      - name: two
+        paths:
+          - /two
+        strip_path: false
+
+  - name: service-three
+    url: http://service-three
+    routes:
+      - name: three
+        paths:
+          - /three
+        strip_path: false
+
+plugins:
+  - name: cors
+    config: 
+      origins:
+        - "*"
+      methods:
+        - HEAD
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+      headers:
+        - Access-Control-Allow-Origin
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - Authorization
+      exposed_headers:
+        - Authorization
+      credentials: true
+      max_age: 3600
+      preflight_continue: false
+
+  - name: rate-limiting
+    config: 
+      minute: 100
+      policy: local
+
+  - name: authn-kong
+    config:
+    # Sadly kong doesn't support env vars in config
+      jwt_secret: "KUKUBIRDAIDHAIDHAJKSDAJIDBQIheh09u2jeqinwdjnbqwsdifhnw0euq2e0nqwdo" 
+      refresh_url: "http://auth-service/auth/refresh"
+      logout_endpoint: "/auth/logout"
+      logout_url: "http://auth-service/auth/logout"
+      unauthenticated_endpoints: 
+        - "/auth/google/callback"
+      # Access rules based on permissions to limit access to service endpoints
+      role_access_rules:
+        "org.permissions.one.read": ["/one/ping"]
+        "org.permissions.one.write": ["/one/pong"]
+        "org.permissions.two.read": ["/two/ping"]
+        "org.permissions.three.read": ["/three/ping"]
