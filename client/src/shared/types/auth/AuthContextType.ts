@@ -4,6 +4,6 @@ export type AuthContextType = {
   isAuthenticated: boolean;
   user: UserData | null;
   googleAuth: () => void;
-  userStorageTest: () => void;
+  appleAuth: () => void;
   signOut: () => void;
 };

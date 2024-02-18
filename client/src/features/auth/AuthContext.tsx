@@ -44,9 +44,10 @@ const useProvideAuth = (): AuthContextType => {
 
         // Handle the response using the provided function
         const data = await handleResponse(response);
-        console.log(data);
+        const userData = JSON.parse(data.payload.value);
+        console.log(userData);
         login(data.user);
-        navigate("/dashboard");
+        navigate("/");
       } catch (error) {
         console.log(error);
       }
@@ -57,9 +58,13 @@ const useProvideAuth = (): AuthContextType => {
     flow: "auth-code",
   });
 
-  const userStorageTest = async (): Promise<void> => {
+  const appleAuth = async (): Promise<void> => {
     try {
-      const response = await api.get("/api/v1/user/test?message=neilgae");
+      const code = "neil";
+      const response = await api.post("/api/v1/auth/apple/callback", {
+        code,
+      });
+
       console.log(response.data.message);
     } catch (error) {
       console.log(error);
@@ -82,7 +87,7 @@ const useProvideAuth = (): AuthContextType => {
     isAuthenticated,
     user,
     googleAuth,
-    userStorageTest,
+    appleAuth,
     signOut,
   };
 };

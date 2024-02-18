@@ -4,8 +4,14 @@ return {
         { config = {
             type = "record",
             fields = {
-                -- Dummy field
-                { enabled = { type = "boolean", default = true, required = false } },
+                {
+                    public_paths = {
+                      type = "array",
+                      default = {},
+                      required = false,
+                      elements = { type = "string" },
+                    }
+                },
             },
           },
         },

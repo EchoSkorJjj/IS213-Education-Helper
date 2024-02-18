@@ -5,35 +5,16 @@ package user_storage_pb;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/any.proto";
 
-message TestRequest {
-  string message = 1;
-}
-
-message TestResponse {
-  string message = 1;
-}
-
 // Simplified Metadata for responses
 message ResponseMetadata {
   string request_id = 1;
   google.protobuf.Timestamp timestamp = 2;
-  bool success = 3;
-  string error_message = 4; // Simplified error handling
-}
-
-// Custom error response
-message ErrorResponse {
-  int32 code = 1;
-  string message = 2;
 }
 
 // General response wrapper for all service responses
 message ServiceResponseWrapper {
   ResponseMetadata metadata = 1;
-  oneof result {
-    google.protobuf.Any payload = 2; // Flexible payload using Any
-    ErrorResponse error = 3;         // Error details
-  }
+  google.protobuf.Any payload = 2; // Flexible payload using Any
 }
 
 // Simplified User definition for demonstration
@@ -47,23 +28,19 @@ message User {
 
 // Request and response messages
 message AuthRequest {
-  string request_id = 1;
-  string google_oauth_code = 2;
+  string code = 1;
 }
 
 message GetUserRequest {
-  string request_id = 1;
-  string user_id = 2;
+  string user_id = 1;
 }
 
 message UpdateUserRequest {
-  string request_id = 1;
-  User user = 2; // Using User message for updates
+  User user = 1; // Using User message for updates
 }
 
 message DeleteUserRequest {
-  string request_id = 1;
-  string user_id = 2;
+  string user_id = 1;
 }
 
 message HealthCheckRequest {
@@ -76,8 +53,8 @@ message HealthCheckResponse {
 
 // Service definition with CRUD operations and health check
 service UserStorage {
-  rpc Test(TestRequest) returns (TestResponse);
-  rpc Authenticate(AuthRequest) returns (ServiceResponseWrapper);
+  rpc GoogleAuth(AuthRequest) returns (ServiceResponseWrapper);
+  rpc AppleAuth(AuthRequest) returns (ServiceResponseWrapper);
   rpc GetUser(GetUserRequest) returns (ServiceResponseWrapper);
   rpc UpdateUser(UpdateUserRequest) returns (ServiceResponseWrapper);
   rpc DeleteUser(DeleteUserRequest) returns (ServiceResponseWrapper);

@@ -14,6 +14,7 @@ services:
           - http
         paths:
           - /api/v1/user
+          - /api/v1/auth
         plugins:
           - name: grpc-gateway
             config:
@@ -46,7 +47,19 @@ plugins:
       max_age: 3600
       preflight_continue: false
 
+  - name: correlation-id
+    config:
+      header_name: Kong-Request-ID
+      generator: tracker
+      echo_downstream: false
+
   - name: rate-limiting
     config: 
       minute: 100
       policy: local
+
+  - name: authn-kong
+    config:
+      public_paths:
+        - /api/v1/auth/google/callback
+        - /api/v1/auth/apple/callback
