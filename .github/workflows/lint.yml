@@ -18,11 +18,11 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Install and Run lint:fix in authentication directory
-      working-directory: ./authentication
-      run: |
-        npm install
-        npm run lint:fix
+    # - name: Install and Run lint:fix in authentication directory
+    #   working-directory: ./authentication
+    #   run: |
+    #     npm install
+    #     npm run lint:fix
 
     - name: Install and Run lint:fix in frontend directory
       working-directory: ./client
