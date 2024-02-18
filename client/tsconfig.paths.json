@@ -2,13 +2,12 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "~components/*": ["./src/components/*"],
+      "~pages/*": ["./src/pages/*"],
       "~shared/*": ["./src/shared/*"],
-      "~models/*": ["./src/shared/models/*"],
+      "~types/*": ["./src/shared/types/*"],
       "~features/*": ["./src/features/*"],
-      "~locales/*": ["./src/shared/locales/*"],
-      "~api": ["./src/features/api/api"],
-      "~types": ["./src/shared/types"],
-      "~auth/*": ["./src/features/auth/*"]
+      "~api": ["./src/features/api"]
     }
   }
 }

@@ -3,12 +3,6 @@ version: "3.8"
 secrets:
   kong_db_password:
     file: ./kong_db_password.txt
-  mysql_root_password:
-    file: ./mysql_root_password.txt
-  mysql_password:
-    file: ./mysql_password.txt
-  redis_password:
-    file: ./redis_password.txt
 
 x-common-env:
   &common-env
@@ -20,28 +14,12 @@ networks:
   default:
 
 volumes:
-  mysql-data: {}
   kong-data: {}
 
 services:
-  nginx:
-    image: nginx:nginx-latest
-    restart: always
-    build:
-      context: ../config
-      dockerfile: Dockerfile
-    ports:
-      - 80:80
-      - 443:443
-    depends_on:
-      kong-gateway:
-        condition: service_started
-      frontend-client:
-        condition: service_started
-
   kong-gateway:
     image: kong:latest
-    build: ../../kong
+    build: ../../kong-gateway
     environment:
       <<: *common-env
       KONG_DATABASE: off
@@ -61,73 +39,18 @@ services:
       - kong_db_password
     restart: on-failure
     volumes:
-      - ../../kong/kong.yml:/etc/kong/kong.yml 
-      - ../../kong/authn-kong:/usr/local/share/lua/5.1/kong/plugins/authn-kong 
+      - ../../kong-gateway/kong.yml:/etc/kong/kong.yml 
+      - ../../kong-gateway/authn-kong:/usr/local/share/lua/5.1/kong/plugins/authn-kong 
+      - ../../kong-gateway/protos:/usr/local/share/lua/5.1/kong/protos
 
-  mysqldb:
-    image: mysql:8.0.29
-    environment:
-      MYSQL_DATABASE: "my_db"
-    volumes:
-      - mysql-data:/var/lib/mysql
-      - ./scripts/mysqldb_init.sh:/etc/mysqldb_init.sh
-      - ./scripts/mysqldb_update_privileges.sh:/docker-entrypoint-initdb.d/mysqldb_update_privileges.sh
-    command: ["sh", "/etc/mysqldb_init.sh", "/run/secrets/mysql_password", "/run/secrets/mysql_root_password"]
-    healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        timeout: 20s
-        retries: 10
-    read_only: false
-    secrets:
-      - mysql_password
-      - mysql_root_password
-
-  cache-service:
-    image: redis:7.2-rc2-alpine3.18
-    volumes:
-      - ./scripts/redis_init.sh:/etc/redis_init.sh
-    command: ["sh", "/etc/redis_init.sh", "/run/secrets/redis_password"]
-    healthcheck:
-      test: ["CMD", "redis-cli", "-a", "/run/secrets/redis_password", "--raw", "incr", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    secrets:
-      - redis_password
-
-  service-one:
-    build: ../../downstream-services/service-one
-    image: service-one:1.0
+  user-storage-service:
+    build: ../../user-storage
+    image: user-storage-service:1.0
     depends_on:
-      mysqldb:
-        condition: service_healthy
       kong-gateway:
         condition: service_healthy
-      cache-service:
-        condition: service_healthy
-
-  service-two:
-    build: ../../downstream-services/service-two
-    image: service-two:1.0
-    depends_on:
-      - kong-gateway
-  
-  service-three:
-    build: ../../downstream-services/service-three
-    image: service-three:1.0
-    depends_on:
-      - kong-gateway
-
-  auth-service:
-    build: ../../authentication
-    image: auth-service:1.0
-    depends_on:
-      mysqldb:
-        condition: service_healthy
-      kong-gateway:
-        condition: service_healthy
-      cache-service:
-        condition: service_healthy
+    ports:
+      - "50051:50051"
 
   frontend-client:
     build: ../../client
@@ -136,4 +59,4 @@ services:
       kong-gateway:
         condition: service_healthy
     ports:
-      - "8080:5173"
+      - "5173:5173"

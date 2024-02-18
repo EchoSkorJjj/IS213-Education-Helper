@@ -1,0 +1,6 @@
+version: v1
+plugins:
+  - name: ts
+    out: pb
+    opt: grpc_js
+    path: ./node_modules/.bin/protoc-gen-ts

@@ -1,15 +1,18 @@
 # Use an official Node.js runtime as a parent image
-FROM node:slim
+FROM node:current-alpine3.19
 
+# RUN apt update && apt install curl -y
 # Set the working directory in the container to /app
 WORKDIR /app
 
-# Copying all the files in our project
-COPY . .
+# Copying package.json and package-lock.json first for better cache utilization
+COPY package*.json ./
 
 # Installing dependencies
-RUN apt update && apt install curl -y
 RUN npm install
+
+# Copying the rest of the files in our project
+COPY . .
 
 # Starting our application
 CMD [ "npm", "run", "dev" ]

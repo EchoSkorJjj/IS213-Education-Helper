@@ -1,40 +1,30 @@
-# Structure
+# React + TypeScript + Vite
 
-The project directory structure is inspired by the [Hospital Run project](https://github.com/HospitalRun/hospitalrun-frontend).
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-# I18N configuration
+Currently, two official plugins are available:
 
-## TODO:
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- [ ] Add localstorage hook to persist the user choice
-- [ ] create a component to switch the language
+## Expanding the ESLint configuration
 
-# SEO Configuration
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-## TODO:
+- Configure the top-level `parserOptions` property like this:
 
-- [ ] Add ability to auto generate sitemap.xml
-- [ ] More configuration options in the useHead hook to improve SEO
-
-## useHead() hook
-
-useHead hook can be used to update the title and some meta tags for the page itself
-
-```typescript
-useHead("My Page Title", {
-  description: "Page description",
-  keywords: "keyword1, keyword2",
-});
+```js
+export default {
+  // other rules...
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: ["./tsconfig.json", "./tsconfig.node.json"],
+    tsconfigRootDir: __dirname,
+  },
+};
 ```
 
-## Manual edits and changes
-
-1. Please configure the `meta` tag for `theme-color` based on the theme color that you have picked and configured in the chakraUI theme.
-2. Also update the public directory to include the following files
-   1. /favicon.ico
-   2. /apple-touch-icon.png sizes="180x180"
-   3. /mask-icon.svg
-
-## Vite PWA configuration
-
-refer to vite.config.ts for more information
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list

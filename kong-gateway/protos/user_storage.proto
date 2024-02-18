@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package user_storage_pb;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// Simplified Metadata for responses
+message ResponseMetadata {
+    string request_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    bool success = 3;
+    string error_message = 4; // Simplified error handling
+}
+  
+// Custom error response
+message ErrorResponse {
+    int32 code = 1;
+    string message = 2;
+}
+  
+// General response wrapper for all service responses
+message ServiceResponseWrapper {
+    ResponseMetadata metadata = 1;
+    oneof result {
+      google.protobuf.Any payload = 2; // Flexible payload using Any
+      ErrorResponse error = 3;         // Error details
+    }
+}
+message TestRequest {
+    string message = 1;
+}
+
+message TestResponse {
+    string message = 1;
+}
+  
+// Simplified User definition for demonstration
+message User {
+    string user_id = 1;
+    string username = 2;
+    string first_name = 3;
+    string last_name = 4;
+    string email = 5;
+}
+  
+// Request and response messages
+message AuthRequest {
+    string request_id = 1;
+    string google_oauth_code = 2;
+}
+  
+message GetUserRequest {
+    string request_id = 1;
+    string user_id = 2;
+}
+  
+message UpdateUserRequest {
+    string request_id = 1;
+    User user = 2; // Using User message for updates
+}
+  
+message DeleteUserRequest {
+    string request_id = 1;
+    string user_id = 2;
+}
+  
+message HealthCheckRequest {
+    // Empty request for health check
+}
+  
+message HealthCheckResponse {
+    string status = 1;
+}
+
+service UserStorage {
+    rpc Test(TestRequest) returns (TestResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/user/test"
+        };
+    }
+
+    rpc Authenticate(AuthRequest) returns (ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/user/auth"
+            body: "*"
+        };
+    }
+
+    rpc GetUser(GetUserRequest) returns (ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/user/get"
+            body: "*"
+        };
+    }
+
+    rpc UpdateUser(UpdateUserRequest) returns (ServiceResponseWrapper) {
+        option (google.api.http) = {
+            patch: "/api/v1/user/update"
+            body: "*"
+        };
+    }
+
+    rpc DeleteUser(DeleteUserRequest) returns (ServiceResponseWrapper) {
+        option (google.api.http) = {
+            delete: "/api/v1/user/delete"
+            body: "*"
+        };
+    }
+    
+    rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse);
+};

@@ -2,7 +2,7 @@ import { EncryptStorage } from "encrypt-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { AuthStateType, ZustandStorageType } from "~types";
+import { AuthStateType, ZustandStorageType } from "~types/store";
 
 const STORAGE_KEY = import.meta.env.VITE_STORAGE_KEY;
 
@@ -43,18 +43,15 @@ const useAuthStore = create<AuthStateType>()(
     (set) => ({
       isAuthenticated: false,
       user: null,
-      role: null,
-      login: (userData, roleData) => {
+      login: (userData) => {
         set({
           user: userData,
-          role: roleData,
           isAuthenticated: true,
         });
       },
       logout: () => {
         set({
           user: null,
-          role: null,
           isAuthenticated: false,
         });
       },

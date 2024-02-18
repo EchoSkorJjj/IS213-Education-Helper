@@ -1,0 +1,52 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: user-storage-service
+    host: user-storage-service
+    port: 50051
+    protocol: grpc
+    tags:
+      - user-storage-service
+    routes:
+      - name: user-storage
+        protocols:
+          - http
+        paths:
+          - /api/v1/user
+        plugins:
+          - name: grpc-gateway
+            config:
+              proto: /usr/local/share/lua/5.1/kong/protos/user_storage.proto
+
+plugins:
+  - name: cors
+    config: 
+      origins:
+        - "http://localhost:5173"
+      methods:
+        - HEAD
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+      headers:
+        - Access-Control-Allow-Origin
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - Authorization
+      exposed_headers:
+        - Authorization
+      credentials: true
+      max_age: 3600
+      preflight_continue: false
+
+  - name: rate-limiting
+    config: 
+      minute: 100
+      policy: local

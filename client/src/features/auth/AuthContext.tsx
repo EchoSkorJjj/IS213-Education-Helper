@@ -1,18 +1,12 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@chakra-ui/react";
-import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
-import { AxiosError } from "axios";
+// import { useToast } from "@chakra-ui/react";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import useAuthStore from "~shared/store/AuthStore";
 
-import {
-  api,
-  createErrorHandler,
-  createGoogleErrorHandler,
-  handleResponse,
-} from "~api";
-import { AuthContextType } from "~types";
+import { api, handleResponse } from "~api";
+import { AuthContextType } from "~types/auth";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -33,8 +27,8 @@ export const useAuth = (): AuthContextType => {
 };
 
 const useProvideAuth = (): AuthContextType => {
-  const { isAuthenticated, user, role, login, logout } = useAuthStore();
-  const toast = useToast();
+  const { isAuthenticated, user, login, logout } = useAuthStore();
+  // const toast = useToast();
   const navigate = useNavigate();
 
   const googleAuth = useGoogleLogin({
@@ -44,84 +38,51 @@ const useProvideAuth = (): AuthContextType => {
           setTimeout(resolve, 0);
         });
 
-        const response = await api.post("/auth/google/callback", { code });
+        const response = await api.post("/api/v1/auth/google/callback", {
+          code,
+        });
 
         // Handle the response using the provided function
         const data = await handleResponse(response);
         console.log(data);
-        login(data.user, data.role);
+        login(data.user);
         navigate("/dashboard");
       } catch (error) {
-        createErrorHandler(toast)(error as AxiosError<unknown>); // using the modified errorHandler to use toast
+        console.log(error);
       }
     },
     onError: (error): void => {
-      createGoogleErrorHandler(toast)(error as CodeResponse); // using the modified errorHandler to use toast
+      console.log(error);
     },
     flow: "auth-code",
   });
 
-  const checkServiceOne = async (): Promise<void> => {
+  const userStorageTest = async (): Promise<void> => {
     try {
-      const response = await api.get("/one/ping");
-      console.log(response.data);
+      const response = await api.get("/api/v1/user/test?message=neilgae");
+      console.log(response.data.message);
     } catch (error) {
-      createErrorHandler(toast)(error as AxiosError<unknown>);
+      console.log(error);
     }
   };
 
-  const checkServiceOnePong = async (): Promise<void> => {
+  const signOut = async (): Promise<void> => {
     try {
-      const response = await api.get("/one/pong");
-      console.log(response.data);
-    } catch (error) {
-      createErrorHandler(toast)(error as AxiosError<unknown>);
-    }
-  };
-
-  const checkServiceTwo = async (): Promise<void> => {
-    try {
-      const response = await api.get("/two/ping");
-      console.log(response.data);
-    } catch (error) {
-      createErrorHandler(toast)(error as AxiosError<unknown>);
-    }
-  };
-
-  const checkServiceThree = async (): Promise<void> => {
-    try {
-      const response = await api.get("/three/ping");
-      console.log(response.data);
-    } catch (error) {
-      createErrorHandler(toast)(error as AxiosError<unknown>);
-    }
-  };
-
-  const googleLogout = async (): Promise<void> => {
-    try {
-      const response = await api.post("/auth/logout");
+      const response = await api.post("/api/v1/user/logout");
       if (response.status === 200 && isAuthenticated) {
         logout();
         navigate("/");
       }
     } catch (error) {
-      createErrorHandler(toast)(error as AxiosError<unknown>);
+      console.log(error);
     }
   };
-
-  useEffect(() => {
-    // Logic to  perform other initialization tasks
-  }, [isAuthenticated, user, role]);
 
   return {
     isAuthenticated,
     user,
-    role,
     googleAuth,
-    checkServiceOne,
-    checkServiceOnePong,
-    checkServiceTwo,
-    checkServiceThree,
-    googleLogout,
+    userStorageTest,
+    signOut,
   };
 };

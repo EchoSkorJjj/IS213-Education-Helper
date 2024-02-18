@@ -2,43 +2,36 @@ import "inter-ui/inter.css";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
+import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ThemeProvider } from "@opengovsg/design-system-react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import customTheme from "~shared/theme";
 
-import { HeadProvider } from "~features/page-header/title/TitleContext";
+import { AuthProvider } from "~features/auth";
 
 import App from "./App";
 
-import { AuthProvider } from "~auth/index";
+const helmetContext = {};
+
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <ChakraProvider theme={customTheme}>
-        <GoogleOAuthProvider
-          clientId={
-            import.meta.env.VITE_GOOGLE_CLIENT_ID || "Nothing-Ever-Works"
-          }
-        >
+      <GoogleOAuthProvider clientId={clientId}>
+        <ThemeProvider theme={customTheme}>
           <BrowserRouter>
             <AuthProvider>
-              <HeadProvider>
+              <HelmetProvider context={helmetContext}>
                 <App />
-              </HeadProvider>
+              </HelmetProvider>
             </AuthProvider>
           </BrowserRouter>
-        </GoogleOAuthProvider>
-      </ChakraProvider>
+        </ThemeProvider>
+      </GoogleOAuthProvider>
     </React.StrictMode>,
   );
 }
-/*
- * Apparently, vite does not natively ship with a service worker.
- * https://stackoverflow.com/questions/69961761/react-js-builds-with-vite-does-not-include-service-worker-ts
- * Hence need to install a module to do it for us.
- * Please check vite.config.ts to configure the service worker.
- */

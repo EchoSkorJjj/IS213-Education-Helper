@@ -1,9 +1,9 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-cd authentication
-npm run lint:fix
-cd ..
+# cd user-storage
+# npm run lint:fix
+# cd ..
 
 cd client
 npm run lint:fix

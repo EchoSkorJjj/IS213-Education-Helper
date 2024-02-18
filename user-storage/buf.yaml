@@ -1,0 +1,13 @@
+version: v1
+name: buf.build/ESD-project/authentication
+breaking:
+  use:
+    - FILE
+build:
+  excludes:
+    - node_modules
+lint:
+  use:
+    - DEFAULT
+    - COMMENTS
+    - PACKAGE_NO_IMPORT_CYCLE
