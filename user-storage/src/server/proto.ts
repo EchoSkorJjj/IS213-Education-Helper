@@ -3,6 +3,8 @@ import path from 'path';
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 
+import DatabaseConnection from '../models/connection/connection';
+
 import logger from '../logger/logger';
 import { toPascalCase } from "../utils";
 
@@ -53,11 +55,16 @@ class GRPCServer {
         }
     }
 
-    public start(): void {
+    public async start(): Promise<void> {
         if (this.started) {
             logger.error('Server has already started');
             return;
         }
+
+        // Initialise db, even if we are not using it yet.
+        // This is to make sure that it is ready when we need it.
+        const dataSource = DatabaseConnection.getInstance().getDataSource();
+        await dataSource.initialize();
 
         this.server.bindAsync(this.port, grpc.ServerCredentials.createInsecure(), (err, port) => {
             if (err) {

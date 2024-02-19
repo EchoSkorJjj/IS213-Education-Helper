@@ -50,7 +50,7 @@ plugins:
   - name: correlation-id
     config:
       header_name: Kong-Request-ID
-      generator: tracker
+      generator: uuid
       echo_downstream: false
 
   - name: rate-limiting

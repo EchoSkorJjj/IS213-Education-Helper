@@ -37,7 +37,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
 
             // Create a payload
             const payload = getPayload('user_storage.AuthResponse', {
-                username: userData.name,
+                username: userData.username,
                 email: userData.email,
                 role: 'User'
             });

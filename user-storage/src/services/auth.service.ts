@@ -32,8 +32,7 @@ class AuthService {
                 const userData: GoogleUserInfo = await this.googleAPIService.getUserData(
                     userCredentials.access_token,
                 );
-                
-                const user = await this.userService.findOrCreateUser(userData);
+                const user = this.userService.findOrCreateUser(userData);
                 return user;
             } catch (error) {
                 throw error;

@@ -19,6 +19,7 @@ class DatabaseConnection {
             synchronize: false,
             logging: false,
             entitySkipConstructor: true,
+            migrationsTableName: 'migrations',
         });
     }
 
