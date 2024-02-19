@@ -1,21 +1,20 @@
 import * as grpc from '@grpc/grpc-js';
 import { user_storage_pb } from '../../pb/user_storage';
-import * as google_timestamp from '../../pb/google/protobuf/timestamp';
-import * as google_any from '../../pb/google/protobuf/any';
 import logger from '../logger/logger';
+
+import AuthService from '../services/auth.service';
+
+import { dateToGoogleTimeStamp, getPayload, getResponseMetaData, getServiceResponse, getMetaData } from '../utils';
+
 class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
-    GoogleAuth(call: grpc.ServerUnaryCall<user_storage_pb.AuthRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): void {
+    async GoogleAuth(call: grpc.ServerUnaryCall<user_storage_pb.AuthRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): Promise<void> {
         const metadata = call.metadata.getMap();
     
-        // Retrieve the Kong request ID from the metadata
-        const request_id_raw = metadata['kong-request-id'];
-        const request_id = Array.isArray(request_id_raw) ? request_id_raw[0] : request_id_raw;
-        const request_id_str = typeof request_id === 'string' ? request_id : request_id?.toString();
+        const request_id = getMetaData(metadata, 'kong-request-id');
 
         const code = call.request.code;
 
         logger.info(request_id);
-        logger.info(code);
 
         if (!code) {
             const error = {
@@ -26,33 +25,35 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             return;
         }
 
-        // Current time in seconds and nanoseconds for the Timestamp
-        const now = new Date();
-        const seconds = Math.floor(now.getTime() / 1000);
-        const nanos = (now.getTime() % 1000) * 1000000;
+        try {
+            const authService = new AuthService();
 
-        const timestamp = new google_timestamp.google.protobuf.Timestamp({
-            seconds: seconds,
-            nanos: nanos
-        });
+            // Get user data from Google API
+            const userData = await authService.handleGoogleLogin(code);
 
-        const responseMetadata = new user_storage_pb.ResponseMetadata();
-        responseMetadata.request_id = request_id_str;
-        responseMetadata.timestamp = timestamp;
+            // Current date and convert to Google Timestamp
+            const currentDate = new Date();
+            const timestamp = dateToGoogleTimeStamp(currentDate);
 
-        const payload = new google_any.google.protobuf.Any({
-            type_url: 'google.protobuf.StringValue',
-            value: Buffer.from(JSON.stringify({
-                username: 'testuser',
-                role: 'Admin'
-            }))
-        })
+            // Create a payload
+            const payload = getPayload('user_storage.AuthResponse', {
+                username: userData.name,
+                email: userData.email,
+                role: 'User'
+            });
 
-        const serviceResponse = new user_storage_pb.ServiceResponseWrapper();
-        serviceResponse.metadata = responseMetadata;
-        serviceResponse.payload = payload;
+            const responseMetadata = getResponseMetaData(request_id, timestamp);
+            const serviceResponse = getServiceResponse(responseMetadata, payload);
 
-        callback(null, serviceResponse);
+            callback(null, serviceResponse);
+        } catch (err: any) {
+            logger.error(err);
+            const error = {
+                code: grpc.status.INTERNAL,
+                message: err.message,
+            };
+            callback(error, null);
+        }
     }
 
     AppleAuth(call: grpc.ServerUnaryCall<user_storage_pb.AuthRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): void {

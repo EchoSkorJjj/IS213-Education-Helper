@@ -4,7 +4,7 @@ import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 
 import logger from '../logger/logger';
-import stringUtils from '../utils/strings';
+import { toPascalCase } from "../utils";
 
 class GRPCServer {
     private static instance: GRPCServer;
@@ -42,7 +42,7 @@ class GRPCServer {
         const protoPbKey = protoName + '_pb';
 
         if (typeof protoDescriptor[protoPbKey] == 'object') {
-            const protoServiceKey = stringUtils.toPascalCase(protoName);
+            const protoServiceKey = toPascalCase(protoName);
 
             const serviceClient = (protoDescriptor[protoPbKey] as { [key: string]: any })[protoServiceKey];
             this.server.addService(serviceClient.service, new serviceDefinitions.default());

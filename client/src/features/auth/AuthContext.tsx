@@ -44,6 +44,7 @@ const useProvideAuth = (): AuthContextType => {
 
         // Handle the response using the provided function
         const data = await handleResponse(response);
+        console.log(data);
         const userData = JSON.parse(data.payload.value);
         console.log(userData);
         login(data.user);
