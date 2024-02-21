@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message Notes {
+  string userId = 1;
+  string fileId = 2; 
+  bytes file = 3; 
+  FileMetadata metadata = 4; 
+  string filetype = 5; 
+}
+
+message FileMetadata {
+  string title = 1;
+  int64 pagecount = 2; 
+  int64 filesize = 3;
+  string locale = 4;
+}
