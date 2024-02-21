@@ -7,6 +7,13 @@ interface ImportMetaEnv {
   readonly VITE_GOOGLE_CLIENT_ID: string;
   readonly VITE_LOCATIONIQ_ACCESS_TOKEN: string;
   readonly VITE_STORAGE_KEY: string;
+  readonly VITE_URL_ENVIRONMENT_PREFIX: string;
+  readonly VITE_MYINFO_CLIENT_ID: string;
+  readonly VITE_MYINFO_REDIRECT_URL: string;
+  readonly VITE_MYINFO_SCOPE: string;
+  readonly VITE_MYINFO_PURPOSE_ID: string;
+  readonly VITE_MYINFO_AUTH_API_URL: string;
+  readonly VITE_MYINFO_METHOD: string;
 }
 
 interface ImportMeta {

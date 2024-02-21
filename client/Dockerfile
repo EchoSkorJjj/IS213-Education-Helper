@@ -5,6 +5,8 @@ FROM node:current-alpine3.19
 # Set the working directory in the container to /app
 WORKDIR /app
 
+ENV NODE_ENV=development
+
 # Copying package.json and package-lock.json first for better cache utilization
 COPY package*.json ./
 

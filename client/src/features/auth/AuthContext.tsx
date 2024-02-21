@@ -6,6 +6,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import useAuthStore from "~shared/store/AuthStore";
 
 import { api, handleResponse } from "~api";
+import { MYINFO_CONFIG } from "~config";
 import { AuthContextType } from "~types/auth";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,7 +28,8 @@ export const useAuth = (): AuthContextType => {
 };
 
 const useProvideAuth = (): AuthContextType => {
-  const { isAuthenticated, user, login, logout } = useAuthStore();
+  const { isAuthenticated, user, authorization, login, logout, authFlow } =
+    useAuthStore();
   // const toast = useToast();
   const navigate = useNavigate();
 
@@ -41,13 +43,12 @@ const useProvideAuth = (): AuthContextType => {
         const response = await api.post("/api/v1/auth/google/callback", {
           code,
         });
+        const AUTHORIZATION_TOKEN = response.headers["x-access-token"];
 
-        // Handle the response using the provided function
         const data = await handleResponse(response);
-        console.log(data);
         const userData = JSON.parse(data.payload.value);
-        console.log(userData);
-        login(data.user);
+
+        login(userData, AUTHORIZATION_TOKEN);
         navigate("/");
       } catch (error) {
         console.log(error);
@@ -59,14 +60,112 @@ const useProvideAuth = (): AuthContextType => {
     flow: "auth-code",
   });
 
-  const appleAuth = async (): Promise<void> => {
+  const myInfoGetCode = async (): Promise<void> => {
     try {
-      const code = "neil";
-      const response = await api.post("/api/v1/auth/apple/callback", {
-        code,
-      });
+      const response = await api.post(
+        "/api/v1/auth/myInfo/generateCodeChallenge",
+      );
+      const result = response.data.code_challenge;
+      const MYINFO_UNIQUE_ID = response.headers["x-myinfo-unique-id"];
 
-      console.log(response.data.message);
+      authFlow(MYINFO_UNIQUE_ID);
+
+      const authorizeUrl =
+        MYINFO_CONFIG.MYINFO_AUTH_API_URL +
+        "?client_id=" +
+        MYINFO_CONFIG.MYINFO_CLIENT_ID +
+        "&scope=" +
+        MYINFO_CONFIG.MYINFO_SCOPES +
+        "&purpose_id=" +
+        MYINFO_CONFIG.MYINFO_PURPOSE_ID +
+        "&code_challenge=" +
+        result +
+        "&code_challenge_method=" +
+        MYINFO_CONFIG.MYINFO_METHOD +
+        "&redirect_uri=" +
+        MYINFO_CONFIG.MYINFO_CALLBACK_URL;
+
+      window.location.href = authorizeUrl;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const myInfoAuth = async (): Promise<void> => {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+
+      if (!code) {
+        console.error("Auth code is required");
+        return;
+      }
+
+      const response = await api.post(
+        "/api/v1/auth/myInfo/callback",
+        {
+          code: code,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authorization}`,
+          },
+        },
+      );
+      const AUTHORIZATION_TOKEN = response.headers["x-access-token"];
+
+      const data = await handleResponse(response);
+      const userData = JSON.parse(data.payload.value);
+
+      login(userData, AUTHORIZATION_TOKEN);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sgIdGetAuthUrl = async (): Promise<void> => {
+    try {
+      const response = await api.post("/api/v1/auth/sgId/generateAuthUrl");
+      const AUTH_URL = response.data.auth_url;
+      const SGID_UNIQUE_ID = response.headers["x-sgid-unique-id"];
+
+      authFlow(SGID_UNIQUE_ID);
+
+      window.location.href = AUTH_URL;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sgIdAuth = async (): Promise<void> => {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+
+      if (!code) {
+        console.error("Auth code is required");
+        return;
+      }
+
+      const response = await api.post(
+        "/api/v1/auth/sgId/callback",
+        {
+          code: code,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authorization}`,
+          },
+        },
+      );
+      const AUTHORIZATION_TOKEN = response.headers["x-access-token"];
+
+      const data = await handleResponse(response);
+      const userData = JSON.parse(data.payload.value);
+
+      login(userData, AUTHORIZATION_TOKEN);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +187,10 @@ const useProvideAuth = (): AuthContextType => {
     isAuthenticated,
     user,
     googleAuth,
-    appleAuth,
+    myInfoGetCode,
+    myInfoAuth,
+    sgIdGetAuthUrl,
+    sgIdAuth,
     signOut,
   };
 };

@@ -4,6 +4,15 @@ import logger from '../logger/logger';
 import { GoogleUserInfo } from "../types";
 
 class GoogleAPIService {
+  private static instance: GoogleAPIService;
+
+  public static getInstance(): GoogleAPIService {
+    if (!GoogleAPIService.instance) {
+      GoogleAPIService.instance = new GoogleAPIService();
+    }
+    return GoogleAPIService.instance;
+}
+
   async getUserData(accessToken: string) {
     try {
       const response = await axios.get<GoogleUserInfo>(

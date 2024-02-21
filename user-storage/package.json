@@ -13,13 +13,16 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.10.0",
     "@grpc/proto-loader": "^0.7.10",
+    "@opengovsg/sgid-client": "^2.2.0",
     "axios": "^1.6.7",
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
     "google-auth-library": "^9.6.3",
     "jsonwebtoken": "^9.0.2",
+    "myinfo-connector-v4-nodejs": "^2.0.0",
     "pg": "^8.11.3",
     "protoc-gen-ts": "^0.8.7",
+    "redis": "^4.6.13",
     "ts-node": "^10.9.2",
     "ts-protoc-gen": "^0.15.0",
     "typeorm": "^0.3.20",
@@ -31,6 +34,7 @@
     "@connectrpc/protoc-gen-connect-es": "^1.3.0",
     "@types/express": "^4.17.21",
     "@types/google-protobuf": "^3.15.12",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.11.17",
     "typescript": "^5.3.3"
   }

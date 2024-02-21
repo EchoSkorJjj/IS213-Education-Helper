@@ -61,6 +61,15 @@ services:
       timeout: 5s
       retries: 5
 
+  user-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   user-storage-service:
     build: ../../user-storage
     image: user-storage-service:1.0
@@ -79,4 +88,4 @@ services:
       kong-gateway:
         condition: service_healthy
     ports:
-      - "5173:5173"
+      - "3001:3001"

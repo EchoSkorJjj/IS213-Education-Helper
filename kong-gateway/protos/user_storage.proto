@@ -26,6 +26,22 @@ message User {
     string last_name = 4;
     string email = 5;
 }
+
+// Singpass MyInfo generate challenge code request
+message MyInfoCodeRequest {
+}
+
+message MyInfoCodeResponse {
+    string code_challenge = 1;
+}
+
+// Singpass SgId generate auth url request
+message SgIdAuthUrlRequest {
+}
+
+message SgIdAuthUrlResponse {
+  string auth_url = 1;
+}
   
 // Request and response messages
 message AuthRequest {
@@ -60,9 +76,30 @@ service UserStorage {
         };
     }
 
-    rpc AppleAuth(AuthRequest) returns (ServiceResponseWrapper) {
+    rpc MyInfoCode(MyInfoCodeRequest) returns (MyInfoCodeResponse) {
         option (google.api.http) = {
-            post: "/api/v1/auth/apple/callback"
+            post: "/api/v1/auth/myInfo/generateCodeChallenge"
+            body: "*"
+        };
+    }
+
+    rpc MyInfoAuth(AuthRequest) returns (ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/myInfo/callback"
+            body: "*"
+        };
+    }
+
+    rpc SgIdAuthUrl(SgIdAuthUrlRequest) returns (SgIdAuthUrlResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/sgId/generateAuthUrl"
+            body: "*"
+        };
+    }
+
+    rpc SgIdAuth(AuthRequest) returns (ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/sgId/callback"
             body: "*"
         };
     }

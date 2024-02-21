@@ -26,6 +26,22 @@ message User {
   string email = 5;
 }
 
+// Singpass MyInfo generate challenge code request
+message MyInfoCodeRequest {
+}
+
+message MyInfoCodeResponse {
+    string code_challenge = 1;
+}
+
+// Singpass SgId generate auth url request
+message SgIdAuthUrlRequest {
+}
+
+message SgIdAuthUrlResponse {
+  string auth_url = 1;
+}
+
 // Request and response messages
 message AuthRequest {
   string code = 1;
@@ -54,7 +70,10 @@ message HealthCheckResponse {
 // Service definition with CRUD operations and health check
 service UserStorage {
   rpc GoogleAuth(AuthRequest) returns (ServiceResponseWrapper);
-  rpc AppleAuth(AuthRequest) returns (ServiceResponseWrapper);
+  rpc MyInfoCode(MyInfoCodeRequest) returns (MyInfoCodeResponse);
+  rpc MyInfoAuth(AuthRequest) returns (ServiceResponseWrapper);
+  rpc SgIdAuthUrl(SgIdAuthUrlRequest) returns (SgIdAuthUrlResponse);
+  rpc SgIdAuth(AuthRequest) returns (ServiceResponseWrapper);
   rpc GetUser(GetUserRequest) returns (ServiceResponseWrapper);
   rpc UpdateUser(UpdateUserRequest) returns (ServiceResponseWrapper);
   rpc DeleteUser(DeleteUserRequest) returns (ServiceResponseWrapper);

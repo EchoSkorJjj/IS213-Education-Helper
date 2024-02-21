@@ -1,14 +1,23 @@
 import UserDatabaseService from '../models/user-service';
-import { GoogleUserInfo } from '../types';
+import { UserInfo, ClientUserData } from '../types';
 
 class UserService {
+    private static instance: UserService;
+
     private userDatabaseService: UserDatabaseService;
 
     constructor() {
         this.userDatabaseService = UserDatabaseService.getInstance();
     }
 
-    public async findOrCreateUser(userData: GoogleUserInfo) {
+    public static getInstance(): UserService {
+        if (!UserService.instance) {
+            UserService.instance = new UserService();
+        }
+        return UserService.instance;
+    }
+
+    public async findOrCreateUser(userData: UserInfo): Promise<ClientUserData> {
         const user = await this.userDatabaseService.findUserByEmail(userData.email);
         if (!user) {
             const newUser = await this.userDatabaseService.createUser({

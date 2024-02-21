@@ -8,17 +8,15 @@ const Loader = lazy(() => import("~components/loader/Loader"));
 const NotFound = lazy(() => import("~pages/notfound/NotFound"));
 
 const TestPage = lazy(() => import("~pages/TestPage"));
+const TestPage2 = lazy(() => import("~pages/TestPage2"));
 
 const App = () => {
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === "auth-storage" && !event.newValue) {
         useAuthStore.setState({
-          isAuthenticated: true,
-          user: {
-            username: "nani",
-            role: "Admin",
-          },
+          isAuthenticated: false,
+          user: null,
         });
       }
     };
@@ -35,6 +33,9 @@ const App = () => {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<TestPage />} />
+              <Route path="/callback" element={<TestPage />} />
+              <Route path="/auth/sgid/callback" element={<TestPage2 />} />
+              {/* http://localhost:5173/singpass/auth/callback */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

@@ -58,6 +58,7 @@ export default defineConfig({
       usePolling: true,
     },
     host: true,
+    port: 3001,
     strictPort: true,
   },
   build: {
@@ -66,6 +67,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "~pages": path.resolve(__dirname, "src/pages"),
+      "~config": path.resolve(__dirname, "src/config"),
       "~components": path.resolve(__dirname, "src/components"),
       "~shared": path.resolve(__dirname, "src/shared"),
       "~types": path.resolve(__dirname, "src/shared/types"),

@@ -43,16 +43,24 @@ const useAuthStore = create<AuthStateType>()(
     (set) => ({
       isAuthenticated: false,
       user: null,
-      login: (userData) => {
+      authorization: null,
+      login: (userData, authorization) => {
         set({
           user: userData,
           isAuthenticated: true,
+          authorization: authorization,
         });
       },
       logout: () => {
         set({
           user: null,
           isAuthenticated: false,
+          authorization: null,
+        });
+      },
+      authFlow: (authorization) => {
+        set({
+          authorization: authorization,
         });
       },
     }),
