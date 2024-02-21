@@ -1,6 +1,0 @@
-1. 2x GRPC server (to talk to upload notes, to talk to retrieve notes)
-(Server is just responding to requests)
-2. We can choose between Unitary or bidirectional streaming
-3. For client we should create simple client to upload notes
-4. DB/Schema is up to us to create
-5. Implement good logging, as a .log file
