@@ -35,7 +35,8 @@ class GRPCServer {
             return;
         }
 
-        const pathToServiceDefinitions = path.resolve(__dirname, '../proto-services', `${protoName}.ts`);
+        const extension = process.env.NODE_ENV === 'production' ? 'js' : 'ts';
+        const pathToServiceDefinitions = path.resolve(__dirname, '../proto-services', `${protoName}.${extension}`);
         const serviceDefinitions = await import(pathToServiceDefinitions);
 
         let pathToProto = path.resolve(__dirname, '../../protos/', protoName);

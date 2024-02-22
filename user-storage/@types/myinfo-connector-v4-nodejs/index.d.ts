@@ -44,3 +44,7 @@ declare module 'myinfo-connector-v4-nodejs' {
     // Adjusted to export MyInfoConnector as a default export
     export default MyInfoConnector;
 }
+// declare module 'myinfo-connector-v4-nodejs' {
+//     const MyInfoConnector: any;
+//     export default MyInfoConnector;
+// }

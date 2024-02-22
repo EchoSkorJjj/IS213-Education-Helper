@@ -1,4 +1,9 @@
 .vscode
-**/*_password.txt
 .DS_Store
-node_modules
+
+.env
+.env.local
+.env.development.local
+
+venv
+__pycache__

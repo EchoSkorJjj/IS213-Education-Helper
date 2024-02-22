@@ -17,7 +17,7 @@ def retrieve_note(stub, note_id):
     return response
 
 def run():
-    with grpc.insecure_channel('localhost:50051') as channel:
+    with grpc.insecure_channel('localhost:50052') as channel:
         stub = notes_pb2_grpc.NoteServiceStub(channel)
 
         # Example usage: upload a PDF note

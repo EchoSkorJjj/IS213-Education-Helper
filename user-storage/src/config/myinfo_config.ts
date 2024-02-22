@@ -1,6 +1,6 @@
 import { MyInfoConfig } from "myinfo-connector-v4-nodejs";
 
-const urlEnvironmentPrefix = process.env.NODE_ENV === "production" ? "" : `${process.env.URL_ENVIRONMENT_PREFIX}.`;
+const urlEnvironmentPrefix = `${process.env.URL_ENVIRONMENT_PREFIX}.`;
 
 export const APP_CONFIG = {
     MYINFO_CLIENT_ID: process.env.MYINFO_CLIENT_ID, 

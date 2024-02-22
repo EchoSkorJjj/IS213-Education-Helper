@@ -7,13 +7,16 @@ from mysql.connector import Error
 import notes_pb2
 import notes_pb2_grpc
 from concurrent import futures
+from dotenv import load_dotenv
 
 # Directly specify your AWS credentials (Not recommended for production use)
 # s3_client = boto3.client(
 #     's3',
-#     aws_access_key_id='AKIAXBWYNHCVA3KMXP4F',
-#     aws_secret_access_key='l2fqR/CFwofX3MhTC79cWjfuvikGDZg47lPRhZv6'
+#     aws_access_key_id='',
+#     aws_secret_access_key=''
 # )
+load_dotenv()
+
 s3_client = boto3.client('s3')
 bucket_name = 'eduhelper-s3notes-bucket'
 
@@ -97,7 +100,7 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     notes_pb2_grpc.add_NoteServiceServicer_to_server(NoteServiceServicer(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:50052')
     server.start()
     server.wait_for_termination()
 
