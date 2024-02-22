@@ -15,7 +15,7 @@ from concurrent import futures
 #     aws_secret_access_key='l2fqR/CFwofX3MhTC79cWjfuvikGDZg47lPRhZv6'
 # )
 s3_client = boto3.client('s3')
-bucket_name = 'eduhelper-notes-bucket'
+bucket_name = 'eduhelper-s3notes-bucket'
 
 # Database connection
 try:
