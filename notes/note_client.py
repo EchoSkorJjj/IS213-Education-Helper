@@ -17,14 +17,14 @@ def retrieve_note(stub, note_id):
     return response
 
 def run():
-    # Update with the appropriate server address and port
     with grpc.insecure_channel('localhost:50051') as channel:
-        stub = notes_pb2_grpc.NoteServiceStub(channel)  # Updated to NoteServiceStub
+        stub = notes_pb2_grpc.NoteServiceStub(channel)
 
-        # Example usage: upload a note
+        # Example usage: upload a PDF note
         user_id = '123'
-        filename = 'example_note.txt'
-        file_content = b'This is the content of the note.'
+        filename = 'example_note.pdf'  # Change to your PDF file name
+        with open(filename, 'rb') as pdf_file:  # Open the PDF file in binary mode
+            file_content = pdf_file.read()  # Read the entire PDF file content
         upload_response = upload_note(stub, user_id, filename, file_content)
         print(f"Uploaded Note ID: {upload_response.noteId}")
 
@@ -32,7 +32,7 @@ def run():
         # Note: You need to implement this part on the server side for it to work
         note_id = upload_response.noteId
         retrieve_response = retrieve_note(stub, note_id)
-        print(f"Retrieved Note Content: {retrieve_response.fileContent}")
+        # print(f"Retrieved Note Content: {retrieve_response.fileContent}")
 
 if __name__ == '__main__':
     run()
