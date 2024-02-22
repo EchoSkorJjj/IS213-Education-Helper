@@ -25,7 +25,7 @@ try:
     db_conn = mysql.connector.connect(
         host=os.getenv('DB_HOST'),
         user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD'),
+        password=os.getenv('DB_PASS'),
         database="my_notes_app"
     )
     db_cursor = db_conn.cursor()
