@@ -1,3 +1,4 @@
+import os
 import uuid
 import grpc
 import boto3
@@ -8,19 +9,20 @@ import notes_pb2_grpc
 from concurrent import futures
 
 # Directly specify your AWS credentials (Not recommended for production use)
-s3_client = boto3.client(
-    's3',
-    aws_access_key_id='AKIAXBWYNHCVA3KMXP4F',
-    aws_secret_access_key='l2fqR/CFwofX3MhTC79cWjfuvikGDZg47lPRhZv6'
-)
+# s3_client = boto3.client(
+#     's3',
+#     aws_access_key_id='AKIAXBWYNHCVA3KMXP4F',
+#     aws_secret_access_key='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'
+# )
+s3_client = boto3.client('s3')
 bucket_name = 'eduhelper-notes-bucket'
 
 # Database connection
 try:
     db_conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root",
+        host=os.getenv('DB_HOST'),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
         database="my_notes_app"
     )
     db_cursor = db_conn.cursor()
