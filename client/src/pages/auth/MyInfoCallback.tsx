@@ -2,14 +2,14 @@ import { useEffect } from "react";
 
 import { useAuth } from "~features/auth";
 
-const TestPage2 = () => {
-  const { sgIdAuth } = useAuth();
+const MyInfoCallback = () => {
+  const { myInfoAuth } = useAuth();
 
   useEffect(() => {
-    sgIdAuth();
+    myInfoAuth();
   }, []);
 
   return <></>;
 };
 
-export default TestPage2;
+export default MyInfoCallback;

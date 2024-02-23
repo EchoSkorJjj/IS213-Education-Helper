@@ -73,6 +73,7 @@ export default defineConfig({
       "~types": path.resolve(__dirname, "src/shared/types"),
       "~features": path.resolve(__dirname, "src/features"),
       "~api": path.resolve(__dirname, "src/features/api"),
+      "~assets": path.resolve(__dirname, "src/assets"),
     },
   },
 });

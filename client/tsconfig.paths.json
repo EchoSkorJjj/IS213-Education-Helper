@@ -8,7 +8,8 @@
       "~shared/*": ["./src/shared/*"],
       "~types/*": ["./src/shared/types/*"],
       "~features/*": ["./src/features/*"],
-      "~api": ["./src/features/api"]
+      "~api": ["./src/features/api"],
+      "~assets/*": ["./src/assets/*"]
     }
   }
 }
