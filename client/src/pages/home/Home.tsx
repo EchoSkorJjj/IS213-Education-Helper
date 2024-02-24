@@ -26,7 +26,7 @@ const HomePage = () => {
               pr="8em"
               pt="8em"
               as="a"
-              href="/notes-generator"
+              href="/generator"
               justifyContent={"center"}
               alignContent="center"
             >
@@ -51,7 +51,7 @@ const HomePage = () => {
               pr="8em"
               pt="8em"
               as="a"
-              href="/notes-marketplace"
+              href="/marketplace"
             >
               <Text color={"white"} lineHeight={1.2} fontSize="3xl">
                 View our

@@ -48,6 +48,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 username: userData.username,
                 email: userData.email,
                 role: userData.role,
+                is_paid: userData.is_paid,
             });
 
             const access_token = jwtHandler.createJWT('10m', {

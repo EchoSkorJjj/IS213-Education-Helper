@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { lazy, useEffect } from "react";
 
 import { useAuth } from "~features/auth";
+
+const Loader = lazy(() => import("~components/loader/Loader"));
 
 const MyInfoCallback = () => {
   const { myInfoAuth } = useAuth();
@@ -9,7 +11,7 @@ const MyInfoCallback = () => {
     myInfoAuth();
   }, []);
 
-  return <></>;
+  return <Loader />;
 };
 
 export default MyInfoCallback;

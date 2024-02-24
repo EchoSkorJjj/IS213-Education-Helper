@@ -7,6 +7,7 @@ export interface IUser {
     first_name: string;
     last_name: string;
     role: string;
+    is_paid: boolean;
     creation_date: Date;
 }
 
@@ -38,6 +39,9 @@ export class User {
     @Column()
     role: string;
 
+    @Column()
+    is_paid: boolean;
+
     @CreateDateColumn()
     creation_date: Date;
 
@@ -51,6 +55,7 @@ export class User {
         this.first_name = user.first_name;
         this.last_name = user.last_name;
         this.role = user.role;
+        this.is_paid = user.is_paid;
         this.creation_date = user.creation_date;
     }
 }

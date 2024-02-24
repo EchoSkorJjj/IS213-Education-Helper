@@ -1,19 +1,13 @@
-import { FiChevronDown } from "react-icons/fi";
 import {
   Avatar,
-  Box,
   Button,
   Center,
   HStack,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
   Portal,
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { Menu } from "@opengovsg/design-system-react";
 
 import avatar4 from "~assets/img/avatars/avatar4.png";
 
@@ -26,8 +20,8 @@ interface AuthMenuProps {
 
 export const AuthMenu = ({ user, handleSignOutClick }: AuthMenuProps) => {
   return (
-    <Menu>
-      <MenuButton
+    <Menu isStretch={true}>
+      <Menu.Button
         as={Button}
         py={2}
         transition="all 0.3s"
@@ -50,13 +44,10 @@ export const AuthMenu = ({ user, handleSignOutClick }: AuthMenuProps) => {
               {user?.role}
             </Text>
           </VStack>
-          <Box display={{ base: "none", lg: "flex" }}>
-            <FiChevronDown />
-          </Box>
         </HStack>
-      </MenuButton>
+      </Menu.Button>
       <Portal>
-        <MenuList alignItems={"center"}>
+        <Menu.List alignItems={"center"} width={"200px"}>
           <br />
           <Center>
             <Avatar size={"2xl"} src={avatar4} referrerPolicy="no-referrer" />
@@ -66,12 +57,12 @@ export const AuthMenu = ({ user, handleSignOutClick }: AuthMenuProps) => {
             <p>{user?.username}</p>
           </Center>
           <br />
-          <MenuDivider />
-          <MenuItem as="a" href="/profile">
+          <Menu.Divider />
+          <Menu.Item as="a" href="/profile">
             Profile Settings
-          </MenuItem>
-          <MenuItem onClick={handleSignOutClick}>Logout</MenuItem>
-        </MenuList>
+          </Menu.Item>
+          <Menu.Item onClick={handleSignOutClick}>Logout</Menu.Item>
+        </Menu.List>
       </Portal>
     </Menu>
   );

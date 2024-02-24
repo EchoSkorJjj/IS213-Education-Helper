@@ -62,21 +62,21 @@ services:
       timeout: 5s
       retries: 5
 
-  notes-db:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=my_notes_app
-    ports:
-      - "3306:3306"
-    volumes:
-      - notes-db-volume:/var/lib/mysql
-      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  # notes-db:
+  #   image: mysql:latest
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_DATABASE=my_notes_app
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - notes-db-volume:/var/lib/mysql
+  #     - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
 
   user-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -87,15 +87,15 @@ services:
       timeout: 5s
       retries: 5
 
-  notes-service:
-    build: ../../notes
-    depends_on:
-      kong-gateway:
-        condition: service_healthy
-      notes-db:
-        condition: service_healthy
-    ports:
-      - "50052:50052"      
+  # notes-service:
+  #   build: ../../notes
+  #   depends_on:
+  #     kong-gateway:
+  #       condition: service_healthy
+  #     notes-db:
+  #       condition: service_healthy
+  #   ports:
+  #     - "50052:50052"      
 
   user-storage-service:
     build: ../../user-storage

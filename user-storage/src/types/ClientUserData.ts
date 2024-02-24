@@ -3,4 +3,5 @@ export interface ClientUserData {
     username: string,
     email: string,
     role: string,
+    is_paid: boolean,
 }

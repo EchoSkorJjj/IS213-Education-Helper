@@ -1,12 +1,4 @@
-import {
-  Box,
-  Flex,
-  Image,
-  Stack,
-  Text,
-  useBreakpointValue,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Flex, Image, Stack, Text, VStack } from "@chakra-ui/react";
 
 import LandingPageImage from "~assets/img/landing_page_image.png";
 
@@ -17,25 +9,30 @@ const LandingPage = () => {
         <Box position="relative" height="100%" width="100%">
           <Image
             src={LandingPageImage}
-            width={useBreakpointValue({ base: "3xl", md: "6xl" })}
+            width={{ base: "3xl", md: "6xl" }}
             position="absolute"
+            display={{ base: "none", md: "flex" }}
             bottom="0"
-            left="50%"
-            transform="translate(-50%, 15%)"
+            left={{ md: "50%" }}
+            transform={{
+              base: "translate(0%, 35%)",
+              md: "translate(-50%, 10%)",
+            }}
             alt="Centered Image"
           />
           <VStack
             w={"full"}
             position="absolute"
-            transform="translate(-15%, 300%)"
+            transform={{ md: "translate(-15%, 370%)" }}
             justify={"center"}
-            px={useBreakpointValue({ base: 4, md: 8 })}
+            mt={{ base: 6, md: "none" }}
+            px={{ base: 4, md: 8 }}
           >
             <Stack maxW={"2xl"} align={"flex-start"} spacing={6}>
               <Text
                 color={"white"}
                 lineHeight={1.2}
-                fontSize={useBreakpointValue({ base: "3xl", md: "5xl" })}
+                fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
               >
                 We{" "}
                 <Text as="span" fontWeight="bold">

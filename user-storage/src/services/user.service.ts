@@ -33,6 +33,7 @@ class UserService {
                 username: newUser.username,
                 email: newUser.email,
                 role: newUser.role,
+                is_paid: newUser.is_paid
             };
         } else {
             return {
@@ -40,6 +41,7 @@ class UserService {
                 username: user.username,
                 email: user.email,
                 role: user.role,
+                is_paid: user.is_paid
             };
         }
     }
