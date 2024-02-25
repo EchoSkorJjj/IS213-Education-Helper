@@ -1,6 +1,6 @@
 PROJECT_NAME = "esd"
 LOCAL_DEPLOY_DIR = "deployment/docker"
-NPM_SUBDIRS = user-storage client 
+NPM_SUBDIRS = backend/simple/user-storage client 
 
 npm-install: npm-install-subdirectories
 	@echo "Running npm install to set up Husky and other dependencies..."
