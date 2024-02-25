@@ -1,0 +1,7 @@
+version: '3'
+services:
+  pdf-reader:
+    build:
+      context: .
+    volumes:
+      - ./example.pdf:/app/example.pdf
