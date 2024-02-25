@@ -52,6 +52,18 @@ const extendedColors: DeepPartial<
     "800": "#554D11",
     "900": "#2B2608",
   },
+  darkBlue: {
+    "400": "#223C5F",
+    "500": "#10203F",
+  },
+  midBlue: {
+    "400": "#0046B7",
+    "500": "#003294",
+  },
+  lightBlue: {
+    "400": "#2D6DDF",
+    "500": "#2257BF",
+  },
 };
 
 /** override chakra colors here */

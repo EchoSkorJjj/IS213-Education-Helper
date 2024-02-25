@@ -3,11 +3,13 @@
     "baseUrl": "./",
     "paths": {
       "~components/*": ["./src/components/*"],
+      "~config": ["./src/config"],
       "~pages/*": ["./src/pages/*"],
       "~shared/*": ["./src/shared/*"],
       "~types/*": ["./src/shared/types/*"],
       "~features/*": ["./src/features/*"],
-      "~api": ["./src/features/api"]
+      "~api": ["./src/features/api"],
+      "~assets/*": ["./src/assets/*"]
     }
   }
 }

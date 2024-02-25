@@ -15,6 +15,8 @@ networks:
 
 volumes:
   kong-data: {}
+  user-storage-db-volume: {}
+  notes-db-volume: {}
 
 services:
   kong-gateway:
@@ -43,11 +45,65 @@ services:
       - ../../backend/kong-gateway/authn-kong:/usr/local/share/lua/5.1/kong/plugins/authn-kong 
       - ../../backend/kong-gateway/protos:/usr/local/share/lua/5.1/kong/protos
 
+  user-storage-db:
+    image: postgres
+    volumes:
+      - user-storage-db-volume:/var/lib/postgresql/data
+      - ../sql_table/create_user_storage_table.sql:/docker-entrypoint-initdb.d/user_storage.sql
+    environment:
+      POSTGRES_DB: user_storage_db
+      POSTGRES_USER: user_storage_user
+      POSTGRES_PASSWORD: user_storage_password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_storage_user -d user_storage_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  notes-db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=my_notes_app
+    ports:
+      - "3306:3306"
+    volumes:
+      - notes-db-volume:/var/lib/mysql
+      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  notes-service:
+    build: ../../backend/simple/notes
+    depends_on:
+      kong-gateway:
+        condition: service_healthy
+      notes-db:
+        condition: service_healthy
+    ports:
+      - "50052:50052"      
+
   user-storage-service:
     build: ../../backend/simple/user-storage
     image: user-storage-service:1.0
     depends_on:
       kong-gateway:
+        condition: service_healthy
+      user-storage-db:
         condition: service_healthy
     ports:
       - "50051:50051"
@@ -59,4 +115,4 @@ services:
       kong-gateway:
         condition: service_healthy
     ports:
-      - "5173:5173"
+      - "3001:3001"

@@ -8,147 +8,11 @@ import * as dependency_2 from "./google/protobuf/any";
 import * as pb_1 from "google-protobuf";
 import * as grpc_1 from "@grpc/grpc-js";
 export namespace user_storage_pb {
-    export class TestRequest extends pb_1.Message {
-        #one_of_decls: number[][] = [];
-        constructor(data?: any[] | {
-            message?: string;
-        }) {
-            super();
-            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
-            if (!Array.isArray(data) && typeof data == "object") {
-                if ("message" in data && data.message != undefined) {
-                    this.message = data.message;
-                }
-            }
-        }
-        get message() {
-            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
-        }
-        set message(value: string) {
-            pb_1.Message.setField(this, 1, value);
-        }
-        static fromObject(data: {
-            message?: string;
-        }): TestRequest {
-            const message = new TestRequest({});
-            if (data.message != null) {
-                message.message = data.message;
-            }
-            return message;
-        }
-        toObject() {
-            const data: {
-                message?: string;
-            } = {};
-            if (this.message != null) {
-                data.message = this.message;
-            }
-            return data;
-        }
-        serialize(): Uint8Array;
-        serialize(w: pb_1.BinaryWriter): void;
-        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
-            const writer = w || new pb_1.BinaryWriter();
-            if (this.message.length)
-                writer.writeString(1, this.message);
-            if (!w)
-                return writer.getResultBuffer();
-        }
-        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): TestRequest {
-            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new TestRequest();
-            while (reader.nextField()) {
-                if (reader.isEndGroup())
-                    break;
-                switch (reader.getFieldNumber()) {
-                    case 1:
-                        message.message = reader.readString();
-                        break;
-                    default: reader.skipField();
-                }
-            }
-            return message;
-        }
-        serializeBinary(): Uint8Array {
-            return this.serialize();
-        }
-        static deserializeBinary(bytes: Uint8Array): TestRequest {
-            return TestRequest.deserialize(bytes);
-        }
-    }
-    export class TestResponse extends pb_1.Message {
-        #one_of_decls: number[][] = [];
-        constructor(data?: any[] | {
-            message?: string;
-        }) {
-            super();
-            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
-            if (!Array.isArray(data) && typeof data == "object") {
-                if ("message" in data && data.message != undefined) {
-                    this.message = data.message;
-                }
-            }
-        }
-        get message() {
-            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
-        }
-        set message(value: string) {
-            pb_1.Message.setField(this, 1, value);
-        }
-        static fromObject(data: {
-            message?: string;
-        }): TestResponse {
-            const message = new TestResponse({});
-            if (data.message != null) {
-                message.message = data.message;
-            }
-            return message;
-        }
-        toObject() {
-            const data: {
-                message?: string;
-            } = {};
-            if (this.message != null) {
-                data.message = this.message;
-            }
-            return data;
-        }
-        serialize(): Uint8Array;
-        serialize(w: pb_1.BinaryWriter): void;
-        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
-            const writer = w || new pb_1.BinaryWriter();
-            if (this.message.length)
-                writer.writeString(1, this.message);
-            if (!w)
-                return writer.getResultBuffer();
-        }
-        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): TestResponse {
-            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new TestResponse();
-            while (reader.nextField()) {
-                if (reader.isEndGroup())
-                    break;
-                switch (reader.getFieldNumber()) {
-                    case 1:
-                        message.message = reader.readString();
-                        break;
-                    default: reader.skipField();
-                }
-            }
-            return message;
-        }
-        serializeBinary(): Uint8Array {
-            return this.serialize();
-        }
-        static deserializeBinary(bytes: Uint8Array): TestResponse {
-            return TestResponse.deserialize(bytes);
-        }
-    }
     export class ResponseMetadata extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
             request_id?: string;
             timestamp?: dependency_1.google.protobuf.Timestamp;
-            success?: boolean;
-            error_message?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -158,12 +22,6 @@ export namespace user_storage_pb {
                 }
                 if ("timestamp" in data && data.timestamp != undefined) {
                     this.timestamp = data.timestamp;
-                }
-                if ("success" in data && data.success != undefined) {
-                    this.success = data.success;
-                }
-                if ("error_message" in data && data.error_message != undefined) {
-                    this.error_message = data.error_message;
                 }
             }
         }
@@ -182,23 +40,9 @@ export namespace user_storage_pb {
         get has_timestamp() {
             return pb_1.Message.getField(this, 2) != null;
         }
-        get success() {
-            return pb_1.Message.getFieldWithDefault(this, 3, false) as boolean;
-        }
-        set success(value: boolean) {
-            pb_1.Message.setField(this, 3, value);
-        }
-        get error_message() {
-            return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
-        }
-        set error_message(value: string) {
-            pb_1.Message.setField(this, 4, value);
-        }
         static fromObject(data: {
             request_id?: string;
             timestamp?: ReturnType<typeof dependency_1.google.protobuf.Timestamp.prototype.toObject>;
-            success?: boolean;
-            error_message?: string;
         }): ResponseMetadata {
             const message = new ResponseMetadata({});
             if (data.request_id != null) {
@@ -207,32 +51,18 @@ export namespace user_storage_pb {
             if (data.timestamp != null) {
                 message.timestamp = dependency_1.google.protobuf.Timestamp.fromObject(data.timestamp);
             }
-            if (data.success != null) {
-                message.success = data.success;
-            }
-            if (data.error_message != null) {
-                message.error_message = data.error_message;
-            }
             return message;
         }
         toObject() {
             const data: {
                 request_id?: string;
                 timestamp?: ReturnType<typeof dependency_1.google.protobuf.Timestamp.prototype.toObject>;
-                success?: boolean;
-                error_message?: string;
             } = {};
             if (this.request_id != null) {
                 data.request_id = this.request_id;
             }
             if (this.timestamp != null) {
                 data.timestamp = this.timestamp.toObject();
-            }
-            if (this.success != null) {
-                data.success = this.success;
-            }
-            if (this.error_message != null) {
-                data.error_message = this.error_message;
             }
             return data;
         }
@@ -244,10 +74,6 @@ export namespace user_storage_pb {
                 writer.writeString(1, this.request_id);
             if (this.has_timestamp)
                 writer.writeMessage(2, this.timestamp, () => this.timestamp.serialize(writer));
-            if (this.success != false)
-                writer.writeBool(3, this.success);
-            if (this.error_message.length)
-                writer.writeString(4, this.error_message);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -263,12 +89,6 @@ export namespace user_storage_pb {
                     case 2:
                         reader.readMessage(message.timestamp, () => message.timestamp = dependency_1.google.protobuf.Timestamp.deserialize(reader));
                         break;
-                    case 3:
-                        message.success = reader.readBool();
-                        break;
-                    case 4:
-                        message.error_message = reader.readString();
-                        break;
                     default: reader.skipField();
                 }
             }
@@ -281,107 +101,12 @@ export namespace user_storage_pb {
             return ResponseMetadata.deserialize(bytes);
         }
     }
-    export class ErrorResponse extends pb_1.Message {
+    export class ServiceResponseWrapper extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
-            code?: number;
-            message?: string;
-        }) {
-            super();
-            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
-            if (!Array.isArray(data) && typeof data == "object") {
-                if ("code" in data && data.code != undefined) {
-                    this.code = data.code;
-                }
-                if ("message" in data && data.message != undefined) {
-                    this.message = data.message;
-                }
-            }
-        }
-        get code() {
-            return pb_1.Message.getFieldWithDefault(this, 1, 0) as number;
-        }
-        set code(value: number) {
-            pb_1.Message.setField(this, 1, value);
-        }
-        get message() {
-            return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
-        }
-        set message(value: string) {
-            pb_1.Message.setField(this, 2, value);
-        }
-        static fromObject(data: {
-            code?: number;
-            message?: string;
-        }): ErrorResponse {
-            const message = new ErrorResponse({});
-            if (data.code != null) {
-                message.code = data.code;
-            }
-            if (data.message != null) {
-                message.message = data.message;
-            }
-            return message;
-        }
-        toObject() {
-            const data: {
-                code?: number;
-                message?: string;
-            } = {};
-            if (this.code != null) {
-                data.code = this.code;
-            }
-            if (this.message != null) {
-                data.message = this.message;
-            }
-            return data;
-        }
-        serialize(): Uint8Array;
-        serialize(w: pb_1.BinaryWriter): void;
-        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
-            const writer = w || new pb_1.BinaryWriter();
-            if (this.code != 0)
-                writer.writeInt32(1, this.code);
-            if (this.message.length)
-                writer.writeString(2, this.message);
-            if (!w)
-                return writer.getResultBuffer();
-        }
-        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): ErrorResponse {
-            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new ErrorResponse();
-            while (reader.nextField()) {
-                if (reader.isEndGroup())
-                    break;
-                switch (reader.getFieldNumber()) {
-                    case 1:
-                        message.code = reader.readInt32();
-                        break;
-                    case 2:
-                        message.message = reader.readString();
-                        break;
-                    default: reader.skipField();
-                }
-            }
-            return message;
-        }
-        serializeBinary(): Uint8Array {
-            return this.serialize();
-        }
-        static deserializeBinary(bytes: Uint8Array): ErrorResponse {
-            return ErrorResponse.deserialize(bytes);
-        }
-    }
-    export class ServiceResponseWrapper extends pb_1.Message {
-        #one_of_decls: number[][] = [[2, 3]];
-        constructor(data?: any[] | ({
             metadata?: ResponseMetadata;
-        } & (({
             payload?: dependency_2.google.protobuf.Any;
-            error?: never;
-        } | {
-            payload?: never;
-            error?: ErrorResponse;
-        })))) {
+        }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
@@ -390,9 +115,6 @@ export namespace user_storage_pb {
                 }
                 if ("payload" in data && data.payload != undefined) {
                     this.payload = data.payload;
-                }
-                if ("error" in data && data.error != undefined) {
-                    this.error = data.error;
                 }
             }
         }
@@ -409,34 +131,14 @@ export namespace user_storage_pb {
             return pb_1.Message.getWrapperField(this, dependency_2.google.protobuf.Any, 2) as dependency_2.google.protobuf.Any;
         }
         set payload(value: dependency_2.google.protobuf.Any) {
-            pb_1.Message.setOneofWrapperField(this, 2, this.#one_of_decls[0], value);
+            pb_1.Message.setWrapperField(this, 2, value);
         }
         get has_payload() {
             return pb_1.Message.getField(this, 2) != null;
         }
-        get error() {
-            return pb_1.Message.getWrapperField(this, ErrorResponse, 3) as ErrorResponse;
-        }
-        set error(value: ErrorResponse) {
-            pb_1.Message.setOneofWrapperField(this, 3, this.#one_of_decls[0], value);
-        }
-        get has_error() {
-            return pb_1.Message.getField(this, 3) != null;
-        }
-        get result() {
-            const cases: {
-                [index: number]: "none" | "payload" | "error";
-            } = {
-                0: "none",
-                2: "payload",
-                3: "error"
-            };
-            return cases[pb_1.Message.computeOneofCase(this, [2, 3])];
-        }
         static fromObject(data: {
             metadata?: ReturnType<typeof ResponseMetadata.prototype.toObject>;
             payload?: ReturnType<typeof dependency_2.google.protobuf.Any.prototype.toObject>;
-            error?: ReturnType<typeof ErrorResponse.prototype.toObject>;
         }): ServiceResponseWrapper {
             const message = new ServiceResponseWrapper({});
             if (data.metadata != null) {
@@ -445,25 +147,18 @@ export namespace user_storage_pb {
             if (data.payload != null) {
                 message.payload = dependency_2.google.protobuf.Any.fromObject(data.payload);
             }
-            if (data.error != null) {
-                message.error = ErrorResponse.fromObject(data.error);
-            }
             return message;
         }
         toObject() {
             const data: {
                 metadata?: ReturnType<typeof ResponseMetadata.prototype.toObject>;
                 payload?: ReturnType<typeof dependency_2.google.protobuf.Any.prototype.toObject>;
-                error?: ReturnType<typeof ErrorResponse.prototype.toObject>;
             } = {};
             if (this.metadata != null) {
                 data.metadata = this.metadata.toObject();
             }
             if (this.payload != null) {
                 data.payload = this.payload.toObject();
-            }
-            if (this.error != null) {
-                data.error = this.error.toObject();
             }
             return data;
         }
@@ -475,8 +170,6 @@ export namespace user_storage_pb {
                 writer.writeMessage(1, this.metadata, () => this.metadata.serialize(writer));
             if (this.has_payload)
                 writer.writeMessage(2, this.payload, () => this.payload.serialize(writer));
-            if (this.has_error)
-                writer.writeMessage(3, this.error, () => this.error.serialize(writer));
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -491,9 +184,6 @@ export namespace user_storage_pb {
                         break;
                     case 2:
                         reader.readMessage(message.payload, () => message.payload = dependency_2.google.protobuf.Any.deserialize(reader));
-                        break;
-                    case 3:
-                        reader.readMessage(message.error, () => message.error = ErrorResponse.deserialize(reader));
                         break;
                     default: reader.skipField();
                 }
@@ -666,58 +356,80 @@ export namespace user_storage_pb {
             return User.deserialize(bytes);
         }
     }
-    export class AuthRequest extends pb_1.Message {
+    export class MyInfoCodeRequest extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {}) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") { }
+        }
+        static fromObject(data: {}): MyInfoCodeRequest {
+            const message = new MyInfoCodeRequest({});
+            return message;
+        }
+        toObject() {
+            const data: {} = {};
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): MyInfoCodeRequest {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new MyInfoCodeRequest();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): MyInfoCodeRequest {
+            return MyInfoCodeRequest.deserialize(bytes);
+        }
+    }
+    export class MyInfoCodeResponse extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
-            request_id?: string;
-            google_oauth_code?: string;
+            code_challenge?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
-                if ("request_id" in data && data.request_id != undefined) {
-                    this.request_id = data.request_id;
-                }
-                if ("google_oauth_code" in data && data.google_oauth_code != undefined) {
-                    this.google_oauth_code = data.google_oauth_code;
+                if ("code_challenge" in data && data.code_challenge != undefined) {
+                    this.code_challenge = data.code_challenge;
                 }
             }
         }
-        get request_id() {
+        get code_challenge() {
             return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
         }
-        set request_id(value: string) {
+        set code_challenge(value: string) {
             pb_1.Message.setField(this, 1, value);
         }
-        get google_oauth_code() {
-            return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
-        }
-        set google_oauth_code(value: string) {
-            pb_1.Message.setField(this, 2, value);
-        }
         static fromObject(data: {
-            request_id?: string;
-            google_oauth_code?: string;
-        }): AuthRequest {
-            const message = new AuthRequest({});
-            if (data.request_id != null) {
-                message.request_id = data.request_id;
-            }
-            if (data.google_oauth_code != null) {
-                message.google_oauth_code = data.google_oauth_code;
+            code_challenge?: string;
+        }): MyInfoCodeResponse {
+            const message = new MyInfoCodeResponse({});
+            if (data.code_challenge != null) {
+                message.code_challenge = data.code_challenge;
             }
             return message;
         }
         toObject() {
             const data: {
-                request_id?: string;
-                google_oauth_code?: string;
+                code_challenge?: string;
             } = {};
-            if (this.request_id != null) {
-                data.request_id = this.request_id;
-            }
-            if (this.google_oauth_code != null) {
-                data.google_oauth_code = this.google_oauth_code;
+            if (this.code_challenge != null) {
+                data.code_challenge = this.code_challenge;
             }
             return data;
         }
@@ -725,10 +437,182 @@ export namespace user_storage_pb {
         serialize(w: pb_1.BinaryWriter): void;
         serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
             const writer = w || new pb_1.BinaryWriter();
-            if (this.request_id.length)
-                writer.writeString(1, this.request_id);
-            if (this.google_oauth_code.length)
-                writer.writeString(2, this.google_oauth_code);
+            if (this.code_challenge.length)
+                writer.writeString(1, this.code_challenge);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): MyInfoCodeResponse {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new MyInfoCodeResponse();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.code_challenge = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): MyInfoCodeResponse {
+            return MyInfoCodeResponse.deserialize(bytes);
+        }
+    }
+    export class SgIdAuthUrlRequest extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {}) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") { }
+        }
+        static fromObject(data: {}): SgIdAuthUrlRequest {
+            const message = new SgIdAuthUrlRequest({});
+            return message;
+        }
+        toObject() {
+            const data: {} = {};
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): SgIdAuthUrlRequest {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new SgIdAuthUrlRequest();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): SgIdAuthUrlRequest {
+            return SgIdAuthUrlRequest.deserialize(bytes);
+        }
+    }
+    export class SgIdAuthUrlResponse extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            auth_url?: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("auth_url" in data && data.auth_url != undefined) {
+                    this.auth_url = data.auth_url;
+                }
+            }
+        }
+        get auth_url() {
+            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        }
+        set auth_url(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        static fromObject(data: {
+            auth_url?: string;
+        }): SgIdAuthUrlResponse {
+            const message = new SgIdAuthUrlResponse({});
+            if (data.auth_url != null) {
+                message.auth_url = data.auth_url;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                auth_url?: string;
+            } = {};
+            if (this.auth_url != null) {
+                data.auth_url = this.auth_url;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.auth_url.length)
+                writer.writeString(1, this.auth_url);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): SgIdAuthUrlResponse {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new SgIdAuthUrlResponse();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.auth_url = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): SgIdAuthUrlResponse {
+            return SgIdAuthUrlResponse.deserialize(bytes);
+        }
+    }
+    export class AuthRequest extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            code?: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("code" in data && data.code != undefined) {
+                    this.code = data.code;
+                }
+            }
+        }
+        get code() {
+            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        }
+        set code(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        static fromObject(data: {
+            code?: string;
+        }): AuthRequest {
+            const message = new AuthRequest({});
+            if (data.code != null) {
+                message.code = data.code;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                code?: string;
+            } = {};
+            if (this.code != null) {
+                data.code = this.code;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.code.length)
+                writer.writeString(1, this.code);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -739,10 +623,7 @@ export namespace user_storage_pb {
                     break;
                 switch (reader.getFieldNumber()) {
                     case 1:
-                        message.request_id = reader.readString();
-                        break;
-                    case 2:
-                        message.google_oauth_code = reader.readString();
+                        message.code = reader.readString();
                         break;
                     default: reader.skipField();
                 }
@@ -759,40 +640,26 @@ export namespace user_storage_pb {
     export class GetUserRequest extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
-            request_id?: string;
             user_id?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
-                if ("request_id" in data && data.request_id != undefined) {
-                    this.request_id = data.request_id;
-                }
                 if ("user_id" in data && data.user_id != undefined) {
                     this.user_id = data.user_id;
                 }
             }
         }
-        get request_id() {
+        get user_id() {
             return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
         }
-        set request_id(value: string) {
+        set user_id(value: string) {
             pb_1.Message.setField(this, 1, value);
         }
-        get user_id() {
-            return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
-        }
-        set user_id(value: string) {
-            pb_1.Message.setField(this, 2, value);
-        }
         static fromObject(data: {
-            request_id?: string;
             user_id?: string;
         }): GetUserRequest {
             const message = new GetUserRequest({});
-            if (data.request_id != null) {
-                message.request_id = data.request_id;
-            }
             if (data.user_id != null) {
                 message.user_id = data.user_id;
             }
@@ -800,12 +667,8 @@ export namespace user_storage_pb {
         }
         toObject() {
             const data: {
-                request_id?: string;
                 user_id?: string;
             } = {};
-            if (this.request_id != null) {
-                data.request_id = this.request_id;
-            }
             if (this.user_id != null) {
                 data.user_id = this.user_id;
             }
@@ -815,10 +678,8 @@ export namespace user_storage_pb {
         serialize(w: pb_1.BinaryWriter): void;
         serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
             const writer = w || new pb_1.BinaryWriter();
-            if (this.request_id.length)
-                writer.writeString(1, this.request_id);
             if (this.user_id.length)
-                writer.writeString(2, this.user_id);
+                writer.writeString(1, this.user_id);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -829,9 +690,6 @@ export namespace user_storage_pb {
                     break;
                 switch (reader.getFieldNumber()) {
                     case 1:
-                        message.request_id = reader.readString();
-                        break;
-                    case 2:
                         message.user_id = reader.readString();
                         break;
                     default: reader.skipField();
@@ -849,43 +707,29 @@ export namespace user_storage_pb {
     export class UpdateUserRequest extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
-            request_id?: string;
             user?: User;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
-                if ("request_id" in data && data.request_id != undefined) {
-                    this.request_id = data.request_id;
-                }
                 if ("user" in data && data.user != undefined) {
                     this.user = data.user;
                 }
             }
         }
-        get request_id() {
-            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
-        }
-        set request_id(value: string) {
-            pb_1.Message.setField(this, 1, value);
-        }
         get user() {
-            return pb_1.Message.getWrapperField(this, User, 2) as User;
+            return pb_1.Message.getWrapperField(this, User, 1) as User;
         }
         set user(value: User) {
-            pb_1.Message.setWrapperField(this, 2, value);
+            pb_1.Message.setWrapperField(this, 1, value);
         }
         get has_user() {
-            return pb_1.Message.getField(this, 2) != null;
+            return pb_1.Message.getField(this, 1) != null;
         }
         static fromObject(data: {
-            request_id?: string;
             user?: ReturnType<typeof User.prototype.toObject>;
         }): UpdateUserRequest {
             const message = new UpdateUserRequest({});
-            if (data.request_id != null) {
-                message.request_id = data.request_id;
-            }
             if (data.user != null) {
                 message.user = User.fromObject(data.user);
             }
@@ -893,12 +737,8 @@ export namespace user_storage_pb {
         }
         toObject() {
             const data: {
-                request_id?: string;
                 user?: ReturnType<typeof User.prototype.toObject>;
             } = {};
-            if (this.request_id != null) {
-                data.request_id = this.request_id;
-            }
             if (this.user != null) {
                 data.user = this.user.toObject();
             }
@@ -908,10 +748,8 @@ export namespace user_storage_pb {
         serialize(w: pb_1.BinaryWriter): void;
         serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
             const writer = w || new pb_1.BinaryWriter();
-            if (this.request_id.length)
-                writer.writeString(1, this.request_id);
             if (this.has_user)
-                writer.writeMessage(2, this.user, () => this.user.serialize(writer));
+                writer.writeMessage(1, this.user, () => this.user.serialize(writer));
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -922,9 +760,6 @@ export namespace user_storage_pb {
                     break;
                 switch (reader.getFieldNumber()) {
                     case 1:
-                        message.request_id = reader.readString();
-                        break;
-                    case 2:
                         reader.readMessage(message.user, () => message.user = User.deserialize(reader));
                         break;
                     default: reader.skipField();
@@ -942,40 +777,26 @@ export namespace user_storage_pb {
     export class DeleteUserRequest extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
-            request_id?: string;
             user_id?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
-                if ("request_id" in data && data.request_id != undefined) {
-                    this.request_id = data.request_id;
-                }
                 if ("user_id" in data && data.user_id != undefined) {
                     this.user_id = data.user_id;
                 }
             }
         }
-        get request_id() {
+        get user_id() {
             return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
         }
-        set request_id(value: string) {
+        set user_id(value: string) {
             pb_1.Message.setField(this, 1, value);
         }
-        get user_id() {
-            return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
-        }
-        set user_id(value: string) {
-            pb_1.Message.setField(this, 2, value);
-        }
         static fromObject(data: {
-            request_id?: string;
             user_id?: string;
         }): DeleteUserRequest {
             const message = new DeleteUserRequest({});
-            if (data.request_id != null) {
-                message.request_id = data.request_id;
-            }
             if (data.user_id != null) {
                 message.user_id = data.user_id;
             }
@@ -983,12 +804,8 @@ export namespace user_storage_pb {
         }
         toObject() {
             const data: {
-                request_id?: string;
                 user_id?: string;
             } = {};
-            if (this.request_id != null) {
-                data.request_id = this.request_id;
-            }
             if (this.user_id != null) {
                 data.user_id = this.user_id;
             }
@@ -998,10 +815,8 @@ export namespace user_storage_pb {
         serialize(w: pb_1.BinaryWriter): void;
         serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
             const writer = w || new pb_1.BinaryWriter();
-            if (this.request_id.length)
-                writer.writeString(1, this.request_id);
             if (this.user_id.length)
-                writer.writeString(2, this.user_id);
+                writer.writeString(1, this.user_id);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -1012,9 +827,6 @@ export namespace user_storage_pb {
                     break;
                 switch (reader.getFieldNumber()) {
                     case 1:
-                        message.request_id = reader.readString();
-                        break;
-                    case 2:
                         message.user_id = reader.readString();
                         break;
                     default: reader.skipField();
@@ -1162,17 +974,44 @@ export namespace user_storage_pb {
     }
     export abstract class UnimplementedUserStorageService {
         static definition = {
-            Test: {
-                path: "/user_storage_pb.UserStorage/Test",
+            GoogleAuth: {
+                path: "/user_storage_pb.UserStorage/GoogleAuth",
                 requestStream: false,
                 responseStream: false,
-                requestSerialize: (message: TestRequest) => Buffer.from(message.serialize()),
-                requestDeserialize: (bytes: Buffer) => TestRequest.deserialize(new Uint8Array(bytes)),
-                responseSerialize: (message: TestResponse) => Buffer.from(message.serialize()),
-                responseDeserialize: (bytes: Buffer) => TestResponse.deserialize(new Uint8Array(bytes))
+                requestSerialize: (message: AuthRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => AuthRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: ServiceResponseWrapper) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => ServiceResponseWrapper.deserialize(new Uint8Array(bytes))
             },
-            Authenticate: {
-                path: "/user_storage_pb.UserStorage/Authenticate",
+            MyInfoCode: {
+                path: "/user_storage_pb.UserStorage/MyInfoCode",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: MyInfoCodeRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => MyInfoCodeRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: MyInfoCodeResponse) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => MyInfoCodeResponse.deserialize(new Uint8Array(bytes))
+            },
+            MyInfoAuth: {
+                path: "/user_storage_pb.UserStorage/MyInfoAuth",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: AuthRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => AuthRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: ServiceResponseWrapper) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => ServiceResponseWrapper.deserialize(new Uint8Array(bytes))
+            },
+            SgIdAuthUrl: {
+                path: "/user_storage_pb.UserStorage/SgIdAuthUrl",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: SgIdAuthUrlRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => SgIdAuthUrlRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: SgIdAuthUrlResponse) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => SgIdAuthUrlResponse.deserialize(new Uint8Array(bytes))
+            },
+            SgIdAuth: {
+                path: "/user_storage_pb.UserStorage/SgIdAuth",
                 requestStream: false,
                 responseStream: false,
                 requestSerialize: (message: AuthRequest) => Buffer.from(message.serialize()),
@@ -1218,8 +1057,11 @@ export namespace user_storage_pb {
             }
         };
         [method: string]: grpc_1.UntypedHandleCall;
-        abstract Test(call: grpc_1.ServerUnaryCall<TestRequest, TestResponse>, callback: grpc_1.sendUnaryData<TestResponse>): void;
-        abstract Authenticate(call: grpc_1.ServerUnaryCall<AuthRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
+        abstract GoogleAuth(call: grpc_1.ServerUnaryCall<AuthRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
+        abstract MyInfoCode(call: grpc_1.ServerUnaryCall<MyInfoCodeRequest, MyInfoCodeResponse>, callback: grpc_1.sendUnaryData<MyInfoCodeResponse>): void;
+        abstract MyInfoAuth(call: grpc_1.ServerUnaryCall<AuthRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
+        abstract SgIdAuthUrl(call: grpc_1.ServerUnaryCall<SgIdAuthUrlRequest, SgIdAuthUrlResponse>, callback: grpc_1.sendUnaryData<SgIdAuthUrlResponse>): void;
+        abstract SgIdAuth(call: grpc_1.ServerUnaryCall<AuthRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract GetUser(call: grpc_1.ServerUnaryCall<GetUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract UpdateUser(call: grpc_1.ServerUnaryCall<UpdateUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract DeleteUser(call: grpc_1.ServerUnaryCall<DeleteUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
@@ -1229,11 +1071,20 @@ export namespace user_storage_pb {
         constructor(address: string, credentials: grpc_1.ChannelCredentials, options?: Partial<grpc_1.ChannelOptions>) {
             super(address, credentials, options);
         }
-        Test: GrpcUnaryServiceInterface<TestRequest, TestResponse> = (message: TestRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<TestResponse>, options?: grpc_1.CallOptions | grpc_1.requestCallback<TestResponse>, callback?: grpc_1.requestCallback<TestResponse>): grpc_1.ClientUnaryCall => {
-            return super.Test(message, metadata, options, callback);
+        GoogleAuth: GrpcUnaryServiceInterface<AuthRequest, ServiceResponseWrapper> = (message: AuthRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
+            return super.GoogleAuth(message, metadata, options, callback);
         };
-        Authenticate: GrpcUnaryServiceInterface<AuthRequest, ServiceResponseWrapper> = (message: AuthRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
-            return super.Authenticate(message, metadata, options, callback);
+        MyInfoCode: GrpcUnaryServiceInterface<MyInfoCodeRequest, MyInfoCodeResponse> = (message: MyInfoCodeRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<MyInfoCodeResponse>, options?: grpc_1.CallOptions | grpc_1.requestCallback<MyInfoCodeResponse>, callback?: grpc_1.requestCallback<MyInfoCodeResponse>): grpc_1.ClientUnaryCall => {
+            return super.MyInfoCode(message, metadata, options, callback);
+        };
+        MyInfoAuth: GrpcUnaryServiceInterface<AuthRequest, ServiceResponseWrapper> = (message: AuthRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
+            return super.MyInfoAuth(message, metadata, options, callback);
+        };
+        SgIdAuthUrl: GrpcUnaryServiceInterface<SgIdAuthUrlRequest, SgIdAuthUrlResponse> = (message: SgIdAuthUrlRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<SgIdAuthUrlResponse>, options?: grpc_1.CallOptions | grpc_1.requestCallback<SgIdAuthUrlResponse>, callback?: grpc_1.requestCallback<SgIdAuthUrlResponse>): grpc_1.ClientUnaryCall => {
+            return super.SgIdAuthUrl(message, metadata, options, callback);
+        };
+        SgIdAuth: GrpcUnaryServiceInterface<AuthRequest, ServiceResponseWrapper> = (message: AuthRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
+            return super.SgIdAuth(message, metadata, options, callback);
         };
         GetUser: GrpcUnaryServiceInterface<GetUserRequest, ServiceResponseWrapper> = (message: GetUserRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
             return super.GetUser(message, metadata, options, callback);

@@ -1,0 +1,18 @@
+
+1. Build Image
+docker build -t notes-service .
+
+2. Run container
+docker run -p 50051:50051 \
+  -e AWS_ACCESS_KEY_ID=your_access_key_id \
+  -e AWS_SECRET_ACCESS_KEY=your_secret_access_key \
+  notes-service
+
+-
+Build instructions from Neil Sharma:
+1. 2x GRPC server (to talk to upload notes, to talk to retrieve notes)
+(Server is just responding to requests)
+2. We can choose between Unitary or bidirectional streaming
+3. For client we should create simple client to upload notes
+4. DB/Schema is up to us to create
+5. Implement good logging, as a .log file

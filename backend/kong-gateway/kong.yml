@@ -14,16 +14,21 @@ services:
           - http
         paths:
           - /api/v1/user
+          - /api/v1/auth
         plugins:
           - name: grpc-gateway
             config:
               proto: /usr/local/share/lua/5.1/kong/protos/user_storage.proto
-
+    
 plugins:
+  - name: file-log
+    service: user-storage-service
+    config:
+      path: /usr/local/share/lua/5.1/kong/plugins/authn-kong/user-storage.log
   - name: cors
     config: 
       origins:
-        - "http://localhost:5173"
+        - "http://localhost:3001"
       methods:
         - HEAD
         - GET
@@ -42,11 +47,28 @@ plugins:
         - Authorization
       exposed_headers:
         - Authorization
+        - X-Myinfo-Unique-Id
+        - X-Access-Token
+        - X-Sgid-Unique-Id
       credentials: true
       max_age: 3600
       preflight_continue: false
+
+  - name: correlation-id
+    config:
+      header_name: Kong-Request-ID
+      generator: uuid
+      echo_downstream: false
 
   - name: rate-limiting
     config: 
       minute: 100
       policy: local
+
+  - name: authn-kong
+    config:
+      public_paths:
+        - /api/v1/auth/google/callback
+        - /api/v1/auth/apple/callback
+        - /api/v1/auth/myInfo/generateCodeChallenge
+        - /api/v1/auth/myInfo/callback

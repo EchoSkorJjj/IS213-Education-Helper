@@ -19,9 +19,15 @@ local claim_spec = {
 -- Access phase handler
 function MyAuthHandler:access(conf)
     local path = kong.request.get_path()
+    local publicPaths = conf.public_paths;
+
     kong.log.notice("The path is ", path)
 
-    
+    for i, pub_path in ipairs(publicPaths) do
+        if pub_path == path then
+        return
+        end
+    end
 end
 
 -- Return the handler
