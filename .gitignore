@@ -2,3 +2,4 @@
 **/*_password.txt
 .DS_Store
 node_modules
+.env
