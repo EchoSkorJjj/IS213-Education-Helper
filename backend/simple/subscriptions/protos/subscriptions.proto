@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package subscription_pb;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+message ResponseMetadata {
+    string request_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+message ServiceResponseWrapper {
+    ResponseMetadata metadata = 1;
+    google.protobuf.Any payload = 2;
+}
+
+// Might need to update message name or service name,
+// temporarily call it SubscriptionMessage for now to
+// prevent naming conflict with the service name.
+message SubscriptionMessage {
+    // could we make user_id the primary key instead?
+    // For now assume subscription_id is required.
+    string subscription_id = 1;
+    string user_id = 2;
+    google.protobuf.Timestamp subscribed_until = 3;
+}
+
+message CreateSubscriptionRequest {
+    string user_id = 1;
+    // may or may not need this, depending on whether we offer different subscription types
+    // (e.g. 1 month, 1 year, unlimited). For now assume it is required.
+    google.protobuf.Timestamp subscribed_until = 2;
+}
+
+message GetSubscriptionRequest {
+    string user_id = 1;
+}
+
+message DeleteSubscriptionRequest {
+    string user_id = 1;
+}
+
+message HealthCheckRequest {
+
+}
+
+message HealthCheckResponse {
+    string status = 1;
+}
+
+service Subscription {
+    // rpc CreateSubscription(CreateSubscriptionRequest) returns (ServiceResponseWrapper);
+    // rpc GetSubscription(GetSubscriptionRequest) returns (ServiceResponseWrapper);
+    // rpc DeleteSubscription(DeleteSubscriptionRequest) returns (ServiceResponseWrapper);
+    rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse);
+}
