@@ -9,12 +9,13 @@ import {
   ListItem,
   Stack,
   Text,
-  useColorModeValue,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 
 import { useAuth } from "~features/auth";
+
+import { getCheckoutUrl } from "~api";
 
 interface Props {
   children: React.ReactNode;
@@ -29,7 +30,7 @@ function PriceWrapper(props: Props) {
       shadow="base"
       borderWidth="1px"
       alignSelf={{ base: "center", lg: "flex-start" }}
-      borderColor={useColorModeValue("gray.200", "gray.500")}
+      borderColor={"gray.200"}
       borderRadius={"xl"}
     >
       {children}
@@ -41,17 +42,24 @@ const SubscribePage = () => {
   const { user } = useAuth();
   const toast = useToast();
 
+  const handleSubscribe = async () => {
+    const url = await getCheckoutUrl();
+    window.location.href = url;
+  };
+
   const handleFreePlan = () => {
+    const plan = user?.is_paid ? "pro" : "free";
     toast({
-      title: "You are already on the free plan!",
+      title: `You are already on the ${plan} plan!`,
       status: "info",
       isClosable: true,
       position: "top",
+      duration: 3000,
     });
   };
 
   return (
-    <Box py={12} h="100vh">
+    <Box py={12} h="100vh" bg="darkBlue.500">
       <VStack spacing={2} textAlign="center">
         <Heading as="h1" fontSize="4xl" color="white">
           Plans that fit your need
@@ -84,11 +92,7 @@ const SubscribePage = () => {
               </Text>
             </HStack>
           </Box>
-          <VStack
-            bg={useColorModeValue("gray.50", "gray.700")}
-            py={4}
-            borderBottomRadius={"xl"}
-          >
+          <VStack bg={"gray.50"} py={4} borderBottomRadius={"xl"}>
             <List spacing={3} textAlign="start" px={12}>
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="blue.500" />
@@ -106,7 +110,7 @@ const SubscribePage = () => {
                 disabled={true}
                 onClick={() => handleFreePlan()}
               >
-                Free Plan
+                {user?.is_paid ? "You are on Pro Plan" : "Already on Free Plan"}
               </Button>
             </Box>
           </VStack>
@@ -135,7 +139,7 @@ const SubscribePage = () => {
             </Box>
             <Box py={4} px={12} color="white">
               <Text fontWeight="500" fontSize="2xl">
-                Growth
+                Pro
               </Text>
               <HStack justifyContent="center">
                 <Text fontSize="3xl" fontWeight="600">
@@ -149,11 +153,7 @@ const SubscribePage = () => {
                 </Text>
               </HStack>
             </Box>
-            <VStack
-              bg={useColorModeValue("gray.50", "gray.700")}
-              py={4}
-              borderBottomRadius={"xl"}
-            >
+            <VStack bg={"gray.50"} py={4} borderBottomRadius={"xl"}>
               <List spacing={3} textAlign="start" px={12}>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
@@ -173,8 +173,8 @@ const SubscribePage = () => {
                 </ListItem>
               </List>
               <Box w="80%" pt={7}>
-                <Button w="full">
-                  {user?.is_paid ? "Already a Pro" : "Go Pro"}
+                <Button w="full" onClick={handleSubscribe}>
+                  {user?.is_paid ? "Unsubscribe" : "Go Pro"}
                 </Button>
               </Box>
             </VStack>

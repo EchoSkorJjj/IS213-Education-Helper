@@ -23,7 +23,9 @@ const SgIDCallbackPage = lazy(() => import("~pages/auth/SgIDCallback"));
 // Private Page
 const HomePage = lazy(() => import("~pages/home/Home"));
 const NotesGeneratorPage = lazy(() => import("~pages/notes/NotesGenerator"));
+const MarketplacePage = lazy(() => import("~pages/marketplace/Marketplace"));
 const SubscribePage = lazy(() => import("~pages/subscribe/Subscribe"));
+const ProfilePage = lazy(() => import("~pages/profile/Profile"));
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -52,7 +54,7 @@ const App = () => {
     <Flex direction="column" minH="100vh" bg={"white"}>
       <Suspense fallback={<Loader />}>
         <Navbar />
-        <Box flex="1" bg="darkBlue.500">
+        <Box flex="1" bg="white">
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route
@@ -77,7 +79,9 @@ const App = () => {
               >
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/generator" element={<NotesGeneratorPage />} />
+                <Route path="/marketplace" element={<MarketplacePage />} />
                 <Route path="/subscribe" element={<SubscribePage />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
