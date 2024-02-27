@@ -34,4 +34,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Set the default command to run the app
-CMD ["python3", "-m", "file_processor.service"]
+CMD ["python3", "/app/file_processor/service.py"]
