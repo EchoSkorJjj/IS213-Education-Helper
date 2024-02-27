@@ -9,7 +9,7 @@
 
 class SubscriptionService final : public subscription_pb::Subscription::Service
 {
-    grpc::Status CreateSubscription(grpc::ServerContext *context, const subscription_pb::CreateSubscriptionRequest *request, subscription_pb::CreateSubscriptionResponse *response) override
+    grpc::Status CreateOrUpdateSubscription(grpc::ServerContext *context, const subscription_pb::CreateOrUpdateSubscriptionRequest *request, subscription_pb::CreateOrUpdateSubscriptionResponse *response) override
     {
         std::string user_id = request->user_id();
         google::protobuf::Timestamp subscribed_until_timestamp = request->subscribed_until();
@@ -25,21 +25,15 @@ class SubscriptionService final : public subscription_pb::Subscription::Service
             Database &db = Database::getInstance();
             subscription_pb::SubscriptionMessage created_subscription = db.createOrUpdateSubscriptionByUserId(user_id, subscribed_until);
 
-            subscription_pb::ResponseMetadata metadata;
-            metadata.set_request_id("1");
-
-            auto now = std::chrono::system_clock::now();
-            int nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() % 1000000000;
-            int seconds = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
-
-            auto timestamp = metadata.mutable_timestamp();
-            timestamp->set_seconds(seconds);
-            timestamp->set_nanos(nanos);
+            subscription_pb::ResponseMetadata metadata = generateMetadata("1");
 
             response->mutable_metadata()->CopyFrom(metadata);
             response->mutable_details()->CopyFrom(created_subscription);
-        } catch (const std::exception &e) {
-            std::cout << "Error creating or updating subscription: " << e.what() << "\n" << std::endl;
+        }
+        catch (const std::exception &e)
+        {
+            std::cout << "Error creating subscription: " << e.what() << "\n"
+                      << std::endl;
             return grpc::Status(grpc::StatusCode::INTERNAL, e.what());
         }
 
@@ -49,67 +43,58 @@ class SubscriptionService final : public subscription_pb::Subscription::Service
 
     grpc::Status GetSubscription(grpc::ServerContext *context, const subscription_pb::GetSubscriptionRequest *request, subscription_pb::GetSubscriptionResponse *response) override
     {
-        // subscription_pb::ResponseMetadata metadata;
-        // metadata.set_request_id("1");
+        std::string user_id = request->user_id();
+        if (user_id.empty())
+        {
+            return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "User ID is empty");
+        }
 
-        // auto now = std::chrono::system_clock::now();
-        // int seconds = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
-        // int nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() % 1000000000;
+        try
+        {
+            Database &db = Database::getInstance();
+            subscription_pb::SubscriptionMessage requested_subscription = db.getSubscriptionByUserId(user_id);
+            subscription_pb::ResponseMetadata metadata = generateMetadata("1");
 
-        // google::protobuf::Timestamp timestamp;
-        // timestamp.set_seconds(seconds);
-        // timestamp.set_nanos(nanos);
-        // metadata.set_allocated_timestamp(&timestamp);
+            response->mutable_metadata()->CopyFrom(metadata);
+            response->mutable_details()->CopyFrom(requested_subscription);
+        }
+        catch (const std::exception &e)
+        {
+            std::cout << "Error getting subscription: " << e.what() << "\n"
+                      << std::endl;
+            return grpc::Status(grpc::StatusCode::INTERNAL, e.what());
+        }
 
-        // response->set_allocated_metadata(&metadata);
-        // response->set_allocated_payload({});
-
-        return grpc::Status::OK;
-    }
-
-    grpc::Status UpdateSubscription(grpc::ServerContext *context, const subscription_pb::UpdateSubscriptionRequest *request, subscription_pb::UpdateSubscriptionResponse *response) override
-    {
-        // subscription_pb::ResponseMetadata metadata;
-        // metadata.set_request_id("1");
-
-        // auto now = std::chrono::system_clock::now();
-        // int seconds = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
-        // int nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() % 1000000000;
-
-        // google::protobuf::Timestamp timestamp;
-        // timestamp.set_seconds(seconds);
-        // timestamp.set_nanos(nanos);
-        // metadata.set_allocated_timestamp(&timestamp);
-
-        // response->set_allocated_metadata(&metadata);
-        // response->set_allocated_payload({});
-
+        std::cout << "Successfully retrieved subscription" << std::endl;
         return grpc::Status::OK;
     }
 
     grpc::Status DeleteSubscription(grpc::ServerContext *context, const subscription_pb::DeleteSubscriptionRequest *request, subscription_pb::DeleteSubscriptionResponse *response) override
     {
-        // subscription_pb::ResponseMetadata *metadata = new subscription_pb::ResponseMetadata();
-        // metadata->set_request_id("1");
+        std::string user_id = request->user_id();
+        if (user_id.empty())
+        {
+            return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "User ID is empty");
+        }
 
-        // auto now = std::chrono::system_clock::now();
-        // int seconds = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
-        // int nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() % 1000000000;
+        try
+        {
+            Database &db = Database::getInstance();
+            subscription_pb::SubscriptionMessage deleted_subscription = db.deleteSubscriptionByUserId(user_id);
+            subscription_pb::ResponseMetadata metadata = generateMetadata("1");
 
-        // google::protobuf::Timestamp *timestamp = new google::protobuf::Timestamp();
-        // timestamp->set_seconds(seconds);
-        // timestamp->set_nanos(nanos);
-        // metadata->set_allocated_timestamp(timestamp);
-        // response->set_allocated_metadata(metadata);
+            response->mutable_metadata()->CopyFrom(metadata);
+            *response->mutable_subscription_id() = deleted_subscription.subscription_id();
+            *response->mutable_user_id() = deleted_subscription.user_id();
+        }
+        catch (const std::exception &e)
+        {
+            std::cout << "Error deleting subscription: " << e.what() << "\n"
+                      << std::endl;
+            return grpc::Status(grpc::StatusCode::INTERNAL, e.what());
+        }
 
-        // subscription_pb::DeleteSubscriptionResponse *content = new subscription_pb::DeleteSubscriptionResponse();
-        // content->set_subscription_id("1");
-        // content->set_user_id("2");
-
-        // google::protobuf::Any *payload = new google::protobuf::Any();
-        // payload->PackFrom(*content);
-        // response->set_allocated_payload(payload);
-
+        std::cout << "Successfully retrieved subscription" << std::endl;
         return grpc::Status::OK;
     }
 

@@ -60,12 +60,12 @@ struct TableStruct_subscriptions_2eproto {
 extern const ::google::protobuf::internal::DescriptorTable
     descriptor_table_subscriptions_2eproto;
 namespace subscription_pb {
-class CreateSubscriptionRequest;
-struct CreateSubscriptionRequestDefaultTypeInternal;
-extern CreateSubscriptionRequestDefaultTypeInternal _CreateSubscriptionRequest_default_instance_;
-class CreateSubscriptionResponse;
-struct CreateSubscriptionResponseDefaultTypeInternal;
-extern CreateSubscriptionResponseDefaultTypeInternal _CreateSubscriptionResponse_default_instance_;
+class CreateOrUpdateSubscriptionRequest;
+struct CreateOrUpdateSubscriptionRequestDefaultTypeInternal;
+extern CreateOrUpdateSubscriptionRequestDefaultTypeInternal _CreateOrUpdateSubscriptionRequest_default_instance_;
+class CreateOrUpdateSubscriptionResponse;
+struct CreateOrUpdateSubscriptionResponseDefaultTypeInternal;
+extern CreateOrUpdateSubscriptionResponseDefaultTypeInternal _CreateOrUpdateSubscriptionResponse_default_instance_;
 class DeleteSubscriptionRequest;
 struct DeleteSubscriptionRequestDefaultTypeInternal;
 extern DeleteSubscriptionRequestDefaultTypeInternal _DeleteSubscriptionRequest_default_instance_;
@@ -1406,26 +1406,26 @@ class ResponseMetadata final :
   friend struct ::TableStruct_subscriptions_2eproto;
 };// -------------------------------------------------------------------
 
-class CreateSubscriptionRequest final :
-    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:subscription_pb.CreateSubscriptionRequest) */ {
+class CreateOrUpdateSubscriptionRequest final :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:subscription_pb.CreateOrUpdateSubscriptionRequest) */ {
  public:
-  inline CreateSubscriptionRequest() : CreateSubscriptionRequest(nullptr) {}
-  ~CreateSubscriptionRequest() override;
+  inline CreateOrUpdateSubscriptionRequest() : CreateOrUpdateSubscriptionRequest(nullptr) {}
+  ~CreateOrUpdateSubscriptionRequest() override;
   template<typename = void>
-  explicit PROTOBUF_CONSTEXPR CreateSubscriptionRequest(::google::protobuf::internal::ConstantInitialized);
+  explicit PROTOBUF_CONSTEXPR CreateOrUpdateSubscriptionRequest(::google::protobuf::internal::ConstantInitialized);
 
-  inline CreateSubscriptionRequest(const CreateSubscriptionRequest& from)
-      : CreateSubscriptionRequest(nullptr, from) {}
-  CreateSubscriptionRequest(CreateSubscriptionRequest&& from) noexcept
-    : CreateSubscriptionRequest() {
+  inline CreateOrUpdateSubscriptionRequest(const CreateOrUpdateSubscriptionRequest& from)
+      : CreateOrUpdateSubscriptionRequest(nullptr, from) {}
+  CreateOrUpdateSubscriptionRequest(CreateOrUpdateSubscriptionRequest&& from) noexcept
+    : CreateOrUpdateSubscriptionRequest() {
     *this = ::std::move(from);
   }
 
-  inline CreateSubscriptionRequest& operator=(const CreateSubscriptionRequest& from) {
+  inline CreateOrUpdateSubscriptionRequest& operator=(const CreateOrUpdateSubscriptionRequest& from) {
     CopyFrom(from);
     return *this;
   }
-  inline CreateSubscriptionRequest& operator=(CreateSubscriptionRequest&& from) noexcept {
+  inline CreateOrUpdateSubscriptionRequest& operator=(CreateOrUpdateSubscriptionRequest&& from) noexcept {
     if (this == &from) return *this;
     if (GetArena() == from.GetArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1457,20 +1457,20 @@ class CreateSubscriptionRequest final :
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const CreateSubscriptionRequest& default_instance() {
+  static const CreateOrUpdateSubscriptionRequest& default_instance() {
     return *internal_default_instance();
   }
-  static inline const CreateSubscriptionRequest* internal_default_instance() {
-    return reinterpret_cast<const CreateSubscriptionRequest*>(
-               &_CreateSubscriptionRequest_default_instance_);
+  static inline const CreateOrUpdateSubscriptionRequest* internal_default_instance() {
+    return reinterpret_cast<const CreateOrUpdateSubscriptionRequest*>(
+               &_CreateOrUpdateSubscriptionRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     3;
 
-  friend void swap(CreateSubscriptionRequest& a, CreateSubscriptionRequest& b) {
+  friend void swap(CreateOrUpdateSubscriptionRequest& a, CreateOrUpdateSubscriptionRequest& b) {
     a.Swap(&b);
   }
-  inline void Swap(CreateSubscriptionRequest* other) {
+  inline void Swap(CreateOrUpdateSubscriptionRequest* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetArena() != nullptr &&
@@ -1483,7 +1483,7 @@ class CreateSubscriptionRequest final :
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(CreateSubscriptionRequest* other) {
+  void UnsafeArenaSwap(CreateOrUpdateSubscriptionRequest* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -1491,14 +1491,14 @@ class CreateSubscriptionRequest final :
 
   // implements Message ----------------------------------------------
 
-  CreateSubscriptionRequest* New(::google::protobuf::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<CreateSubscriptionRequest>(arena);
+  CreateOrUpdateSubscriptionRequest* New(::google::protobuf::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CreateOrUpdateSubscriptionRequest>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const CreateSubscriptionRequest& from);
+  void CopyFrom(const CreateOrUpdateSubscriptionRequest& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom( const CreateSubscriptionRequest& from) {
-    CreateSubscriptionRequest::MergeImpl(*this, from);
+  void MergeFrom( const CreateOrUpdateSubscriptionRequest& from) {
+    CreateOrUpdateSubscriptionRequest::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg);
@@ -1516,16 +1516,16 @@ class CreateSubscriptionRequest final :
   ::google::protobuf::internal::CachedSize* AccessCachedSize() const final;
   void SharedCtor(::google::protobuf::Arena* arena);
   void SharedDtor();
-  void InternalSwap(CreateSubscriptionRequest* other);
+  void InternalSwap(CreateOrUpdateSubscriptionRequest* other);
 
   private:
   friend class ::google::protobuf::internal::AnyMetadata;
   static ::absl::string_view FullMessageName() {
-    return "subscription_pb.CreateSubscriptionRequest";
+    return "subscription_pb.CreateOrUpdateSubscriptionRequest";
   }
   protected:
-  explicit CreateSubscriptionRequest(::google::protobuf::Arena* arena);
-  CreateSubscriptionRequest(::google::protobuf::Arena* arena, const CreateSubscriptionRequest& from);
+  explicit CreateOrUpdateSubscriptionRequest(::google::protobuf::Arena* arena);
+  CreateOrUpdateSubscriptionRequest(::google::protobuf::Arena* arena, const CreateOrUpdateSubscriptionRequest& from);
   public:
 
   static const ClassData _class_data_;
@@ -1572,14 +1572,14 @@ class CreateSubscriptionRequest final :
   ::google::protobuf::Timestamp* _internal_mutable_subscribed_until();
 
   public:
-  // @@protoc_insertion_point(class_scope:subscription_pb.CreateSubscriptionRequest)
+  // @@protoc_insertion_point(class_scope:subscription_pb.CreateOrUpdateSubscriptionRequest)
  private:
   class _Internal;
 
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
       1, 2, 1,
-      57, 2>
+      65, 2>
       _table_;
   friend class ::google::protobuf::MessageLite;
   friend class ::google::protobuf::Arena;
@@ -2416,26 +2416,26 @@ class DeleteSubscriptionResponse final :
   friend struct ::TableStruct_subscriptions_2eproto;
 };// -------------------------------------------------------------------
 
-class CreateSubscriptionResponse final :
-    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:subscription_pb.CreateSubscriptionResponse) */ {
+class CreateOrUpdateSubscriptionResponse final :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:subscription_pb.CreateOrUpdateSubscriptionResponse) */ {
  public:
-  inline CreateSubscriptionResponse() : CreateSubscriptionResponse(nullptr) {}
-  ~CreateSubscriptionResponse() override;
+  inline CreateOrUpdateSubscriptionResponse() : CreateOrUpdateSubscriptionResponse(nullptr) {}
+  ~CreateOrUpdateSubscriptionResponse() override;
   template<typename = void>
-  explicit PROTOBUF_CONSTEXPR CreateSubscriptionResponse(::google::protobuf::internal::ConstantInitialized);
+  explicit PROTOBUF_CONSTEXPR CreateOrUpdateSubscriptionResponse(::google::protobuf::internal::ConstantInitialized);
 
-  inline CreateSubscriptionResponse(const CreateSubscriptionResponse& from)
-      : CreateSubscriptionResponse(nullptr, from) {}
-  CreateSubscriptionResponse(CreateSubscriptionResponse&& from) noexcept
-    : CreateSubscriptionResponse() {
+  inline CreateOrUpdateSubscriptionResponse(const CreateOrUpdateSubscriptionResponse& from)
+      : CreateOrUpdateSubscriptionResponse(nullptr, from) {}
+  CreateOrUpdateSubscriptionResponse(CreateOrUpdateSubscriptionResponse&& from) noexcept
+    : CreateOrUpdateSubscriptionResponse() {
     *this = ::std::move(from);
   }
 
-  inline CreateSubscriptionResponse& operator=(const CreateSubscriptionResponse& from) {
+  inline CreateOrUpdateSubscriptionResponse& operator=(const CreateOrUpdateSubscriptionResponse& from) {
     CopyFrom(from);
     return *this;
   }
-  inline CreateSubscriptionResponse& operator=(CreateSubscriptionResponse&& from) noexcept {
+  inline CreateOrUpdateSubscriptionResponse& operator=(CreateOrUpdateSubscriptionResponse&& from) noexcept {
     if (this == &from) return *this;
     if (GetArena() == from.GetArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2467,20 +2467,20 @@ class CreateSubscriptionResponse final :
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const CreateSubscriptionResponse& default_instance() {
+  static const CreateOrUpdateSubscriptionResponse& default_instance() {
     return *internal_default_instance();
   }
-  static inline const CreateSubscriptionResponse* internal_default_instance() {
-    return reinterpret_cast<const CreateSubscriptionResponse*>(
-               &_CreateSubscriptionResponse_default_instance_);
+  static inline const CreateOrUpdateSubscriptionResponse* internal_default_instance() {
+    return reinterpret_cast<const CreateOrUpdateSubscriptionResponse*>(
+               &_CreateOrUpdateSubscriptionResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     4;
 
-  friend void swap(CreateSubscriptionResponse& a, CreateSubscriptionResponse& b) {
+  friend void swap(CreateOrUpdateSubscriptionResponse& a, CreateOrUpdateSubscriptionResponse& b) {
     a.Swap(&b);
   }
-  inline void Swap(CreateSubscriptionResponse* other) {
+  inline void Swap(CreateOrUpdateSubscriptionResponse* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetArena() != nullptr &&
@@ -2493,7 +2493,7 @@ class CreateSubscriptionResponse final :
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(CreateSubscriptionResponse* other) {
+  void UnsafeArenaSwap(CreateOrUpdateSubscriptionResponse* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -2501,14 +2501,14 @@ class CreateSubscriptionResponse final :
 
   // implements Message ----------------------------------------------
 
-  CreateSubscriptionResponse* New(::google::protobuf::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<CreateSubscriptionResponse>(arena);
+  CreateOrUpdateSubscriptionResponse* New(::google::protobuf::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CreateOrUpdateSubscriptionResponse>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const CreateSubscriptionResponse& from);
+  void CopyFrom(const CreateOrUpdateSubscriptionResponse& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom( const CreateSubscriptionResponse& from) {
-    CreateSubscriptionResponse::MergeImpl(*this, from);
+  void MergeFrom( const CreateOrUpdateSubscriptionResponse& from) {
+    CreateOrUpdateSubscriptionResponse::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg);
@@ -2526,16 +2526,16 @@ class CreateSubscriptionResponse final :
   ::google::protobuf::internal::CachedSize* AccessCachedSize() const final;
   void SharedCtor(::google::protobuf::Arena* arena);
   void SharedDtor();
-  void InternalSwap(CreateSubscriptionResponse* other);
+  void InternalSwap(CreateOrUpdateSubscriptionResponse* other);
 
   private:
   friend class ::google::protobuf::internal::AnyMetadata;
   static ::absl::string_view FullMessageName() {
-    return "subscription_pb.CreateSubscriptionResponse";
+    return "subscription_pb.CreateOrUpdateSubscriptionResponse";
   }
   protected:
-  explicit CreateSubscriptionResponse(::google::protobuf::Arena* arena);
-  CreateSubscriptionResponse(::google::protobuf::Arena* arena, const CreateSubscriptionResponse& from);
+  explicit CreateOrUpdateSubscriptionResponse(::google::protobuf::Arena* arena);
+  CreateOrUpdateSubscriptionResponse(::google::protobuf::Arena* arena, const CreateOrUpdateSubscriptionResponse& from);
   public:
 
   static const ClassData _class_data_;
@@ -2581,7 +2581,7 @@ class CreateSubscriptionResponse final :
   ::subscription_pb::SubscriptionMessage* _internal_mutable_details();
 
   public:
-  // @@protoc_insertion_point(class_scope:subscription_pb.CreateSubscriptionResponse)
+  // @@protoc_insertion_point(class_scope:subscription_pb.CreateOrUpdateSubscriptionResponse)
  private:
   class _Internal;
 
@@ -3168,51 +3168,51 @@ inline void SubscriptionMessage::set_allocated_subscribed_until(::google::protob
 
 // -------------------------------------------------------------------
 
-// CreateSubscriptionRequest
+// CreateOrUpdateSubscriptionRequest
 
 // string user_id = 1 [json_name = "userId"];
-inline void CreateSubscriptionRequest::clear_user_id() {
+inline void CreateOrUpdateSubscriptionRequest::clear_user_id() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   _impl_.user_id_.ClearToEmpty();
 }
-inline const std::string& CreateSubscriptionRequest::user_id() const
+inline const std::string& CreateOrUpdateSubscriptionRequest::user_id() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:subscription_pb.CreateSubscriptionRequest.user_id)
+  // @@protoc_insertion_point(field_get:subscription_pb.CreateOrUpdateSubscriptionRequest.user_id)
   return _internal_user_id();
 }
 template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void CreateSubscriptionRequest::set_user_id(Arg_&& arg,
+inline PROTOBUF_ALWAYS_INLINE void CreateOrUpdateSubscriptionRequest::set_user_id(Arg_&& arg,
                                                      Args_... args) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.user_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:subscription_pb.CreateSubscriptionRequest.user_id)
+  // @@protoc_insertion_point(field_set:subscription_pb.CreateOrUpdateSubscriptionRequest.user_id)
 }
-inline std::string* CreateSubscriptionRequest::mutable_user_id() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline std::string* CreateOrUpdateSubscriptionRequest::mutable_user_id() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   std::string* _s = _internal_mutable_user_id();
-  // @@protoc_insertion_point(field_mutable:subscription_pb.CreateSubscriptionRequest.user_id)
+  // @@protoc_insertion_point(field_mutable:subscription_pb.CreateOrUpdateSubscriptionRequest.user_id)
   return _s;
 }
-inline const std::string& CreateSubscriptionRequest::_internal_user_id() const {
+inline const std::string& CreateOrUpdateSubscriptionRequest::_internal_user_id() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   return _impl_.user_id_.Get();
 }
-inline void CreateSubscriptionRequest::_internal_set_user_id(const std::string& value) {
+inline void CreateOrUpdateSubscriptionRequest::_internal_set_user_id(const std::string& value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.user_id_.Set(value, GetArena());
 }
-inline std::string* CreateSubscriptionRequest::_internal_mutable_user_id() {
+inline std::string* CreateOrUpdateSubscriptionRequest::_internal_mutable_user_id() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   return _impl_.user_id_.Mutable( GetArena());
 }
-inline std::string* CreateSubscriptionRequest::release_user_id() {
+inline std::string* CreateOrUpdateSubscriptionRequest::release_user_id() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  // @@protoc_insertion_point(field_release:subscription_pb.CreateSubscriptionRequest.user_id)
+  // @@protoc_insertion_point(field_release:subscription_pb.CreateOrUpdateSubscriptionRequest.user_id)
   return _impl_.user_id_.Release();
 }
-inline void CreateSubscriptionRequest::set_allocated_user_id(std::string* value) {
+inline void CreateOrUpdateSubscriptionRequest::set_allocated_user_id(std::string* value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   _impl_.user_id_.SetAllocated(value, GetArena());
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -3220,25 +3220,25 @@ inline void CreateSubscriptionRequest::set_allocated_user_id(std::string* value)
           _impl_.user_id_.Set("", GetArena());
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:subscription_pb.CreateSubscriptionRequest.user_id)
+  // @@protoc_insertion_point(field_set_allocated:subscription_pb.CreateOrUpdateSubscriptionRequest.user_id)
 }
 
 // .google.protobuf.Timestamp subscribed_until = 2 [json_name = "subscribedUntil"];
-inline bool CreateSubscriptionRequest::has_subscribed_until() const {
+inline bool CreateOrUpdateSubscriptionRequest::has_subscribed_until() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.subscribed_until_ != nullptr);
   return value;
 }
-inline const ::google::protobuf::Timestamp& CreateSubscriptionRequest::_internal_subscribed_until() const {
+inline const ::google::protobuf::Timestamp& CreateOrUpdateSubscriptionRequest::_internal_subscribed_until() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   const ::google::protobuf::Timestamp* p = _impl_.subscribed_until_;
   return p != nullptr ? *p : reinterpret_cast<const ::google::protobuf::Timestamp&>(::google::protobuf::_Timestamp_default_instance_);
 }
-inline const ::google::protobuf::Timestamp& CreateSubscriptionRequest::subscribed_until() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:subscription_pb.CreateSubscriptionRequest.subscribed_until)
+inline const ::google::protobuf::Timestamp& CreateOrUpdateSubscriptionRequest::subscribed_until() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:subscription_pb.CreateOrUpdateSubscriptionRequest.subscribed_until)
   return _internal_subscribed_until();
 }
-inline void CreateSubscriptionRequest::unsafe_arena_set_allocated_subscribed_until(::google::protobuf::Timestamp* value) {
+inline void CreateOrUpdateSubscriptionRequest::unsafe_arena_set_allocated_subscribed_until(::google::protobuf::Timestamp* value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.subscribed_until_);
@@ -3249,9 +3249,9 @@ inline void CreateSubscriptionRequest::unsafe_arena_set_allocated_subscribed_unt
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:subscription_pb.CreateSubscriptionRequest.subscribed_until)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:subscription_pb.CreateOrUpdateSubscriptionRequest.subscribed_until)
 }
-inline ::google::protobuf::Timestamp* CreateSubscriptionRequest::release_subscribed_until() {
+inline ::google::protobuf::Timestamp* CreateOrUpdateSubscriptionRequest::release_subscribed_until() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
 
   _impl_._has_bits_[0] &= ~0x00000001u;
@@ -3270,16 +3270,16 @@ inline ::google::protobuf::Timestamp* CreateSubscriptionRequest::release_subscri
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return released;
 }
-inline ::google::protobuf::Timestamp* CreateSubscriptionRequest::unsafe_arena_release_subscribed_until() {
+inline ::google::protobuf::Timestamp* CreateOrUpdateSubscriptionRequest::unsafe_arena_release_subscribed_until() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  // @@protoc_insertion_point(field_release:subscription_pb.CreateSubscriptionRequest.subscribed_until)
+  // @@protoc_insertion_point(field_release:subscription_pb.CreateOrUpdateSubscriptionRequest.subscribed_until)
 
   _impl_._has_bits_[0] &= ~0x00000001u;
   ::google::protobuf::Timestamp* temp = _impl_.subscribed_until_;
   _impl_.subscribed_until_ = nullptr;
   return temp;
 }
-inline ::google::protobuf::Timestamp* CreateSubscriptionRequest::_internal_mutable_subscribed_until() {
+inline ::google::protobuf::Timestamp* CreateOrUpdateSubscriptionRequest::_internal_mutable_subscribed_until() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   _impl_._has_bits_[0] |= 0x00000001u;
   if (_impl_.subscribed_until_ == nullptr) {
@@ -3288,12 +3288,12 @@ inline ::google::protobuf::Timestamp* CreateSubscriptionRequest::_internal_mutab
   }
   return _impl_.subscribed_until_;
 }
-inline ::google::protobuf::Timestamp* CreateSubscriptionRequest::mutable_subscribed_until() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::google::protobuf::Timestamp* CreateOrUpdateSubscriptionRequest::mutable_subscribed_until() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::Timestamp* _msg = _internal_mutable_subscribed_until();
-  // @@protoc_insertion_point(field_mutable:subscription_pb.CreateSubscriptionRequest.subscribed_until)
+  // @@protoc_insertion_point(field_mutable:subscription_pb.CreateOrUpdateSubscriptionRequest.subscribed_until)
   return _msg;
 }
-inline void CreateSubscriptionRequest::set_allocated_subscribed_until(::google::protobuf::Timestamp* value) {
+inline void CreateOrUpdateSubscriptionRequest::set_allocated_subscribed_until(::google::protobuf::Timestamp* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (message_arena == nullptr) {
@@ -3311,34 +3311,34 @@ inline void CreateSubscriptionRequest::set_allocated_subscribed_until(::google::
   }
 
   _impl_.subscribed_until_ = reinterpret_cast<::google::protobuf::Timestamp*>(value);
-  // @@protoc_insertion_point(field_set_allocated:subscription_pb.CreateSubscriptionRequest.subscribed_until)
+  // @@protoc_insertion_point(field_set_allocated:subscription_pb.CreateOrUpdateSubscriptionRequest.subscribed_until)
 }
 
 // -------------------------------------------------------------------
 
-// CreateSubscriptionResponse
+// CreateOrUpdateSubscriptionResponse
 
 // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
-inline bool CreateSubscriptionResponse::has_metadata() const {
+inline bool CreateOrUpdateSubscriptionResponse::has_metadata() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.metadata_ != nullptr);
   return value;
 }
-inline void CreateSubscriptionResponse::clear_metadata() {
+inline void CreateOrUpdateSubscriptionResponse::clear_metadata() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.metadata_ != nullptr) _impl_.metadata_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline const ::subscription_pb::ResponseMetadata& CreateSubscriptionResponse::_internal_metadata() const {
+inline const ::subscription_pb::ResponseMetadata& CreateOrUpdateSubscriptionResponse::_internal_metadata() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   const ::subscription_pb::ResponseMetadata* p = _impl_.metadata_;
   return p != nullptr ? *p : reinterpret_cast<const ::subscription_pb::ResponseMetadata&>(::subscription_pb::_ResponseMetadata_default_instance_);
 }
-inline const ::subscription_pb::ResponseMetadata& CreateSubscriptionResponse::metadata() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:subscription_pb.CreateSubscriptionResponse.metadata)
+inline const ::subscription_pb::ResponseMetadata& CreateOrUpdateSubscriptionResponse::metadata() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:subscription_pb.CreateOrUpdateSubscriptionResponse.metadata)
   return _internal_metadata();
 }
-inline void CreateSubscriptionResponse::unsafe_arena_set_allocated_metadata(::subscription_pb::ResponseMetadata* value) {
+inline void CreateOrUpdateSubscriptionResponse::unsafe_arena_set_allocated_metadata(::subscription_pb::ResponseMetadata* value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.metadata_);
@@ -3349,9 +3349,9 @@ inline void CreateSubscriptionResponse::unsafe_arena_set_allocated_metadata(::su
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:subscription_pb.CreateSubscriptionResponse.metadata)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:subscription_pb.CreateOrUpdateSubscriptionResponse.metadata)
 }
-inline ::subscription_pb::ResponseMetadata* CreateSubscriptionResponse::release_metadata() {
+inline ::subscription_pb::ResponseMetadata* CreateOrUpdateSubscriptionResponse::release_metadata() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
 
   _impl_._has_bits_[0] &= ~0x00000001u;
@@ -3370,16 +3370,16 @@ inline ::subscription_pb::ResponseMetadata* CreateSubscriptionResponse::release_
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return released;
 }
-inline ::subscription_pb::ResponseMetadata* CreateSubscriptionResponse::unsafe_arena_release_metadata() {
+inline ::subscription_pb::ResponseMetadata* CreateOrUpdateSubscriptionResponse::unsafe_arena_release_metadata() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  // @@protoc_insertion_point(field_release:subscription_pb.CreateSubscriptionResponse.metadata)
+  // @@protoc_insertion_point(field_release:subscription_pb.CreateOrUpdateSubscriptionResponse.metadata)
 
   _impl_._has_bits_[0] &= ~0x00000001u;
   ::subscription_pb::ResponseMetadata* temp = _impl_.metadata_;
   _impl_.metadata_ = nullptr;
   return temp;
 }
-inline ::subscription_pb::ResponseMetadata* CreateSubscriptionResponse::_internal_mutable_metadata() {
+inline ::subscription_pb::ResponseMetadata* CreateOrUpdateSubscriptionResponse::_internal_mutable_metadata() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   _impl_._has_bits_[0] |= 0x00000001u;
   if (_impl_.metadata_ == nullptr) {
@@ -3388,12 +3388,12 @@ inline ::subscription_pb::ResponseMetadata* CreateSubscriptionResponse::_interna
   }
   return _impl_.metadata_;
 }
-inline ::subscription_pb::ResponseMetadata* CreateSubscriptionResponse::mutable_metadata() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::subscription_pb::ResponseMetadata* CreateOrUpdateSubscriptionResponse::mutable_metadata() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::subscription_pb::ResponseMetadata* _msg = _internal_mutable_metadata();
-  // @@protoc_insertion_point(field_mutable:subscription_pb.CreateSubscriptionResponse.metadata)
+  // @@protoc_insertion_point(field_mutable:subscription_pb.CreateOrUpdateSubscriptionResponse.metadata)
   return _msg;
 }
-inline void CreateSubscriptionResponse::set_allocated_metadata(::subscription_pb::ResponseMetadata* value) {
+inline void CreateOrUpdateSubscriptionResponse::set_allocated_metadata(::subscription_pb::ResponseMetadata* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (message_arena == nullptr) {
@@ -3411,30 +3411,30 @@ inline void CreateSubscriptionResponse::set_allocated_metadata(::subscription_pb
   }
 
   _impl_.metadata_ = reinterpret_cast<::subscription_pb::ResponseMetadata*>(value);
-  // @@protoc_insertion_point(field_set_allocated:subscription_pb.CreateSubscriptionResponse.metadata)
+  // @@protoc_insertion_point(field_set_allocated:subscription_pb.CreateOrUpdateSubscriptionResponse.metadata)
 }
 
 // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
-inline bool CreateSubscriptionResponse::has_details() const {
+inline bool CreateOrUpdateSubscriptionResponse::has_details() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.details_ != nullptr);
   return value;
 }
-inline void CreateSubscriptionResponse::clear_details() {
+inline void CreateOrUpdateSubscriptionResponse::clear_details() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.details_ != nullptr) _impl_.details_->Clear();
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline const ::subscription_pb::SubscriptionMessage& CreateSubscriptionResponse::_internal_details() const {
+inline const ::subscription_pb::SubscriptionMessage& CreateOrUpdateSubscriptionResponse::_internal_details() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   const ::subscription_pb::SubscriptionMessage* p = _impl_.details_;
   return p != nullptr ? *p : reinterpret_cast<const ::subscription_pb::SubscriptionMessage&>(::subscription_pb::_SubscriptionMessage_default_instance_);
 }
-inline const ::subscription_pb::SubscriptionMessage& CreateSubscriptionResponse::details() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:subscription_pb.CreateSubscriptionResponse.details)
+inline const ::subscription_pb::SubscriptionMessage& CreateOrUpdateSubscriptionResponse::details() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:subscription_pb.CreateOrUpdateSubscriptionResponse.details)
   return _internal_details();
 }
-inline void CreateSubscriptionResponse::unsafe_arena_set_allocated_details(::subscription_pb::SubscriptionMessage* value) {
+inline void CreateOrUpdateSubscriptionResponse::unsafe_arena_set_allocated_details(::subscription_pb::SubscriptionMessage* value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.details_);
@@ -3445,9 +3445,9 @@ inline void CreateSubscriptionResponse::unsafe_arena_set_allocated_details(::sub
   } else {
     _impl_._has_bits_[0] &= ~0x00000002u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:subscription_pb.CreateSubscriptionResponse.details)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:subscription_pb.CreateOrUpdateSubscriptionResponse.details)
 }
-inline ::subscription_pb::SubscriptionMessage* CreateSubscriptionResponse::release_details() {
+inline ::subscription_pb::SubscriptionMessage* CreateOrUpdateSubscriptionResponse::release_details() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
 
   _impl_._has_bits_[0] &= ~0x00000002u;
@@ -3466,16 +3466,16 @@ inline ::subscription_pb::SubscriptionMessage* CreateSubscriptionResponse::relea
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return released;
 }
-inline ::subscription_pb::SubscriptionMessage* CreateSubscriptionResponse::unsafe_arena_release_details() {
+inline ::subscription_pb::SubscriptionMessage* CreateOrUpdateSubscriptionResponse::unsafe_arena_release_details() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  // @@protoc_insertion_point(field_release:subscription_pb.CreateSubscriptionResponse.details)
+  // @@protoc_insertion_point(field_release:subscription_pb.CreateOrUpdateSubscriptionResponse.details)
 
   _impl_._has_bits_[0] &= ~0x00000002u;
   ::subscription_pb::SubscriptionMessage* temp = _impl_.details_;
   _impl_.details_ = nullptr;
   return temp;
 }
-inline ::subscription_pb::SubscriptionMessage* CreateSubscriptionResponse::_internal_mutable_details() {
+inline ::subscription_pb::SubscriptionMessage* CreateOrUpdateSubscriptionResponse::_internal_mutable_details() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   _impl_._has_bits_[0] |= 0x00000002u;
   if (_impl_.details_ == nullptr) {
@@ -3484,12 +3484,12 @@ inline ::subscription_pb::SubscriptionMessage* CreateSubscriptionResponse::_inte
   }
   return _impl_.details_;
 }
-inline ::subscription_pb::SubscriptionMessage* CreateSubscriptionResponse::mutable_details() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::subscription_pb::SubscriptionMessage* CreateOrUpdateSubscriptionResponse::mutable_details() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::subscription_pb::SubscriptionMessage* _msg = _internal_mutable_details();
-  // @@protoc_insertion_point(field_mutable:subscription_pb.CreateSubscriptionResponse.details)
+  // @@protoc_insertion_point(field_mutable:subscription_pb.CreateOrUpdateSubscriptionResponse.details)
   return _msg;
 }
-inline void CreateSubscriptionResponse::set_allocated_details(::subscription_pb::SubscriptionMessage* value) {
+inline void CreateOrUpdateSubscriptionResponse::set_allocated_details(::subscription_pb::SubscriptionMessage* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (message_arena == nullptr) {
@@ -3507,7 +3507,7 @@ inline void CreateSubscriptionResponse::set_allocated_details(::subscription_pb:
   }
 
   _impl_.details_ = reinterpret_cast<::subscription_pb::SubscriptionMessage*>(value);
-  // @@protoc_insertion_point(field_set_allocated:subscription_pb.CreateSubscriptionResponse.details)
+  // @@protoc_insertion_point(field_set_allocated:subscription_pb.CreateOrUpdateSubscriptionResponse.details)
 }
 
 // -------------------------------------------------------------------

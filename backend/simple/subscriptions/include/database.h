@@ -9,11 +9,11 @@ class Database
 {
 public:
     static Database &getInstance();
-    
-    pqxx::result getSubscriptionByUserId(const std::string &user_id);
+
+    subscription_pb::SubscriptionMessage getSubscriptionByUserId(const std::string &user_id);
     subscription_pb::SubscriptionMessage createOrUpdateSubscriptionByUserId(const std::string &user_id, const time_t subscribed_until);
-    pqxx::result getExpiredSubscriptions();
-    pqxx::result deleteSubscriptionByUserId(const std::string &user_id);
+    std::vector<subscription_pb::SubscriptionMessage> getExpiredSubscriptions();
+    subscription_pb::SubscriptionMessage deleteSubscriptionByUserId(const std::string &user_id);
 
 private:
     pqxx::connection conn;

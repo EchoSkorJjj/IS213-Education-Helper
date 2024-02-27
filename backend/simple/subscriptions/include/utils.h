@@ -8,5 +8,6 @@
 std::string time_t_to_string(const time_t &time);
 google::protobuf::Timestamp time_t_to_timestamp(const time_t &time);
 google::protobuf::Timestamp pqxx_field_to_timestamp(const pqxx::field &field);
+subscription_pb::ResponseMetadata generateMetadata(const std::string& request_id);
 
 #endif

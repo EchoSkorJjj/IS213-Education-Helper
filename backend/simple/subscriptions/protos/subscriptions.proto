@@ -27,14 +27,14 @@ message SubscriptionMessage {
     google.protobuf.Timestamp subscribed_until = 3;
 }
 
-message CreateSubscriptionRequest {
+message CreateOrUpdateSubscriptionRequest {
     string user_id = 1;
     // may or may not need this, depending on whether we offer different subscription types
     // (e.g. 1 month, 1 year, unlimited). For now assume it is required.
     google.protobuf.Timestamp subscribed_until = 2;
 }
 
-message CreateSubscriptionResponse {
+message CreateOrUpdateSubscriptionResponse {
     ResponseMetadata metadata = 1;
     SubscriptionMessage details = 2;
 }
@@ -77,9 +77,8 @@ message HealthCheckResponse {
 }
 
 service Subscription {
-    rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
+    rpc CreateOrUpdateSubscription(CreateOrUpdateSubscriptionRequest) returns (CreateOrUpdateSubscriptionResponse);
     rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
-    rpc UpdateSubscription(UpdateSubscriptionRequest) returns (UpdateSubscriptionResponse);
     rpc DeleteSubscription(DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse);
     rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse);
 }

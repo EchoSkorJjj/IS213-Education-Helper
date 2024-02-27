@@ -1,7 +1,6 @@
 #include "../../include/database.h"
 #include "../../include/utils.h"
 #include "../../pb/subscriptions.pb.h"
-#include "../../pb/subscriptions.grpc.pb.h"
 
 Database &Database::getInstance()
 {
@@ -9,14 +8,27 @@ Database &Database::getInstance()
     return instance;
 }
 
-pqxx::result Database::getSubscriptionByUserId(const std::string &user_id)
+subscription_pb::SubscriptionMessage Database::getSubscriptionByUserId(const std::string &user_id)
 {
     pqxx::work W(conn);
     std::string query = "SELECT * FROM subscriptions WHERE user_id = $1";
 
-    pqxx::result R = W.exec_params(query, user_id);
+    pqxx::result results = W.exec_params(query, user_id);
     W.commit();
-    return R;
+
+    if (results.empty())
+    {
+        throw std::runtime_error("No subscription found for user");
+    }
+
+    subscription_pb::SubscriptionMessage subscription_message;
+    auto row = results[0];
+    subscription_message.set_subscription_id(row["id"].c_str());
+    subscription_message.set_user_id(row["user_id"].c_str());
+    auto timestamp_ptr = subscription_message.mutable_subscribed_until();
+    *timestamp_ptr = pqxx_field_to_timestamp(row["subscribed_until"]);
+
+    return subscription_message;
 }
 
 subscription_pb::SubscriptionMessage Database::createOrUpdateSubscriptionByUserId(const std::string &user_id, const time_t subscribed_until)
@@ -32,47 +44,82 @@ subscription_pb::SubscriptionMessage Database::createOrUpdateSubscriptionByUserI
     W.exec_params(insert_query, user_id, timestamp_str);
 
     std::string select_query = "SELECT * FROM subscriptions WHERE user_id = $1";
-    pqxx::result R = W.exec_params(select_query, user_id);
+    pqxx::result select_results = W.exec_params(select_query, user_id);
     W.commit();
 
-    if (R.empty())
+    if (select_results.empty())
     {
         throw std::runtime_error("Failed to create or update subscription");
     }
 
     subscription_pb::SubscriptionMessage subscription_message;
-    auto row = R[0];
+    auto row = select_results[0];
     subscription_message.set_subscription_id(row["id"].c_str());
     subscription_message.set_user_id(row["user_id"].c_str());
 
-    google::protobuf::Timestamp subscribed_until_timestamp = pqxx_field_to_timestamp(row["subscribed_until"]);
     auto timestamp_ptr = subscription_message.mutable_subscribed_until();
-    *timestamp_ptr = subscribed_until_timestamp;
-    
+    *timestamp_ptr = pqxx_field_to_timestamp(row["subscribed_until"]);
+
     return subscription_message;
 }
 
-pqxx::result Database::getExpiredSubscriptions()
+std::vector<subscription_pb::SubscriptionMessage> Database::getExpiredSubscriptions()
 {
-    time_t t = std::time(nullptr);
-    std::string current_timestamp_str = time_t_to_string(t);
+    time_t current_time = std::time(nullptr);
+    std::string current_timestamp_str = time_t_to_string(current_time);
 
     pqxx::work W(conn);
     std::string query = "SELECT * FROM subscriptions WHERE subscribed_until <= $1";
 
-    pqxx::result R = W.exec_params(query, current_timestamp_str);
+    pqxx::result results = W.exec_params(query, current_timestamp_str);
     W.commit();
-    return R;
+
+    std::vector<subscription_pb::SubscriptionMessage> expired_subscriptions;
+    for (auto row : results)
+    {
+        subscription_pb::SubscriptionMessage subscription_message;
+        subscription_message.set_subscription_id(row["id"].c_str());
+        subscription_message.set_user_id(row["user_id"].c_str());
+
+        auto timestamp_ptr = subscription_message.mutable_subscribed_until();
+        *timestamp_ptr = pqxx_field_to_timestamp(row["subscribed_until"]);
+
+        expired_subscriptions.push_back(subscription_message);
+    }
+
+    return expired_subscriptions;
 }
 
-pqxx::result Database::deleteSubscriptionByUserId(const std::string &user_id)
+subscription_pb::SubscriptionMessage Database::deleteSubscriptionByUserId(const std::string &user_id)
 {
     pqxx::work W(conn);
-    std::string query = "DELETE FROM subscriptions WHERE user_id = $1";
 
-    pqxx::result R = W.exec_params(query, user_id);
+    std::string select_query = "SELECT * FROM subscriptions WHERE user_id = $1";
+    pqxx::result select_results = W.exec_params(select_query, user_id);
+
+    if (select_results.empty())
+    {
+        throw std::runtime_error("No subscription found for user");
+    }
+
+    subscription_pb::SubscriptionMessage subscription_message;
+    auto row = select_results[0];
+    subscription_message.set_subscription_id(row["id"].c_str());
+    subscription_message.set_user_id(row["user_id"].c_str());
+
+    auto timestamp_ptr = subscription_message.mutable_subscribed_until();
+    *timestamp_ptr = pqxx_field_to_timestamp(row["subscribed_until"]);
+
+    std::string delete_query = "DELETE FROM subscriptions WHERE user_id = $1";
+    pqxx::result delete_results = W.exec_params(delete_query, user_id);
     W.commit();
-    return R;
+
+    if (delete_results.affected_rows() == 0)
+    {
+        throw std::runtime_error("Failed to delete subscription");
+    }
+
+    return subscription_message;
 }
 
 Database::Database() : conn(std::string("dbname=") + std::getenv("DB_NAME") +
