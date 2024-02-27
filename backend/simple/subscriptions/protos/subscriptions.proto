@@ -4,6 +4,7 @@ package subscription_pb;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
 
 message ResponseMetadata {
     string request_id = 1;
@@ -33,12 +34,26 @@ message CreateSubscriptionRequest {
     google.protobuf.Timestamp subscribed_until = 2;
 }
 
+message CreateSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
 message GetSubscriptionRequest {
     string user_id = 1;
 }
 
+message GetSubscriptionResponse {
+    SubscriptionMessage details = 1;
+}
+
 message DeleteSubscriptionRequest {
     string user_id = 1;
+}
+
+message DeleteSubscriptionResponse {
+    string subscription_id = 1;
+    string user_id = 2;
 }
 
 message HealthCheckRequest {
@@ -50,8 +65,8 @@ message HealthCheckResponse {
 }
 
 service Subscription {
-    // rpc CreateSubscription(CreateSubscriptionRequest) returns (ServiceResponseWrapper);
-    // rpc GetSubscription(GetSubscriptionRequest) returns (ServiceResponseWrapper);
-    // rpc DeleteSubscription(DeleteSubscriptionRequest) returns (ServiceResponseWrapper);
+    rpc CreateSubscription(CreateSubscriptionRequest) returns (ServiceResponseWrapper);
+    rpc GetSubscription(GetSubscriptionRequest) returns (ServiceResponseWrapper);
+    rpc DeleteSubscription(DeleteSubscriptionRequest) returns (ServiceResponseWrapper);
     rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse);
 }
