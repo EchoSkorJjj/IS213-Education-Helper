@@ -34,7 +34,7 @@ const generateNote = async (topic: string, notesTitle: string) => {
   return { topic, title, imageURL, creator };
 };
 
-export const fetchNotes = async (
+export const getNotes = async (
   topic: string,
   notesTitle: string,
   currentMarketPage: number,
