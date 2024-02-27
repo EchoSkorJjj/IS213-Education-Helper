@@ -88,7 +88,7 @@ const Market = ({
                 height="50%"
                 width="100%"
               />
-              <CardBody p="0">
+              <CardBody pl="4" p="0">
                 <Stack
                   pt="1em"
                   pr="3em"
