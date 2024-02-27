@@ -24,8 +24,6 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv
-  grpc
-  grpc-tools
   json
   sinatra
   stripe
