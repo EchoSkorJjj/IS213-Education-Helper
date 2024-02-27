@@ -23,6 +23,8 @@ import NotesPageImage from "~assets/img/notes_page_image.png";
 
 import { useAuth } from "~features/auth";
 
+import { generateNotes } from "~api";
+
 const NotesGeneratorPage = () => {
   const {
     isOpen: isModalOpen,
@@ -58,7 +60,7 @@ const NotesGeneratorPage = () => {
     setGenerateFlashcard(false);
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!selectedFile) {
       toast({
         title: "No file selected",
@@ -78,7 +80,9 @@ const NotesGeneratorPage = () => {
       isClosable: true,
     });
 
-    // TODO: Make an api call
+    const data = await generateNotes(selectedFile, generateFlashcard);
+
+    console.log(data);
   };
 
   return (

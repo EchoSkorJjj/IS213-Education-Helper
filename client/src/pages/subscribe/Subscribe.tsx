@@ -15,6 +15,8 @@ import {
 
 import { useAuth } from "~features/auth";
 
+import { getCheckoutUrl } from "~api";
+
 interface Props {
   children: React.ReactNode;
 }
@@ -39,6 +41,11 @@ function PriceWrapper(props: Props) {
 const SubscribePage = () => {
   const { user } = useAuth();
   const toast = useToast();
+
+  const handleSubscribe = async () => {
+    const url = await getCheckoutUrl();
+    window.location.href = url;
+  };
 
   const handleFreePlan = () => {
     const plan = user?.is_paid ? "pro" : "free";
@@ -166,7 +173,7 @@ const SubscribePage = () => {
                 </ListItem>
               </List>
               <Box w="80%" pt={7}>
-                <Button w="full">
+                <Button w="full" onClick={handleSubscribe}>
                   {user?.is_paid ? "Unsubscribe" : "Go Pro"}
                 </Button>
               </Box>

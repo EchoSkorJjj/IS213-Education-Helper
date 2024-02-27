@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 
-import { fetchNotes } from "./generateNote";
+import { getNotes } from "./generateNote";
 import Market from "./Market";
 import Topics from "./Topics";
+
+import { getTopics } from "~api";
 
 interface NotesProp {
   topic: string;
@@ -13,6 +15,8 @@ interface NotesProp {
 }
 
 const MarketplacePage = () => {
+  const toast = useToast();
+
   const [topics, setTopics] = useState<string[]>([]);
   const [topic, setTopic] = useState<string>("All");
   const [notesTitle, setNotesTitle] = useState<string>("");
@@ -22,43 +26,38 @@ const MarketplacePage = () => {
   const [currentTopicPage, setCurrentTopicPage] = useState(1);
   const [currentMarketPage, setCurrentMarketPage] = useState(1);
 
-  const getNotes = async (
+  const handleGetNotes = async (
     topic: string,
     notesTitle: string,
     currentMarketPage: number,
   ): Promise<void> => {
-    const { notes, totalNotesCount } = await fetchNotes(
-      topic,
-      notesTitle,
-      currentMarketPage,
-    );
+    const data = await getNotes(topic, notesTitle, currentMarketPage);
 
-    setNotes(notes);
-    setTotalNotesCount(totalNotesCount);
+    setNotes(data.notes);
+    setTotalNotesCount(data.totalNotesCount);
   };
 
   useEffect(() => {
-    // Simulate fetching topics names
-    const fetchedTopics = [
-      "All",
-      "Data Science",
-      "Business & Management",
-      "Language",
-      "Information Technology",
-      "Film & Media",
-      "Math & Logic",
-      "Health & Medical",
-      "Design & Creative",
-      "Neil deGrasse Tyson",
-      "Neil sharma",
-      "Neil Gae",
-    ];
+    const fetchTopics = async () => {
+      const fetchedTopics = await getTopics();
+      if (!fetchedTopics || fetchedTopics.length === 0) {
+        toast({
+          title: "Failed to fetch topics",
+          status: "error",
+          isClosable: true,
+          position: "top",
+          duration: 3000,
+        });
+        return;
+      }
+      setTopics(fetchedTopics);
+    };
 
-    setTopics(fetchedTopics);
+    fetchTopics();
   }, []);
 
   useEffect(() => {
-    getNotes(topic, notesTitle, currentMarketPage);
+    handleGetNotes(topic, notesTitle, currentMarketPage);
   }, [topic, notesTitle, currentMarketPage]);
 
   return (
