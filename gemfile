@@ -4,5 +4,4 @@ gem 'sinatra'
 gem 'stripe'
 gem 'json'
 gem 'dotenv'
-gem 'grpc-tools'
-gem 'grpc'
+
