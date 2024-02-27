@@ -13,6 +13,7 @@ add_executable(SUBSCRIPTIONS_SERVICE
     pb/subscriptions.grpc.pb.cc
     src/proto-services/subscriptions.cpp
     src/database/database.cpp
+    src/utils/utils.cpp
     src/server.cpp
 )
 
