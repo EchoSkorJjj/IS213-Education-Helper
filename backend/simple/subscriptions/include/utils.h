@@ -1,13 +1,16 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <pqxx/pqxx>
 #include <grpcpp/grpcpp.h>
+
+#include <pqxx/pqxx>
+
 #include "../pb/subscriptions.grpc.pb.h"
 
-std::string time_t_to_string(const time_t &time);
-google::protobuf::Timestamp time_t_to_timestamp(const time_t &time);
-google::protobuf::Timestamp pqxx_field_to_timestamp(const pqxx::field &field);
-subscription_pb::ResponseMetadata generateMetadata(const std::string& request_id);
+std::string TimeT2String(const time_t &time);
+google::protobuf::Timestamp TimeT2GoogleTimestamp(const time_t &time);
+google::protobuf::Timestamp PqxxField2GoogleTimestamp(const pqxx::field &field);
+subscription_pb::ResponseMetadata GenerateMetadata(
+    const std::string &request_id);
 
 #endif
