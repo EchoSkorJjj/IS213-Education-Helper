@@ -18,7 +18,7 @@ configure do
 end
 
 before do
-  response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3002'
+  response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
   response.headers['Access-Control-Allow-Credentials'] = 'true'
 end
 
@@ -38,8 +38,8 @@ get '/checkout' do
         quantity: 1,
       }],
       mode: 'subscription',
-      success_url: 'http://localhost:3002/subscribe',
-      cancel_url: 'http://localhost:3002/subscribe',
+      success_url: 'http://localhost:3001/subscribe',
+      cancel_url: 'http://localhost:3001/subscribe',
     )
   
     json url:session.url
