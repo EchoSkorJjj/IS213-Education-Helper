@@ -35,26 +35,33 @@ class Subscription final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::subscription_pb::ServiceResponseWrapper* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>> AsyncCreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>>(AsyncCreateSubscriptionRaw(context, request, cq));
+    virtual ::grpc::Status CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::subscription_pb::CreateSubscriptionResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::CreateSubscriptionResponse>> AsyncCreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::CreateSubscriptionResponse>>(AsyncCreateSubscriptionRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>> PrepareAsyncCreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>>(PrepareAsyncCreateSubscriptionRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::CreateSubscriptionResponse>> PrepareAsyncCreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::CreateSubscriptionResponse>>(PrepareAsyncCreateSubscriptionRaw(context, request, cq));
     }
-    virtual ::grpc::Status GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::subscription_pb::ServiceResponseWrapper* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>> AsyncGetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>>(AsyncGetSubscriptionRaw(context, request, cq));
+    virtual ::grpc::Status GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::subscription_pb::GetSubscriptionResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::GetSubscriptionResponse>> AsyncGetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::GetSubscriptionResponse>>(AsyncGetSubscriptionRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>> PrepareAsyncGetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>>(PrepareAsyncGetSubscriptionRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::GetSubscriptionResponse>> PrepareAsyncGetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::GetSubscriptionResponse>>(PrepareAsyncGetSubscriptionRaw(context, request, cq));
     }
-    virtual ::grpc::Status DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::subscription_pb::ServiceResponseWrapper* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>> AsyncDeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>>(AsyncDeleteSubscriptionRaw(context, request, cq));
+    virtual ::grpc::Status UpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::subscription_pb::UpdateSubscriptionResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::UpdateSubscriptionResponse>> AsyncUpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::UpdateSubscriptionResponse>>(AsyncUpdateSubscriptionRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>> PrepareAsyncDeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>>(PrepareAsyncDeleteSubscriptionRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::UpdateSubscriptionResponse>> PrepareAsyncUpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::UpdateSubscriptionResponse>>(PrepareAsyncUpdateSubscriptionRaw(context, request, cq));
+    }
+    virtual ::grpc::Status DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::subscription_pb::DeleteSubscriptionResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::DeleteSubscriptionResponse>> AsyncDeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::DeleteSubscriptionResponse>>(AsyncDeleteSubscriptionRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::DeleteSubscriptionResponse>> PrepareAsyncDeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::DeleteSubscriptionResponse>>(PrepareAsyncDeleteSubscriptionRaw(context, request, cq));
     }
     virtual ::grpc::Status CheckHealth(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest& request, ::subscription_pb::HealthCheckResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::HealthCheckResponse>> AsyncCheckHealth(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest& request, ::grpc::CompletionQueue* cq) {
@@ -66,12 +73,14 @@ class Subscription final {
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::CreateSubscriptionResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::CreateSubscriptionResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::GetSubscriptionResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::GetSubscriptionResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void UpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest* request, ::subscription_pb::UpdateSubscriptionResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void UpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest* request, ::subscription_pb::UpdateSubscriptionResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::DeleteSubscriptionResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::DeleteSubscriptionResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void CheckHealth(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest* request, ::subscription_pb::HealthCheckResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void CheckHealth(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest* request, ::subscription_pb::HealthCheckResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -79,38 +88,47 @@ class Subscription final {
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>* AsyncCreateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>* PrepareAsyncCreateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>* AsyncGetSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>* PrepareAsyncGetSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>* AsyncDeleteSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::ServiceResponseWrapper>* PrepareAsyncDeleteSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::CreateSubscriptionResponse>* AsyncCreateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::CreateSubscriptionResponse>* PrepareAsyncCreateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::GetSubscriptionResponse>* AsyncGetSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::GetSubscriptionResponse>* PrepareAsyncGetSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::UpdateSubscriptionResponse>* AsyncUpdateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::UpdateSubscriptionResponse>* PrepareAsyncUpdateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::DeleteSubscriptionResponse>* AsyncDeleteSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::DeleteSubscriptionResponse>* PrepareAsyncDeleteSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::HealthCheckResponse>* AsyncCheckHealthRaw(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::subscription_pb::HealthCheckResponse>* PrepareAsyncCheckHealthRaw(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::subscription_pb::ServiceResponseWrapper* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>> AsyncCreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>>(AsyncCreateSubscriptionRaw(context, request, cq));
+    ::grpc::Status CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::subscription_pb::CreateSubscriptionResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::CreateSubscriptionResponse>> AsyncCreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::CreateSubscriptionResponse>>(AsyncCreateSubscriptionRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>> PrepareAsyncCreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>>(PrepareAsyncCreateSubscriptionRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::CreateSubscriptionResponse>> PrepareAsyncCreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::CreateSubscriptionResponse>>(PrepareAsyncCreateSubscriptionRaw(context, request, cq));
     }
-    ::grpc::Status GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::subscription_pb::ServiceResponseWrapper* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>> AsyncGetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>>(AsyncGetSubscriptionRaw(context, request, cq));
+    ::grpc::Status GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::subscription_pb::GetSubscriptionResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::GetSubscriptionResponse>> AsyncGetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::GetSubscriptionResponse>>(AsyncGetSubscriptionRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>> PrepareAsyncGetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>>(PrepareAsyncGetSubscriptionRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::GetSubscriptionResponse>> PrepareAsyncGetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::GetSubscriptionResponse>>(PrepareAsyncGetSubscriptionRaw(context, request, cq));
     }
-    ::grpc::Status DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::subscription_pb::ServiceResponseWrapper* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>> AsyncDeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>>(AsyncDeleteSubscriptionRaw(context, request, cq));
+    ::grpc::Status UpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::subscription_pb::UpdateSubscriptionResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::UpdateSubscriptionResponse>> AsyncUpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::UpdateSubscriptionResponse>>(AsyncUpdateSubscriptionRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>> PrepareAsyncDeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>>(PrepareAsyncDeleteSubscriptionRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::UpdateSubscriptionResponse>> PrepareAsyncUpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::UpdateSubscriptionResponse>>(PrepareAsyncUpdateSubscriptionRaw(context, request, cq));
+    }
+    ::grpc::Status DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::subscription_pb::DeleteSubscriptionResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::DeleteSubscriptionResponse>> AsyncDeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::DeleteSubscriptionResponse>>(AsyncDeleteSubscriptionRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::DeleteSubscriptionResponse>> PrepareAsyncDeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::DeleteSubscriptionResponse>>(PrepareAsyncDeleteSubscriptionRaw(context, request, cq));
     }
     ::grpc::Status CheckHealth(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest& request, ::subscription_pb::HealthCheckResponse* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::subscription_pb::HealthCheckResponse>> AsyncCheckHealth(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest& request, ::grpc::CompletionQueue* cq) {
@@ -122,12 +140,14 @@ class Subscription final {
     class async final :
       public StubInterface::async_interface {
      public:
-      void CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, std::function<void(::grpc::Status)>) override;
-      void CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, std::function<void(::grpc::Status)>) override;
-      void GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, std::function<void(::grpc::Status)>) override;
-      void DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::CreateSubscriptionResponse* response, std::function<void(::grpc::Status)>) override;
+      void CreateSubscription(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::CreateSubscriptionResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::GetSubscriptionResponse* response, std::function<void(::grpc::Status)>) override;
+      void GetSubscription(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::GetSubscriptionResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void UpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest* request, ::subscription_pb::UpdateSubscriptionResponse* response, std::function<void(::grpc::Status)>) override;
+      void UpdateSubscription(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest* request, ::subscription_pb::UpdateSubscriptionResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::DeleteSubscriptionResponse* response, std::function<void(::grpc::Status)>) override;
+      void DeleteSubscription(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::DeleteSubscriptionResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void CheckHealth(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest* request, ::subscription_pb::HealthCheckResponse* response, std::function<void(::grpc::Status)>) override;
       void CheckHealth(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest* request, ::subscription_pb::HealthCheckResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
@@ -141,16 +161,19 @@ class Subscription final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>* AsyncCreateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>* PrepareAsyncCreateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>* AsyncGetSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>* PrepareAsyncGetSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>* AsyncDeleteSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::subscription_pb::ServiceResponseWrapper>* PrepareAsyncDeleteSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::subscription_pb::CreateSubscriptionResponse>* AsyncCreateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::subscription_pb::CreateSubscriptionResponse>* PrepareAsyncCreateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::CreateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::subscription_pb::GetSubscriptionResponse>* AsyncGetSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::subscription_pb::GetSubscriptionResponse>* PrepareAsyncGetSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::GetSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::subscription_pb::UpdateSubscriptionResponse>* AsyncUpdateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::subscription_pb::UpdateSubscriptionResponse>* PrepareAsyncUpdateSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::UpdateSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::subscription_pb::DeleteSubscriptionResponse>* AsyncDeleteSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::subscription_pb::DeleteSubscriptionResponse>* PrepareAsyncDeleteSubscriptionRaw(::grpc::ClientContext* context, const ::subscription_pb::DeleteSubscriptionRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::subscription_pb::HealthCheckResponse>* AsyncCheckHealthRaw(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::subscription_pb::HealthCheckResponse>* PrepareAsyncCheckHealthRaw(::grpc::ClientContext* context, const ::subscription_pb::HealthCheckRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_CreateSubscription_;
     const ::grpc::internal::RpcMethod rpcmethod_GetSubscription_;
+    const ::grpc::internal::RpcMethod rpcmethod_UpdateSubscription_;
     const ::grpc::internal::RpcMethod rpcmethod_DeleteSubscription_;
     const ::grpc::internal::RpcMethod rpcmethod_CheckHealth_;
   };
@@ -160,9 +183,10 @@ class Subscription final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status CreateSubscription(::grpc::ServerContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response);
-    virtual ::grpc::Status GetSubscription(::grpc::ServerContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response);
-    virtual ::grpc::Status DeleteSubscription(::grpc::ServerContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response);
+    virtual ::grpc::Status CreateSubscription(::grpc::ServerContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::CreateSubscriptionResponse* response);
+    virtual ::grpc::Status GetSubscription(::grpc::ServerContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::GetSubscriptionResponse* response);
+    virtual ::grpc::Status UpdateSubscription(::grpc::ServerContext* context, const ::subscription_pb::UpdateSubscriptionRequest* request, ::subscription_pb::UpdateSubscriptionResponse* response);
+    virtual ::grpc::Status DeleteSubscription(::grpc::ServerContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::DeleteSubscriptionResponse* response);
     virtual ::grpc::Status CheckHealth(::grpc::ServerContext* context, const ::subscription_pb::HealthCheckRequest* request, ::subscription_pb::HealthCheckResponse* response);
   };
   template <class BaseClass>
@@ -177,11 +201,11 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::CreateSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestCreateSubscription(::grpc::ServerContext* context, ::subscription_pb::CreateSubscriptionRequest* request, ::grpc::ServerAsyncResponseWriter< ::subscription_pb::ServiceResponseWrapper>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestCreateSubscription(::grpc::ServerContext* context, ::subscription_pb::CreateSubscriptionRequest* request, ::grpc::ServerAsyncResponseWriter< ::subscription_pb::CreateSubscriptionResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -197,12 +221,32 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::GetSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestGetSubscription(::grpc::ServerContext* context, ::subscription_pb::GetSubscriptionRequest* request, ::grpc::ServerAsyncResponseWriter< ::subscription_pb::ServiceResponseWrapper>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestGetSubscription(::grpc::ServerContext* context, ::subscription_pb::GetSubscriptionRequest* request, ::grpc::ServerAsyncResponseWriter< ::subscription_pb::GetSubscriptionResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_UpdateSubscription : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_UpdateSubscription() {
+      ::grpc::Service::MarkMethodAsync(2);
+    }
+    ~WithAsyncMethod_UpdateSubscription() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpdateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::UpdateSubscriptionRequest* /*request*/, ::subscription_pb::UpdateSubscriptionResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestUpdateSubscription(::grpc::ServerContext* context, ::subscription_pb::UpdateSubscriptionRequest* request, ::grpc::ServerAsyncResponseWriter< ::subscription_pb::UpdateSubscriptionResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -211,18 +255,18 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_DeleteSubscription() {
-      ::grpc::Service::MarkMethodAsync(2);
+      ::grpc::Service::MarkMethodAsync(3);
     }
     ~WithAsyncMethod_DeleteSubscription() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::DeleteSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestDeleteSubscription(::grpc::ServerContext* context, ::subscription_pb::DeleteSubscriptionRequest* request, ::grpc::ServerAsyncResponseWriter< ::subscription_pb::ServiceResponseWrapper>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestDeleteSubscription(::grpc::ServerContext* context, ::subscription_pb::DeleteSubscriptionRequest* request, ::grpc::ServerAsyncResponseWriter< ::subscription_pb::DeleteSubscriptionResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -231,7 +275,7 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_CheckHealth() {
-      ::grpc::Service::MarkMethodAsync(3);
+      ::grpc::Service::MarkMethodAsync(4);
     }
     ~WithAsyncMethod_CheckHealth() override {
       BaseClassMustBeDerivedFromService(this);
@@ -242,10 +286,10 @@ class Subscription final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCheckHealth(::grpc::ServerContext* context, ::subscription_pb::HealthCheckRequest* request, ::grpc::ServerAsyncResponseWriter< ::subscription_pb::HealthCheckResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_CreateSubscription<WithAsyncMethod_GetSubscription<WithAsyncMethod_DeleteSubscription<WithAsyncMethod_CheckHealth<Service > > > > AsyncService;
+  typedef WithAsyncMethod_CreateSubscription<WithAsyncMethod_GetSubscription<WithAsyncMethod_UpdateSubscription<WithAsyncMethod_DeleteSubscription<WithAsyncMethod_CheckHealth<Service > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_CreateSubscription : public BaseClass {
    private:
@@ -253,25 +297,25 @@ class Subscription final {
    public:
     WithCallbackMethod_CreateSubscription() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>(
+          new ::grpc::internal::CallbackUnaryHandler< ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::CreateSubscriptionResponse>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response) { return this->CreateSubscription(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::subscription_pb::CreateSubscriptionRequest* request, ::subscription_pb::CreateSubscriptionResponse* response) { return this->CreateSubscription(context, request, response); }));}
     void SetMessageAllocatorFor_CreateSubscription(
-        ::grpc::MessageAllocator< ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>* allocator) {
+        ::grpc::MessageAllocator< ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::CreateSubscriptionResponse>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::CreateSubscriptionResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_CreateSubscription() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::CreateSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* CreateSubscription(
-      ::grpc::CallbackServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::CreateSubscriptionResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_GetSubscription : public BaseClass {
@@ -280,25 +324,52 @@ class Subscription final {
    public:
     WithCallbackMethod_GetSubscription() {
       ::grpc::Service::MarkMethodCallback(1,
-          new ::grpc::internal::CallbackUnaryHandler< ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>(
+          new ::grpc::internal::CallbackUnaryHandler< ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::GetSubscriptionResponse>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response) { return this->GetSubscription(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::subscription_pb::GetSubscriptionRequest* request, ::subscription_pb::GetSubscriptionResponse* response) { return this->GetSubscription(context, request, response); }));}
     void SetMessageAllocatorFor_GetSubscription(
-        ::grpc::MessageAllocator< ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>* allocator) {
+        ::grpc::MessageAllocator< ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::GetSubscriptionResponse>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::GetSubscriptionResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_GetSubscription() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::GetSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* GetSubscription(
-      ::grpc::CallbackServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::GetSubscriptionResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_UpdateSubscription : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_UpdateSubscription() {
+      ::grpc::Service::MarkMethodCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::subscription_pb::UpdateSubscriptionRequest, ::subscription_pb::UpdateSubscriptionResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::subscription_pb::UpdateSubscriptionRequest* request, ::subscription_pb::UpdateSubscriptionResponse* response) { return this->UpdateSubscription(context, request, response); }));}
+    void SetMessageAllocatorFor_UpdateSubscription(
+        ::grpc::MessageAllocator< ::subscription_pb::UpdateSubscriptionRequest, ::subscription_pb::UpdateSubscriptionResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::subscription_pb::UpdateSubscriptionRequest, ::subscription_pb::UpdateSubscriptionResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_UpdateSubscription() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpdateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::UpdateSubscriptionRequest* /*request*/, ::subscription_pb::UpdateSubscriptionResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* UpdateSubscription(
+      ::grpc::CallbackServerContext* /*context*/, const ::subscription_pb::UpdateSubscriptionRequest* /*request*/, ::subscription_pb::UpdateSubscriptionResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_DeleteSubscription : public BaseClass {
@@ -306,26 +377,26 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_DeleteSubscription() {
-      ::grpc::Service::MarkMethodCallback(2,
-          new ::grpc::internal::CallbackUnaryHandler< ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>(
+      ::grpc::Service::MarkMethodCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::DeleteSubscriptionResponse>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::ServiceResponseWrapper* response) { return this->DeleteSubscription(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::subscription_pb::DeleteSubscriptionRequest* request, ::subscription_pb::DeleteSubscriptionResponse* response) { return this->DeleteSubscription(context, request, response); }));}
     void SetMessageAllocatorFor_DeleteSubscription(
-        ::grpc::MessageAllocator< ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>*>(handler)
+        ::grpc::MessageAllocator< ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::DeleteSubscriptionResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::DeleteSubscriptionResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_DeleteSubscription() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::DeleteSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* DeleteSubscription(
-      ::grpc::CallbackServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::DeleteSubscriptionResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_CheckHealth : public BaseClass {
@@ -333,13 +404,13 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_CheckHealth() {
-      ::grpc::Service::MarkMethodCallback(3,
+      ::grpc::Service::MarkMethodCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::subscription_pb::HealthCheckRequest, ::subscription_pb::HealthCheckResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::subscription_pb::HealthCheckRequest* request, ::subscription_pb::HealthCheckResponse* response) { return this->CheckHealth(context, request, response); }));}
     void SetMessageAllocatorFor_CheckHealth(
         ::grpc::MessageAllocator< ::subscription_pb::HealthCheckRequest, ::subscription_pb::HealthCheckResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::subscription_pb::HealthCheckRequest, ::subscription_pb::HealthCheckResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -354,7 +425,7 @@ class Subscription final {
     virtual ::grpc::ServerUnaryReactor* CheckHealth(
       ::grpc::CallbackServerContext* /*context*/, const ::subscription_pb::HealthCheckRequest* /*request*/, ::subscription_pb::HealthCheckResponse* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_CreateSubscription<WithCallbackMethod_GetSubscription<WithCallbackMethod_DeleteSubscription<WithCallbackMethod_CheckHealth<Service > > > > CallbackService;
+  typedef WithCallbackMethod_CreateSubscription<WithCallbackMethod_GetSubscription<WithCallbackMethod_UpdateSubscription<WithCallbackMethod_DeleteSubscription<WithCallbackMethod_CheckHealth<Service > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_CreateSubscription : public BaseClass {
@@ -368,7 +439,7 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::CreateSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -385,7 +456,24 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::GetSubscriptionResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_UpdateSubscription : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_UpdateSubscription() {
+      ::grpc::Service::MarkMethodGeneric(2);
+    }
+    ~WithGenericMethod_UpdateSubscription() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpdateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::UpdateSubscriptionRequest* /*request*/, ::subscription_pb::UpdateSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -396,13 +484,13 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_DeleteSubscription() {
-      ::grpc::Service::MarkMethodGeneric(2);
+      ::grpc::Service::MarkMethodGeneric(3);
     }
     ~WithGenericMethod_DeleteSubscription() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::DeleteSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -413,7 +501,7 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_CheckHealth() {
-      ::grpc::Service::MarkMethodGeneric(3);
+      ::grpc::Service::MarkMethodGeneric(4);
     }
     ~WithGenericMethod_CheckHealth() override {
       BaseClassMustBeDerivedFromService(this);
@@ -436,7 +524,7 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::CreateSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -456,7 +544,7 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::GetSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -465,23 +553,43 @@ class Subscription final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_UpdateSubscription : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_UpdateSubscription() {
+      ::grpc::Service::MarkMethodRaw(2);
+    }
+    ~WithRawMethod_UpdateSubscription() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpdateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::UpdateSubscriptionRequest* /*request*/, ::subscription_pb::UpdateSubscriptionResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestUpdateSubscription(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_DeleteSubscription : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_DeleteSubscription() {
-      ::grpc::Service::MarkMethodRaw(2);
+      ::grpc::Service::MarkMethodRaw(3);
     }
     ~WithRawMethod_DeleteSubscription() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::DeleteSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestDeleteSubscription(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -490,7 +598,7 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_CheckHealth() {
-      ::grpc::Service::MarkMethodRaw(3);
+      ::grpc::Service::MarkMethodRaw(4);
     }
     ~WithRawMethod_CheckHealth() override {
       BaseClassMustBeDerivedFromService(this);
@@ -501,7 +609,7 @@ class Subscription final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCheckHealth(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -519,7 +627,7 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::CreateSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -541,11 +649,33 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::GetSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* GetSubscription(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_UpdateSubscription : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_UpdateSubscription() {
+      ::grpc::Service::MarkMethodRawCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->UpdateSubscription(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_UpdateSubscription() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpdateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::UpdateSubscriptionRequest* /*request*/, ::subscription_pb::UpdateSubscriptionResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* UpdateSubscription(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -554,7 +684,7 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_DeleteSubscription() {
-      ::grpc::Service::MarkMethodRawCallback(2,
+      ::grpc::Service::MarkMethodRawCallback(3,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->DeleteSubscription(context, request, response); }));
@@ -563,7 +693,7 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::DeleteSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -576,7 +706,7 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_CheckHealth() {
-      ::grpc::Service::MarkMethodRawCallback(3,
+      ::grpc::Service::MarkMethodRawCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->CheckHealth(context, request, response); }));
@@ -600,10 +730,10 @@ class Subscription final {
     WithStreamedUnaryMethod_CreateSubscription() {
       ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>(
+          ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::CreateSubscriptionResponse>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>* streamer) {
+                     ::subscription_pb::CreateSubscriptionRequest, ::subscription_pb::CreateSubscriptionResponse>* streamer) {
                        return this->StreamedCreateSubscription(context,
                          streamer);
                   }));
@@ -612,12 +742,12 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status CreateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::CreateSubscriptionRequest* /*request*/, ::subscription_pb::CreateSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedCreateSubscription(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::subscription_pb::CreateSubscriptionRequest,::subscription_pb::ServiceResponseWrapper>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedCreateSubscription(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::subscription_pb::CreateSubscriptionRequest,::subscription_pb::CreateSubscriptionResponse>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetSubscription : public BaseClass {
@@ -627,10 +757,10 @@ class Subscription final {
     WithStreamedUnaryMethod_GetSubscription() {
       ::grpc::Service::MarkMethodStreamed(1,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>(
+          ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::GetSubscriptionResponse>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>* streamer) {
+                     ::subscription_pb::GetSubscriptionRequest, ::subscription_pb::GetSubscriptionResponse>* streamer) {
                        return this->StreamedGetSubscription(context,
                          streamer);
                   }));
@@ -639,12 +769,39 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status GetSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::GetSubscriptionRequest* /*request*/, ::subscription_pb::GetSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedGetSubscription(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::subscription_pb::GetSubscriptionRequest,::subscription_pb::ServiceResponseWrapper>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedGetSubscription(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::subscription_pb::GetSubscriptionRequest,::subscription_pb::GetSubscriptionResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_UpdateSubscription : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_UpdateSubscription() {
+      ::grpc::Service::MarkMethodStreamed(2,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::subscription_pb::UpdateSubscriptionRequest, ::subscription_pb::UpdateSubscriptionResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::subscription_pb::UpdateSubscriptionRequest, ::subscription_pb::UpdateSubscriptionResponse>* streamer) {
+                       return this->StreamedUpdateSubscription(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_UpdateSubscription() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status UpdateSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::UpdateSubscriptionRequest* /*request*/, ::subscription_pb::UpdateSubscriptionResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedUpdateSubscription(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::subscription_pb::UpdateSubscriptionRequest,::subscription_pb::UpdateSubscriptionResponse>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_DeleteSubscription : public BaseClass {
@@ -652,12 +809,12 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_DeleteSubscription() {
-      ::grpc::Service::MarkMethodStreamed(2,
+      ::grpc::Service::MarkMethodStreamed(3,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>(
+          ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::DeleteSubscriptionResponse>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::ServiceResponseWrapper>* streamer) {
+                     ::subscription_pb::DeleteSubscriptionRequest, ::subscription_pb::DeleteSubscriptionResponse>* streamer) {
                        return this->StreamedDeleteSubscription(context,
                          streamer);
                   }));
@@ -666,12 +823,12 @@ class Subscription final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::ServiceResponseWrapper* /*response*/) override {
+    ::grpc::Status DeleteSubscription(::grpc::ServerContext* /*context*/, const ::subscription_pb::DeleteSubscriptionRequest* /*request*/, ::subscription_pb::DeleteSubscriptionResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedDeleteSubscription(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::subscription_pb::DeleteSubscriptionRequest,::subscription_pb::ServiceResponseWrapper>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedDeleteSubscription(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::subscription_pb::DeleteSubscriptionRequest,::subscription_pb::DeleteSubscriptionResponse>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_CheckHealth : public BaseClass {
@@ -679,7 +836,7 @@ class Subscription final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_CheckHealth() {
-      ::grpc::Service::MarkMethodStreamed(3,
+      ::grpc::Service::MarkMethodStreamed(4,
         new ::grpc::internal::StreamedUnaryHandler<
           ::subscription_pb::HealthCheckRequest, ::subscription_pb::HealthCheckResponse>(
             [this](::grpc::ServerContext* context,
@@ -700,9 +857,9 @@ class Subscription final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedCheckHealth(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::subscription_pb::HealthCheckRequest,::subscription_pb::HealthCheckResponse>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_CreateSubscription<WithStreamedUnaryMethod_GetSubscription<WithStreamedUnaryMethod_DeleteSubscription<WithStreamedUnaryMethod_CheckHealth<Service > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_CreateSubscription<WithStreamedUnaryMethod_GetSubscription<WithStreamedUnaryMethod_UpdateSubscription<WithStreamedUnaryMethod_DeleteSubscription<WithStreamedUnaryMethod_CheckHealth<Service > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_CreateSubscription<WithStreamedUnaryMethod_GetSubscription<WithStreamedUnaryMethod_DeleteSubscription<WithStreamedUnaryMethod_CheckHealth<Service > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_CreateSubscription<WithStreamedUnaryMethod_GetSubscription<WithStreamedUnaryMethod_UpdateSubscription<WithStreamedUnaryMethod_DeleteSubscription<WithStreamedUnaryMethod_CheckHealth<Service > > > > > StreamedService;
 };
 
 }  // namespace subscription_pb

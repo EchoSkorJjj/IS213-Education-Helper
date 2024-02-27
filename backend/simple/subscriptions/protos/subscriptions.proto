@@ -44,7 +44,18 @@ message GetSubscriptionRequest {
 }
 
 message GetSubscriptionResponse {
-    SubscriptionMessage details = 1;
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+message UpdateSubscriptionRequest {
+    string user_id = 1;
+    google.protobuf.Timestamp subscribed_until = 2;
+}
+
+message UpdateSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
 }
 
 message DeleteSubscriptionRequest {
@@ -52,8 +63,9 @@ message DeleteSubscriptionRequest {
 }
 
 message DeleteSubscriptionResponse {
-    string subscription_id = 1;
-    string user_id = 2;
+    ResponseMetadata metadata = 1;
+    string subscription_id = 2;
+    string user_id = 3;
 }
 
 message HealthCheckRequest {
@@ -65,8 +77,9 @@ message HealthCheckResponse {
 }
 
 service Subscription {
-    rpc CreateSubscription(CreateSubscriptionRequest) returns (ServiceResponseWrapper);
-    rpc GetSubscription(GetSubscriptionRequest) returns (ServiceResponseWrapper);
-    rpc DeleteSubscription(DeleteSubscriptionRequest) returns (ServiceResponseWrapper);
+    rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
+    rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
+    rpc UpdateSubscription(UpdateSubscriptionRequest) returns (UpdateSubscriptionResponse);
+    rpc DeleteSubscription(DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse);
     rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse);
 }

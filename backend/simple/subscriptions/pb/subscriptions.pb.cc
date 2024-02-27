@@ -76,30 +76,6 @@ struct GetSubscriptionRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetSubscriptionRequestDefaultTypeInternal _GetSubscriptionRequest_default_instance_;
 
-inline constexpr DeleteSubscriptionResponse::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : subscription_id_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
-        user_id_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
-        _cached_size_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR DeleteSubscriptionResponse::DeleteSubscriptionResponse(::_pbi::ConstantInitialized)
-    : _impl_(::_pbi::ConstantInitialized()) {}
-struct DeleteSubscriptionResponseDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DeleteSubscriptionResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DeleteSubscriptionResponseDefaultTypeInternal() {}
-  union {
-    DeleteSubscriptionResponse _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteSubscriptionResponseDefaultTypeInternal _DeleteSubscriptionResponse_default_instance_;
-
 inline constexpr DeleteSubscriptionRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : user_id_(
@@ -120,6 +96,28 @@ struct DeleteSubscriptionRequestDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteSubscriptionRequestDefaultTypeInternal _DeleteSubscriptionRequest_default_instance_;
+
+inline constexpr UpdateSubscriptionRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        user_id_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        subscribed_until_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR UpdateSubscriptionRequest::UpdateSubscriptionRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct UpdateSubscriptionRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR UpdateSubscriptionRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~UpdateSubscriptionRequestDefaultTypeInternal() {}
+  union {
+    UpdateSubscriptionRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 UpdateSubscriptionRequestDefaultTypeInternal _UpdateSubscriptionRequest_default_instance_;
 
 inline constexpr SubscriptionMessage::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -190,6 +188,26 @@ struct CreateSubscriptionRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CreateSubscriptionRequestDefaultTypeInternal _CreateSubscriptionRequest_default_instance_;
 
+inline constexpr UpdateSubscriptionResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        metadata_{nullptr},
+        details_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR UpdateSubscriptionResponse::UpdateSubscriptionResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct UpdateSubscriptionResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR UpdateSubscriptionResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~UpdateSubscriptionResponseDefaultTypeInternal() {}
+  union {
+    UpdateSubscriptionResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 UpdateSubscriptionResponseDefaultTypeInternal _UpdateSubscriptionResponse_default_instance_;
+
 inline constexpr ServiceResponseWrapper::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -213,6 +231,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr GetSubscriptionResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
+        metadata_{nullptr},
         details_{nullptr} {}
 
 template <typename>
@@ -229,9 +248,35 @@ struct GetSubscriptionResponseDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetSubscriptionResponseDefaultTypeInternal _GetSubscriptionResponse_default_instance_;
 
+inline constexpr DeleteSubscriptionResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        subscription_id_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        user_id_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        metadata_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DeleteSubscriptionResponse::DeleteSubscriptionResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DeleteSubscriptionResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DeleteSubscriptionResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DeleteSubscriptionResponseDefaultTypeInternal() {}
+  union {
+    DeleteSubscriptionResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteSubscriptionResponseDefaultTypeInternal _DeleteSubscriptionResponse_default_instance_;
+
 inline constexpr CreateSubscriptionResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
+        metadata_{nullptr},
         details_{nullptr} {}
 
 template <typename>
@@ -248,7 +293,7 @@ struct CreateSubscriptionResponseDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CreateSubscriptionResponseDefaultTypeInternal _CreateSubscriptionResponse_default_instance_;
 }  // namespace subscription_pb
-static ::_pb::Metadata file_level_metadata_subscriptions_2eproto[11];
+static ::_pb::Metadata file_level_metadata_subscriptions_2eproto[13];
 static constexpr const ::_pb::EnumDescriptor**
     file_level_enum_descriptors_subscriptions_2eproto = nullptr;
 static constexpr const ::_pb::ServiceDescriptor**
@@ -313,8 +358,10 @@ const ::uint32_t TableStruct_subscriptions_2eproto::offsets[] PROTOBUF_SECTION_V
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::CreateSubscriptionResponse, _impl_.metadata_),
     PROTOBUF_FIELD_OFFSET(::subscription_pb::CreateSubscriptionResponse, _impl_.details_),
     0,
+    1,
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::subscription_pb::GetSubscriptionRequest, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -332,8 +379,34 @@ const ::uint32_t TableStruct_subscriptions_2eproto::offsets[] PROTOBUF_SECTION_V
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::GetSubscriptionResponse, _impl_.metadata_),
     PROTOBUF_FIELD_OFFSET(::subscription_pb::GetSubscriptionResponse, _impl_.details_),
     0,
+    1,
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::UpdateSubscriptionRequest, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::UpdateSubscriptionRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::UpdateSubscriptionRequest, _impl_.user_id_),
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::UpdateSubscriptionRequest, _impl_.subscribed_until_),
+    ~0u,
+    0,
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::UpdateSubscriptionResponse, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::UpdateSubscriptionResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::UpdateSubscriptionResponse, _impl_.metadata_),
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::UpdateSubscriptionResponse, _impl_.details_),
+    0,
+    1,
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::subscription_pb::DeleteSubscriptionRequest, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -343,7 +416,7 @@ const ::uint32_t TableStruct_subscriptions_2eproto::offsets[] PROTOBUF_SECTION_V
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::subscription_pb::DeleteSubscriptionRequest, _impl_.user_id_),
-    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::DeleteSubscriptionResponse, _impl_._has_bits_),
     PROTOBUF_FIELD_OFFSET(::subscription_pb::DeleteSubscriptionResponse, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
@@ -351,8 +424,12 @@ const ::uint32_t TableStruct_subscriptions_2eproto::offsets[] PROTOBUF_SECTION_V
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::subscription_pb::DeleteSubscriptionResponse, _impl_.metadata_),
     PROTOBUF_FIELD_OFFSET(::subscription_pb::DeleteSubscriptionResponse, _impl_.subscription_id_),
     PROTOBUF_FIELD_OFFSET(::subscription_pb::DeleteSubscriptionResponse, _impl_.user_id_),
+    0,
+    ~0u,
+    ~0u,
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::subscription_pb::HealthCheckRequest, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -378,13 +455,15 @@ static const ::_pbi::MigrationSchema
         {12, 22, -1, sizeof(::subscription_pb::ServiceResponseWrapper)},
         {24, 35, -1, sizeof(::subscription_pb::SubscriptionMessage)},
         {38, 48, -1, sizeof(::subscription_pb::CreateSubscriptionRequest)},
-        {50, 59, -1, sizeof(::subscription_pb::CreateSubscriptionResponse)},
-        {60, -1, -1, sizeof(::subscription_pb::GetSubscriptionRequest)},
-        {69, 78, -1, sizeof(::subscription_pb::GetSubscriptionResponse)},
-        {79, -1, -1, sizeof(::subscription_pb::DeleteSubscriptionRequest)},
-        {88, -1, -1, sizeof(::subscription_pb::DeleteSubscriptionResponse)},
-        {98, -1, -1, sizeof(::subscription_pb::HealthCheckRequest)},
-        {106, -1, -1, sizeof(::subscription_pb::HealthCheckResponse)},
+        {50, 60, -1, sizeof(::subscription_pb::CreateSubscriptionResponse)},
+        {62, -1, -1, sizeof(::subscription_pb::GetSubscriptionRequest)},
+        {71, 81, -1, sizeof(::subscription_pb::GetSubscriptionResponse)},
+        {83, 93, -1, sizeof(::subscription_pb::UpdateSubscriptionRequest)},
+        {95, 105, -1, sizeof(::subscription_pb::UpdateSubscriptionResponse)},
+        {107, -1, -1, sizeof(::subscription_pb::DeleteSubscriptionRequest)},
+        {116, 127, -1, sizeof(::subscription_pb::DeleteSubscriptionResponse)},
+        {130, -1, -1, sizeof(::subscription_pb::HealthCheckRequest)},
+        {138, -1, -1, sizeof(::subscription_pb::HealthCheckResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -395,6 +474,8 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::subscription_pb::_CreateSubscriptionResponse_default_instance_._instance,
     &::subscription_pb::_GetSubscriptionRequest_default_instance_._instance,
     &::subscription_pb::_GetSubscriptionResponse_default_instance_._instance,
+    &::subscription_pb::_UpdateSubscriptionRequest_default_instance_._instance,
+    &::subscription_pb::_UpdateSubscriptionResponse_default_instance_._instance,
     &::subscription_pb::_DeleteSubscriptionRequest_default_instance_._instance,
     &::subscription_pb::_DeleteSubscriptionResponse_default_instance_._instance,
     &::subscription_pb::_HealthCheckRequest_default_instance_._instance,
@@ -417,32 +498,47 @@ const char descriptor_table_protodef_subscriptions_2eproto[] PROTOBUF_SECTION_VA
     "pR\017subscribedUntil\"{\n\031CreateSubscription"
     "Request\022\027\n\007user_id\030\001 \001(\tR\006userId\022E\n\020subs"
     "cribed_until\030\002 \001(\0132\032.google.protobuf.Tim"
-    "estampR\017subscribedUntil\"\\\n\032CreateSubscri"
-    "ptionResponse\022>\n\007details\030\001 \001(\0132$.subscri"
-    "ption_pb.SubscriptionMessageR\007details\"1\n"
-    "\026GetSubscriptionRequest\022\027\n\007user_id\030\001 \001(\t"
-    "R\006userId\"Y\n\027GetSubscriptionResponse\022>\n\007d"
-    "etails\030\001 \001(\0132$.subscription_pb.Subscript"
-    "ionMessageR\007details\"4\n\031DeleteSubscriptio"
-    "nRequest\022\027\n\007user_id\030\001 \001(\tR\006userId\"^\n\032Del"
-    "eteSubscriptionResponse\022\'\n\017subscription_"
-    "id\030\001 \001(\tR\016subscriptionId\022\027\n\007user_id\030\002 \001("
-    "\tR\006userId\"\024\n\022HealthCheckRequest\"-\n\023Healt"
-    "hCheckResponse\022\026\n\006status\030\001 \001(\tR\006status2\243"
-    "\003\n\014Subscription\022i\n\022CreateSubscription\022*."
-    "subscription_pb.CreateSubscriptionReques"
-    "t\032\'.subscription_pb.ServiceResponseWrapp"
-    "er\022c\n\017GetSubscription\022\'.subscription_pb."
-    "GetSubscriptionRequest\032\'.subscription_pb"
-    ".ServiceResponseWrapper\022i\n\022DeleteSubscri"
-    "ption\022*.subscription_pb.DeleteSubscripti"
-    "onRequest\032\'.subscription_pb.ServiceRespo"
-    "nseWrapper\022X\n\013CheckHealth\022#.subscription"
-    "_pb.HealthCheckRequest\032$.subscription_pb"
-    ".HealthCheckResponseB\201\001\n\023com.subscriptio"
-    "n_pbB\022SubscriptionsProtoP\001\242\002\003SXX\252\002\016Subsc"
-    "riptionPb\312\002\016SubscriptionPb\342\002\032Subscriptio"
-    "nPb\\GPBMetadata\352\002\016SubscriptionPbb\006proto3"
+    "estampR\017subscribedUntil\"\233\001\n\032CreateSubscr"
+    "iptionResponse\022=\n\010metadata\030\001 \001(\0132!.subsc"
+    "ription_pb.ResponseMetadataR\010metadata\022>\n"
+    "\007details\030\002 \001(\0132$.subscription_pb.Subscri"
+    "ptionMessageR\007details\"1\n\026GetSubscription"
+    "Request\022\027\n\007user_id\030\001 \001(\tR\006userId\"\230\001\n\027Get"
+    "SubscriptionResponse\022=\n\010metadata\030\001 \001(\0132!"
+    ".subscription_pb.ResponseMetadataR\010metad"
+    "ata\022>\n\007details\030\002 \001(\0132$.subscription_pb.S"
+    "ubscriptionMessageR\007details\"{\n\031UpdateSub"
+    "scriptionRequest\022\027\n\007user_id\030\001 \001(\tR\006userI"
+    "d\022E\n\020subscribed_until\030\002 \001(\0132\032.google.pro"
+    "tobuf.TimestampR\017subscribedUntil\"\233\001\n\032Upd"
+    "ateSubscriptionResponse\022=\n\010metadata\030\001 \001("
+    "\0132!.subscription_pb.ResponseMetadataR\010me"
+    "tadata\022>\n\007details\030\002 \001(\0132$.subscription_p"
+    "b.SubscriptionMessageR\007details\"4\n\031Delete"
+    "SubscriptionRequest\022\027\n\007user_id\030\001 \001(\tR\006us"
+    "erId\"\235\001\n\032DeleteSubscriptionResponse\022=\n\010m"
+    "etadata\030\001 \001(\0132!.subscription_pb.Response"
+    "MetadataR\010metadata\022\'\n\017subscription_id\030\002 "
+    "\001(\tR\016subscriptionId\022\027\n\007user_id\030\003 \001(\tR\006us"
+    "erId\"\024\n\022HealthCheckRequest\"-\n\023HealthChec"
+    "kResponse\022\026\n\006status\030\001 \001(\tR\006status2\233\004\n\014Su"
+    "bscription\022m\n\022CreateSubscription\022*.subsc"
+    "ription_pb.CreateSubscriptionRequest\032+.s"
+    "ubscription_pb.CreateSubscriptionRespons"
+    "e\022d\n\017GetSubscription\022\'.subscription_pb.G"
+    "etSubscriptionRequest\032(.subscription_pb."
+    "GetSubscriptionResponse\022m\n\022UpdateSubscri"
+    "ption\022*.subscription_pb.UpdateSubscripti"
+    "onRequest\032+.subscription_pb.UpdateSubscr"
+    "iptionResponse\022m\n\022DeleteSubscription\022*.s"
+    "ubscription_pb.DeleteSubscriptionRequest"
+    "\032+.subscription_pb.DeleteSubscriptionRes"
+    "ponse\022X\n\013CheckHealth\022#.subscription_pb.H"
+    "ealthCheckRequest\032$.subscription_pb.Heal"
+    "thCheckResponseB\201\001\n\023com.subscription_pbB"
+    "\022SubscriptionsProtoP\001\242\002\003SXX\252\002\016Subscripti"
+    "onPb\312\002\016SubscriptionPb\342\002\032SubscriptionPb\\G"
+    "PBMetadata\352\002\016SubscriptionPbb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_subscriptions_2eproto_deps[3] =
     {
@@ -454,13 +550,13 @@ static ::absl::once_flag descriptor_table_subscriptions_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_subscriptions_2eproto = {
     false,
     false,
-    1680,
+    2275,
     descriptor_table_protodef_subscriptions_2eproto,
     "subscriptions.proto",
     &descriptor_table_subscriptions_2eproto_once,
     descriptor_table_subscriptions_2eproto_deps,
     3,
-    11,
+    13,
     schemas,
     file_default_instances,
     TableStruct_subscriptions_2eproto::offsets,
@@ -1527,12 +1623,19 @@ class CreateSubscriptionResponse::_Internal {
   using HasBits = decltype(std::declval<CreateSubscriptionResponse>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
     8 * PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_._has_bits_);
+  static const ::subscription_pb::ResponseMetadata& metadata(const CreateSubscriptionResponse* msg);
+  static void set_has_metadata(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
   static const ::subscription_pb::SubscriptionMessage& details(const CreateSubscriptionResponse* msg);
   static void set_has_details(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
+    (*has_bits)[0] |= 2u;
   }
 };
 
+const ::subscription_pb::ResponseMetadata& CreateSubscriptionResponse::_Internal::metadata(const CreateSubscriptionResponse* msg) {
+  return *msg->_impl_.metadata_;
+}
 const ::subscription_pb::SubscriptionMessage& CreateSubscriptionResponse::_Internal::details(const CreateSubscriptionResponse* msg) {
   return *msg->_impl_.details_;
 }
@@ -1557,7 +1660,10 @@ CreateSubscriptionResponse::CreateSubscriptionResponse(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
   ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.details_ = (cached_has_bits & 0x00000001u)
+  _impl_.metadata_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::subscription_pb::ResponseMetadata>(arena, *from._impl_.metadata_)
+                : nullptr;
+  _impl_.details_ = (cached_has_bits & 0x00000002u)
                 ? CreateMaybeMessage<::subscription_pb::SubscriptionMessage>(arena, *from._impl_.details_)
                 : nullptr;
 
@@ -1570,7 +1676,12 @@ inline PROTOBUF_NDEBUG_INLINE CreateSubscriptionResponse::Impl_::Impl_(
 
 inline void CreateSubscriptionResponse::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.details_ = {};
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, metadata_),
+           0,
+           offsetof(Impl_, details_) -
+               offsetof(Impl_, metadata_) +
+               sizeof(Impl_::details_));
 }
 CreateSubscriptionResponse::~CreateSubscriptionResponse() {
   // @@protoc_insertion_point(destructor:subscription_pb.CreateSubscriptionResponse)
@@ -1579,6 +1690,7 @@ CreateSubscriptionResponse::~CreateSubscriptionResponse() {
 }
 inline void CreateSubscriptionResponse::SharedDtor() {
   ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.metadata_;
   delete _impl_.details_;
   _impl_.~Impl_();
 }
@@ -1591,9 +1703,15 @@ PROTOBUF_NOINLINE void CreateSubscriptionResponse::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.details_ != nullptr);
-    _impl_.details_->Clear();
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(_impl_.metadata_ != nullptr);
+      _impl_.metadata_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.details_ != nullptr);
+      _impl_.details_->Clear();
+    }
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1607,30 +1725,37 @@ const char* CreateSubscriptionResponse::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 1, 0, 2> CreateSubscriptionResponse::_table_ = {
+const ::_pbi::TcParseTable<1, 2, 2, 0, 2> CreateSubscriptionResponse::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_._has_bits_),
     0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
+    2, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
-    1,  // num_aux_entries
+    2,  // num_field_entries
+    2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     &_CreateSubscriptionResponse_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
-    // .subscription_pb.SubscriptionMessage details = 1 [json_name = "details"];
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
     {::_pbi::TcParser::FastMtS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_.details_)}},
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_.details_)}},
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_.metadata_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // .subscription_pb.SubscriptionMessage details = 1 [json_name = "details"];
-    {PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_.details_), _Internal::kHasBitsOffset + 0, 0,
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    {PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_.metadata_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+    {PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_.details_), _Internal::kHasBitsOffset + 1, 1,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
+    {::_pbi::TcParser::GetTable<::subscription_pb::ResponseMetadata>()},
     {::_pbi::TcParser::GetTable<::subscription_pb::SubscriptionMessage>()},
   }}, {{
   }},
@@ -1644,10 +1769,17 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> CreateSubscriptionResponse::_table_ = 
   (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  // .subscription_pb.SubscriptionMessage details = 1 [json_name = "details"];
+  // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
   if (cached_has_bits & 0x00000001u) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        1, _Internal::details(this),
+        1, _Internal::metadata(this),
+        _Internal::metadata(this).GetCachedSize(), target, stream);
+  }
+
+  // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+  if (cached_has_bits & 0x00000002u) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::details(this),
         _Internal::details(this).GetCachedSize(), target, stream);
   }
 
@@ -1668,13 +1800,21 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> CreateSubscriptionResponse::_table_ = 
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .subscription_pb.SubscriptionMessage details = 1 [json_name = "details"];
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    total_size +=
-        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.details_);
-  }
+  if (cached_has_bits & 0x00000003u) {
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    if (cached_has_bits & 0x00000001u) {
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.metadata_);
+    }
 
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+    if (cached_has_bits & 0x00000002u) {
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.details_);
+    }
+
+  }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -1694,9 +1834,16 @@ void CreateSubscriptionResponse::MergeImpl(::google::protobuf::Message& to_msg, 
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_internal_mutable_details()->::subscription_pb::SubscriptionMessage::MergeFrom(
-        from._internal_details());
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_mutable_metadata()->::subscription_pb::ResponseMetadata::MergeFrom(
+          from._internal_metadata());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_internal_mutable_details()->::subscription_pb::SubscriptionMessage::MergeFrom(
+          from._internal_details());
+    }
   }
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1719,7 +1866,12 @@ void CreateSubscriptionResponse::InternalSwap(CreateSubscriptionResponse* PROTOB
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  swap(_impl_.details_, other->_impl_.details_);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_.details_)
+      + sizeof(CreateSubscriptionResponse::_impl_.details_)
+      - PROTOBUF_FIELD_OFFSET(CreateSubscriptionResponse, _impl_.metadata_)>(
+          reinterpret_cast<char*>(&_impl_.metadata_),
+          reinterpret_cast<char*>(&other->_impl_.metadata_));
 }
 
 ::google::protobuf::Metadata CreateSubscriptionResponse::GetMetadata() const {
@@ -1924,12 +2076,19 @@ class GetSubscriptionResponse::_Internal {
   using HasBits = decltype(std::declval<GetSubscriptionResponse>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
     8 * PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_._has_bits_);
+  static const ::subscription_pb::ResponseMetadata& metadata(const GetSubscriptionResponse* msg);
+  static void set_has_metadata(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
   static const ::subscription_pb::SubscriptionMessage& details(const GetSubscriptionResponse* msg);
   static void set_has_details(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
+    (*has_bits)[0] |= 2u;
   }
 };
 
+const ::subscription_pb::ResponseMetadata& GetSubscriptionResponse::_Internal::metadata(const GetSubscriptionResponse* msg) {
+  return *msg->_impl_.metadata_;
+}
 const ::subscription_pb::SubscriptionMessage& GetSubscriptionResponse::_Internal::details(const GetSubscriptionResponse* msg) {
   return *msg->_impl_.details_;
 }
@@ -1954,7 +2113,10 @@ GetSubscriptionResponse::GetSubscriptionResponse(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
   ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.details_ = (cached_has_bits & 0x00000001u)
+  _impl_.metadata_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::subscription_pb::ResponseMetadata>(arena, *from._impl_.metadata_)
+                : nullptr;
+  _impl_.details_ = (cached_has_bits & 0x00000002u)
                 ? CreateMaybeMessage<::subscription_pb::SubscriptionMessage>(arena, *from._impl_.details_)
                 : nullptr;
 
@@ -1967,7 +2129,12 @@ inline PROTOBUF_NDEBUG_INLINE GetSubscriptionResponse::Impl_::Impl_(
 
 inline void GetSubscriptionResponse::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.details_ = {};
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, metadata_),
+           0,
+           offsetof(Impl_, details_) -
+               offsetof(Impl_, metadata_) +
+               sizeof(Impl_::details_));
 }
 GetSubscriptionResponse::~GetSubscriptionResponse() {
   // @@protoc_insertion_point(destructor:subscription_pb.GetSubscriptionResponse)
@@ -1976,6 +2143,7 @@ GetSubscriptionResponse::~GetSubscriptionResponse() {
 }
 inline void GetSubscriptionResponse::SharedDtor() {
   ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.metadata_;
   delete _impl_.details_;
   _impl_.~Impl_();
 }
@@ -1988,9 +2156,15 @@ PROTOBUF_NOINLINE void GetSubscriptionResponse::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.details_ != nullptr);
-    _impl_.details_->Clear();
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(_impl_.metadata_ != nullptr);
+      _impl_.metadata_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.details_ != nullptr);
+      _impl_.details_->Clear();
+    }
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -2004,30 +2178,37 @@ const char* GetSubscriptionResponse::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 1, 0, 2> GetSubscriptionResponse::_table_ = {
+const ::_pbi::TcParseTable<1, 2, 2, 0, 2> GetSubscriptionResponse::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_._has_bits_),
     0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
+    2, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
-    1,  // num_aux_entries
+    2,  // num_field_entries
+    2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     &_GetSubscriptionResponse_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
-    // .subscription_pb.SubscriptionMessage details = 1 [json_name = "details"];
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
     {::_pbi::TcParser::FastMtS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_.details_)}},
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_.details_)}},
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_.metadata_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // .subscription_pb.SubscriptionMessage details = 1 [json_name = "details"];
-    {PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_.details_), _Internal::kHasBitsOffset + 0, 0,
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    {PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_.metadata_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+    {PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_.details_), _Internal::kHasBitsOffset + 1, 1,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
+    {::_pbi::TcParser::GetTable<::subscription_pb::ResponseMetadata>()},
     {::_pbi::TcParser::GetTable<::subscription_pb::SubscriptionMessage>()},
   }}, {{
   }},
@@ -2041,10 +2222,17 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> GetSubscriptionResponse::_table_ = {
   (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  // .subscription_pb.SubscriptionMessage details = 1 [json_name = "details"];
+  // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
   if (cached_has_bits & 0x00000001u) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        1, _Internal::details(this),
+        1, _Internal::metadata(this),
+        _Internal::metadata(this).GetCachedSize(), target, stream);
+  }
+
+  // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+  if (cached_has_bits & 0x00000002u) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::details(this),
         _Internal::details(this).GetCachedSize(), target, stream);
   }
 
@@ -2065,13 +2253,21 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> GetSubscriptionResponse::_table_ = {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .subscription_pb.SubscriptionMessage details = 1 [json_name = "details"];
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    total_size +=
-        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.details_);
-  }
+  if (cached_has_bits & 0x00000003u) {
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    if (cached_has_bits & 0x00000001u) {
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.metadata_);
+    }
 
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+    if (cached_has_bits & 0x00000002u) {
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.details_);
+    }
+
+  }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2091,9 +2287,16 @@ void GetSubscriptionResponse::MergeImpl(::google::protobuf::Message& to_msg, con
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_internal_mutable_details()->::subscription_pb::SubscriptionMessage::MergeFrom(
-        from._internal_details());
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_mutable_metadata()->::subscription_pb::ResponseMetadata::MergeFrom(
+          from._internal_metadata());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_internal_mutable_details()->::subscription_pb::SubscriptionMessage::MergeFrom(
+          from._internal_details());
+    }
   }
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -2116,13 +2319,526 @@ void GetSubscriptionResponse::InternalSwap(GetSubscriptionResponse* PROTOBUF_RES
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  swap(_impl_.details_, other->_impl_.details_);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_.details_)
+      + sizeof(GetSubscriptionResponse::_impl_.details_)
+      - PROTOBUF_FIELD_OFFSET(GetSubscriptionResponse, _impl_.metadata_)>(
+          reinterpret_cast<char*>(&_impl_.metadata_),
+          reinterpret_cast<char*>(&other->_impl_.metadata_));
 }
 
 ::google::protobuf::Metadata GetSubscriptionResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_subscriptions_2eproto_getter, &descriptor_table_subscriptions_2eproto_once,
       file_level_metadata_subscriptions_2eproto[6]);
+}
+// ===================================================================
+
+class UpdateSubscriptionRequest::_Internal {
+ public:
+  using HasBits = decltype(std::declval<UpdateSubscriptionRequest>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(UpdateSubscriptionRequest, _impl_._has_bits_);
+  static const ::google::protobuf::Timestamp& subscribed_until(const UpdateSubscriptionRequest* msg);
+  static void set_has_subscribed_until(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+};
+
+const ::google::protobuf::Timestamp& UpdateSubscriptionRequest::_Internal::subscribed_until(const UpdateSubscriptionRequest* msg) {
+  return *msg->_impl_.subscribed_until_;
+}
+void UpdateSubscriptionRequest::clear_subscribed_until() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.subscribed_until_ != nullptr) _impl_.subscribed_until_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+UpdateSubscriptionRequest::UpdateSubscriptionRequest(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:subscription_pb.UpdateSubscriptionRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE UpdateSubscriptionRequest::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        user_id_(arena, from.user_id_) {}
+
+UpdateSubscriptionRequest::UpdateSubscriptionRequest(
+    ::google::protobuf::Arena* arena,
+    const UpdateSubscriptionRequest& from)
+    : ::google::protobuf::Message(arena) {
+  UpdateSubscriptionRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.subscribed_until_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::google::protobuf::Timestamp>(arena, *from._impl_.subscribed_until_)
+                : nullptr;
+
+  // @@protoc_insertion_point(copy_constructor:subscription_pb.UpdateSubscriptionRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE UpdateSubscriptionRequest::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        user_id_(arena) {}
+
+inline void UpdateSubscriptionRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.subscribed_until_ = {};
+}
+UpdateSubscriptionRequest::~UpdateSubscriptionRequest() {
+  // @@protoc_insertion_point(destructor:subscription_pb.UpdateSubscriptionRequest)
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void UpdateSubscriptionRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.user_id_.Destroy();
+  delete _impl_.subscribed_until_;
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void UpdateSubscriptionRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:subscription_pb.UpdateSubscriptionRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.user_id_.ClearToEmpty();
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.subscribed_until_ != nullptr);
+    _impl_.subscribed_until_->Clear();
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+const char* UpdateSubscriptionRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 57, 2> UpdateSubscriptionRequest::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(UpdateSubscriptionRequest, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_UpdateSubscriptionRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // .google.protobuf.Timestamp subscribed_until = 2 [json_name = "subscribedUntil"];
+    {::_pbi::TcParser::FastMtS1,
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(UpdateSubscriptionRequest, _impl_.subscribed_until_)}},
+    // string user_id = 1 [json_name = "userId"];
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(UpdateSubscriptionRequest, _impl_.user_id_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string user_id = 1 [json_name = "userId"];
+    {PROTOBUF_FIELD_OFFSET(UpdateSubscriptionRequest, _impl_.user_id_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .google.protobuf.Timestamp subscribed_until = 2 [json_name = "subscribedUntil"];
+    {PROTOBUF_FIELD_OFFSET(UpdateSubscriptionRequest, _impl_.subscribed_until_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::google::protobuf::Timestamp>()},
+  }}, {{
+    "\51\7\0\0\0\0\0\0"
+    "subscription_pb.UpdateSubscriptionRequest"
+    "user_id"
+  }},
+};
+
+::uint8_t* UpdateSubscriptionRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:subscription_pb.UpdateSubscriptionRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string user_id = 1 [json_name = "userId"];
+  if (!this->_internal_user_id().empty()) {
+    const std::string& _s = this->_internal_user_id();
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "subscription_pb.UpdateSubscriptionRequest.user_id");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  cached_has_bits = _impl_._has_bits_[0];
+  // .google.protobuf.Timestamp subscribed_until = 2 [json_name = "subscribedUntil"];
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::subscribed_until(this),
+        _Internal::subscribed_until(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:subscription_pb.UpdateSubscriptionRequest)
+  return target;
+}
+
+::size_t UpdateSubscriptionRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:subscription_pb.UpdateSubscriptionRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string user_id = 1 [json_name = "userId"];
+  if (!this->_internal_user_id().empty()) {
+    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                    this->_internal_user_id());
+  }
+
+  // .google.protobuf.Timestamp subscribed_until = 2 [json_name = "subscribedUntil"];
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.subscribed_until_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf::Message::ClassData UpdateSubscriptionRequest::_class_data_ = {
+    UpdateSubscriptionRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf::Message::ClassData* UpdateSubscriptionRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void UpdateSubscriptionRequest::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
+  auto* const _this = static_cast<UpdateSubscriptionRequest*>(&to_msg);
+  auto& from = static_cast<const UpdateSubscriptionRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:subscription_pb.UpdateSubscriptionRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_user_id().empty()) {
+    _this->_internal_set_user_id(from._internal_user_id());
+  }
+  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
+    _this->_internal_mutable_subscribed_until()->::google::protobuf::Timestamp::MergeFrom(
+        from._internal_subscribed_until());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void UpdateSubscriptionRequest::CopyFrom(const UpdateSubscriptionRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:subscription_pb.UpdateSubscriptionRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool UpdateSubscriptionRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* UpdateSubscriptionRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void UpdateSubscriptionRequest::InternalSwap(UpdateSubscriptionRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.user_id_, &other->_impl_.user_id_, arena);
+  swap(_impl_.subscribed_until_, other->_impl_.subscribed_until_);
+}
+
+::google::protobuf::Metadata UpdateSubscriptionRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_subscriptions_2eproto_getter, &descriptor_table_subscriptions_2eproto_once,
+      file_level_metadata_subscriptions_2eproto[7]);
+}
+// ===================================================================
+
+class UpdateSubscriptionResponse::_Internal {
+ public:
+  using HasBits = decltype(std::declval<UpdateSubscriptionResponse>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(UpdateSubscriptionResponse, _impl_._has_bits_);
+  static const ::subscription_pb::ResponseMetadata& metadata(const UpdateSubscriptionResponse* msg);
+  static void set_has_metadata(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static const ::subscription_pb::SubscriptionMessage& details(const UpdateSubscriptionResponse* msg);
+  static void set_has_details(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+};
+
+const ::subscription_pb::ResponseMetadata& UpdateSubscriptionResponse::_Internal::metadata(const UpdateSubscriptionResponse* msg) {
+  return *msg->_impl_.metadata_;
+}
+const ::subscription_pb::SubscriptionMessage& UpdateSubscriptionResponse::_Internal::details(const UpdateSubscriptionResponse* msg) {
+  return *msg->_impl_.details_;
+}
+UpdateSubscriptionResponse::UpdateSubscriptionResponse(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:subscription_pb.UpdateSubscriptionResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE UpdateSubscriptionResponse::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+UpdateSubscriptionResponse::UpdateSubscriptionResponse(
+    ::google::protobuf::Arena* arena,
+    const UpdateSubscriptionResponse& from)
+    : ::google::protobuf::Message(arena) {
+  UpdateSubscriptionResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.metadata_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::subscription_pb::ResponseMetadata>(arena, *from._impl_.metadata_)
+                : nullptr;
+  _impl_.details_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::subscription_pb::SubscriptionMessage>(arena, *from._impl_.details_)
+                : nullptr;
+
+  // @@protoc_insertion_point(copy_constructor:subscription_pb.UpdateSubscriptionResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE UpdateSubscriptionResponse::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void UpdateSubscriptionResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, metadata_),
+           0,
+           offsetof(Impl_, details_) -
+               offsetof(Impl_, metadata_) +
+               sizeof(Impl_::details_));
+}
+UpdateSubscriptionResponse::~UpdateSubscriptionResponse() {
+  // @@protoc_insertion_point(destructor:subscription_pb.UpdateSubscriptionResponse)
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void UpdateSubscriptionResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.metadata_;
+  delete _impl_.details_;
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void UpdateSubscriptionResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:subscription_pb.UpdateSubscriptionResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(_impl_.metadata_ != nullptr);
+      _impl_.metadata_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.details_ != nullptr);
+      _impl_.details_->Clear();
+    }
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+const char* UpdateSubscriptionResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 2, 0, 2> UpdateSubscriptionResponse::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(UpdateSubscriptionResponse, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    2,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_UpdateSubscriptionResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+    {::_pbi::TcParser::FastMtS1,
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(UpdateSubscriptionResponse, _impl_.details_)}},
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(UpdateSubscriptionResponse, _impl_.metadata_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    {PROTOBUF_FIELD_OFFSET(UpdateSubscriptionResponse, _impl_.metadata_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+    {PROTOBUF_FIELD_OFFSET(UpdateSubscriptionResponse, _impl_.details_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::subscription_pb::ResponseMetadata>()},
+    {::_pbi::TcParser::GetTable<::subscription_pb::SubscriptionMessage>()},
+  }}, {{
+  }},
+};
+
+::uint8_t* UpdateSubscriptionResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:subscription_pb.UpdateSubscriptionResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::metadata(this),
+        _Internal::metadata(this).GetCachedSize(), target, stream);
+  }
+
+  // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+  if (cached_has_bits & 0x00000002u) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::details(this),
+        _Internal::details(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:subscription_pb.UpdateSubscriptionResponse)
+  return target;
+}
+
+::size_t UpdateSubscriptionResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:subscription_pb.UpdateSubscriptionResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    if (cached_has_bits & 0x00000001u) {
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.metadata_);
+    }
+
+    // .subscription_pb.SubscriptionMessage details = 2 [json_name = "details"];
+    if (cached_has_bits & 0x00000002u) {
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.details_);
+    }
+
+  }
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf::Message::ClassData UpdateSubscriptionResponse::_class_data_ = {
+    UpdateSubscriptionResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf::Message::ClassData* UpdateSubscriptionResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void UpdateSubscriptionResponse::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
+  auto* const _this = static_cast<UpdateSubscriptionResponse*>(&to_msg);
+  auto& from = static_cast<const UpdateSubscriptionResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:subscription_pb.UpdateSubscriptionResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_mutable_metadata()->::subscription_pb::ResponseMetadata::MergeFrom(
+          from._internal_metadata());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_internal_mutable_details()->::subscription_pb::SubscriptionMessage::MergeFrom(
+          from._internal_details());
+    }
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void UpdateSubscriptionResponse::CopyFrom(const UpdateSubscriptionResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:subscription_pb.UpdateSubscriptionResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool UpdateSubscriptionResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* UpdateSubscriptionResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void UpdateSubscriptionResponse::InternalSwap(UpdateSubscriptionResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(UpdateSubscriptionResponse, _impl_.details_)
+      + sizeof(UpdateSubscriptionResponse::_impl_.details_)
+      - PROTOBUF_FIELD_OFFSET(UpdateSubscriptionResponse, _impl_.metadata_)>(
+          reinterpret_cast<char*>(&_impl_.metadata_),
+          reinterpret_cast<char*>(&other->_impl_.metadata_));
+}
+
+::google::protobuf::Metadata UpdateSubscriptionResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_subscriptions_2eproto_getter, &descriptor_table_subscriptions_2eproto_once,
+      file_level_metadata_subscriptions_2eproto[8]);
 }
 // ===================================================================
 
@@ -2312,14 +3028,24 @@ void DeleteSubscriptionRequest::InternalSwap(DeleteSubscriptionRequest* PROTOBUF
 ::google::protobuf::Metadata DeleteSubscriptionRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_subscriptions_2eproto_getter, &descriptor_table_subscriptions_2eproto_once,
-      file_level_metadata_subscriptions_2eproto[7]);
+      file_level_metadata_subscriptions_2eproto[9]);
 }
 // ===================================================================
 
 class DeleteSubscriptionResponse::_Internal {
  public:
+  using HasBits = decltype(std::declval<DeleteSubscriptionResponse>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_._has_bits_);
+  static const ::subscription_pb::ResponseMetadata& metadata(const DeleteSubscriptionResponse* msg);
+  static void set_has_metadata(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
 };
 
+const ::subscription_pb::ResponseMetadata& DeleteSubscriptionResponse::_Internal::metadata(const DeleteSubscriptionResponse* msg) {
+  return *msg->_impl_.metadata_;
+}
 DeleteSubscriptionResponse::DeleteSubscriptionResponse(::google::protobuf::Arena* arena)
     : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
@@ -2328,9 +3054,10 @@ DeleteSubscriptionResponse::DeleteSubscriptionResponse(::google::protobuf::Arena
 inline PROTOBUF_NDEBUG_INLINE DeleteSubscriptionResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from)
-      : subscription_id_(arena, from.subscription_id_),
-        user_id_(arena, from.user_id_),
-        _cached_size_{0} {}
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        subscription_id_(arena, from.subscription_id_),
+        user_id_(arena, from.user_id_) {}
 
 DeleteSubscriptionResponse::DeleteSubscriptionResponse(
     ::google::protobuf::Arena* arena,
@@ -2341,18 +3068,23 @@ DeleteSubscriptionResponse::DeleteSubscriptionResponse(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.metadata_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::subscription_pb::ResponseMetadata>(arena, *from._impl_.metadata_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:subscription_pb.DeleteSubscriptionResponse)
 }
 inline PROTOBUF_NDEBUG_INLINE DeleteSubscriptionResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : subscription_id_(arena),
-        user_id_(arena),
-        _cached_size_{0} {}
+      : _cached_size_{0},
+        subscription_id_(arena),
+        user_id_(arena) {}
 
 inline void DeleteSubscriptionResponse::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.metadata_ = {};
 }
 DeleteSubscriptionResponse::~DeleteSubscriptionResponse() {
   // @@protoc_insertion_point(destructor:subscription_pb.DeleteSubscriptionResponse)
@@ -2363,6 +3095,7 @@ inline void DeleteSubscriptionResponse::SharedDtor() {
   ABSL_DCHECK(GetArena() == nullptr);
   _impl_.subscription_id_.Destroy();
   _impl_.user_id_.Destroy();
+  delete _impl_.metadata_;
   _impl_.~Impl_();
 }
 
@@ -2375,6 +3108,12 @@ PROTOBUF_NOINLINE void DeleteSubscriptionResponse::Clear() {
 
   _impl_.subscription_id_.ClearToEmpty();
   _impl_.user_id_.ClearToEmpty();
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.metadata_ != nullptr);
+    _impl_.metadata_->Clear();
+  }
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -2386,39 +3125,46 @@ const char* DeleteSubscriptionResponse::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 0, 73, 2> DeleteSubscriptionResponse::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 1, 73, 2> DeleteSubscriptionResponse::_table_ = {
   {
-    0,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
     &_DeleteSubscriptionResponse_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
-    // string user_id = 2 [json_name = "userId"];
+    {::_pbi::TcParser::MiniParse, {}},
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.metadata_)}},
+    // string subscription_id = 2 [json_name = "subscriptionId"];
     {::_pbi::TcParser::FastUS1,
-     {18, 63, 0, PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.user_id_)}},
-    // string subscription_id = 1 [json_name = "subscriptionId"];
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.subscription_id_)}},
+    // string user_id = 3 [json_name = "userId"];
     {::_pbi::TcParser::FastUS1,
-     {10, 63, 0, PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.subscription_id_)}},
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.user_id_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // string subscription_id = 1 [json_name = "subscriptionId"];
-    {PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.subscription_id_), 0, 0,
+    // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+    {PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.metadata_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // string subscription_id = 2 [json_name = "subscriptionId"];
+    {PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.subscription_id_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // string user_id = 2 [json_name = "userId"];
-    {PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.user_id_), 0, 0,
+    // string user_id = 3 [json_name = "userId"];
+    {PROTOBUF_FIELD_OFFSET(DeleteSubscriptionResponse, _impl_.user_id_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-  }},
-  // no aux_entries
-  {{
-    "\52\17\7\0\0\0\0\0"
+  }}, {{
+    {::_pbi::TcParser::GetTable<::subscription_pb::ResponseMetadata>()},
+  }}, {{
+    "\52\0\17\7\0\0\0\0"
     "subscription_pb.DeleteSubscriptionResponse"
     "subscription_id"
     "user_id"
@@ -2432,20 +3178,28 @@ const ::_pbi::TcParseTable<1, 2, 0, 73, 2> DeleteSubscriptionResponse::_table_ =
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
 
-  // string subscription_id = 1 [json_name = "subscriptionId"];
+  cached_has_bits = _impl_._has_bits_[0];
+  // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::metadata(this),
+        _Internal::metadata(this).GetCachedSize(), target, stream);
+  }
+
+  // string subscription_id = 2 [json_name = "subscriptionId"];
   if (!this->_internal_subscription_id().empty()) {
     const std::string& _s = this->_internal_subscription_id();
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
         _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "subscription_pb.DeleteSubscriptionResponse.subscription_id");
-    target = stream->WriteStringMaybeAliased(1, _s, target);
+    target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
-  // string user_id = 2 [json_name = "userId"];
+  // string user_id = 3 [json_name = "userId"];
   if (!this->_internal_user_id().empty()) {
     const std::string& _s = this->_internal_user_id();
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
         _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "subscription_pb.DeleteSubscriptionResponse.user_id");
-    target = stream->WriteStringMaybeAliased(2, _s, target);
+    target = stream->WriteStringMaybeAliased(3, _s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2465,16 +3219,23 @@ const ::_pbi::TcParseTable<1, 2, 0, 73, 2> DeleteSubscriptionResponse::_table_ =
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string subscription_id = 1 [json_name = "subscriptionId"];
+  // string subscription_id = 2 [json_name = "subscriptionId"];
   if (!this->_internal_subscription_id().empty()) {
     total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_subscription_id());
   }
 
-  // string user_id = 2 [json_name = "userId"];
+  // string user_id = 3 [json_name = "userId"];
   if (!this->_internal_user_id().empty()) {
     total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_user_id());
+  }
+
+  // .subscription_pb.ResponseMetadata metadata = 1 [json_name = "metadata"];
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.metadata_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -2502,6 +3263,10 @@ void DeleteSubscriptionResponse::MergeImpl(::google::protobuf::Message& to_msg, 
   if (!from._internal_user_id().empty()) {
     _this->_internal_set_user_id(from._internal_user_id());
   }
+  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
+    _this->_internal_mutable_metadata()->::subscription_pb::ResponseMetadata::MergeFrom(
+        from._internal_metadata());
+  }
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2524,14 +3289,16 @@ void DeleteSubscriptionResponse::InternalSwap(DeleteSubscriptionResponse* PROTOB
   auto* arena = GetArena();
   ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.subscription_id_, &other->_impl_.subscription_id_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.user_id_, &other->_impl_.user_id_, arena);
+  swap(_impl_.metadata_, other->_impl_.metadata_);
 }
 
 ::google::protobuf::Metadata DeleteSubscriptionResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_subscriptions_2eproto_getter, &descriptor_table_subscriptions_2eproto_once,
-      file_level_metadata_subscriptions_2eproto[8]);
+      file_level_metadata_subscriptions_2eproto[10]);
 }
 // ===================================================================
 
@@ -2566,7 +3333,7 @@ HealthCheckRequest::HealthCheckRequest(
 ::google::protobuf::Metadata HealthCheckRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_subscriptions_2eproto_getter, &descriptor_table_subscriptions_2eproto_once,
-      file_level_metadata_subscriptions_2eproto[9]);
+      file_level_metadata_subscriptions_2eproto[11]);
 }
 // ===================================================================
 
@@ -2756,7 +3523,7 @@ void HealthCheckResponse::InternalSwap(HealthCheckResponse* PROTOBUF_RESTRICT ot
 ::google::protobuf::Metadata HealthCheckResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_subscriptions_2eproto_getter, &descriptor_table_subscriptions_2eproto_once,
-      file_level_metadata_subscriptions_2eproto[10]);
+      file_level_metadata_subscriptions_2eproto[12]);
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace subscription_pb
