@@ -5,7 +5,6 @@ import {
   Button,
   Flex,
   HStack,
-  Image,
   Modal,
   ModalCloseButton,
   ModalContent,
@@ -14,8 +13,9 @@ import {
   ModalOverlay,
   Stack,
   Text,
+  useBreakpointValue,
   useDisclosure,
-  VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { Attachment } from "@opengovsg/design-system-react";
 
@@ -29,11 +29,12 @@ const NotesGeneratorPage = () => {
     onOpen: openModal,
     onClose: closeModal,
   } = useDisclosure();
+  const toast = useToast();
   const { user } = useAuth();
   const DropZoneAccept = [".doc", ".docx", ".pdf", ".ppt", ".pptx"];
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [generateFlashcard, setGenerateFlashcard] = useState<boolean>(true);
-  const maxSize = 20 * 1024 * 1024; // 20MB in bytes
+  const maxSize = 10 * 1024 * 1024; // 20MB in bytes
 
   const handleChange = (file?: File) => {
     setSelectedFile(file);
@@ -51,40 +52,90 @@ const NotesGeneratorPage = () => {
 
   const handleGenerationChange = () => {
     if (!user?.is_paid) {
-      // Show modal to upgrade to Pro
       openModal();
       return;
     }
     setGenerateFlashcard(false);
   };
 
+  const handleGenerate = () => {
+    if (!selectedFile) {
+      toast({
+        title: "No file selected",
+        description: "Please select a file to generate Notes or MCQs",
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    toast({
+      title: `Generating ${generateFlashcard ? "Flashcards" : "MCQs"}`,
+      status: "info",
+      position: "top",
+      duration: 6000,
+      isClosable: true,
+    });
+
+    // TODO: Make an api call
+  };
+
   return (
-    <Flex direction="column" h="100vh" mt={{ base: "1em", md: "8em" }}>
+    <Flex direction="column" h="100vh">
       <Flex flex="45%" bg="darkBlue.500" align="center" justify="center">
-        <Box position="relative" height="100%" width="100%">
-          <Image
-            src={NotesPageImage}
-            width={{ base: "3xl", md: "6xl" }}
+        <Stack
+          w={"full"}
+          justify={"end"}
+          textAlign={"center"}
+          mt={{ base: 6, md: "none" }}
+          px={{ base: 4, md: 8 }}
+          display={{ base: "flex", md: "none" }}
+        >
+          <Text
+            color={"white"}
+            lineHeight={1.2}
+            fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
+          >
+            <Text as="span" fontWeight="bold">
+              Notes
+            </Text>
+            <br />
+            <Text as="span" fontWeight="bold">
+              Generator
+            </Text>
+          </Text>
+        </Stack>
+        <Box
+          position="relative"
+          height="100%"
+          width="100%"
+          display={{ base: "none", md: "flex" }}
+        >
+          <Flex
+            width={{ base: "3xl", lg: "6xl" }}
+            h={"100%"}
+            backgroundImage={NotesPageImage}
+            backgroundSize={"cover"}
+            backgroundPosition={"center center"}
             position="absolute"
-            display={{ base: "none", md: "flex" }}
             bottom="0"
             left={{ md: "50%" }}
-            transform={{
+            transform={useBreakpointValue({
               base: "translate(0%, 35%)",
               md: "translate(-50%, 10%)",
-            }}
-            alt="Centered Image"
-          />
-          <VStack
-            w={"full"}
-            position="absolute"
-            transform={{ md: "translate(-19%, 170%)" }}
-            justify={"center"}
-            mt={{ base: 6, md: "none" }}
-            px={{ base: 4, md: 8 }}
+            })}
           >
-            <Stack maxW={"2xl"} align={"flex-start"}>
+            <Stack
+              w={"full"}
+              justify={"end"}
+              textAlign={"start"}
+              mt={{ base: 6, md: "none" }}
+              px={{ base: 4, md: 8 }}
+            >
               <Text
+                pl={{ base: 11 }}
+                pb={{ base: 11 }}
                 color={"white"}
                 lineHeight={1.2}
                 fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
@@ -98,10 +149,10 @@ const NotesGeneratorPage = () => {
                 </Text>
               </Text>
             </Stack>
-          </VStack>
+          </Flex>
         </Box>
       </Flex>
-      <Flex flex="55%" bg="white" justify="center">
+      <Flex bg="white" justify="center" pt={{ base: "5", md: "2" }} px="10">
         <Flex
           maxW={"6xl"}
           mt={{ md: "4em" }}
@@ -205,7 +256,13 @@ const NotesGeneratorPage = () => {
             justifyContent={"center"}
             mt="3em"
           >
-            <Button bg="midBlue.500" size="lg" width="15%" mb="3em">
+            <Button
+              bg="midBlue.500"
+              size="lg"
+              width="15%"
+              mb="3em"
+              onClick={handleGenerate}
+            >
               Generate
             </Button>
           </Flex>

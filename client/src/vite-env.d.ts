@@ -14,6 +14,7 @@ interface ImportMetaEnv {
   readonly VITE_MYINFO_PURPOSE_ID: string;
   readonly VITE_MYINFO_AUTH_API_URL: string;
   readonly VITE_MYINFO_METHOD: string;
+  readonly VITE_UNSPLASH_CLIENT_ID: string;
 }
 
 interface ImportMeta {
