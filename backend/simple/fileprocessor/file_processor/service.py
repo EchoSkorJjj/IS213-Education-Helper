@@ -10,8 +10,34 @@ import uuid
 import shutil
 import tempfile
 
+import grpc
+from concurrent import futures
+import file_processor_pb2
+import file_processor_pb2_grpc
+
 # Securely configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+class FileProcessorServicer(file_processor_pb2_grpc.FileProcessorServicer):
+    async def ProcessFile(self, request, context):
+        input_pdf_bytes = request.file
+        file_id = request.fileId
+        filename = request.filename
+        texts, error = await ocr_pdf_and_extract_text(filename, 'eng', input_bytes=input_pdf_bytes)
+        if texts:
+            json_response = generate_json_response(file_id, filename, texts)
+            response = json.loads(json_response)
+            pages = [file_processor_pb2.Page(pageId=p["pageId"], content=p["content"]) for p in response["pages"]]
+            metadata = file_processor_pb2.FileMetadata(title=response["metadata"]["title"],
+                                                        pageCount=response["metadata"]["pageCount"],
+                                                        filesize=response["metadata"]["filesize"],
+                                                        locale=response["metadata"]["locale"])
+            return file_processor_pb2.FileProcessResponse(fileId=file_id, metadata=metadata, pages=pages)
+        else:
+            context.set_code(grpc.StatusCode.INTERNAL)
+            context.set_details(error)
+            return file_processor_pb2.FileProcessResponse()
+
 
 # Validate and sanitize input PDF path
 def secure_path(input_pdf):
@@ -110,5 +136,12 @@ async def main():
     else:
         logging.error(f"OCR processing failed: {error}")
 
-if __name__ == "__main__":
-    asyncio.run(main())
+async def serve():
+    server = grpc.aio.server()
+    file_processor_pb2_grpc.add_FileProcessorServicer_to_server(FileProcessorServicer(), server)
+    server.add_insecure_port('[::]:50051')
+    await server.start()
+    await server.wait_for_termination()
+
+if __name__ == '__main__':
+    asyncio.run(serve())
