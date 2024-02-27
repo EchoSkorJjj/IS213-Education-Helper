@@ -68,12 +68,20 @@ message DeleteSubscriptionResponse {
     string user_id = 3;
 }
 
+// Referenced Microsoft's HealthStatus Enum. See here:
+// https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.diagnostics.healthchecks.healthstatus?view=dotnet-plat-ext-8.0
+enum HealthCheckStatus {
+    UNHEALTHY = 0;
+    DEGRADED = 1;
+    HEALTHY = 2;
+}
+
 message HealthCheckRequest {
 
 }
 
 message HealthCheckResponse {
-    string status = 1;
+    HealthCheckStatus status = 1;
 }
 
 service Subscription {

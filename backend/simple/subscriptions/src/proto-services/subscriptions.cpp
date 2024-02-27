@@ -105,7 +105,7 @@ class SubscriptionService final
       grpc::ServerContext *context,
       const subscription_pb::HealthCheckRequest *request,
       subscription_pb::HealthCheckResponse *response) override {
-    response->set_status("I AM HIT!");
+    response->set_status(subscription_pb::HealthCheckStatus::HEALTHY);
     return grpc::Status::OK;
   }
 };

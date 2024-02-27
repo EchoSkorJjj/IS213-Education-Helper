@@ -24,9 +24,7 @@ namespace subscription_pb {
 
 inline constexpr HealthCheckResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
-      : status_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
+      : status_{static_cast< ::subscription_pb::HealthCheckStatus >(0)},
         _cached_size_{0} {}
 
 template <typename>
@@ -294,8 +292,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CreateOrUpdateSubscriptionResponseDefaultTypeInternal _CreateOrUpdateSubscriptionResponse_default_instance_;
 }  // namespace subscription_pb
 static ::_pb::Metadata file_level_metadata_subscriptions_2eproto[13];
-static constexpr const ::_pb::EnumDescriptor**
-    file_level_enum_descriptors_subscriptions_2eproto = nullptr;
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_subscriptions_2eproto[1];
 static constexpr const ::_pb::ServiceDescriptor**
     file_level_service_descriptors_subscriptions_2eproto = nullptr;
 const ::uint32_t TableStruct_subscriptions_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
@@ -521,23 +518,25 @@ const char descriptor_table_protodef_subscriptions_2eproto[] PROTOBUF_SECTION_VA
     "ption_pb.ResponseMetadataR\010metadata\022\'\n\017s"
     "ubscription_id\030\002 \001(\tR\016subscriptionId\022\027\n\007"
     "user_id\030\003 \001(\tR\006userId\"\024\n\022HealthCheckRequ"
-    "est\"-\n\023HealthCheckResponse\022\026\n\006status\030\001 \001"
-    "(\tR\006status2\305\003\n\014Subscription\022\205\001\n\032CreateOr"
-    "UpdateSubscription\0222.subscription_pb.Cre"
-    "ateOrUpdateSubscriptionRequest\0323.subscri"
-    "ption_pb.CreateOrUpdateSubscriptionRespo"
-    "nse\022d\n\017GetSubscription\022\'.subscription_pb"
-    ".GetSubscriptionRequest\032(.subscription_p"
-    "b.GetSubscriptionResponse\022m\n\022DeleteSubsc"
-    "ription\022*.subscription_pb.DeleteSubscrip"
-    "tionRequest\032+.subscription_pb.DeleteSubs"
-    "criptionResponse\022X\n\013CheckHealth\022#.subscr"
-    "iption_pb.HealthCheckRequest\032$.subscript"
-    "ion_pb.HealthCheckResponseB\201\001\n\023com.subsc"
-    "ription_pbB\022SubscriptionsProtoP\001\242\002\003SXX\252\002"
-    "\016SubscriptionPb\312\002\016SubscriptionPb\342\002\032Subsc"
-    "riptionPb\\GPBMetadata\352\002\016SubscriptionPbb\006"
-    "proto3"
+    "est\"Q\n\023HealthCheckResponse\022:\n\006status\030\001 \001"
+    "(\0162\".subscription_pb.HealthCheckStatusR\006"
+    "status*=\n\021HealthCheckStatus\022\r\n\tUNHEALTHY"
+    "\020\000\022\014\n\010DEGRADED\020\001\022\013\n\007HEALTHY\020\0022\305\003\n\014Subscr"
+    "iption\022\205\001\n\032CreateOrUpdateSubscription\0222."
+    "subscription_pb.CreateOrUpdateSubscripti"
+    "onRequest\0323.subscription_pb.CreateOrUpda"
+    "teSubscriptionResponse\022d\n\017GetSubscriptio"
+    "n\022\'.subscription_pb.GetSubscriptionReque"
+    "st\032(.subscription_pb.GetSubscriptionResp"
+    "onse\022m\n\022DeleteSubscription\022*.subscriptio"
+    "n_pb.DeleteSubscriptionRequest\032+.subscri"
+    "ption_pb.DeleteSubscriptionResponse\022X\n\013C"
+    "heckHealth\022#.subscription_pb.HealthCheck"
+    "Request\032$.subscription_pb.HealthCheckRes"
+    "ponseB\201\001\n\023com.subscription_pbB\022Subscript"
+    "ionsProtoP\001\242\002\003SXX\252\002\016SubscriptionPb\312\002\016Sub"
+    "scriptionPb\342\002\032SubscriptionPb\\GPBMetadata"
+    "\352\002\016SubscriptionPbb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_subscriptions_2eproto_deps[3] =
     {
@@ -549,7 +548,7 @@ static ::absl::once_flag descriptor_table_subscriptions_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_subscriptions_2eproto = {
     false,
     false,
-    2206,
+    2305,
     descriptor_table_protodef_subscriptions_2eproto,
     "subscriptions.proto",
     &descriptor_table_subscriptions_2eproto_once,
@@ -582,6 +581,15 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_subscrip
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_subscriptions_2eproto(&descriptor_table_subscriptions_2eproto);
 namespace subscription_pb {
+const ::google::protobuf::EnumDescriptor* HealthCheckStatus_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_subscriptions_2eproto);
+  return file_level_enum_descriptors_subscriptions_2eproto[0];
+}
+PROTOBUF_CONSTINIT const uint32_t HealthCheckStatus_internal_data_[] = {
+    196608u, 0u, };
+bool HealthCheckStatus_IsValid(int value) {
+  return 0 <= value && value <= 2;
+}
 // ===================================================================
 
 class ResponseMetadata::_Internal {
@@ -3345,32 +3353,19 @@ HealthCheckResponse::HealthCheckResponse(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:subscription_pb.HealthCheckResponse)
 }
-inline PROTOBUF_NDEBUG_INLINE HealthCheckResponse::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from)
-      : status_(arena, from.status_),
-        _cached_size_{0} {}
-
 HealthCheckResponse::HealthCheckResponse(
-    ::google::protobuf::Arena* arena,
-    const HealthCheckResponse& from)
-    : ::google::protobuf::Message(arena) {
-  HealthCheckResponse* const _this = this;
-  (void)_this;
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
-
-  // @@protoc_insertion_point(copy_constructor:subscription_pb.HealthCheckResponse)
+    ::google::protobuf::Arena* arena, const HealthCheckResponse& from)
+    : HealthCheckResponse(arena) {
+  MergeFrom(from);
 }
 inline PROTOBUF_NDEBUG_INLINE HealthCheckResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : status_(arena),
-        _cached_size_{0} {}
+      : _cached_size_{0} {}
 
 inline void HealthCheckResponse::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.status_ = {};
 }
 HealthCheckResponse::~HealthCheckResponse() {
   // @@protoc_insertion_point(destructor:subscription_pb.HealthCheckResponse)
@@ -3379,7 +3374,6 @@ HealthCheckResponse::~HealthCheckResponse() {
 }
 inline void HealthCheckResponse::SharedDtor() {
   ABSL_DCHECK(GetArena() == nullptr);
-  _impl_.status_.Destroy();
   _impl_.~Impl_();
 }
 
@@ -3390,7 +3384,7 @@ PROTOBUF_NOINLINE void HealthCheckResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.status_.ClearToEmpty();
+  _impl_.status_ = 0;
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -3402,7 +3396,7 @@ const char* HealthCheckResponse::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 0, 50, 2> HealthCheckResponse::_table_ = {
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2> HealthCheckResponse::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
@@ -3416,21 +3410,18 @@ const ::_pbi::TcParseTable<0, 1, 0, 50, 2> HealthCheckResponse::_table_ = {
     &_HealthCheckResponse_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
-    // string status = 1 [json_name = "status"];
-    {::_pbi::TcParser::FastUS1,
-     {10, 63, 0, PROTOBUF_FIELD_OFFSET(HealthCheckResponse, _impl_.status_)}},
+    // .subscription_pb.HealthCheckStatus status = 1 [json_name = "status"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(HealthCheckResponse, _impl_.status_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(HealthCheckResponse, _impl_.status_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // string status = 1 [json_name = "status"];
+    // .subscription_pb.HealthCheckStatus status = 1 [json_name = "status"];
     {PROTOBUF_FIELD_OFFSET(HealthCheckResponse, _impl_.status_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
   }},
   // no aux_entries
   {{
-    "\43\6\0\0\0\0\0\0"
-    "subscription_pb.HealthCheckResponse"
-    "status"
   }},
 };
 
@@ -3441,12 +3432,11 @@ const ::_pbi::TcParseTable<0, 1, 0, 50, 2> HealthCheckResponse::_table_ = {
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
 
-  // string status = 1 [json_name = "status"];
-  if (!this->_internal_status().empty()) {
-    const std::string& _s = this->_internal_status();
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "subscription_pb.HealthCheckResponse.status");
-    target = stream->WriteStringMaybeAliased(1, _s, target);
+  // .subscription_pb.HealthCheckStatus status = 1 [json_name = "status"];
+  if (this->_internal_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        1, this->_internal_status(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3466,10 +3456,10 @@ const ::_pbi::TcParseTable<0, 1, 0, 50, 2> HealthCheckResponse::_table_ = {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string status = 1 [json_name = "status"];
-  if (!this->_internal_status().empty()) {
-    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                    this->_internal_status());
+  // .subscription_pb.HealthCheckStatus status = 1 [json_name = "status"];
+  if (this->_internal_status() != 0) {
+    total_size += 1 +
+                  ::_pbi::WireFormatLite::EnumSize(this->_internal_status());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -3491,7 +3481,7 @@ void HealthCheckResponse::MergeImpl(::google::protobuf::Message& to_msg, const :
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_status().empty()) {
+  if (from._internal_status() != 0) {
     _this->_internal_set_status(from._internal_status());
   }
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
@@ -3513,10 +3503,8 @@ PROTOBUF_NOINLINE bool HealthCheckResponse::IsInitialized() const {
 }
 void HealthCheckResponse::InternalSwap(HealthCheckResponse* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.status_, &other->_impl_.status_, arena);
+  swap(_impl_.status_, other->_impl_.status_);
 }
 
 ::google::protobuf::Metadata HealthCheckResponse::GetMetadata() const {

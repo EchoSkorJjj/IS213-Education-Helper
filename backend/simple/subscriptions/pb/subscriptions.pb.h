@@ -34,6 +34,7 @@
 #include "google/protobuf/message.h"
 #include "google/protobuf/repeated_field.h"  // IWYU pragma: export
 #include "google/protobuf/extension_set.h"  // IWYU pragma: export
+#include "google/protobuf/generated_enum_reflection.h"
 #include "google/protobuf/unknown_field_set.h"
 #include "google/protobuf/timestamp.pb.h"
 #include "google/protobuf/any.pb.h"
@@ -106,6 +107,40 @@ namespace protobuf {
 }  // namespace google
 
 namespace subscription_pb {
+enum HealthCheckStatus : int {
+  UNHEALTHY = 0,
+  DEGRADED = 1,
+  HEALTHY = 2,
+  HealthCheckStatus_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::min(),
+  HealthCheckStatus_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::max(),
+};
+
+bool HealthCheckStatus_IsValid(int value);
+extern const uint32_t HealthCheckStatus_internal_data_[];
+constexpr HealthCheckStatus HealthCheckStatus_MIN = static_cast<HealthCheckStatus>(0);
+constexpr HealthCheckStatus HealthCheckStatus_MAX = static_cast<HealthCheckStatus>(2);
+constexpr int HealthCheckStatus_ARRAYSIZE = 2 + 1;
+const ::google::protobuf::EnumDescriptor*
+HealthCheckStatus_descriptor();
+template <typename T>
+const std::string& HealthCheckStatus_Name(T value) {
+  static_assert(std::is_same<T, HealthCheckStatus>::value ||
+                    std::is_integral<T>::value,
+                "Incorrect type passed to HealthCheckStatus_Name().");
+  return HealthCheckStatus_Name(static_cast<HealthCheckStatus>(value));
+}
+template <>
+inline const std::string& HealthCheckStatus_Name(HealthCheckStatus value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<HealthCheckStatus_descriptor,
+                                                 0, 2>(
+      static_cast<int>(value));
+}
+inline bool HealthCheckStatus_Parse(absl::string_view name, HealthCheckStatus* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<HealthCheckStatus>(
+      HealthCheckStatus_descriptor(), name, value);
+}
 
 // ===================================================================
 
@@ -246,20 +281,14 @@ class HealthCheckResponse final :
   enum : int {
     kStatusFieldNumber = 1,
   };
-  // string status = 1 [json_name = "status"];
+  // .subscription_pb.HealthCheckStatus status = 1 [json_name = "status"];
   void clear_status() ;
-  const std::string& status() const;
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_status(Arg_&& arg, Args_... args);
-  std::string* mutable_status();
-  PROTOBUF_NODISCARD std::string* release_status();
-  void set_allocated_status(std::string* value);
+  ::subscription_pb::HealthCheckStatus status() const;
+  void set_status(::subscription_pb::HealthCheckStatus value);
 
   private:
-  const std::string& _internal_status() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_status(
-      const std::string& value);
-  std::string* _internal_mutable_status();
+  ::subscription_pb::HealthCheckStatus _internal_status() const;
+  void _internal_set_status(::subscription_pb::HealthCheckStatus value);
 
   public:
   // @@protoc_insertion_point(class_scope:subscription_pb.HealthCheckResponse)
@@ -269,7 +298,7 @@ class HealthCheckResponse final :
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
       0, 1, 0,
-      50, 2>
+      0, 2>
       _table_;
   friend class ::google::protobuf::MessageLite;
   friend class ::google::protobuf::Arena;
@@ -285,7 +314,7 @@ class HealthCheckResponse final :
                               ::google::protobuf::Arena* arena);
         inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                               ::google::protobuf::Arena* arena, const Impl_& from);
-    ::google::protobuf::internal::ArenaStringPtr status_;
+    int status_;
     mutable ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -4378,57 +4407,27 @@ inline void DeleteSubscriptionResponse::set_allocated_user_id(std::string* value
 
 // HealthCheckResponse
 
-// string status = 1 [json_name = "status"];
+// .subscription_pb.HealthCheckStatus status = 1 [json_name = "status"];
 inline void HealthCheckResponse::clear_status() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  _impl_.status_.ClearToEmpty();
+  _impl_.status_ = 0;
 }
-inline const std::string& HealthCheckResponse::status() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::subscription_pb::HealthCheckStatus HealthCheckResponse::status() const {
   // @@protoc_insertion_point(field_get:subscription_pb.HealthCheckResponse.status)
   return _internal_status();
 }
-template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void HealthCheckResponse::set_status(Arg_&& arg,
-                                                     Args_... args) {
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  ;
-  _impl_.status_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+inline void HealthCheckResponse::set_status(::subscription_pb::HealthCheckStatus value) {
+  _internal_set_status(value);
   // @@protoc_insertion_point(field_set:subscription_pb.HealthCheckResponse.status)
 }
-inline std::string* HealthCheckResponse::mutable_status() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_status();
-  // @@protoc_insertion_point(field_mutable:subscription_pb.HealthCheckResponse.status)
-  return _s;
-}
-inline const std::string& HealthCheckResponse::_internal_status() const {
+inline ::subscription_pb::HealthCheckStatus HealthCheckResponse::_internal_status() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
-  return _impl_.status_.Get();
+  return static_cast<::subscription_pb::HealthCheckStatus>(_impl_.status_);
 }
-inline void HealthCheckResponse::_internal_set_status(const std::string& value) {
+inline void HealthCheckResponse::_internal_set_status(::subscription_pb::HealthCheckStatus value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
-  _impl_.status_.Set(value, GetArena());
-}
-inline std::string* HealthCheckResponse::_internal_mutable_status() {
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  ;
-  return _impl_.status_.Mutable( GetArena());
-}
-inline std::string* HealthCheckResponse::release_status() {
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  // @@protoc_insertion_point(field_release:subscription_pb.HealthCheckResponse.status)
-  return _impl_.status_.Release();
-}
-inline void HealthCheckResponse::set_allocated_status(std::string* value) {
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  _impl_.status_.SetAllocated(value, GetArena());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        if (_impl_.status_.IsDefault()) {
-          _impl_.status_.Set("", GetArena());
-        }
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:subscription_pb.HealthCheckResponse.status)
+  _impl_.status_ = value;
 }
 
 #ifdef __GNUC__
@@ -4438,6 +4437,19 @@ inline void HealthCheckResponse::set_allocated_status(std::string* value) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace subscription_pb
 
+
+namespace google {
+namespace protobuf {
+
+template <>
+struct is_proto_enum<::subscription_pb::HealthCheckStatus> : std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor<::subscription_pb::HealthCheckStatus>() {
+  return ::subscription_pb::HealthCheckStatus_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 
