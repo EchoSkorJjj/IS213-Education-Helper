@@ -25,6 +25,7 @@ const HomePage = lazy(() => import("~pages/home/Home"));
 const NotesGeneratorPage = lazy(() => import("~pages/notes/NotesGenerator"));
 const MarketplacePage = lazy(() => import("~pages/marketplace/Marketplace"));
 const SubscribePage = lazy(() => import("~pages/subscribe/Subscribe"));
+const ProfilePage = lazy(() => import("~pages/profile/Profile"));
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -80,6 +81,7 @@ const App = () => {
                 <Route path="/generator" element={<NotesGeneratorPage />} />
                 <Route path="/marketplace" element={<MarketplacePage />} />
                 <Route path="/subscribe" element={<SubscribePage />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
