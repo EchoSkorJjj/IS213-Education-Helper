@@ -9,8 +9,6 @@ import {
 } from "@chakra-ui/react";
 import { Menu } from "@opengovsg/design-system-react";
 
-import avatar4 from "~assets/img/avatars/avatar4.png";
-
 import { UserData } from "~types/data";
 
 interface AuthMenuProps {
@@ -32,7 +30,12 @@ export const AuthMenu = ({ user, handleSignOutClick }: AuthMenuProps) => {
         minW={0}
       >
         <HStack>
-          <Avatar size={"sm"} src={avatar4} referrerPolicy="no-referrer" />
+          <Avatar
+            size={"sm"}
+            src={user?.profile_pic}
+            name={user?.username}
+            referrerPolicy="no-referrer"
+          />
           <VStack
             display={{ base: "none", lg: "flex" }}
             alignItems="flex-start"
@@ -50,7 +53,12 @@ export const AuthMenu = ({ user, handleSignOutClick }: AuthMenuProps) => {
         <Menu.List alignItems={"center"} width={"200px"}>
           <br />
           <Center>
-            <Avatar size={"2xl"} src={avatar4} referrerPolicy="no-referrer" />
+            <Avatar
+              size={"2xl"}
+              src={user?.profile_pic}
+              name={user?.username}
+              referrerPolicy="no-referrer"
+            />
           </Center>
           <br />
           <Center>

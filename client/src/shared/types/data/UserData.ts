@@ -3,5 +3,6 @@ export interface UserData {
   username: string;
   email: string;
   role: string;
+  profile_pic: string;
   is_paid: boolean;
 }

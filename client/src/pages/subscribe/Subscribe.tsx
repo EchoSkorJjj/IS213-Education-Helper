@@ -59,7 +59,11 @@ const SubscribePage = () => {
   };
 
   return (
-    <Box py={12} h="100vh" bg="darkBlue.500">
+    <Box
+      py={12}
+      h="100vh"
+      bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
+    >
       <VStack spacing={2} textAlign="center">
         <Heading as="h1" fontSize="4xl" color="white">
           Plans that fit your need

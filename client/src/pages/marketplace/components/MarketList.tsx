@@ -27,7 +27,7 @@ interface MarketProps {
   totalNotesCount: number;
 }
 
-const Market = ({
+const MarketList = ({
   notes,
   setNotesTitle,
   setCurrentMarketPage,
@@ -123,4 +123,4 @@ const Market = ({
   );
 };
 
-export default Market;
+export default MarketList;

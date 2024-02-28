@@ -22,7 +22,7 @@ const SgIDCallbackPage = lazy(() => import("~pages/auth/SgIDCallback"));
 
 // Private Page
 const HomePage = lazy(() => import("~pages/home/Home"));
-const NotesGeneratorPage = lazy(() => import("~pages/notes/NotesGenerator"));
+const NotesGeneratorPage = lazy(() => import("~pages/notes/Notes"));
 const MarketplacePage = lazy(() => import("~pages/marketplace/Marketplace"));
 const SubscribePage = lazy(() => import("~pages/subscribe/Subscribe"));
 const ProfilePage = lazy(() => import("~pages/profile/Profile"));
@@ -39,6 +39,7 @@ const App = () => {
             username: "Hello World",
             email: "sadad@gmail.com",
             role: "User",
+            profile_pic: "",
             is_paid: false,
           },
         });

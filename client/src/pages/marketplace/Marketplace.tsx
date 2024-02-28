@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Box, useToast } from "@chakra-ui/react";
 
-import { getNotes } from "./generateNote";
-import Market from "./Market";
-import Topics from "./Topics";
+import { getNotes } from "./components/generateNote";
+import MarketHeader from "./components/MarketHeader";
+import MarketList from "./components/MarketList";
+import TopicsList from "./components/TopicsList";
 
 import { getTopics } from "~api";
 
@@ -61,15 +62,16 @@ const MarketplacePage = () => {
   }, [topic, notesTitle, currentMarketPage]);
 
   return (
-    <Box>
-      <Topics
+    <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)">
+      <MarketHeader />
+      <TopicsList
         topics={topics}
         setTopic={setTopic}
         topic={topic}
         setCurrentTopicPage={setCurrentTopicPage}
         currentTopicPage={currentTopicPage}
       />
-      <Market
+      <MarketList
         notes={notes}
         setNotesTitle={setNotesTitle}
         setCurrentMarketPage={setCurrentMarketPage}
