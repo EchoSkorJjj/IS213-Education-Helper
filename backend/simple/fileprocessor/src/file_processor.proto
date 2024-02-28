@@ -2,9 +2,26 @@ syntax = "proto3";
 
 package fileprocessor;
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// Metadata associated with each response
+message ResponseMetadata {
+    string request_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+// Generic wrapper for service responses
+message ServiceResponseWrapper {
+    ResponseMetadata metadata = 1;
+    google.protobuf.Any payload = 2;
+}
+
+// Existing definitions below, with modifications to response messages
+
 // Service definition
 service FileProcessor {
-  rpc ProcessFile(FileUploadRequest) returns (FileProcessResponse);
+  rpc ProcessFile(FileUploadRequest) returns (ServiceResponseWrapper);
 }
 
 // Message for file upload request
@@ -23,7 +40,7 @@ message FileMetadata {
   string locale = 4;
 }
 
-// Response message including processed file information
+// Modified response message to include in the payload of ServiceResponseWrapper
 message FileProcessResponse {
   string fileId = 1;
   FileMetadata metadata = 2;

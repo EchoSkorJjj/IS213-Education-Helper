@@ -6,4 +6,4 @@ services:
     ports:
       - "50051:50051"
     volumes:
-      - ./example.pdf:/app/example.pdf
+      - ./src/example.pdf:/app/example.pdf
