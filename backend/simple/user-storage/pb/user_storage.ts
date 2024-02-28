@@ -205,6 +205,7 @@ export namespace user_storage_pb {
             first_name?: string;
             last_name?: string;
             email?: string;
+            profile_pic?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -223,6 +224,9 @@ export namespace user_storage_pb {
                 }
                 if ("email" in data && data.email != undefined) {
                     this.email = data.email;
+                }
+                if ("profile_pic" in data && data.profile_pic != undefined) {
+                    this.profile_pic = data.profile_pic;
                 }
             }
         }
@@ -256,12 +260,19 @@ export namespace user_storage_pb {
         set email(value: string) {
             pb_1.Message.setField(this, 5, value);
         }
+        get profile_pic() {
+            return pb_1.Message.getFieldWithDefault(this, 6, "") as string;
+        }
+        set profile_pic(value: string) {
+            pb_1.Message.setField(this, 6, value);
+        }
         static fromObject(data: {
             user_id?: string;
             username?: string;
             first_name?: string;
             last_name?: string;
             email?: string;
+            profile_pic?: string;
         }): User {
             const message = new User({});
             if (data.user_id != null) {
@@ -279,6 +290,9 @@ export namespace user_storage_pb {
             if (data.email != null) {
                 message.email = data.email;
             }
+            if (data.profile_pic != null) {
+                message.profile_pic = data.profile_pic;
+            }
             return message;
         }
         toObject() {
@@ -288,6 +302,7 @@ export namespace user_storage_pb {
                 first_name?: string;
                 last_name?: string;
                 email?: string;
+                profile_pic?: string;
             } = {};
             if (this.user_id != null) {
                 data.user_id = this.user_id;
@@ -303,6 +318,9 @@ export namespace user_storage_pb {
             }
             if (this.email != null) {
                 data.email = this.email;
+            }
+            if (this.profile_pic != null) {
+                data.profile_pic = this.profile_pic;
             }
             return data;
         }
@@ -320,6 +338,8 @@ export namespace user_storage_pb {
                 writer.writeString(4, this.last_name);
             if (this.email.length)
                 writer.writeString(5, this.email);
+            if (this.profile_pic.length)
+                writer.writeString(6, this.profile_pic);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -343,6 +363,9 @@ export namespace user_storage_pb {
                         break;
                     case 5:
                         message.email = reader.readString();
+                        break;
+                    case 6:
+                        message.profile_pic = reader.readString();
                         break;
                     default: reader.skipField();
                 }
@@ -841,6 +864,46 @@ export namespace user_storage_pb {
             return DeleteUserRequest.deserialize(bytes);
         }
     }
+    export class LogoutRequest extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {}) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") { }
+        }
+        static fromObject(data: {}): LogoutRequest {
+            const message = new LogoutRequest({});
+            return message;
+        }
+        toObject() {
+            const data: {} = {};
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): LogoutRequest {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new LogoutRequest();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): LogoutRequest {
+            return LogoutRequest.deserialize(bytes);
+        }
+    }
     export class HealthCheckRequest extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {}) {
@@ -1019,6 +1082,15 @@ export namespace user_storage_pb {
                 responseSerialize: (message: ServiceResponseWrapper) => Buffer.from(message.serialize()),
                 responseDeserialize: (bytes: Buffer) => ServiceResponseWrapper.deserialize(new Uint8Array(bytes))
             },
+            Logout: {
+                path: "/user_storage_pb.UserStorage/Logout",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: LogoutRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => LogoutRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: ServiceResponseWrapper) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => ServiceResponseWrapper.deserialize(new Uint8Array(bytes))
+            },
             GetUser: {
                 path: "/user_storage_pb.UserStorage/GetUser",
                 requestStream: false,
@@ -1062,6 +1134,7 @@ export namespace user_storage_pb {
         abstract MyInfoAuth(call: grpc_1.ServerUnaryCall<AuthRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract SgIdAuthUrl(call: grpc_1.ServerUnaryCall<SgIdAuthUrlRequest, SgIdAuthUrlResponse>, callback: grpc_1.sendUnaryData<SgIdAuthUrlResponse>): void;
         abstract SgIdAuth(call: grpc_1.ServerUnaryCall<AuthRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
+        abstract Logout(call: grpc_1.ServerUnaryCall<LogoutRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract GetUser(call: grpc_1.ServerUnaryCall<GetUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract UpdateUser(call: grpc_1.ServerUnaryCall<UpdateUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract DeleteUser(call: grpc_1.ServerUnaryCall<DeleteUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
@@ -1085,6 +1158,9 @@ export namespace user_storage_pb {
         };
         SgIdAuth: GrpcUnaryServiceInterface<AuthRequest, ServiceResponseWrapper> = (message: AuthRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
             return super.SgIdAuth(message, metadata, options, callback);
+        };
+        Logout: GrpcUnaryServiceInterface<LogoutRequest, ServiceResponseWrapper> = (message: LogoutRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
+            return super.Logout(message, metadata, options, callback);
         };
         GetUser: GrpcUnaryServiceInterface<GetUserRequest, ServiceResponseWrapper> = (message: GetUserRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
             return super.GetUser(message, metadata, options, callback);

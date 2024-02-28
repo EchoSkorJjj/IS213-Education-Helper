@@ -24,6 +24,7 @@ message User {
   string first_name = 3;
   string last_name = 4;
   string email = 5;
+  string profile_pic = 6;
 }
 
 // Singpass MyInfo generate challenge code request
@@ -59,6 +60,9 @@ message DeleteUserRequest {
   string user_id = 1;
 }
 
+message LogoutRequest {
+}
+
 message HealthCheckRequest {
   // Empty request for health check
 }
@@ -74,6 +78,7 @@ service UserStorage {
   rpc MyInfoAuth(AuthRequest) returns (ServiceResponseWrapper);
   rpc SgIdAuthUrl(SgIdAuthUrlRequest) returns (SgIdAuthUrlResponse);
   rpc SgIdAuth(AuthRequest) returns (ServiceResponseWrapper);
+  rpc Logout(LogoutRequest) returns (ServiceResponseWrapper);
   rpc GetUser(GetUserRequest) returns (ServiceResponseWrapper);
   rpc UpdateUser(UpdateUserRequest) returns (ServiceResponseWrapper);
   rpc DeleteUser(DeleteUserRequest) returns (ServiceResponseWrapper);

@@ -23,6 +23,7 @@ RUN npm ci
 COPY . .
 RUN npm run build
 COPY protos ./dist/protos
+COPY src/cert ./dist/src/cert
 
 FROM node:20.11.1-alpine3.19
 ENV NODE_ENV production

@@ -6,9 +6,9 @@ export const APP_CONFIG = {
     MYINFO_CLIENT_ID: process.env.MYINFO_CLIENT_ID, 
     MYINFO_SUBENTITY_ID: process.env.MYINFO_SUBENTITY_ID, //only for platform apps
     // MYINFO_CLIENT_PRIVATE_SIGNING_KEY: process.env.MYINFO_CLIENT_PRIVATE_SIGNING_KEY,
-    MYINFO_CLIENT_PRIVATE_SIGNING_KEY: "/app/src/cert/is213-education-helper-signing-private-key.pem",
+    MYINFO_CLIENT_PRIVATE_SIGNING_KEY: "/app/dist/src/cert/is213-education-helper-signing-private-key.pem",
     // MYINFO_CLIENT_PRIVATE_ENCRYPTION_KEYS: process.env.MYINFO_CLIENT_PRIVATE_ENCRYPTION_KEYS,
-    MYINFO_CLIENT_PRIVATE_ENCRYPTION_KEYS: "/app/src/cert/encryption-private-keys/",
+    MYINFO_CLIENT_PRIVATE_ENCRYPTION_KEYS: "/app/dist/src/cert/encryption-private-keys/",
     MYINFO_CALLBACK_URL: process.env.MYINFO_CALLBACK_URL,
     MYINFO_PURPOSE_ID: process.env.MYINFO_PURPOSE_ID,
     MYINFO_SCOPES : process.env.MYINFO_SCOPES,

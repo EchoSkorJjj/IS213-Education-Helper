@@ -25,6 +25,7 @@ message User {
     string first_name = 3;
     string last_name = 4;
     string email = 5;
+    string profile_pic = 6;
 }
 
 // Singpass MyInfo generate challenge code request
@@ -58,6 +59,9 @@ message UpdateUserRequest {
   
 message DeleteUserRequest {
     string user_id = 1;
+}
+
+message LogoutRequest {
 }
   
 message HealthCheckRequest {
@@ -100,6 +104,13 @@ service UserStorage {
     rpc SgIdAuth(AuthRequest) returns (ServiceResponseWrapper) {
         option (google.api.http) = {
             post: "/api/v1/auth/sgId/callback"
+            body: "*"
+        };
+    }
+
+    rpc Logout(LogoutRequest) returns (ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/logout"
             body: "*"
         };
     }

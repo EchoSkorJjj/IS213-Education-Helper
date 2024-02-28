@@ -90,8 +90,6 @@ services:
   notes-service:
     build: ../../backend/simple/notes
     depends_on:
-      kong-gateway:
-        condition: service_healthy
       notes-db:
         condition: service_healthy
     ports:
@@ -101,8 +99,6 @@ services:
     build: ../../backend/simple/user-storage
     image: user-storage-service:1.0
     depends_on:
-      kong-gateway:
-        condition: service_healthy
       user-storage-db:
         condition: service_healthy
     ports:

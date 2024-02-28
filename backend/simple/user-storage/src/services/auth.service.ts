@@ -55,6 +55,7 @@ class AuthService {
                     email: userData.email,
                     given_name: userData.given_name,
                     family_name: userData.family_name,
+                    profile_pic: userData.picture,
                 });
                 return user;
             } catch (error) {
@@ -119,6 +120,7 @@ class AuthService {
                     email: userData.email.value,
                     given_name: nameArray[0],
                     family_name: nameArray.slice(1).join(" "),
+                    profile_pic: "",
                 });
 
                 return user;
@@ -173,6 +175,7 @@ class AuthService {
                     email: 'dummyemail@gmail.com',
                     given_name: nameArray[0],
                     family_name: nameArray.slice(1).join(" "),
+                    profile_pic: "",
                 });
 
                 return user;

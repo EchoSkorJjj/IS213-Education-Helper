@@ -26,6 +26,7 @@ class UserService {
                 first_name: userData.given_name,
                 last_name: userData.family_name,
                 role: 'User',
+                profile_pic: userData.profile_pic,
             });
 
             return {
@@ -33,6 +34,7 @@ class UserService {
                 username: newUser.username,
                 email: newUser.email,
                 role: newUser.role,
+                profile_pic: newUser.profile_pic,
                 is_paid: newUser.is_paid
             };
         } else {
@@ -41,6 +43,7 @@ class UserService {
                 username: user.username,
                 email: user.email,
                 role: user.role,
+                profile_pic: user.profile_pic,
                 is_paid: user.is_paid
             };
         }

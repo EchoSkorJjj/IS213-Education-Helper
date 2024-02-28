@@ -7,6 +7,7 @@ export interface IUser {
     first_name: string;
     last_name: string;
     role: string;
+    profile_pic: string;
     is_paid: boolean;
     creation_date: Date;
 }
@@ -17,6 +18,7 @@ export interface CreateUserDTO {
     first_name: string;
     last_name: string;
     role: string;
+    profile_pic: string;
 }
 
 @Entity({name: 'user_storage_table'})
@@ -40,6 +42,9 @@ export class User {
     role: string;
 
     @Column()
+    profile_pic: string;
+
+    @Column()
     is_paid: boolean;
 
     @CreateDateColumn()
@@ -55,6 +60,7 @@ export class User {
         this.first_name = user.first_name;
         this.last_name = user.last_name;
         this.role = user.role;
+        this.profile_pic = user.profile_pic;
         this.is_paid = user.is_paid;
         this.creation_date = user.creation_date;
     }

@@ -48,6 +48,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 username: userData.username,
                 email: userData.email,
                 role: userData.role,
+                profile_pic: userData.profile_pic,
                 is_paid: userData.is_paid,
             });
 
@@ -138,6 +139,8 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 username: userData.username,
                 email: userData.email,
                 role: userData.role,
+                profile_pic: userData.profile_pic,
+                is_paid: userData.is_paid,
             });
 
             const access_token = jwtHandler.createJWT('10m', {
@@ -236,6 +239,8 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 username: userData.username,
                 email: userData.email,
                 role: userData.role,
+                profile_pic: userData.profile_pic,
+                is_paid: userData.is_paid,
             });
 
             const access_token = jwtHandler.createJWT('10m', {
@@ -255,6 +260,55 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             logger.error(err);
             const error = {
                 code: grpc.status.INVALID_ARGUMENT,
+                message: err.message,
+            };
+            callback(error, null);
+        }
+    }
+
+    async Logout(call: grpc.ServerUnaryCall<user_storage_pb.LogoutRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): Promise<void> {
+        const jwtHandler = JWTHandler.getInstance();
+
+        const metadata = call.metadata.getMap();
+        const request_id = getMetaData(metadata, 'kong-request-id');
+
+        const AUTHZ_HEADER = getMetaData(metadata, 'authorization');
+        const AUTHZ_HEADER_ID_ERROR = isNullOrUndefined(AUTHZ_HEADER);
+        if (AUTHZ_HEADER_ID_ERROR) {
+            callback(AUTHZ_HEADER_ID_ERROR, null);
+            return;
+        }
+
+        const AUTHZ_TOKEN = AUTHZ_HEADER.split(' ')[1]?.trim();
+        try {
+            const currentDate = new Date();
+            const timestamp = dateToGoogleTimeStamp(currentDate);
+
+            const payload = getPayload('userStorage.LogoutResponse', {
+                message: 'User logged out successfully',
+            })
+
+            const responseMetadata = getResponseMetaData(request_id, timestamp);
+            const serviceResponse = getServiceResponse(responseMetadata, payload);
+
+            const decodedToken = jwtHandler.verifyJWT(AUTHZ_TOKEN);
+            if (!decodedToken.exp) {
+                logger.info('Token does not have an expiration time.');
+                callback(null, serviceResponse);
+            }
+
+            const currentTime = Math.floor(Date.now() / 1000);
+            const expiryInSec = decodedToken.exp - currentTime;
+
+            const redisClient = RedisService.getInstance();
+
+            await redisClient.set(`revoked:${AUTHZ_TOKEN}`, decodedToken.user_id, expiryInSec);
+            
+            callback(null, serviceResponse);
+        } catch (err: any) {
+            logger.error(err);
+            const error = {
+                code: grpc.status.INTERNAL,
                 message: err.message,
             };
             callback(error, null);
