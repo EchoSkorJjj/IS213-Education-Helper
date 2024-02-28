@@ -1,7 +1,9 @@
-version: '3'
+version: "3"
 services:
   pdf-reader:
     build:
       context: .
+    ports:
+      - "50051:50051"
     volumes:
-      - ./example.pdf:/app/example.pdf
+      - ./src/example.pdf:/app/example.pdf
