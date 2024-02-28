@@ -1,4 +1,3 @@
-# file_processor_service.py
 import grpc
 import logging
 import file_processor_pb2_grpc
@@ -7,6 +6,10 @@ from ocr_processing import process_pdf_file
 from datetime import datetime
 import uuid
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class FileProcessorServicer(file_processor_pb2_grpc.FileProcessorServicer):
     def ProcessFile(self, request, context):
@@ -16,14 +19,14 @@ class FileProcessorServicer(file_processor_pb2_grpc.FileProcessorServicer):
         environment_mode = os.getenv('ENVIRONMENT_MODE', 'development')  # Default to development if not set
         
         # Check for kong-request-id in metadata if the mode is production
-        request_metadata = None
+        request_metadata = request.metadata if hasattr(request, 'metadata') else None
         if environment_mode.lower() == 'production':
-            if 'kong-request-id' not in request.metadata or not request.metadata['kong-request-id']:
+            kong_request_id = request_metadata.get('kong-request-id') if request_metadata else None
+            if not kong_request_id:
                 context.abort(
                     code=grpc.StatusCode.INVALID_ARGUMENT,
-                    details="Missing required 'kong-request-id' in metadata for production mode.",
+                    details="Missing required 'kong-request-id' in metadata for production mode."
                 )
-            request_metadata = request.metadata
         
         try:
             texts, metadata = process_pdf_file(input_pdf_bytes, filename)
@@ -36,7 +39,7 @@ class FileProcessorServicer(file_processor_pb2_grpc.FileProcessorServicer):
             
             # Wrap the response payload in ServiceResponseWrapper
             response_wrapper = file_processor_pb2.ServiceResponseWrapper()
-            kong_request_id = request.metadata.get('kong-request-id') if request_metadata else  str(uuid.uuid4())
+            kong_request_id = kong_request_id or str(uuid.uuid4())  # Use generated UUID if kong_request_id is None
             response_wrapper.metadata.request_id = kong_request_id
             response_wrapper.metadata.timestamp.FromDatetime(datetime.now())
             response_wrapper.payload.Pack(response_payload)

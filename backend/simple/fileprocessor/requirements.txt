@@ -1,5 +1,5 @@
 grpcio
 grpcio-tools
-tika
 langdetect
 pypdf2
+python-dotenv
