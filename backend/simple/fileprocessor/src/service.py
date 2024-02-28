@@ -130,7 +130,7 @@ async def main():
 async def serve():
     server = grpc.aio.server()
     file_processor_pb2_grpc.add_FileProcessorServicer_to_server(FileProcessorServicer(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:50053')
     await server.start()
     await server.wait_for_termination()
 

@@ -5,7 +5,7 @@ import file_processor_pb2
 import file_processor_pb2_grpc
 
 async def process_file_stub(user_id, file, filename, file_id):
-    async with grpc.aio.insecure_channel('localhost:50051') as channel:
+    async with grpc.aio.insecure_channel('localhost:50053') as channel:
         stub = file_processor_pb2_grpc.FileProcessorStub(channel)
         request = file_processor_pb2.FileUploadRequest(
             userId=user_id,
