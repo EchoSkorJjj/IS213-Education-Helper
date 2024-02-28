@@ -1,4 +1,5 @@
 import { lazy, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 
 import { useAuth } from "~features/auth";
 
@@ -11,7 +12,15 @@ const MyInfoCallback = () => {
     myInfoAuth();
   }, []);
 
-  return <Loader />;
+  return (
+    <>
+      <Helmet>
+        <title>MyInfo Auth</title>
+        <meta name="description" content="MyInfo Auth" />
+      </Helmet>
+      <Loader />
+    </>
+  );
 };
 
 export default MyInfoCallback;

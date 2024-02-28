@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Box, Flex, Image, Stack, Text } from "@chakra-ui/react";
 
 import LongArrowRight from "~assets/img/right_arrow.svg";
@@ -9,6 +10,10 @@ const HomePage = () => {
       w="100%"
       bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
     >
+      <Helmet>
+        <title>Home</title>
+        <meta name="description" content="Home" />
+      </Helmet>
       <Flex
         w="100%"
         h="90%"

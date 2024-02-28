@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { FaCheckCircle } from "react-icons/fa";
 import {
   Box,
@@ -64,6 +65,10 @@ const SubscribePage = () => {
       h="100vh"
       bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
     >
+      <Helmet>
+        <title>Profile</title>
+        <meta name="description" content="Profile" />
+      </Helmet>
       <VStack spacing={2} textAlign="center">
         <Heading as="h1" fontSize="4xl" color="white">
           Plans that fit your need

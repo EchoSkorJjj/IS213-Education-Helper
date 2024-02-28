@@ -67,7 +67,7 @@ export const AuthMenu = ({ user, handleSignOutClick }: AuthMenuProps) => {
           <br />
           <Menu.Divider />
           <Menu.Item as="a" href="/profile">
-            Profile Settings
+            Profile
           </Menu.Item>
           <Menu.Item onClick={handleSignOutClick}>Logout</Menu.Item>
         </Menu.List>

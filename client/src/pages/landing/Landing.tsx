@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 
 import LandingPageImage from "~assets/img/landing_page_image.png";
@@ -5,6 +6,10 @@ import LandingPageImage from "~assets/img/landing_page_image.png";
 const LandingPage = () => {
   return (
     <Box w="100%" h="100vh">
+      <Helmet>
+        <title>Landing</title>
+        <meta name="description" content="Landing" />
+      </Helmet>
       <Flex
         w="100%"
         h="40%"

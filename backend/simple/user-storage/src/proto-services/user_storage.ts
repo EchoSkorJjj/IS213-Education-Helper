@@ -46,6 +46,8 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             const payload = getPayload('user_storage.AuthResponse', {
                 user_id: userData.user_id,
                 username: userData.username,
+                first_name: userData.first_name,
+                last_name: userData.last_name,
                 email: userData.email,
                 role: userData.role,
                 profile_pic: userData.profile_pic,
@@ -137,6 +139,8 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             const payload = getPayload('user_storage.AuthResponse', {
                 user_id: userData.user_id,
                 username: userData.username,
+                first_name: userData.first_name,
+                last_name: userData.last_name,
                 email: userData.email,
                 role: userData.role,
                 profile_pic: userData.profile_pic,
@@ -237,6 +241,8 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             const payload = getPayload('user_storage.AuthResponse', {
                 user_id: userData.user_id,
                 username: userData.username,
+                first_name: userData.first_name,
+                last_name: userData.last_name,
                 email: userData.email,
                 role: userData.role,
                 profile_pic: userData.profile_pic,

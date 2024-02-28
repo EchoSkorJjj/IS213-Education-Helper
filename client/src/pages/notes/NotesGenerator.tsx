@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Button,
@@ -14,8 +15,8 @@ import {
 
 import { useAuth } from "~features/auth";
 
-import NotesGenerator from "./components/NotesGenerator";
 import NotesHeader from "./components/NotesHeader";
+import NotesGenerator from "./components/NotesUpload";
 
 import { generateNotes } from "~api";
 
@@ -68,6 +69,10 @@ const NotesGeneratorPage = () => {
   };
   return (
     <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)">
+      <Helmet>
+        <title>Notes</title>
+        <meta name="description" content="Notes" />
+      </Helmet>
       <NotesHeader />
       <NotesGenerator
         selectedFile={selectedFile}

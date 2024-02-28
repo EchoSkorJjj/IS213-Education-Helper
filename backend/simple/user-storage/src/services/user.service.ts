@@ -32,6 +32,8 @@ class UserService {
             return {
                 user_id: newUser.user_id,
                 username: newUser.username,
+                first_name: newUser.first_name,
+                last_name: newUser.last_name,
                 email: newUser.email,
                 role: newUser.role,
                 profile_pic: newUser.profile_pic,
@@ -41,6 +43,8 @@ class UserService {
             return {
                 user_id: user.user_id,
                 username: user.username,
+                first_name: user.first_name,
+                last_name: user.last_name,
                 email: user.email,
                 role: user.role,
                 profile_pic: user.profile_pic,

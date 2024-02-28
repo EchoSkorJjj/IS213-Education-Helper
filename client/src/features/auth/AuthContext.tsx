@@ -195,6 +195,7 @@ const useProvideAuth = (): AuthContextType => {
   return {
     isAuthenticated,
     user,
+    authorization,
     googleAuth,
     myInfoGetCode,
     myInfoAuth,

@@ -2,7 +2,7 @@ import { LockIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, HStack, Stack, Text } from "@chakra-ui/react";
 import { Attachment } from "@opengovsg/design-system-react";
 
-interface NotesGeneratorProps {
+interface NotesUploadProps {
   selectedFile: File | undefined;
   generateFlashcard: boolean;
   setGenerateFlashcard: (value: boolean) => void;
@@ -11,14 +11,14 @@ interface NotesGeneratorProps {
   handleGenerationChange: () => void;
 }
 
-const NotesGenerator = ({
+const NotesUpload = ({
   selectedFile,
   handleChange,
   generateFlashcard,
   handleGenerationChange,
   handleGenerate,
   setGenerateFlashcard,
-}: NotesGeneratorProps) => {
+}: NotesUploadProps) => {
   const DropZoneAccept = [".pdf"];
   const maxSize = 10 * 1024 * 1024; // 10MB in bytes
 
@@ -153,4 +153,4 @@ const NotesGenerator = ({
   );
 };
 
-export default NotesGenerator;
+export default NotesUpload;

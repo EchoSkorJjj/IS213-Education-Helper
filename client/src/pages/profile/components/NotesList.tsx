@@ -20,46 +20,47 @@ interface NotesProp {
   creator: string;
 }
 
-interface MarketProps {
+interface NotesListProps {
   notes: NotesProp[];
   setNotesTitle: (notesTitle: string) => void;
-  setCurrentMarketPage: (pageNumber: number) => void;
-  currentMarketPage: number;
+  setCurrentPage: (pageNumber: number) => void;
+  currentPage: number;
   totalNotesCount: number;
+  header: string;
+  description: string;
 }
 
-const MarketList = ({
+const NotesList = ({
   notes,
   setNotesTitle,
-  setCurrentMarketPage,
-  currentMarketPage,
+  setCurrentPage,
+  currentPage,
   totalNotesCount,
-}: MarketProps) => {
+  header,
+  description,
+}: NotesListProps) => {
   const pageSize = 8;
 
   return (
-    <Flex
-      direction="column"
-      height="100%"
-      alignItems={"center"}
-      mb="5em"
-      px="10"
-    >
-      <Flex maxW={"6xl"} mt={{ md: "4em" }} width="100%" direction="column">
+    <Flex direction="column" height="100%" alignItems={"center"} px="10">
+      <Flex maxW={"6xl"} width="100%" direction="column">
         <Flex
           direction="row"
           alignItems="center"
           justifyContent="space-between"
         >
-          <Box>
+          <Flex direction="column">
             <Text
-              color="midBlue.500"
-              fontSize={{ base: "2xl", md: "5xl", lg: "7xl" }}
+              color="lightBlue.500"
+              fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
               fontWeight="bold"
             >
-              Marketplace
+              {header}
             </Text>
-          </Box>
+            <Text color="gray.500" fontSize={{ base: "lg", lg: "xl" }}>
+              {description}
+            </Text>
+          </Flex>
           <Box>
             <Searchbar
               placeholder="Search notes"
@@ -74,7 +75,7 @@ const MarketList = ({
           </Box>
         </Flex>
         <SimpleGrid
-          columns={{ base: 2, md: 3, lg: 4 }}
+          columns={{ base: 2, lg: 4 }}
           spacing={5}
           paddingTop="5"
           paddingBottom="5"
@@ -116,12 +117,12 @@ const MarketList = ({
           isDisabled={notes.length === 0}
           totalCount={totalNotesCount}
           pageSize={pageSize}
-          currentPage={currentMarketPage}
-          onPageChange={setCurrentMarketPage}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
         />
       </Flex>
     </Flex>
   );
 };
 
-export default MarketList;
+export default NotesList;

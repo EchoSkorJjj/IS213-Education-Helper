@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 
 const NotFound = () => {
@@ -9,6 +10,10 @@ const NotFound = () => {
       height="100vh"
       bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
     >
+      <Helmet>
+        <title>Not Found</title>
+        <meta name="description" content="Not Found" />
+      </Helmet>
       <Flex
         w="100%"
         h="90%"

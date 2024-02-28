@@ -205,7 +205,6 @@ export namespace user_storage_pb {
             first_name?: string;
             last_name?: string;
             email?: string;
-            profile_pic?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -224,9 +223,6 @@ export namespace user_storage_pb {
                 }
                 if ("email" in data && data.email != undefined) {
                     this.email = data.email;
-                }
-                if ("profile_pic" in data && data.profile_pic != undefined) {
-                    this.profile_pic = data.profile_pic;
                 }
             }
         }
@@ -260,19 +256,12 @@ export namespace user_storage_pb {
         set email(value: string) {
             pb_1.Message.setField(this, 5, value);
         }
-        get profile_pic() {
-            return pb_1.Message.getFieldWithDefault(this, 6, "") as string;
-        }
-        set profile_pic(value: string) {
-            pb_1.Message.setField(this, 6, value);
-        }
         static fromObject(data: {
             user_id?: string;
             username?: string;
             first_name?: string;
             last_name?: string;
             email?: string;
-            profile_pic?: string;
         }): User {
             const message = new User({});
             if (data.user_id != null) {
@@ -290,9 +279,6 @@ export namespace user_storage_pb {
             if (data.email != null) {
                 message.email = data.email;
             }
-            if (data.profile_pic != null) {
-                message.profile_pic = data.profile_pic;
-            }
             return message;
         }
         toObject() {
@@ -302,7 +288,6 @@ export namespace user_storage_pb {
                 first_name?: string;
                 last_name?: string;
                 email?: string;
-                profile_pic?: string;
             } = {};
             if (this.user_id != null) {
                 data.user_id = this.user_id;
@@ -318,9 +303,6 @@ export namespace user_storage_pb {
             }
             if (this.email != null) {
                 data.email = this.email;
-            }
-            if (this.profile_pic != null) {
-                data.profile_pic = this.profile_pic;
             }
             return data;
         }
@@ -338,8 +320,6 @@ export namespace user_storage_pb {
                 writer.writeString(4, this.last_name);
             if (this.email.length)
                 writer.writeString(5, this.email);
-            if (this.profile_pic.length)
-                writer.writeString(6, this.profile_pic);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -363,9 +343,6 @@ export namespace user_storage_pb {
                         break;
                     case 5:
                         message.email = reader.readString();
-                        break;
-                    case 6:
-                        message.profile_pic = reader.readString();
                         break;
                     default: reader.skipField();
                 }
