@@ -48,7 +48,7 @@ class FileProcessorServicer(file_processor_pb2_grpc.FileProcessorServicer):
         response_payload = file_processor_pb2.FileProcessResponse(fileId=file_id, metadata=file_metadata, pages=pages)
         
         response_wrapper = file_processor_pb2.ServiceResponseWrapper()
-        response_wrapper.metadata.request_id = kong_request_id or str(uuid.uuid4())
+        response_wrapper.metadata.request_id = kong_request_id or "This is development mode. No kong-request-id in metadata."
         
         timestamp = Timestamp()
         timestamp.FromDatetime(datetime.now())
