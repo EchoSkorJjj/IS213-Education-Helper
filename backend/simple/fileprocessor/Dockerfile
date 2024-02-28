@@ -25,7 +25,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install gRPC tools for Python
-RUN pip install grpcio grpcio-tools
+RUN pip install grpcio grpcio-tools protobuf
+
 
 # Set the working directory in the container
 WORKDIR /app
