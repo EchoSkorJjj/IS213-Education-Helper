@@ -62,14 +62,6 @@ message DeleteUserRequest {
 
 message LogoutRequest {
 }
-  
-message HealthCheckRequest {
-    // Empty request for health check
-}
-  
-message HealthCheckResponse {
-    string status = 1;
-}
 
 service UserStorage {
     rpc GoogleAuth(AuthRequest) returns (ServiceResponseWrapper) {
@@ -134,6 +126,4 @@ service UserStorage {
             body: "*"
         };
     }
-    
-    rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse);
 };

@@ -62,14 +62,6 @@ message DeleteUserRequest {
 message LogoutRequest {
 }
 
-message HealthCheckRequest {
-  // Empty request for health check
-}
-
-message HealthCheckResponse {
-  string status = 1;
-}
-
 // Service definition with CRUD operations and health check
 service UserStorage {
   rpc GoogleAuth(AuthRequest) returns (ServiceResponseWrapper);
@@ -81,5 +73,4 @@ service UserStorage {
   rpc GetUser(GetUserRequest) returns (ServiceResponseWrapper);
   rpc UpdateUser(UpdateUserRequest) returns (ServiceResponseWrapper);
   rpc DeleteUser(DeleteUserRequest) returns (ServiceResponseWrapper);
-  rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse);
 }

@@ -32,6 +32,9 @@ services:
       # - "8001:8001" # Admin API
       - "8443:8443" # Proxy SSL
       - "8444:8444" # Admin API SSL
+    depends_on:
+      user-storage-service:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s
@@ -62,21 +65,22 @@ services:
       timeout: 5s
       retries: 5
 
-  notes-db:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=my_notes_app
-    ports:
-      - "3306:3306"
-    volumes:
-      - notes-db-volume:/var/lib/mysql
-      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  # notes-db:
+  #   image: mysql:latest
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_DATABASE=my_notes_app
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - notes-db-volume:/var/lib/mysql
+  #     - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 30s
 
   user-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -87,13 +91,13 @@ services:
       timeout: 5s
       retries: 5
 
-  notes-service:
-    build: ../../backend/simple/notes
-    depends_on:
-      notes-db:
-        condition: service_healthy
-    ports:
-      - "50052:50052"      
+  # notes-service:
+  #   build: ../../backend/simple/notes
+  #   depends_on:
+  #     notes-db:
+  #       condition: service_healthy
+  #   ports:
+  #     - "50052:50052"      
 
   user-storage-service:
     build: ../../backend/simple/user-storage
@@ -101,14 +105,22 @@ services:
     depends_on:
       user-storage-db:
         condition: service_healthy
-    ports:
-      - "50051:50051"
-
-  frontend-client:
-    build: ../../client
-    image: client:1.0
-    depends_on:
-      kong-gateway:
+      user-redis:
         condition: service_healthy
     ports:
-      - "3001:3001"
+      - "50051:50051"
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # frontend-client:
+  #   build: ../../client
+  #   image: client:1.0
+  #   depends_on:
+  #     kong-gateway:
+  #       condition: service_healthy
+  #   ports:
+  #     - "3001:3001"

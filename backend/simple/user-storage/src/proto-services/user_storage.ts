@@ -348,13 +348,6 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             
         ));
     }
-
-    CheckHealth(call: grpc.ServerUnaryCall<user_storage_pb.HealthCheckRequest, user_storage_pb.HealthCheckResponse>, callback: grpc.sendUnaryData<user_storage_pb.HealthCheckResponse>): void {
-        callback(null, new user_storage_pb.HealthCheckResponse(
-            
-        ));
-    }
-    
 }
 
 export default UserStorage;
