@@ -4,8 +4,8 @@ import { Attachment } from "@opengovsg/design-system-react";
 
 interface NotesUploadProps {
   selectedFile: File | undefined;
-  generateFlashcard: boolean;
-  setGenerateFlashcard: (value: boolean) => void;
+  generateType: string;
+  setGenerateType: (value: string) => void;
   handleGenerate: () => void;
   handleChange: (file: File) => void;
   handleGenerationChange: () => void;
@@ -14,10 +14,10 @@ interface NotesUploadProps {
 const NotesUpload = ({
   selectedFile,
   handleChange,
-  generateFlashcard,
+  generateType,
   handleGenerationChange,
   handleGenerate,
-  setGenerateFlashcard,
+  setGenerateType,
 }: NotesUploadProps) => {
   const DropZoneAccept = [".pdf"];
   const maxSize = 10 * 1024 * 1024; // 10MB in bytes
@@ -31,6 +31,8 @@ const NotesUpload = ({
 
     return null;
   };
+
+  const generateFlashcard = generateType === "flashcard";
 
   return (
     <Flex
@@ -85,7 +87,7 @@ const NotesUpload = ({
             alignContent="center"
             color={generateFlashcard ? "white" : "midBlue.500"}
             textAlign="start"
-            onClick={() => setGenerateFlashcard(true)}
+            onClick={() => setGenerateType("flashcard")}
           >
             <Text fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}>
               Generate

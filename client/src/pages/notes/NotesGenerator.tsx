@@ -29,7 +29,7 @@ const NotesGeneratorPage = () => {
   const toast = useToast();
   const { user } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
-  const [generateFlashcard, setGenerateFlashcard] = useState<boolean>(true);
+  const [generateType, setGenerateType] = useState<string>("flashcard");
 
   const handleChange = (file: File) => {
     setSelectedFile(file);
@@ -40,7 +40,7 @@ const NotesGeneratorPage = () => {
       openModal();
       return;
     }
-    setGenerateFlashcard(false);
+    setGenerateType("mcq");
   };
 
   const handleGenerate = async () => {
@@ -56,14 +56,14 @@ const NotesGeneratorPage = () => {
       return;
     }
     toast({
-      title: `Generating ${generateFlashcard ? "Flashcards" : "MCQs"}`,
+      title: `Generating ${generateType}`,
       status: "info",
       position: "top",
       duration: 6000,
       isClosable: true,
     });
 
-    const data = await generateNotes(selectedFile, generateFlashcard);
+    const data = await generateNotes(selectedFile, generateType);
 
     console.log(data);
   };
@@ -77,10 +77,10 @@ const NotesGeneratorPage = () => {
       <NotesGenerator
         selectedFile={selectedFile}
         handleChange={handleChange}
-        generateFlashcard={generateFlashcard}
+        generateType={generateType}
         handleGenerationChange={handleGenerationChange}
         handleGenerate={handleGenerate}
-        setGenerateFlashcard={setGenerateFlashcard}
+        setGenerateType={setGenerateType}
       />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ModalOverlay />

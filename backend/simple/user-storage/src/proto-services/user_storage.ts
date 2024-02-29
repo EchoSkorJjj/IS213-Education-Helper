@@ -21,11 +21,11 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
     async GoogleAuth(call: grpc.ServerUnaryCall<user_storage_pb.AuthRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): Promise<void> {
         const metadata = call.metadata.getMap();
     
-        const request_id = getMetaData(metadata, 'kong-request-id');
+        const requestId = getMetaData(metadata, 'kong-request-id');
 
-        const GOOGLE_OAUTH_CODE = call.request.code;
+        const googleOAuthCode = call.request.code;
 
-        const code_error = isNullOrUndefined(GOOGLE_OAUTH_CODE);
+        const code_error = isNullOrUndefined(googleOAuthCode);
         if (code_error) {
             callback(code_error, null); 
             return;
@@ -36,7 +36,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             const authService = AuthService.getInstance();
 
             // Get user data from Google API
-            const userData = await authService.handleGoogleLogin(GOOGLE_OAUTH_CODE);
+            const userData = await authService.handleGoogleLogin(googleOAuthCode);
 
             // Current date and convert to Google Timestamp
             const currentDate = new Date();
@@ -63,7 +63,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             metadata.set('x-access-token', access_token);
             call.sendMetadata(metadata);
 
-            const responseMetadata = getResponseMetaData(request_id, timestamp);
+            const responseMetadata = getResponseMetaData(requestId, timestamp);
             const serviceResponse = getServiceResponse(responseMetadata, payload);
 
             callback(null, serviceResponse);
@@ -85,14 +85,14 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
 
         const pkceCodePair = connector.generatePKCECodePair();
 
-        const MYINFO_UNIQUE_ID = jwtHandler.createJWT('5m', { myinfo_auth: true });
+        const myInfoUniqueId = jwtHandler.createJWT('5m', { myinfo_auth: true });
         try {
             const redisClient = RedisService.getInstance();
 
-            await redisClient.set(`myinfo_auth_flow:${MYINFO_UNIQUE_ID}`, pkceCodePair.codeVerifier, 300);
+            await redisClient.set(`myinfo_auth_flow:${myInfoUniqueId}`, pkceCodePair.codeVerifier, 300);
             
             const metadata = new grpc.Metadata();
-            metadata.set('x-myinfo-unique-id', MYINFO_UNIQUE_ID);
+            metadata.set('x-myinfo-unique-id', myInfoUniqueId);
             call.sendMetadata(metadata);
 
             callback(null, new user_storage_pb.MyInfoCodeResponse(
@@ -114,22 +114,22 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
         const jwtHandler = JWTHandler.getInstance();
 
         const metadata = call.metadata.getMap();
-        const request_id = getMetaData(metadata, 'kong-request-id');
-        const MYINFO_OAUTH_CODE = call.request.code;
+        const requestId = getMetaData(metadata, 'kong-request-id');
+        const myInfoOAuthCode = call.request.code;
 
-        const MYINFO_UNIQUE_ID = getMetaData(metadata, 'authorization');
-        const MYINFO_UNIQUE_ID_ERROR = isNullOrUndefined(MYINFO_UNIQUE_ID);
-        if (MYINFO_UNIQUE_ID_ERROR) {
-            callback(MYINFO_UNIQUE_ID_ERROR, null);
+        const myInfoUniqueId = getMetaData(metadata, 'authorization');
+        const myInfoUniqueIdError = isNullOrUndefined(myInfoUniqueId);
+        if (myInfoUniqueIdError) {
+            callback(myInfoUniqueIdError, null);
             return;
         }
 
-        const token = MYINFO_UNIQUE_ID.split(' ')[1]?.trim(); 
+        const token = myInfoUniqueId.split(' ')[1]?.trim(); 
         try {
             const authService = AuthService.getInstance();
 
             // Get the user data from MyInfo API
-            const userData = await authService.handleMyInfoLogin(MYINFO_OAUTH_CODE, token);
+            const userData = await authService.handleMyInfoLogin(myInfoOAuthCode, token);
 
             // Current date and convert to Google Timestamp
             const currentDate = new Date();
@@ -156,7 +156,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             newMetadata.set('x-access-token', access_token);
             call.sendMetadata(newMetadata);
 
-            const responseMetadata = getResponseMetaData(request_id, timestamp);
+            const responseMetadata = getResponseMetaData(requestId, timestamp);
             const serviceResponse = getServiceResponse(responseMetadata, payload);
 
             callback(null, serviceResponse);
@@ -187,14 +187,14 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             nonce: nonce,
         }
 
-        const SGID_UNIQUE_ID = jwtHandler.createJWT('5m', { sgid_auth: true });
+        const sgIdUniqueId = jwtHandler.createJWT('5m', { sgid_auth: true });
         try {
             const redisClient = RedisService.getInstance();
 
-            await redisClient.set(`sgid_auth_flow:${SGID_UNIQUE_ID}`, JSON.stringify(jwt_payload), 300);
+            await redisClient.set(`sgid_auth_flow:${sgIdUniqueId}`, JSON.stringify(jwt_payload), 300);
             
             const metadata = new grpc.Metadata();
-            metadata.set('x-sgid-unique-id', SGID_UNIQUE_ID);
+            metadata.set('x-sgid-unique-id', sgIdUniqueId);
             call.sendMetadata(metadata);
 
             callback(null, new user_storage_pb.SgIdAuthUrlResponse(
@@ -216,22 +216,22 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
         const jwtHandler = JWTHandler.getInstance();
 
         const metadata = call.metadata.getMap();
-        const request_id = getMetaData(metadata, 'kong-request-id');
-        const SGID_OAUTH_CODE = call.request.code;
+        const requestId = getMetaData(metadata, 'kong-request-id');
+        const sgIdOAuthCode = call.request.code;
 
-        const SGID_UNIQUE_ID = getMetaData(metadata, 'authorization');
-        const SGID_UNIQUE_ID_ERROR = isNullOrUndefined(SGID_UNIQUE_ID);
-        if (SGID_UNIQUE_ID_ERROR) {
-            callback(SGID_UNIQUE_ID_ERROR, null);
+        const sgIdUniqueId = getMetaData(metadata, 'authorization');
+        const sgIdUniqueIdError = isNullOrUndefined(sgIdUniqueId);
+        if (sgIdUniqueIdError) {
+            callback(sgIdUniqueIdError, null);
             return;
         }
 
-        const token = SGID_UNIQUE_ID.split(' ')[1]?.trim(); 
+        const token = sgIdUniqueId.split(' ')[1]?.trim(); 
         try {
             const authService = AuthService.getInstance();
 
             // Get the user data from SGID API
-            const userData = await authService.handleSgIdLogin(SGID_OAUTH_CODE, token);
+            const userData = await authService.handleSgIdLogin(sgIdOAuthCode, token);
 
             // Current date and convert to Google Timestamp
             const currentDate = new Date();
@@ -258,7 +258,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             newMetadata.set('x-access-token', access_token);
             call.sendMetadata(newMetadata);
 
-            const responseMetadata = getResponseMetaData(request_id, timestamp);
+            const responseMetadata = getResponseMetaData(requestId, timestamp);
             const serviceResponse = getServiceResponse(responseMetadata, payload);
 
             callback(null, serviceResponse);
@@ -276,16 +276,16 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
         const jwtHandler = JWTHandler.getInstance();
 
         const metadata = call.metadata.getMap();
-        const request_id = getMetaData(metadata, 'kong-request-id');
+        const requestId = getMetaData(metadata, 'kong-request-id');
 
-        const AUTHZ_HEADER = getMetaData(metadata, 'authorization');
-        const AUTHZ_HEADER_ID_ERROR = isNullOrUndefined(AUTHZ_HEADER);
-        if (AUTHZ_HEADER_ID_ERROR) {
-            callback(AUTHZ_HEADER_ID_ERROR, null);
+        const authzHeader = getMetaData(metadata, 'authorization');
+        const authzHeaderIdError = isNullOrUndefined(authzHeader);
+        if (authzHeaderIdError) {
+            callback(authzHeaderIdError, null);
             return;
         }
 
-        const AUTHZ_TOKEN = AUTHZ_HEADER.split(' ')[1]?.trim();
+        const AUTHZ_TOKEN = authzHeader.split(' ')[1]?.trim();
         try {
             const currentDate = new Date();
             const timestamp = dateToGoogleTimeStamp(currentDate);
@@ -294,7 +294,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 message: 'User logged out successfully',
             })
 
-            const responseMetadata = getResponseMetaData(request_id, timestamp);
+            const responseMetadata = getResponseMetaData(requestId, timestamp);
             const serviceResponse = getServiceResponse(responseMetadata, payload);
 
             const decodedToken = jwtHandler.verifyJWT(AUTHZ_TOKEN);

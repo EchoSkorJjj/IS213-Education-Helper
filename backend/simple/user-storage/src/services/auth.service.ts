@@ -67,9 +67,9 @@ class AuthService {
         }
     }
 
-    async handleMyInfoLogin(MYINFO_OAUTH_CODE: string, MYINFO_UNIQUE_ID: string): Promise<ClientUserData> {
+    async handleMyInfoLogin(myInfoOAuthCode: string, myInfoUniqueId: string): Promise<ClientUserData> {
         const { myInfoConnector } = this.oAuthClientService;
-        const decoded = this.jwtHandler.verifyJWT(MYINFO_UNIQUE_ID);
+        const decoded = this.jwtHandler.verifyJWT(myInfoUniqueId);
 
         if (!decoded) {
             throw new Error("Unauthorized");
@@ -80,7 +80,7 @@ class AuthService {
         }
 
         try {
-            const codeVerifier = await this.redisClient.get(`myinfo_auth_flow:${MYINFO_UNIQUE_ID}`);
+            const codeVerifier = await this.redisClient.get(`myinfo_auth_flow:${myInfoUniqueId}`);
 
             if (!codeVerifier) {
                 throw new Error("Unauthorized");
@@ -107,7 +107,7 @@ class AuthService {
             // privateEncryptionKeys.push(APP_CONFIG.MYINFO_CLIENT_PRIVATE_ENCRYPTION_KEYS);
 
             const userData = await myInfoConnector.getMyInfoPersonData(
-                MYINFO_OAUTH_CODE,
+                myInfoOAuthCode,
                 codeVerifier,
                 privateSigningKey,
                 privateEncryptionKeys
@@ -134,9 +134,9 @@ class AuthService {
         }
     }
 
-    async handleSgIdLogin(SGID_OAUTH_CODE: string, SGID_UNIQUE_ID: string): Promise<ClientUserData> {
+    async handleSgIdLogin(sgIdOAuthCode: string, sgIdUniqueId: string): Promise<ClientUserData> {
         const { sgidClient } = this.oAuthClientService;
-        const decoded = this.jwtHandler.verifyJWT(SGID_UNIQUE_ID);
+        const decoded = this.jwtHandler.verifyJWT(sgIdUniqueId);
 
         if (!decoded) {
             throw new Error("Unauthorized");
@@ -147,7 +147,7 @@ class AuthService {
         }
 
         try {
-            const data = await this.redisClient.get(`sgid_auth_flow:${SGID_UNIQUE_ID}`);
+            const data = await this.redisClient.get(`sgid_auth_flow:${sgIdUniqueId}`);
 
             if (!data) {
                 throw new Error("Unauthorized");
@@ -156,7 +156,7 @@ class AuthService {
             const { codeVerifier, nonce } = JSON.parse(data);
 
             const { accessToken, sub } = await sgidClient.callback({
-                code: SGID_OAUTH_CODE,
+                code: sgIdOAuthCode,
                 nonce,
                 codeVerifier,
             })

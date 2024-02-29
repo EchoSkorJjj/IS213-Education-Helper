@@ -40,17 +40,17 @@ export const getCheckoutUrl = async () => {
   }
 };
 
-export const generateNotes = async (file: File, generateFlashcard: boolean) => {
+export const generateNotes = async (file: File, generateType: string) => {
   const { authorization } = useAuth();
   try {
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("generateType", generateType);
 
     const response = await api.post(
       "/api/v1/notes/generate",
       {
         formData: formData,
-        generateFlashcard: generateFlashcard,
       },
       {
         headers: {
