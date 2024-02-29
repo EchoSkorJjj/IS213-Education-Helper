@@ -9,12 +9,6 @@ import notes_pb2_grpc
 from concurrent import futures
 from dotenv import load_dotenv
 
-# Directly specify your AWS credentials (Not recommended for production use)
-# s3_client = boto3.client(
-#     's3',
-#     aws_access_key_id='',
-#     aws_secret_access_key=''
-# )
 load_dotenv()
 
 s3_client = boto3.client('s3')
