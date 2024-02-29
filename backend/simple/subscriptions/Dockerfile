@@ -2,8 +2,16 @@ FROM developwithzt/esd-cpp-grpc-base:1.0 AS builder
 WORKDIR /app
 RUN apt-get update && apt-get install -y \
     libpqxx-dev \
-    libpq-dev
+    libpq-dev \
+    curl
+RUN BIN="/usr/local/bin" && \
+    VERSION="1.29.0" && \
+    curl -sSL \
+    "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
+    -o "${BIN}/buf" && \
+    chmod +x "${BIN}/buf"
 COPY . .
+RUN buf generate
 RUN mkdir build && cd build && cmake .. && make
 
 # Might want to find a lighter image to use as base here.
