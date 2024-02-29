@@ -1,0 +1,9 @@
+
+version: "3.8"
+services:
+
+  upload-notes:
+      build: ./
+      image: upload-notes:1.0
+      ports:
+      - "8080:8080"
