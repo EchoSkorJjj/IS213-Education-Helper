@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package content_pb;
+
+import "google/protobuf/timestamp.proto";
+
+message Flashcard {
+    string id = 1;
+    string question = 2;
+    string answer = 3;
+}
+
+message MultipleChoiceQuestionOption {
+    string option = 1;
+    bool is_correct = 2;
+}
+
+message MultipleChoiceQuestion {
+    string id = 1;
+    string question = 2;
+    repeated MultipleChoiceQuestionOption options = 3;
+    bool multiple_answers = 4;
+}
+
+message ResponseMetadata {
+    string request_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+enum ContentType {
+    FLASHCARD = 0;
+    MCQ = 1;
+}
+
+message GetContentRequest {
+    string note_id = 1;
+    repeated ContentType content_type = 2;
+}
+
+message GetContentResponse {
+    ResponseMetadata metadata = 1;
+    repeated Flashcard flashcards = 2;
+    repeated MultipleChoiceQuestion mcqs = 3;
+}
+
+message CreateFlashcardRequest {
+    string note_id = 1;
+    string question = 2;
+    string answer = 3;
+}
+
+message GeneralResponse {
+    ResponseMetadata metadata = 1;
+    oneof content_affected {
+        Flashcard flashcard = 2;
+        MultipleChoiceQuestion mcq = 3;
+    }
+}
+
+message CreateMultipleChoiceQuestionRequest {
+    string note_id = 1;
+    string question = 2;
+    repeated MultipleChoiceQuestionOption options = 3;
+}
+
+message DeleteContentRequest {
+    string id = 1;
+}
+
+message UpdateFlashcardRequest {
+    string id = 1;
+    optional string question = 2;
+    optional string answer = 3;
+}
+
+message UpdateMultipleChoiceQuestionRequest {
+    string id = 1;
+    optional string question = 2;
+    repeated MultipleChoiceQuestionOption options = 3;
+}
+
+service Content {
+    rpc GetContent(GetContentRequest) returns (GetContentResponse);
+    rpc CreateFlashcard(CreateFlashcardRequest) returns (GeneralResponse);
+    rpc CreateMultipleChoiceQuestion(CreateMultipleChoiceQuestionRequest) returns (GeneralResponse);
+    rpc DeleteContent(DeleteContentRequest) returns (GeneralResponse);
+    rpc UpdateFlashcard(UpdateFlashcardRequest) returns (GeneralResponse);
+    rpc UpdateMultipleChoiceQuestion(UpdateMultipleChoiceQuestionRequest) returns (GeneralResponse);
+}

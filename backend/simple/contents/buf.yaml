@@ -1,0 +1,4 @@
+version: v1
+name: buf.build/ESD-project/contents
+deps:
+  - buf.build/beta/googleapis
