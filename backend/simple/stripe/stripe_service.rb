@@ -31,6 +31,8 @@ options "*" do
 end
 
 get '/checkout' do
+  customer_email = params['email'] 
+  #might need to change depending on how the customer_email is retrieved
   session = Stripe::Checkout::Session.create(
     payment_method_types: ['card'],
     line_items: [{
@@ -40,6 +42,7 @@ get '/checkout' do
     mode: 'subscription',
     success_url: 'http://localhost:3001/subscribe',
     cancel_url: 'http://localhost:3001/subscribe',
+    customer_email: customer_email,
   )
 
   session
@@ -83,6 +86,7 @@ post '/webhook' do
     customer_email = customer.email
 
     # Now you can use the customer_email
+    # Send over to the complex service somehow
     # For example, print it:
     puts "Customer email: #{customer_email}"
   end

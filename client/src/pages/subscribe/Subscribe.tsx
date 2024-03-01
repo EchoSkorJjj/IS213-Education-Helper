@@ -173,7 +173,7 @@ const SubscribePage = () => {
                 </ListItem>
               </List>
               <Box w="80%" pt={7}>
-                <Button w="full">
+                <Button w="full" >
                   {user?.is_paid ? "Already a Pro" : "Go Pro"}
                 </Button>
               </Box>
