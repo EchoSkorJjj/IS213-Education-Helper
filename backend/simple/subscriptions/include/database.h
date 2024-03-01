@@ -11,12 +11,12 @@ class Database {
  public:
   static Database& GetInstance();
 
-  subscription_pb::SubscriptionMessage GetSubscriptionByUserId(
+  subscription_pb::SubscriptionMessage GetSubscriptionByEmail(
       const std::string& user_id);
-  subscription_pb::SubscriptionMessage CreateOrUpdateSubscriptionByUserId(
+  subscription_pb::SubscriptionMessage CreateOrUpdateSubscriptionByEmail(
       const std::string& user_id, const time_t subscribed_until);
   std::vector<subscription_pb::SubscriptionMessage> GetExpiredSubscriptions();
-  subscription_pb::SubscriptionMessage DeleteSubscriptionByUserId(
+  subscription_pb::SubscriptionMessage DeleteSubscriptionByEmail(
       const std::string& user_id);
 
  private:

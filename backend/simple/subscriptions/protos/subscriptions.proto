@@ -20,15 +20,15 @@ message ServiceResponseWrapper {
 // temporarily call it SubscriptionMessage for now to
 // prevent naming conflict with the service name.
 message SubscriptionMessage {
-    // could we make user_id the primary key instead?
+    // could we make email the primary key instead?
     // For now assume subscription_id is required.
     string subscription_id = 1;
-    string user_id = 2;
+    string email = 2;
     google.protobuf.Timestamp subscribed_until = 3;
 }
 
 message CreateOrUpdateSubscriptionRequest {
-    string user_id = 1;
+    string email = 1;
     // may or may not need this, depending on whether we offer different subscription types
     // (e.g. 1 month, 1 year, unlimited). For now assume it is required.
     google.protobuf.Timestamp subscribed_until = 2;
@@ -40,7 +40,7 @@ message CreateOrUpdateSubscriptionResponse {
 }
 
 message GetSubscriptionRequest {
-    string user_id = 1;
+    string email = 1;
 }
 
 message GetSubscriptionResponse {
@@ -49,7 +49,7 @@ message GetSubscriptionResponse {
 }
 
 message UpdateSubscriptionRequest {
-    string user_id = 1;
+    string email = 1;
     google.protobuf.Timestamp subscribed_until = 2;
 }
 
@@ -59,13 +59,13 @@ message UpdateSubscriptionResponse {
 }
 
 message DeleteSubscriptionRequest {
-    string user_id = 1;
+    string email = 1;
 }
 
 message DeleteSubscriptionResponse {
     ResponseMetadata metadata = 1;
     string subscription_id = 2;
-    string user_id = 3;
+    string email = 3;
 }
 
 // Referenced Microsoft's HealthStatus Enum. See here:

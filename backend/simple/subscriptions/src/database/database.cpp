@@ -8,12 +8,12 @@ Database &Database::GetInstance() {
   return instance;
 }
 
-subscription_pb::SubscriptionMessage Database::GetSubscriptionByUserId(
-    const std::string &user_id) {
+subscription_pb::SubscriptionMessage Database::GetSubscriptionByEmail(
+    const std::string &email) {
   pqxx::work W(conn_);
-  std::string query = "SELECT * FROM subscriptions WHERE user_id = $1";
+  std::string query = "SELECT * FROM subscriptions WHERE email = $1";
 
-  pqxx::result results = W.exec_params(query, user_id);
+  pqxx::result results = W.exec_params(query, email);
   W.commit();
 
   if (results.empty()) {
@@ -23,7 +23,7 @@ subscription_pb::SubscriptionMessage Database::GetSubscriptionByUserId(
   subscription_pb::SubscriptionMessage subscription_message;
   auto row = results[0];
   subscription_message.set_subscription_id(row["id"].c_str());
-  subscription_message.set_user_id(row["user_id"].c_str());
+  subscription_message.set_email(row["email"].c_str());
   auto timestamp_ptr = subscription_message.mutable_subscribed_until();
   *timestamp_ptr = PqxxField2GoogleTimestamp(row["subscribed_until"]);
 
@@ -31,21 +31,21 @@ subscription_pb::SubscriptionMessage Database::GetSubscriptionByUserId(
 }
 
 subscription_pb::SubscriptionMessage
-Database::CreateOrUpdateSubscriptionByUserId(const std::string &user_id,
+Database::CreateOrUpdateSubscriptionByEmail(const std::string &email,
                                              const time_t subscribed_until) {
   std::string timestamp_str = TimeT2String(subscribed_until);
 
   pqxx::work W(conn_);
   std::string insert_query =
-      "INSERT INTO subscriptions (user_id, subscribed_until) "
+      "INSERT INTO subscriptions (email, subscribed_until) "
       "VALUES ($1, $2) "
-      "ON CONFLICT (user_id) DO UPDATE "
+      "ON CONFLICT (email) DO UPDATE "
       "SET subscribed_until = $2";
 
-  W.exec_params(insert_query, user_id, timestamp_str);
+  W.exec_params(insert_query, email, timestamp_str);
 
-  std::string select_query = "SELECT * FROM subscriptions WHERE user_id = $1";
-  pqxx::result select_results = W.exec_params(select_query, user_id);
+  std::string select_query = "SELECT * FROM subscriptions WHERE email = $1";
+  pqxx::result select_results = W.exec_params(select_query, email);
   W.commit();
 
   if (select_results.empty()) {
@@ -55,7 +55,7 @@ Database::CreateOrUpdateSubscriptionByUserId(const std::string &user_id,
   subscription_pb::SubscriptionMessage subscription_message;
   auto row = select_results[0];
   subscription_message.set_subscription_id(row["id"].c_str());
-  subscription_message.set_user_id(row["user_id"].c_str());
+  subscription_message.set_email(row["email"].c_str());
 
   auto timestamp_ptr = subscription_message.mutable_subscribed_until();
   *timestamp_ptr = PqxxField2GoogleTimestamp(row["subscribed_until"]);
@@ -79,7 +79,7 @@ Database::GetExpiredSubscriptions() {
   for (auto row : results) {
     subscription_pb::SubscriptionMessage subscription_message;
     subscription_message.set_subscription_id(row["id"].c_str());
-    subscription_message.set_user_id(row["user_id"].c_str());
+    subscription_message.set_email(row["email"].c_str());
 
     auto timestamp_ptr = subscription_message.mutable_subscribed_until();
     *timestamp_ptr = PqxxField2GoogleTimestamp(row["subscribed_until"]);
@@ -90,12 +90,12 @@ Database::GetExpiredSubscriptions() {
   return expired_subscriptions;
 }
 
-subscription_pb::SubscriptionMessage Database::DeleteSubscriptionByUserId(
-    const std::string &user_id) {
+subscription_pb::SubscriptionMessage Database::DeleteSubscriptionByEmail(
+    const std::string &email) {
   pqxx::work W(conn_);
 
-  std::string select_query = "SELECT * FROM subscriptions WHERE user_id = $1";
-  pqxx::result select_results = W.exec_params(select_query, user_id);
+  std::string select_query = "SELECT * FROM subscriptions WHERE email = $1";
+  pqxx::result select_results = W.exec_params(select_query, email);
 
   if (select_results.empty()) {
     throw std::runtime_error("No subscription found for user");
@@ -104,13 +104,13 @@ subscription_pb::SubscriptionMessage Database::DeleteSubscriptionByUserId(
   subscription_pb::SubscriptionMessage subscription_message;
   auto row = select_results[0];
   subscription_message.set_subscription_id(row["id"].c_str());
-  subscription_message.set_user_id(row["user_id"].c_str());
+  subscription_message.set_email(row["email"].c_str());
 
   auto timestamp_ptr = subscription_message.mutable_subscribed_until();
   *timestamp_ptr = PqxxField2GoogleTimestamp(row["subscribed_until"]);
 
-  std::string delete_query = "DELETE FROM subscriptions WHERE user_id = $1";
-  pqxx::result delete_results = W.exec_params(delete_query, user_id);
+  std::string delete_query = "DELETE FROM subscriptions WHERE email = $1";
+  pqxx::result delete_results = W.exec_params(delete_query, email);
   W.commit();
 
   if (delete_results.affected_rows() == 0) {

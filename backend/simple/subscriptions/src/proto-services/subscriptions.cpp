@@ -14,20 +14,20 @@ class SubscriptionService final
       grpc::ServerContext *context,
       const subscription_pb::CreateOrUpdateSubscriptionRequest *request,
       subscription_pb::CreateOrUpdateSubscriptionResponse *response) override {
-    std::string user_id = request->user_id();
+    std::string email = request->email();
     google::protobuf::Timestamp subscribed_until_timestamp =
         request->subscribed_until();
     time_t subscribed_until = subscribed_until_timestamp.seconds();
 
-    if (user_id.empty()) {
+    if (email.empty()) {
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT,
-                          "User ID is empty");
+                          "Email is empty");
     }
 
     try {
       Database &db = Database::GetInstance();
       subscription_pb::SubscriptionMessage created_subscription =
-          db.CreateOrUpdateSubscriptionByUserId(user_id, subscribed_until);
+          db.CreateOrUpdateSubscriptionByEmail(email, subscribed_until);
 
       subscription_pb::ResponseMetadata metadata = GenerateMetadata("1");
 
@@ -47,16 +47,16 @@ class SubscriptionService final
       grpc::ServerContext *context,
       const subscription_pb::GetSubscriptionRequest *request,
       subscription_pb::GetSubscriptionResponse *response) override {
-    std::string user_id = request->user_id();
-    if (user_id.empty()) {
+    std::string email = request->email();
+    if (email.empty()) {
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT,
-                          "User ID is empty");
+                          "Email is empty");
     }
 
     try {
       Database &db = Database::GetInstance();
       subscription_pb::SubscriptionMessage requested_subscription =
-          db.GetSubscriptionByUserId(user_id);
+          db.GetSubscriptionByEmail(email);
       subscription_pb::ResponseMetadata metadata = GenerateMetadata("1");
 
       response->mutable_metadata()->CopyFrom(metadata);
@@ -75,22 +75,22 @@ class SubscriptionService final
       grpc::ServerContext *context,
       const subscription_pb::DeleteSubscriptionRequest *request,
       subscription_pb::DeleteSubscriptionResponse *response) override {
-    std::string user_id = request->user_id();
-    if (user_id.empty()) {
+    std::string email = request->email();
+    if (email.empty()) {
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT,
-                          "User ID is empty");
+                          "Email is empty");
     }
 
     try {
       Database &db = Database::GetInstance();
       subscription_pb::SubscriptionMessage deleted_subscription =
-          db.DeleteSubscriptionByUserId(user_id);
+          db.DeleteSubscriptionByEmail(email);
       subscription_pb::ResponseMetadata metadata = GenerateMetadata("1");
 
       response->mutable_metadata()->CopyFrom(metadata);
       *response->mutable_subscription_id() =
           deleted_subscription.subscription_id();
-      *response->mutable_user_id() = deleted_subscription.user_id();
+      *response->mutable_email() = deleted_subscription.email();
     } catch (const std::exception &e) {
       std::cout << "Error deleting subscription: " << e.what() << "\n"
                 << std::endl;
