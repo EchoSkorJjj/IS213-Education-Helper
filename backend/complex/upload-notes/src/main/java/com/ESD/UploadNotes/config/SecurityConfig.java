@@ -23,9 +23,8 @@ public class SecurityConfig {
     throws Exception {
     http
       .authorizeHttpRequests(rQ -> {
-        rQ.requestMatchers("/**").permitAll();
-        // this is a security risk
-        // TODO: figure out path
+        rQ.requestMatchers("/api/v1/notes/**").permitAll().anyRequest().authenticated() // Ensure all requests are authenticated
+        ;
       })
       .addFilterBefore(
         customRequestFilter(),
@@ -33,7 +32,6 @@ public class SecurityConfig {
       ) // this usernamepassword filter is provided by spring it is needed because our filter needs to have an order specified.
       .csrf(csrf -> csrf.ignoringRequestMatchers("/**"));
 
-    // Disable features not being used
 
     return http.build();
   }
@@ -47,7 +45,6 @@ public class SecurityConfig {
         HttpServletResponse response,
         FilterChain chain
       ) throws ServletException, IOException {
-        // Implement your filtering logic here
         if (
           request.getHeader("kong-request-id") == null ||
           request.getHeader("X-User-ID") == null

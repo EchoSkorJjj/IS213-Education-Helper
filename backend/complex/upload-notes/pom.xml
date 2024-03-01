@@ -156,6 +156,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jcl</artifactId>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
