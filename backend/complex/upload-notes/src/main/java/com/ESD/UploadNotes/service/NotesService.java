@@ -1,68 +1,54 @@
 package com.ESD.UploadNotes.service;
 
-import org.slf4j.LoggerFactory;
+import com.ESD.UploadNotes.exception.FileValidationException;
+import com.ESD.UploadNotes.exception.NoteProcessingException;
+import com.ESD.UploadNotes.utility.FileConverter;
+import com.ESD.UploadNotes.utility.FileValidator;
+import com.ESD.UploadNotes.utility.RequestExtractor;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ESD.UploadNotes.exception.FileValidationException;
-import com.ESD.UploadNotes.exception.NoteProcessingException;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Optional;
-
 @Service
 public class NotesService {
+
     private static final Logger logger = LoggerFactory.getLogger(NotesService.class);
 
-    /**
-     * Processes the note, validating the file and note data, and prepares it for gRPC transmission.
-     *
-     * @param file The PDF file to be processed.
-     * @param noteData The data associated with the note.
-     * @return true if the note is processed successfully, false otherwise.
-     * @throws FileValidationException 
-     */
+    private final FileValidator fileValidator;
+    private final FileConverter fileConverter;
+    private final GrpcClientService grpcClientService;
+    private final RequestExtractor requestExtractor;
+
+    @Autowired
+    public NotesService(FileValidator fileValidator, FileConverter fileConverter,
+                        GrpcClientService grpcClientService, RequestExtractor requestExtractor) {
+        this.fileValidator = fileValidator;
+        this.fileConverter = fileConverter;
+        this.grpcClientService = grpcClientService;
+        this.requestExtractor = requestExtractor;
+    }
 
     public boolean processNote(MultipartFile file, String noteData) throws NoteProcessingException, FileValidationException {
-        if (!validateInput(file, noteData)) {
-            logger.warn("Invalid input for note processing");
-            throw new FileValidationException("Invalid file or note data");
-        }
+        try {
+            String kongRequestId = requestExtractor.extractKongRequestId();
+            if (!fileValidator.validate(file, noteData)) {
+                logger.error("Invalid input for note processing, Kong Request ID: {}", kongRequestId);
+                throw new FileValidationException("Invalid file or note data", kongRequestId);
+            }
 
-        Optional<byte[]> fileBytes = convertFileToBytes(file);
-        if (!fileBytes.isPresent()) {
-            logger.error("Failed to convert file to bytes");
-            throw new NoteProcessingException("Error during file conversion");
-        }
+            byte[] fileBytes = fileConverter.convert(file)
+                .orElseThrow(() -> new NoteProcessingException("Error during file conversion", kongRequestId));
 
-        // Additional logic goes here
-
-        return true;
-    }
-
-    private boolean validateInput(MultipartFile file, String noteData) {
-        return !file.isEmpty() && isPdfFile(file) && isValidNoteData(noteData);
-    }
-
-    private boolean isPdfFile(MultipartFile file) {
-        String contentType = file.getContentType();
-        return "application/pdf".equals(contentType);
-    }
-
-    private boolean isValidNoteData(String noteData) {
-        // Implement validation logic here
-        return true; // Placeholder for validation logic
-    }
-
-    private Optional<byte[]> convertFileToBytes(MultipartFile file) {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-            bos.write(file.getBytes());
-            return Optional.of(bos.toByteArray());
-        } catch (IOException e) {
-            // Log error or handle exception
-            return Optional.empty();
+            grpcClientService.send(fileBytes, noteData, kongRequestId);
+            return true;
+        } catch (NoteProcessingException | FileValidationException e) {
+            logger.error("Error processing note: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Unexpected error processing note", e);
+            throw new NoteProcessingException("Unexpected error processing note", e.getMessage());
         }
     }
 }

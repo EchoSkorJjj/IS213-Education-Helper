@@ -14,18 +14,21 @@ public class CustomGlobalExceptionHandler {
 
     @ExceptionHandler(FileValidationException.class)
     public ResponseEntity<String> handleFileValidationException(FileValidationException ex) {
-        logger.error("File validation error: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        String kongRequestId = ex.getKongRequestId();
+        logger.error("File validation error: {}, Kong Request ID: {}", ex.getMessage(), kongRequestId);
+        return new ResponseEntity<>(ex.getMessage() + " | Kong Request ID: " + kongRequestId, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoteProcessingException.class)
     public ResponseEntity<String> handleNoteProcessingException(NoteProcessingException ex) {
-        logger.error("Note processing error: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        String kongRequestId = ex.getKongRequestId();
+        logger.error("Note processing error: {}, Kong Request ID: {}", ex.getMessage(), kongRequestId);
+        return new ResponseEntity<>(ex.getMessage() + " | Kong Request ID: " + kongRequestId, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGlobalException(Exception ex) {
+        // As generic exceptions won't have a Kong Request ID, logging remains unchanged.
         logger.error("An unexpected error occurred: {}", ex.getMessage());
         return new ResponseEntity<>("An unexpected error occurred.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
