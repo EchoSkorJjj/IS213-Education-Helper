@@ -31,55 +31,61 @@ options "*" do
 end
 
 get '/checkout' do
-    session = Stripe::Checkout::Session.create(
-      payment_method_types: ['card'],
-      line_items: [{
-        price: ENV['STRIPE_PRICE_ID'], 
-        quantity: 1,
-      }],
-      mode: 'subscription',
-      success_url: 'http://localhost:3001/subscribe',
-      cancel_url: 'http://localhost:3001/subscribe',
-    )
-  
-    json url:session.url
-  end
+  session = Stripe::Checkout::Session.create(
+    payment_method_types: ['card'],
+    line_items: [{
+      price: ENV['STRIPE_PRICE_ID'], 
+      quantity: 1,
+    }],
+    mode: 'subscription',
+    success_url: 'http://localhost:3001/subscribe',
+    cancel_url: 'http://localhost:3001/subscribe',
+  )
 
-  post '/webhook' do
-    payload = request.body.read
-    sig_header = request.env['HTTP_STRIPE_SIGNATURE']
-  
-    event = nil
-  
-    begin
-      event = Stripe::Webhook.construct_event(
-        payload, sig_header, stripe_webhook_secret
-      )
-    rescue JSON::ParserError => e
+  session
+
+  redirect session.url
+end
+
+post '/webhook' do
+  payload = request.body.read
+  print payload
+  sig_header = request.env['HTTP_STRIPE_SIGNATURE']
+  print sig_header
+  event = nil
+
+  begin
+    event = Stripe::Webhook.construct_event(
+        payload, sig_header, ENV['STRIPE_WEBHOOK_SECRET']
+    )
+  rescue JSON::ParserError => e
       # Invalid payload
       status 400
-      return 'Bad request'
-    rescue Stripe::SignatureVerificationError => e
+      return
+  rescue Stripe::SignatureVerificationError => e
       # Invalid signature
       status 400
-      return 'Bad request'
-    end
-  
-    # Handle the event
-    case event.type
-    when 'checkout.session.completed'
-      session = event.data.object
-      handle_checkout_session(session)
-    # ... handle other event types
-    else
-      puts "Unhandled event type: #{event.type}"
-    end
-  
-    status 200
+      return
   end
-  
-  def handle_checkout_session(session)
-    # Here you might want to look up the session in your database and mark it as paid
-    # Or you might want to create a new order in your database
-    puts "Checkout session completed! ID: #{session.id}"
+
+  # Handle the checkout.session.completed event
+  if event.type == 'checkout.session.completed'
+    session = event.data.object
+    puts session
+    customer_id = session.customer
+
+    # Now you can use the customer_id
+    # For example, print it:
+    customer = Stripe::Customer.retrieve(customer_id)
+    puts customer
+
+    # Extract the customer's email
+    customer_email = customer.email
+
+    # Now you can use the customer_email
+    # For example, print it:
+    puts "Customer email: #{customer_email}"
   end
+
+  status 200
+end
