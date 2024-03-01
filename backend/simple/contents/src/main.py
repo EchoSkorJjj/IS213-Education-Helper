@@ -1,5 +1,7 @@
-import dotenv
+import os
 import logging
+
+import dotenv
 
 from src.server.server import Server
 

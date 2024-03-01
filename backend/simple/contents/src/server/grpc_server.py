@@ -1,6 +1,5 @@
 from typing import Type
 from concurrent import futures
-
 import grpc
 import logging
 
@@ -14,14 +13,17 @@ class GrpcServer:
 
     def __new__(cls: Type['GrpcServer']) -> 'GrpcServer':
         if not hasattr(cls, 'instance'):
+            logging.debug("No instance of 'GrpcServer' found, creating a new one")
             cls.instance = super(GrpcServer, cls).__new__(cls)
 
         return cls.instance
     
     def set_max_workers(self: 'GrpcServer', max_workers: int) -> None:
+        logging.debug(f"Max workers set to {max_workers}")
         self._max_workers = max_workers
     
     def set_port(self: 'GrpcServer', port: int) -> None:
+        logging.debug(f"Port set to {port}")
         self._port = port
     
     def start(self) -> None:
@@ -31,8 +33,12 @@ class GrpcServer:
             raise ValueError('Max workers not set')
         
         self._server = grpc.server(futures.ThreadPoolExecutor(max_workers=self._max_workers))
+        logging.debug("Server started with {self._max_workers} workers...")
         contents_pb2_grpc.add_ContentServicer_to_server(content_servicer.ContentServicer(), self._server)
+        logging.debug("ContentServicer added...")
         self._server.add_insecure_port(f'[::]:{self._port}')
-        logging.info("mum gay")
+        logging.debug(f"Insecure port on [::]:{self._port} added...")
         self._server.start()
+        logging.info(f"Server started on port {self._port} with {self._max_workers} workers.")
+
         self._server.wait_for_termination()

@@ -17,6 +17,7 @@ volumes:
   kong-data: {}
   user-storage-db-volume: {}
   notes-db-volume: {}
+  contents-db-volume: {}
 
 services:
   kong-gateway:
@@ -77,6 +78,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  
+  contents-db:
+    image: bitnami/cassandra:4.1.4
+    volumes:
+      - contents-db-volume:/bitnami
+      - ../sql_table/create_contents_table.cql:/docker-entrypoint-initdb.d/create_contents_table.cql
+    healthcheck:
+      # TODO: Not secure. Username and password are exposed in the command.
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   user-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -107,6 +120,15 @@ services:
         condition: service_healthy
     ports:
       - "50051:50051"
+    
+  contents-service:
+    build: ../../backend/simple/contents
+    image: content-service:1.0
+    volumes:
+      - ../../backend/simple/contents/.env:/app/.env
+    depends_on:
+      contents-db:
+        condition: service_healthy
 
   frontend-client:
     build: ../../client
