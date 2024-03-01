@@ -11,7 +11,7 @@ GRPC_SERVER_ADDRESS = 'localhost:50052'
 @app.route('/upload_note', methods=['POST'])
 def upload_note():
     # This route expects a multipart/form-data request
-    # with 'userId', 'filename', and 'fileContent' fields
+    # with 'userId', ' filename', and 'fileContent' fields
     if 'fileContent' not in request.files:
         return jsonify({"error": "fileContent part is missing"}), 400
     file_content = request.files['fileContent']
