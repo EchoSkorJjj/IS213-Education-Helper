@@ -26,6 +26,7 @@ const NotesGeneratorPage = lazy(() => import("~pages/notes/NotesGenerator"));
 const MarketplacePage = lazy(() => import("~pages/marketplace/Marketplace"));
 const SubscribePage = lazy(() => import("~pages/subscribe/Subscribe"));
 const ProfilePage = lazy(() => import("~pages/profile/Profile"));
+const UpdateProfilePage = lazy(() => import("~pages/profile/UpdateProfile"));
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -37,8 +38,11 @@ const App = () => {
           user: {
             user_id: "sadad",
             username: "Hello World",
+            first_name: "Hello",
+            last_name: "World",
             email: "sadad@gmail.com",
             role: "User",
+            profile_pic: "",
             is_paid: false,
           },
         });
@@ -82,6 +86,7 @@ const App = () => {
                 <Route path="/marketplace" element={<MarketplacePage />} />
                 <Route path="/subscribe" element={<SubscribePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/profile/update" element={<UpdateProfilePage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

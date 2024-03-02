@@ -67,6 +67,7 @@ const LoginPage = () => {
             />
             <IconButton
               aria-label="myinfo"
+              border="none"
               size="lg"
               icon={<Image src={MyInfoLogo} boxSize="100%" objectFit="cover" />}
               onClick={myInfoGetCode}
