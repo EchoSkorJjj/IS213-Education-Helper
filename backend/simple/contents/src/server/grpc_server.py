@@ -18,11 +18,11 @@ class GrpcServer:
 
         return cls.instance
     
-    def set_max_workers(self: 'GrpcServer', max_workers: int) -> None:
+    def set_max_workers(self, max_workers: int) -> None:
         logging.debug(f"Max workers set to {max_workers}")
         self._max_workers = max_workers
     
-    def set_port(self: 'GrpcServer', port: int) -> None:
+    def set_port(self, port: int) -> None:
         logging.debug(f"Port set to {port}")
         self._port = port
     
@@ -34,10 +34,13 @@ class GrpcServer:
         
         self._server = grpc.server(futures.ThreadPoolExecutor(max_workers=self._max_workers))
         logging.debug("Server started with {self._max_workers} workers...")
+        
         contents_pb2_grpc.add_ContentServicer_to_server(content_servicer.ContentServicer(), self._server)
         logging.debug("ContentServicer added...")
+        
         self._server.add_insecure_port(f'[::]:{self._port}')
         logging.debug(f"Insecure port on [::]:{self._port} added...")
+        
         self._server.start()
         logging.info(f"Server started on port {self._port} with {self._max_workers} workers.")
 

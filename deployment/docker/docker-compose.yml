@@ -91,6 +91,15 @@ services:
       timeout: 10s
       retries: 3
 
+  contents-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   user-redis:
     image: redis:7.2-rc2-alpine3.18
     command: redis-server --requirepass password
@@ -128,6 +137,8 @@ services:
       - ../../backend/simple/contents/.env:/app/.env
     depends_on:
       contents-db:
+        condition: service_healthy
+      contents-redis:
         condition: service_healthy
 
   frontend-client:

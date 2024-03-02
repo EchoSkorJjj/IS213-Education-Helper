@@ -6,11 +6,23 @@ CREATE TYPE IF NOT EXISTS mcq_option (
     is_correct boolean
 );
 
-CREATE TABLE IF NOT EXISTS contents (
+CREATE TABLE IF NOT EXISTS mcq (
     id UUID PRIMARY KEY,
-    content_type text,
     question text,
-    answer text,
     options list<frozen<mcq_option>>,
     multiple_answers boolean
+);
+
+CREATE TABLE IF NOT EXISTS flashcard (
+    id UUID PRIMARY KEY,
+    question text,
+    answer text
+);
+
+CREATE TABLE IF NOT EXISTS contents_to_note (
+    note_id UUID,
+    content_id UUID,
+    content_type text,
+
+    PRIMARY KEY (note_id, content_id)
 );
