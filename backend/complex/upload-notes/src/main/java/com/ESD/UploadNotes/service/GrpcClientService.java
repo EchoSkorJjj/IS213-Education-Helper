@@ -3,8 +3,10 @@ package com.ESD.UploadNotes.service;
 import com.ESD.UploadNotes.config.GrpcClientConfig;
 import com.ESD.UploadNotes.proto.FileProcessorGrpc;
 import com.ESD.UploadNotes.proto.UploadNotesProto.FileUploadRequest;
+import com.ESD.UploadNotes.proto.UploadNotesProto.FileProcessResponse;
 import com.ESD.UploadNotes.proto.UploadNotesProto.ServiceResponseWrapper;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,7 @@ public class GrpcClientService {
 
     @Value("${app.rabbitmq.routingkey}")
     private String routingKey;
+
     @Autowired
     public GrpcClientService(GrpcClientConfig grpcClientConfig, RabbitTemplate rabbitTemplate) {
         this.fileProcessorStub = FileProcessorGrpc.newBlockingStub(grpcClientConfig.managedChannel());
@@ -45,8 +48,11 @@ public class GrpcClientService {
                     .setFile(ByteString.copyFrom(fileBytes))
                     .build();
 
-            ServiceResponseWrapper response = fileProcessorStub.processFile(request);
+            ServiceResponseWrapper responseWrapper = fileProcessorStub.processFile(request);
+            FileProcessResponse response = responseWrapper.getPayload().unpack(FileProcessResponse.class);
             publishToRabbitMQ(response);
+        } catch (InvalidProtocolBufferException e) {
+            logger.error("Failed to unpack FileProcessResponse", e);
         } catch (Exception e) {
             logger.error("Failed to process file and send to RabbitMQ", e);
         }
@@ -55,15 +61,14 @@ public class GrpcClientService {
     private <T> void publishToRabbitMQ(T response) {
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             if (ack) {
-                System.out.println("Message successfully delivered to the exchange");
+                logger.info("Message successfully delivered to the exchange");
             } else {
-                System.out.println("Failed to deliver message to the exchange: " + cause);
+                logger.error("Failed to deliver message to the exchange: " + cause);
             }
         });
         rabbitTemplate.convertAndSend(exchange, routingKey, response);
         logger.info("Message published to RabbitMQ successfully");
     }
-    
 
     private String generateFileSignature(byte[] fileBytes) {
         try {
@@ -77,8 +82,8 @@ public class GrpcClientService {
 
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
             if (hex.length() == 1) {
                 hexString.append('0');
             }
