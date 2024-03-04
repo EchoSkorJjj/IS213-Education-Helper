@@ -22,6 +22,7 @@ class Server {
     public async start(): Promise<void> {
         try {
             await this.server.registerService('user_storage');
+            await this.server.registerService('health');
             this.server.start();
         } catch (e) {
             logger.error(`Failed to start server: ${e}`);

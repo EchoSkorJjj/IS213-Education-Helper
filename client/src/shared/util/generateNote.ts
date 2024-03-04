@@ -27,11 +27,12 @@ const fetchImageURL = async (query: string) => {
 
 const generateNote = async (topic: string, notesTitle: string) => {
   const imageURL = await fetchImageURL(topic);
+  const unique_id = faker.string.uuid();
   let title = notesTitle + faker.lorem.words(2);
   title = title.charAt(0).toUpperCase() + title.slice(1);
 
   const creator = faker.person.fullName();
-  return { topic, title, imageURL, creator };
+  return { unique_id, topic, title, imageURL, creator };
 };
 
 export const getNotes = async (
@@ -54,4 +55,37 @@ export const getNotes = async (
     const notes = await Promise.all(specificTopicNotes);
     return { notes: notes, totalNotesCount: totalNotesCount };
   }
+};
+
+const generateUserNote = async (topic: string, notesTitle: string) => {
+  const imageURL = await fetchImageURL(topic);
+  const unique_id = faker.string.uuid();
+  let title = notesTitle + faker.lorem.words(2);
+  title = title.charAt(0).toUpperCase() + title.slice(1);
+
+  const creator = faker.person.fullName();
+  return { unique_id, topic, title, imageURL, creator };
+};
+
+export const getUserNotes = async (
+  userNoteType: string,
+  notesTitle: string,
+  currentPage: number,
+) => {
+  const totalNotesCount = 100 - currentPage + currentPage;
+  let selectedTopics: any[] = [];
+
+  if (userNoteType === "created") {
+    // Take the first 4 topics
+    selectedTopics = topics.slice(0, 4);
+  } else if (userNoteType === "saved") {
+    // Take the last 4 topics
+    selectedTopics = topics.slice(-4);
+  }
+
+  const notes = await Promise.all(
+    selectedTopics.map((topic) => generateUserNote(topic, notesTitle)),
+  );
+
+  return { notes: notes, totalNotesCount: totalNotesCount };
 };

@@ -1,45 +1,63 @@
-# ocr_processing.py
 import logging
+import os
 from PyPDF2 import PdfReader
 from io import BytesIO
 import tempfile
 import subprocess
-import os
-from utilities import generate_json_response, detect_locale
+from utilities import detect_locale
+
+# Setup based on the environment
+environment = os.getenv('ENVIRONMENT_MODE', 'development')
+logging_level = logging.INFO if environment.lower() == 'production' else logging.DEBUG
+logging.basicConfig(level=logging_level, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def process_pdf_file(input_pdf_bytes, filename):
+    logging.info(f"Starting OCR processing for file: {filename}")
+    # Check the file size before processing
+    max_file_size = 5 * 1024 * 1024  # 5 MB
+    if len(input_pdf_bytes) > max_file_size:
+        logging.error(f"File {filename} exceeds the maximum allowed size of 5 MB.")
+        raise ValueError(f"File {filename} is too large to process.")
+
     try:
         input_stream = BytesIO(input_pdf_bytes)
         texts, temp_pdf_path = ocr_pdf(input_stream)
         metadata = generate_metadata(filename, temp_pdf_path, texts)
-        
-        if os.path.exists(temp_pdf_path):
-            os.remove(temp_pdf_path)
-        
-        return texts, metadata
     except Exception as e:
-        logging.error(f"Error in OCR processing for file {filename}: {str(e)}", exc_info=True)
+        logging.error("Error in OCR processing: %s", e, exc_info=environment.lower() == 'development')
         raise
+    finally:
+        # Secure cleanup of the temporary file
+        if temp_pdf_path and os.path.exists(temp_pdf_path):
+            os.remove(temp_pdf_path)
+            logging.debug("Temporary file removed.")
+    return texts, metadata
 
 def ocr_pdf(input_stream):
     with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp_output:
+        input_data = input_stream.read()
+        if not input_data:
+            raise ValueError("Input PDF data is empty")
+        
         ocrmypdf_cmd = ["ocrmypdf", "-l", "eng", "--force-ocr", "--output-type", "pdf", "-", tmp_output.name]
-        process = subprocess.run(ocrmypdf_cmd, input=input_stream.read(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.run(ocrmypdf_cmd, input=input_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
         if process.returncode != 0:
-            logging.error(f"OCR command failed: {process.stderr.decode()}")
-            raise Exception(f"OCR failed for file {tmp_output.name}: {process.stderr.decode()}")
+            raise Exception(f"OCR command failed: {process.stderr.decode()}")
         
-        texts = extract_text_from_pdf(tmp_output.name)
-        return texts, tmp_output.name
+        logging.debug("OCR processing completed.")
+        return extract_text_from_pdf(tmp_output.name), tmp_output.name
 
 def extract_text_from_pdf(pdf_path):
     texts = []
-    with open(pdf_path, 'rb') as pdf_file:
+    try:
+        pdf_file = open(pdf_path, 'rb')
         reader = PdfReader(pdf_file)
         for page_num, page in enumerate(reader.pages, start=1):
             text = page.extract_text() or "Error extracting text"
             texts.append({"pageId": page_num, "content": text})
+    finally:
+        pdf_file.close()
     return texts
 
 def generate_metadata(filename, pdf_path, texts):
@@ -50,4 +68,5 @@ def generate_metadata(filename, pdf_path, texts):
         "filesize": os.path.getsize(pdf_path),
         "locale": locale
     }
+    logging.debug("Metadata generated.")
     return metadata

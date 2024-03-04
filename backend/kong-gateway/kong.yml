@@ -72,3 +72,4 @@ plugins:
         - /api/v1/auth/apple/callback
         - /api/v1/auth/myInfo/generateCodeChallenge
         - /api/v1/auth/myInfo/callback
+        - /api/v1/auth/logout

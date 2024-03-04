@@ -32,6 +32,9 @@ services:
       # - "8001:8001" # Admin API
       - "8443:8443" # Proxy SSL
       - "8444:8444" # Admin API SSL
+    depends_on:
+      user-storage-service:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s
@@ -77,6 +80,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
   user-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -90,8 +94,6 @@ services:
   notes-service:
     build: ../../backend/simple/notes
     depends_on:
-      kong-gateway:
-        condition: service_healthy
       notes-db:
         condition: service_healthy
     ports:
@@ -101,12 +103,18 @@ services:
     build: ../../backend/simple/user-storage
     image: user-storage-service:1.0
     depends_on:
-      kong-gateway:
-        condition: service_healthy
       user-storage-db:
+        condition: service_healthy
+      user-redis:
         condition: service_healthy
     ports:
       - "50051:50051"
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   frontend-client:
     build: ../../client

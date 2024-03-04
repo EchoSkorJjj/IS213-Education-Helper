@@ -3,7 +3,10 @@ services:
   pdf-reader:
     build:
       context: .
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: localhost:24224
+    #     tag: docker.container.pdf-reader
     ports:
       - "50051:50051"
-    volumes:
-      - ./src/example.pdf:/app/example.pdf
