@@ -88,8 +88,23 @@ post '/webhook' do
     # Now you can use the customer_email
     # Send over to the complex service somehow
     # For example, print it:
-    puts "Customer email: #{customer_email}"
+    send_to_kong(customer_email)
   end
 
   status 200
+end
+
+def send_to_kong(customer_email)
+  uri = URI.parse("http://kong-api-endpoint") # replace with your Kong API endpoint
+
+  header = {'Content-Type': 'application/json'}
+  data = {customer_email: customer_email}
+
+  # Create the HTTP objects
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Post.new(uri.request_uri, header)
+  request.body = data.to_json
+
+  # Send the request
+  response = http.request(request)
 end
