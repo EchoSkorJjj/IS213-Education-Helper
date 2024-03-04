@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package uploadnotes;
+package fileprocessor;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/any.proto";
@@ -18,7 +18,7 @@ message ResponseMetadata {
 message ServiceResponseWrapper {
     ResponseMetadata metadata = 1;
     google.protobuf.Any payload = 2;
-}
+}  
 
 // Existing definitions below, with modifications to response messages
 

@@ -30,7 +30,7 @@ public class NotesService {
         this.requestExtractor = requestExtractor;
     }
 
-    public boolean processNote(MultipartFile file, String noteData) throws NoteProcessingException, FileValidationException {
+    public void processNote(MultipartFile file, String noteData) throws NoteProcessingException, FileValidationException {
         try {
             String kongRequestId = requestExtractor.extractKongRequestId();
             if (!fileValidator.validate(file, noteData)) {
@@ -42,7 +42,6 @@ public class NotesService {
                 .orElseThrow(() -> new NoteProcessingException("Error during file conversion", kongRequestId));
 
             grpcClientService.send(fileBytes, noteData, kongRequestId);
-            return true;
         } catch (NoteProcessingException | FileValidationException e) {
             logger.error("Error processing note: {}", e.getMessage());
             throw e;

@@ -28,15 +28,13 @@ public class NotesController {
                                              @RequestParam("noteData") String noteData) {
         try {
             logger.debug("Received a request to process a note.");
-            boolean isProcessed = notesService.processNote(file, noteData);
+            notesService.processNote(file, noteData);
             
-            if (isProcessed) {
+           
                 logger.info("Note processed successfully.");
                 return ResponseEntity.ok("Note processed successfully");
-            } else {
-                logger.warn("Note processing failed due to invalid input.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data or file format");
-            }
+   
+            
         } catch (FileValidationException | NoteProcessingException e) {
             logger.error("Error during note processing: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
