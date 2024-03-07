@@ -10,4 +10,5 @@ export type AuthContextType = {
   sgIdGetAuthUrl: () => void;
   sgIdAuth: () => void;
   signOut: () => void;
+  generateNotes: (file: File, generateType: string) => void;
 };

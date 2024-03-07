@@ -192,6 +192,37 @@ const useProvideAuth = (): AuthContextType => {
     }
   };
 
+  const generateNotes = async (
+    file: File,
+    generateType: string,
+  ): Promise<void> => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("generateType", generateType);
+
+      const response = await api.post(
+        "/api/v1/notes/upload",
+        {
+          formData: formData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authorization}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      /*
+       * const data = await handleResponse(response);
+       * return data;
+       */
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     isAuthenticated,
     user,
@@ -202,5 +233,6 @@ const useProvideAuth = (): AuthContextType => {
     sgIdGetAuthUrl,
     sgIdAuth,
     signOut,
+    generateNotes,
   };
 };

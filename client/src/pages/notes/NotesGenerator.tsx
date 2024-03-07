@@ -18,7 +18,7 @@ import { useAuth } from "~features/auth";
 import NotesHeader from "./components/NotesHeader";
 import NotesGenerator from "./components/NotesUpload";
 
-import { generateNotes } from "~api";
+// import { generateNotes } from "~api";
 
 const NotesGeneratorPage = () => {
   const {
@@ -27,7 +27,7 @@ const NotesGeneratorPage = () => {
     onClose: closeModal,
   } = useDisclosure();
   const toast = useToast();
-  const { user } = useAuth();
+  const { user, generateNotes } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [generateType, setGenerateType] = useState<string>("flashcard");
 
@@ -63,9 +63,9 @@ const NotesGeneratorPage = () => {
       isClosable: true,
     });
 
-    const data = await generateNotes(selectedFile, generateType);
+    await generateNotes(selectedFile, generateType);
 
-    console.log(data);
+    // console.log(data);
   };
   return (
     <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)">

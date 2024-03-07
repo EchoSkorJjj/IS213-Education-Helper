@@ -15,8 +15,8 @@ public class FileValidator {
      * @param noteData The note data to validate.
      * @return true if both the file and note data are valid, false otherwise.
      */
-    public boolean validate(MultipartFile file, String noteData) {
-        return validateFile(file) && validateNoteData(noteData);
+    public boolean validate(MultipartFile file, String generateType) {
+        return validateFile(file) && validateNoteData(generateType);
     }
 
     /**
@@ -37,11 +37,10 @@ public class FileValidator {
     /**
      * Validates the note data.
      *
-     * @param noteData The note data.
+     * @param generateType The note data.
      * @return true if the note data meets the validation criteria, false otherwise.
      */
-    private boolean validateNoteData(String noteData) {
-        // Implement note data validation logic here (e.g., non-empty, specific format, length)
-        return noteData != null && !noteData.trim().isEmpty(); // Example validation
+    private boolean validateNoteData(String generateType) {
+        return ContentType.valueOf(generateType) != null;
     }
 }

@@ -31,7 +31,7 @@ service FileProcessor {
 message FileUploadRequest {
   string userId = 1;
   string fileId = 2;
-  string filename = 3;
+  string generateType = 3;
   bytes file = 4; // PDF file content
 }
 

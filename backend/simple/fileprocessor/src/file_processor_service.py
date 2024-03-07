@@ -32,7 +32,7 @@ class FileProcessorServicer(file_processor_pb2_grpc.FileProcessorServicer):
             return self.abort_request(context, "Missing required 'kong-request-id' in metadata for production mode.")
 
         try:
-            texts, metadata = process_pdf_file(request.file, request.filename)
+            texts, metadata = process_pdf_file(request.file, request.generateType, request.fileId)
             return self.create_response(file_id, texts, metadata, kong_request_id)
         except Exception as e:
             logging.error(f"Error processing file {file_id}: {str(e)}", exc_info=True)

@@ -65,22 +65,22 @@ services:
       timeout: 5s
       retries: 5
 
-  notes-db:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=my_notes_app
-    ports:
-      - "3306:3306"
-    volumes:
-      - notes-db-volume:/var/lib/mysql
-      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
+  # notes-db:
+  #   image: mysql:latest
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_DATABASE=my_notes_app
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - notes-db-volume:/var/lib/mysql
+  #     - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 30s
 
   user-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -91,13 +91,13 @@ services:
       timeout: 5s
       retries: 5
 
-  notes-service:
-    build: ../../backend/simple/notes
-    depends_on:
-      notes-db:
-        condition: service_healthy
-    ports:
-      - "50052:50052"      
+  # notes-service:
+  #   build: ../../backend/simple/notes
+  #   depends_on:
+  #     notes-db:
+  #       condition: service_healthy
+  #   ports:
+  #     - "50052:50052"      
 
   user-storage-service:
     build: ../../backend/simple/user-storage
@@ -124,3 +124,37 @@ services:
         condition: service_healthy
     ports:
       - "3001:3001"
+
+  upload-notes:
+    build: ../../backend/complex/upload-notes
+    image: upload-notes:1.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: "user"
+      RABBITMQ_DEFAULT_PASS: "password"
+    ports:
+      - "5672:5672" # AMQP protocol
+      - "15672:15672" # Management UI
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # pdf-reader:
+  #   build:
+  #     context: ../../backend/simple/fileprocessor
+  #   # logging:
+  #   #   driver: fluentd
+  #   #   options:
+  #   #     fluentd-address: localhost:24224
+  #   #     tag: docker.container.pdf-reader
+  #   ports:
+  #     - "50053:50053"

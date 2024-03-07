@@ -47,7 +47,7 @@ public class SecurityConfig {
       ) throws ServletException, IOException {
         if (
           request.getHeader("kong-request-id") == null ||
-          request.getHeader("X-User-ID") == null
+          request.getHeader("x-user-id") == null
         ) {
           response.sendError(
             HttpServletResponse.SC_BAD_REQUEST,

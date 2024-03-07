@@ -36,15 +36,16 @@ public class GrpcClientService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void send(byte[] fileBytes, String filename, String kongRequestId) {
+    public void send(byte[] fileBytes, String generateType, String kongRequestId) {
         try {
+            // TODO: pass user id as parameter
             String userId = UUID.randomUUID().toString();
             String fileId = generateFileSignature(fileBytes) + "-" + UUID.randomUUID().toString();
 
             FileUploadRequest request = FileUploadRequest.newBuilder()
                     .setUserId(userId)
                     .setFileId(fileId)
-                    .setFilename(filename)
+                    .setGenerateType(generateType)
                     .setFile(ByteString.copyFrom(fileBytes))
                     .build();
 

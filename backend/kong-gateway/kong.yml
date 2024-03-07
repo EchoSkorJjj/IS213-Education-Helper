@@ -19,7 +19,26 @@ services:
           - name: grpc-gateway
             config:
               proto: /usr/local/share/lua/5.1/kong/protos/user_storage.proto
-    
+
+  - name: upload-notes-service
+    host: upload-notes
+    port: 8080
+    protocol: http
+    tags:
+      - upload-notes-service
+    routes:
+      - name: upload-notes
+        protocols:
+          - http
+        paths:
+          - /api/v1/notes/upload
+        strip_path: false
+        plugins:
+          - name: rate-limiting
+            config:
+              minute: 100
+              policy: local
+
 plugins:
   - name: file-log
     service: user-storage-service

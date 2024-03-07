@@ -18,7 +18,7 @@ WORKDIR /app
 # Copy the JAR from the build stage
 COPY --from=build /app/target/UploadNotes-0.0.1-SNAPSHOT.jar app.jar
 
-EXPOSE 50055
+# EXPOSE 50055
 
 # ENTRYPOINT ["sh", "-c", "echo $JAVA_HOME && while true; do sleep 1; done"]
 

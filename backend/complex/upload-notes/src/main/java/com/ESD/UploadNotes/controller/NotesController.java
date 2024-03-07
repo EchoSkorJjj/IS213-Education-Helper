@@ -25,15 +25,13 @@ public class NotesController {
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadNote(@RequestParam("file") MultipartFile file,
-                                             @RequestParam("noteData") String noteData) {
+                                             @RequestParam("generateType") String generateType) {
         try {
             logger.debug("Received a request to process a note.");
-            notesService.processNote(file, noteData);
-            
+            notesService.processNote(file, generateType);
            
-                logger.info("Note processed successfully.");
-                return ResponseEntity.ok("Note processed successfully");
-   
+            logger.info("Note processed successfully.");
+            return ResponseEntity.ok("Note processed successfully");
             
         } catch (FileValidationException | NoteProcessingException e) {
             logger.error("Error during note processing: {}", e.getMessage());

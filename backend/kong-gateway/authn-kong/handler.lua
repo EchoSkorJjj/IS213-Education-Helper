@@ -28,6 +28,8 @@ function MyAuthHandler:access(conf)
         return
         end
     end
+    userId = 123456
+    kong.service.request.set_header("x-user-id", userId)
 end
 
 -- Return the handler

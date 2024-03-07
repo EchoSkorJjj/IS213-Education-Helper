@@ -48,7 +48,7 @@ export const generateNotes = async (file: File, generateType: string) => {
     formData.append("generateType", generateType);
 
     const response = await api.post(
-      "/api/v1/notes/generate",
+      "/api/v1/notes/upload",
       {
         formData: formData,
       },
