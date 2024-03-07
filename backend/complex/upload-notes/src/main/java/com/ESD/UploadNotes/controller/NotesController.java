@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/notes")
@@ -24,21 +26,27 @@ public class NotesController {
     private NotesService notesService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadNote(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<Map<String,String>> uploadNote(@RequestParam("file") MultipartFile file,
                                              @RequestParam("generateType") String generateType) {
+        Map<String, String> response = new HashMap<>();                                        
         try {
             logger.debug("Received a request to process a note.");
-            notesService.processNote(file, generateType);
+            String fileId = notesService.processNote(file, generateType);
            
             logger.info("Note processed successfully.");
-            return ResponseEntity.ok("Note processed successfully");
+            
+            response.put("message", "Note processed successfully");
+            response.put("fileId", fileId);
+            return ResponseEntity.ok(response);
             
         } catch (FileValidationException | NoteProcessingException e) {
             logger.error("Error during note processing: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         } catch (Exception e) {
             logger.error("An unexpected error occurred: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+            response.put("error", "An unexpected error occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }

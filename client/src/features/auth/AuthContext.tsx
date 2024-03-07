@@ -201,23 +201,16 @@ const useProvideAuth = (): AuthContextType => {
       formData.append("file", file);
       formData.append("generateType", generateType);
 
-      const response = await api.post(
-        "/api/v1/notes/upload",
-        {
-          formData: formData,
+      const response = await api.post("/api/v1/notes/upload", formData, {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${authorization}`,
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
+      });
 
-      /*
-       * const data = await handleResponse(response);
-       * return data;
-       */
+      const data = await handleResponse(response);
+      console.log(data);
+      console.log(data.fileId);
     } catch (error) {
       console.log(error);
     }

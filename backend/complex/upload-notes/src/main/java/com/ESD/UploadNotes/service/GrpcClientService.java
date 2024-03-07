@@ -36,10 +36,8 @@ public class GrpcClientService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void send(byte[] fileBytes, String generateType, String kongRequestId) {
+    public String send(byte[] fileBytes, String generateType, String kongRequestId, String userId) {
         try {
-            // TODO: pass user id as parameter
-            String userId = UUID.randomUUID().toString();
             String fileId = generateFileSignature(fileBytes) + "-" + UUID.randomUUID().toString();
 
             FileUploadRequest request = FileUploadRequest.newBuilder()
@@ -48,15 +46,16 @@ public class GrpcClientService {
                     .setGenerateType(generateType)
                     .setFile(ByteString.copyFrom(fileBytes))
                     .build();
-
             ServiceResponseWrapper responseWrapper = fileProcessorStub.processFile(request);
             FileProcessResponse response = responseWrapper.getPayload().unpack(FileProcessResponse.class);
             publishToRabbitMQ(response);
+            return fileId;
         } catch (InvalidProtocolBufferException e) {
             logger.error("Failed to unpack FileProcessResponse", e);
         } catch (Exception e) {
             logger.error("Failed to process file and send to RabbitMQ", e);
         }
+        return kongRequestId;
     }
 
     private <T> void publishToRabbitMQ(T response) {

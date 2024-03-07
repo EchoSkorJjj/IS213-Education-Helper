@@ -18,4 +18,15 @@ public class RequestExtractor {
         HttpServletRequest request = attributes.getRequest();
         return request.getHeader("kong-request-id");
     }
+
+    /**
+     * Extracts the user ID from the current HTTP request.
+     *
+     * @return The user ID, or null if not present.
+     */
+    public String extractUserId() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        return request.getHeader("x-user-id");
+    }
 }
