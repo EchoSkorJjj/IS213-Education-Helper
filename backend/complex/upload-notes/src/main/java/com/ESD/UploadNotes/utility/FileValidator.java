@@ -40,7 +40,12 @@ public class FileValidator {
      * @param generateType The note data.
      * @return true if the note data meets the validation criteria, false otherwise.
      */
-    private boolean validateNoteData(String generateType) {
+    public static boolean validateNoteData(String generateType) {
         return ContentType.valueOf(generateType) != null;
+    }
+    public static String formatSize(long v) {
+        if (v < 1024) return v + " B";
+        int z = (63 - Long.numberOfLeadingZeros(v)) / 10;
+        return String.format("%.1f %sB", (double)v / (1L << (z*10)), " KMGTPE".charAt(z));
     }
 }

@@ -2,10 +2,8 @@ package com.ESD.UploadNotes.service;
 
 import com.ESD.UploadNotes.config.GrpcClientConfig;
 import com.ESD.UploadNotes.proto.FileProcessorGrpc;
-import com.ESD.UploadNotes.proto.UploadNotesProto.FileUploadRequest;
-import com.ESD.UploadNotes.proto.UploadNotesProto.FileProcessResponse;
-import com.ESD.UploadNotes.proto.UploadNotesProto.ServiceResponseWrapper;
-import com.google.protobuf.ByteString;
+import com.ESD.UploadNotes.proto.UploadNotesProto;
+
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +22,14 @@ public class GrpcClientService {
     private static final Logger logger = LoggerFactory.getLogger(GrpcClientService.class);
     private final FileProcessorGrpc.FileProcessorBlockingStub fileProcessorStub;
     private final RabbitTemplate rabbitTemplate;
+
     @Value("${app.rabbitmq.exchange}")
     private String exchange;
 
     @Value("${app.rabbitmq.routingkey}")
     private String routingKey;
 
-    @Autowired
+     @Autowired
     public GrpcClientService(GrpcClientConfig grpcClientConfig, RabbitTemplate rabbitTemplate) {
         this.fileProcessorStub = FileProcessorGrpc.newBlockingStub(grpcClientConfig.managedChannel());
         this.rabbitTemplate = rabbitTemplate;
@@ -40,32 +39,38 @@ public class GrpcClientService {
         try {
             String fileId = generateFileSignature(fileBytes) + "-" + UUID.randomUUID().toString();
 
-            FileUploadRequest request = FileUploadRequest.newBuilder()
+            UploadNotesProto.FileUploadRequest request = UploadNotesProto.FileUploadRequest.newBuilder()
                     .setUserId(userId)
                     .setFileId(fileId)
                     .setGenerateType(generateType)
-                    .setFile(ByteString.copyFrom(fileBytes))
+                    .setFile(com.google.protobuf.ByteString.copyFrom(fileBytes))
                     .build();
-            ServiceResponseWrapper responseWrapper = fileProcessorStub.processFile(request);
-            FileProcessResponse response = responseWrapper.getPayload().unpack(FileProcessResponse.class);
-            publishToRabbitMQ(response);
-            return fileId;
+
+            UploadNotesProto.ServiceResponseWrapper responseWrapper = fileProcessorStub.processFile(request);
+            if (!responseWrapper.getPayload().is(UploadNotesProto.FileProcessResponse.class)) {
+                logger.error("Payload is not of FileProcessResponse type.");
+                return null; 
+            }
+            UploadNotesProto.FileProcessResponse response = responseWrapper.getPayload().unpack(UploadNotesProto.FileProcessResponse.class);
+
+
+            if (response.getFileId().equals(fileId)) {
+                publishToRabbitMQ(response);
+                return fileId;
+            } else {
+                logger.error("File processing failed or file ID mismatch.");
+                return null; 
+            }
         } catch (InvalidProtocolBufferException e) {
             logger.error("Failed to unpack FileProcessResponse", e);
+            return null;
         } catch (Exception e) {
-            logger.error("Failed to process file and send to RabbitMQ", e);
+            logger.error("Failed to process file or send to RabbitMQ", e);
+            return null;
         }
-        return kongRequestId;
     }
 
     private <T> void publishToRabbitMQ(T response) {
-        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
-            if (ack) {
-                logger.info("Message successfully delivered to the exchange");
-            } else {
-                logger.error("Failed to deliver message to the exchange: " + cause);
-            }
-        });
         rabbitTemplate.convertAndSend(exchange, routingKey, response);
         logger.info("Message published to RabbitMQ successfully");
     }
@@ -76,6 +81,7 @@ public class GrpcClientService {
             byte[] encodedhash = digest.digest(fileBytes);
             return bytesToHex(encodedhash);
         } catch (NoSuchAlgorithmException e) {
+            logger.error("SHA-256 algorithm not found", e);
             throw new RuntimeException("SHA-256 algorithm not found", e);
         }
     }

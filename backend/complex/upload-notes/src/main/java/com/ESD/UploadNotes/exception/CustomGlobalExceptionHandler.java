@@ -26,10 +26,5 @@ public class CustomGlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage() + " | Kong Request ID: " + kongRequestId, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGlobalException(Exception ex) {
-        // As generic exceptions won't have a Kong Request ID, logging remains unchanged.
-        logger.error("An unexpected error occurred: {}", ex.getMessage());
-        return new ResponseEntity<>("An unexpected error occurred.", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+
 }
