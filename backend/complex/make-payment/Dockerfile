@@ -21,5 +21,4 @@ FROM alpine:3.19.1
 WORKDIR /app
 RUN apk --no-cache add ca-certificates
 COPY --from=builder /app/build/server .
-# CMD ["tail", "-f", "/dev/null"]
 CMD ["./server"]
