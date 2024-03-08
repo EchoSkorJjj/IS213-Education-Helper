@@ -2,9 +2,11 @@ package payment
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 
 	"google.golang.org/grpc/codes"
@@ -33,7 +35,8 @@ func (s *Server) Checkout(ctx context.Context, req *make_payment.CheckoutRequest
 	data := url.Values{}
 	data.Set("email", email)
 	dataReader := strings.NewReader((data.Encode()))
-	httpReq, err := http.NewRequest("GET", "http://payment-service:4567/checkout", dataReader)
+	checkoutUrl := fmt.Sprintf("http://%s:4567/checkout", os.Getenv("PAYMENT_SERVICE_HOST"))
+	httpReq, err := http.NewRequest("GET", checkoutUrl, dataReader)
 	if err != nil {
 		log.Printf("Failed to create new HTTP request: %v", err)
 		returnedErr = status.Errorf(codes.InvalidArgument, "Error creating request: %v", err)

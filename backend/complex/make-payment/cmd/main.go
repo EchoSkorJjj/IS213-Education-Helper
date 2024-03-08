@@ -3,7 +3,9 @@ package main
 import (
 	"log"
 	"net"
+	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
@@ -13,9 +15,14 @@ import (
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", os.Getenv("GRPC_SERVER_ADDRESS"))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

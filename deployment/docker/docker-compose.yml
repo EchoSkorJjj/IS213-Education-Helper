@@ -109,6 +109,8 @@ services:
     depends_on:
       payment-service:
         condition: service_started
+    volumes:
+      - ../../backend/complex/make-payment/.env:/app/.env
     
   subscription-service:
     restart: always
