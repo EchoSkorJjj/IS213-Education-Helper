@@ -9,6 +9,7 @@ require 'sinatra/cross_origin'
 require 'sinatra/json'
 
 Dotenv.load
+set :bind, '0.0.0.0'
 
 Stripe.api_key = ENV['STRIPE_SECRET_KEY']
 stripe_webhook_secret = ENV['STRIPE_WEBHOOK_SECRET']
