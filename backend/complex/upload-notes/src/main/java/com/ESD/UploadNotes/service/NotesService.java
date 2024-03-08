@@ -35,7 +35,7 @@ public class NotesService {
     this.grpcClientService = grpcClientService;
   }
 
-  public String processNote(MultipartFile file, String generateType)
+  public String processNote(MultipartFile file, String generateType, String fileName)
     throws NoteProcessingException, FileValidationException {
     try {
       String kongRequestId = RequestExtractor.extractKongRequestId().toString();
@@ -63,6 +63,7 @@ public class NotesService {
       String fileId = grpcClientService.send(
         fileBytes,
         generateType,
+        fileName,
         kongRequestId,
         userId
       );

@@ -200,6 +200,7 @@ const useProvideAuth = (): AuthContextType => {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("generateType", generateType);
+      formData.append("fileName", file.name);
 
       const response = await api.post("/api/v1/notes/upload", formData, {
         headers: {

@@ -11,7 +11,7 @@ environment = os.getenv('ENVIRONMENT_MODE', 'development')
 logging_level = logging.INFO if environment.lower() == 'production' else logging.DEBUG
 logging.basicConfig(level=logging_level, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-def process_pdf_file(input_pdf_bytes, generateType, fileId):
+def process_pdf_file(input_pdf_bytes, generateType, fileName, fileId):
     logging.info(f"Starting OCR processing for file: {fileId}")
     # Check the file size before processing
     max_file_size = 5 * 1024 * 1024  # 5 MB
@@ -22,7 +22,7 @@ def process_pdf_file(input_pdf_bytes, generateType, fileId):
     try:
         input_stream = BytesIO(input_pdf_bytes)
         texts, temp_pdf_path = ocr_pdf(input_stream)
-        metadata = generate_metadata(generateType, temp_pdf_path, texts)
+        metadata = generate_metadata(generateType, fileName, temp_pdf_path, texts)
     except Exception as e:
         logging.error("Error in OCR processing: %s", e, exc_info=environment.lower() == 'development')
         raise
@@ -60,10 +60,11 @@ def extract_text_from_pdf(pdf_path):
         pdf_file.close()
     return texts
 
-def generate_metadata(generateType, pdf_path, texts):
+def generate_metadata(generateType, fileName, pdf_path, texts):
     locale = detect_locale(' '.join([text["content"] for text in texts]))
     metadata = {
-        "title": os.path.basename(generateType),
+        "title": os.path.basename(fileName),
+        "generateType": os.path.basename(generateType),
         "pageCount": len(texts),
         "filesize": os.path.getsize(pdf_path),
         "locale": locale

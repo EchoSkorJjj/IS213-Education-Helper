@@ -32,15 +32,17 @@ message FileUploadRequest {
   string userId = 1;
   string fileId = 2;
   string generateType = 3;
-  bytes file = 4; // PDF file content
+  string fileName = 4;
+  bytes file = 5; // PDF file content
 }
 
 // Metadata associated with the file
 message FileMetadata {
   string title = 1;
-  int64 pageCount = 2;
-  int64 filesize = 3;
-  string locale = 4;
+  string generateType = 2;
+  int64 pageCount = 3;
+  int64 filesize = 4;
+  string locale = 5;
 }
 
 // Modified response message to include in the payload of ServiceResponseWrapper

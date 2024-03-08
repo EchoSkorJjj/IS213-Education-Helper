@@ -15,9 +15,14 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.ESD.UploadNotes.utility.CleanContent;
+import com.ESD.UploadNotes.utility.PageContent;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class GrpcClientService {
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   private static final Logger logger = LoggerFactory.getLogger(
     GrpcClientService.class
@@ -44,6 +49,7 @@ public class GrpcClientService {
   public String send(
     byte[] fileBytes,
     String generateType,
+    String fileName,
     String kongRequestId,
     String userId
   ) {
@@ -56,6 +62,7 @@ public class GrpcClientService {
         .setUserId(userId)
         .setFileId(fileId)
         .setGenerateType(generateType)
+        .setFileName(fileName)
         .setFile(com.google.protobuf.ByteString.copyFrom(fileBytes))
         .build();
 
@@ -75,7 +82,15 @@ public class GrpcClientService {
         .unpack(UploadNotesProto.FileProcessResponse.class);
 
       if (response.getFileId().equals(fileId)) {
-        publishToRabbitMQ(response);
+        CleanContent cleanContent = new CleanContent(userId, response.getFileId(), response.getMetadata());
+
+        publishToRabbitMQ(cleanContent);
+        
+        for (UploadNotesProto.Page page : response.getPagesList()) {
+          PageContent pageContent = new PageContent(page.getPageId(), page.getContent(), cleanContent.getFileId());
+          publishToRabbitMQ(pageContent); 
+        }
+
         return fileId;
       } else {
         logger.error("File processing failed or file ID mismatch.");
@@ -95,8 +110,14 @@ public class GrpcClientService {
   }
 
   private <T> void publishToRabbitMQ(T response) {
-    rabbitTemplate.convertAndSend(exchange, routingKey, response);
-    logger.info("Message published to RabbitMQ successfully");
+    try {
+      String jsonMessage = objectMapper.writeValueAsString(response);
+      rabbitTemplate.convertAndSend(exchange, routingKey, jsonMessage);
+      logger.info("Message published to RabbitMQ successfully");
+    } catch (JsonProcessingException e) {
+      logger.error("Error serializing object to JSON", e);
+      throw new IllegalStateException("Error serializing object to JSON", e);
+    }
   }
 
   private String generateFileSignature(byte[] fileBytes) {

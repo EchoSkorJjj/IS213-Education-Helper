@@ -31,7 +31,8 @@ public class NotesController {
 
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> uploadNote(@RequestParam("file") MultipartFile file,
-                                                          @RequestParam("generateType") String generateType) {
+                                                          @RequestParam("generateType") String generateType,
+                                                          @RequestParam("fileName") String fileName) {
 
         Map<String, String> response = new HashMap<>();
         if (file.isEmpty()) {
@@ -48,7 +49,7 @@ public class NotesController {
 
         try {
             logger.debug("Received a request to process a note.");
-            String fileId = notesService.processNote(file, generateType);
+            String fileId = notesService.processNote(file, generateType, fileName);
             
             if (fileId == null || fileId.trim().isEmpty()) {
                 logger.error("Note processing failed with an empty fileId. Kong Request ID : "+RequestExtractor.extractKongRequestId());
