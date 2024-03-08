@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 	"net/url"
 	"os"
 	"strings"
@@ -12,7 +11,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb"
+	"github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/internal/utils"
+	make_payment "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb"
 )
 
 type PaymentService interface {
@@ -28,43 +28,25 @@ func NewServer() *Server {
 }
 
 func (s *Server) Checkout(ctx context.Context, req *make_payment.CheckoutRequest) (*make_payment.CheckoutResponse, error) {
-	var returnedErr error
-
-	email := req.Email
+	paymentServiceHost := os.Getenv("PAYMENT_SERVICE_HOST")
+	checkoutURL := fmt.Sprintf("http://%s:4567/checkout", paymentServiceHost)
 
 	data := url.Values{}
-	data.Set("email", email)
-	dataReader := strings.NewReader((data.Encode()))
-	checkoutUrl := fmt.Sprintf("http://%s:4567/checkout", os.Getenv("PAYMENT_SERVICE_HOST"))
-	httpReq, err := http.NewRequest("GET", checkoutUrl, dataReader)
-	if err != nil {
-		log.Printf("Failed to create new HTTP request: %v", err)
-		returnedErr = status.Errorf(codes.InvalidArgument, "Error creating request: %v", err)
-		return nil, returnedErr
-	}
+	data.Set("email", req.Email)
+	dataReader := strings.NewReader(data.Encode())
 
-	httpReq.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	client := &http.Client{
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
-
-	httpResp, err := client.Do(httpReq)
+	httpResp, err := utils.SendHttpRequest(ctx, "GET", checkoutURL, dataReader) // Assuming SendHttpRequest supports context
 	if err != nil {
-		log.Printf("Failed to send HTTP request: %v", err)
-		returnedErr = status.Errorf(codes.Internal, "Error sending request: %v", err)
-		return nil, returnedErr
+		return nil, status.Errorf(codes.Internal, "error sending request: %v", err)
 	}
 	defer httpResp.Body.Close()
 
-	stripeRedirectUrl, err := httpResp.Location()
+	stripeRedirectURL, err := httpResp.Location()
 	if err != nil {
 		log.Printf("Failed to extract Stripe Redirect URL from HTTP response: %v", err)
-		returnedErr = status.Errorf(codes.Internal, "Error getting Stripe Redirect URL: %v", err)
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "error getting Stripe Redirect URL: %v", err)
 	}
 
-	log.Printf("Successfully extracted Stripe Redirect URL: %v", stripeRedirectUrl.String())
-	return &make_payment.CheckoutResponse{Url: stripeRedirectUrl.String()}, nil
+	log.Printf("Successfully extracted Stripe Redirect URL: %v", stripeRedirectURL.String())
+	return &make_payment.CheckoutResponse{Url: stripeRedirectURL.String()}, nil
 }
