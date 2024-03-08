@@ -4,19 +4,14 @@ package make_payment_pb;
 
 option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment";
 
-message PaymentRequest {
-  string user_id = 1;
-  float amount = 2;
-  string currency = 3;
-  string source = 4;
+message CheckoutRequest {
+  string email = 1;
 }
 
-message PaymentResponse {
-  bool success = 1;
-  string transaction_id = 2;
-  string message = 3;
+message CheckoutResponse {
+  string url = 1;
 }
 
 service PaymentService {
-    rpc MakePayment (PaymentRequest) returns (PaymentResponse) {}
+    rpc Checkout (CheckoutRequest) returns (CheckoutResponse) {}
 }
