@@ -22,7 +22,6 @@ public class NotesService {
   private final FileValidator fileValidator;
   private final FileConverter fileConverter;
   private final GrpcClientService grpcClientService;
-  private final RequestExtractor requestExtractor;
 
   @Autowired
   public NotesService(
@@ -34,14 +33,13 @@ public class NotesService {
     this.fileValidator = fileValidator;
     this.fileConverter = fileConverter;
     this.grpcClientService = grpcClientService;
-    this.requestExtractor = requestExtractor;
   }
 
   public String processNote(MultipartFile file, String generateType)
     throws NoteProcessingException, FileValidationException {
     try {
-      String kongRequestId = requestExtractor.extractKongRequestId();
-      String userId = requestExtractor.extractUserId();
+      String kongRequestId = RequestExtractor.extractKongRequestId().toString();
+      String userId = RequestExtractor.extractUserId();
       if (!fileValidator.validate(file, generateType)) {
         logger.error(
           "Invalid input for note processing, Kong Request ID: {}",
@@ -78,7 +76,7 @@ public class NotesService {
 
       return fileId;
     } catch (NoteProcessingException | FileValidationException e) {
-      logger.error("Error processing note: {}", e.getMessage());
+      logger.error("Error processing note: {}",  RequestExtractor.extractKongRequestId());
       throw e;
     } catch (MaxUploadSizeExceededException e) {
       logger.error(
@@ -95,7 +93,7 @@ public class NotesService {
       logger.error("Unexpected error processing note", e);
       throw new NoteProcessingException(
         "Unexpected error processing note",
-        e.getMessage()
+        RequestExtractor.extractKongRequestId()
       );
     }
   }

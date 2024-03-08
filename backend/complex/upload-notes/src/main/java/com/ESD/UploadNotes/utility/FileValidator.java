@@ -1,7 +1,7 @@
 package com.ESD.UploadNotes.utility;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.stream.Stream;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +41,8 @@ public class FileValidator {
      * @return true if the note data meets the validation criteria, false otherwise.
      */
     public static boolean validateNoteData(String generateType) {
-        return ContentType.valueOf(generateType) != null;
+       return Stream.of(ContentType.values()).anyMatch(v -> v.name().equals(generateType));
+
     }
     public static String formatSize(long v) {
         if (v < 1024) return v + " B";

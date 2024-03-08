@@ -1,8 +1,8 @@
 package com.ESD.UploadNotes.controller;
 
 import com.ESD.UploadNotes.service.NotesService;
-import com.ESD.UploadNotes.utility.ContentType;
 import com.ESD.UploadNotes.utility.FileValidator;
+import com.ESD.UploadNotes.utility.RequestExtractor;
 import com.ESD.UploadNotes.exception.FileValidationException;
 import com.ESD.UploadNotes.exception.NoteProcessingException;
 import org.slf4j.Logger;
@@ -33,16 +33,14 @@ public class NotesController {
     public ResponseEntity<Map<String, String>> uploadNote(@RequestParam("file") MultipartFile file,
                                                           @RequestParam("generateType") String generateType) {
 
-        //  TODO: Bugs
-        // 1. It throws 500 instead of 400 for ContentType not found
         Map<String, String> response = new HashMap<>();
         if (file.isEmpty()) {
-            logger.error("Invalid request parameters. Null File. ");
+            logger.error("Invalid request parameters. Null File. Kong Request ID : "+RequestExtractor.extractKongRequestId());
             response.put("error", "Invalid file or generateType parameter");
             return ResponseEntity.badRequest().body(response);
         }
         if(!FileValidator.validateNoteData(generateType)) {
-            logger.error("Invalid request parameters. Unknown generate type. ");
+            logger.error("Invalid request parameters. Unknown generate type.  Kong Request ID : "+RequestExtractor.extractKongRequestId());
             response.put("error", "Invalid file or generateType parameter");
             return ResponseEntity.badRequest().body(response);
         }
@@ -53,7 +51,7 @@ public class NotesController {
             String fileId = notesService.processNote(file, generateType);
             
             if (fileId == null || fileId.trim().isEmpty()) {
-                logger.error("Note processing failed with an empty fileId.");
+                logger.error("Note processing failed with an empty fileId. Kong Request ID : "+RequestExtractor.extractKongRequestId());
                 response.put("error", "Note processing failed");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
             }
@@ -62,18 +60,20 @@ public class NotesController {
             response.put("message", "Note processed successfully");
             response.put("fileId", fileId);
             return ResponseEntity.ok(response);
-        } catch (FileValidationException | NoteProcessingException e) {
-            logger.error("Error during note processing: {}", e.getMessage());
+        }  catch (FileValidationException | NoteProcessingException e) {
+            logger.error("Kong ID: "+RequestExtractor.extractKongRequestId()+"Error during note processing: {}", e.getMessage());
             response.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            // Use HttpStatus.BAD_REQUEST for FileValidationException to indicate client error
+            HttpStatus status = e instanceof FileValidationException ? HttpStatus.BAD_REQUEST : HttpStatus.INTERNAL_SERVER_ERROR;
+            return ResponseEntity.status(status).body(response);
         } catch(MaxUploadSizeExceededException e) {
-            logger.error("Max File size Exceeded. Actual file Size ("+FileValidator.formatSize(file.getSize())+"): {}", e.getMessage());
-            response.put("error", "An unexpected error occurred");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        
+            String errorMessage = "Kong ID: "+RequestExtractor.extractKongRequestId()+"File size exceeds the maximum allowed limit of 15MB.";
+            logger.error(errorMessage + " Actual file Size: " + FileValidator.formatSize(file.getSize()), e);
+            response.put("error", errorMessage);
+            return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(response); // 413 Payload Too Large
         } catch (Exception e) {
-            logger.error("An unexpected error occurred: {}", e.getMessage());
-            response.put("error", "An unexpected error occurred");
+            logger.error("Kong ID: "+RequestExtractor.extractKongRequestId()+"An unexpected error occurred: {}", e.getMessage());
+            response.put("error", "An unexpected error occurred. Please try again later.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }

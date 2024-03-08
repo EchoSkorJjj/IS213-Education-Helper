@@ -13,7 +13,7 @@ public class RequestExtractor {
      *
      * @return The Kong request ID, or null if not present.
      */
-    public String extractKongRequestId() {
+    public static String extractKongRequestId() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         return request.getHeader("kong-request-id");
@@ -24,7 +24,7 @@ public class RequestExtractor {
      *
      * @return The user ID, or null if not present.
      */
-    public String extractUserId() {
+    public static String extractUserId() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         return request.getHeader("x-user-id");

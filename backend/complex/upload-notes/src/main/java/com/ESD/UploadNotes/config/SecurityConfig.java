@@ -22,6 +22,7 @@ public class SecurityConfig {
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
     throws Exception {
     http
+    .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(rQ -> {
         rQ.requestMatchers("/api/v1/notes/**").permitAll().anyRequest().authenticated() // Ensure all requests are authenticated
         ;
