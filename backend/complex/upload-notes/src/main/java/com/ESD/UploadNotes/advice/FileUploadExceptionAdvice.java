@@ -13,6 +13,6 @@ public class FileUploadExceptionAdvice {
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException exc) {
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("File too large! Kong ID: "+RequestExtractor.extractKongRequestId());
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File too large! Kong ID: "+RequestExtractor.extractKongRequestId());
     }
 }
