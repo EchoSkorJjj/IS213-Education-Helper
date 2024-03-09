@@ -4,12 +4,12 @@ import com.ESD.UploadNotes.proto.UploadNotesProto;
 import java.util.Map;
 import java.util.HashMap;
 
-public class CleanContent {
+public class ProcessedContent {
     String userId;
     String fileId;
     Map<String, Object> metadata;
 
-    public CleanContent(String userId, String fileId, UploadNotesProto.FileMetadata metadata) {
+    public ProcessedContent(String userId, String fileId, UploadNotesProto.FileMetadata metadata) {
         this.userId = userId;
         this.fileId = fileId;
         this.metadata = convertMetadataToMap(metadata);
