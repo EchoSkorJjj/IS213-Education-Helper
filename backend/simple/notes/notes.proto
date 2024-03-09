@@ -27,7 +27,7 @@ service NoteService {
 // Request message for uploading a note
 message UploadNoteRequest {
   string userId = 1;
-  string filename = 2;
+  string noteId = 2;
   bytes fileContent = 3;
 }
 
@@ -38,12 +38,12 @@ message UploadNoteResponse {
 
 // Request message for retrieving a note
 message RetrieveNoteRequest {
-  string noteId = 1;
+  string userId = 1;
+  string noteId = 2;
 }
 
 // Response message for retrieving a note
 message RetrieveNoteResponse {
   string userId = 1;
-  string filename = 2;
-  bytes fileContent = 3;
+  bytes fileContent = 2;
 }
