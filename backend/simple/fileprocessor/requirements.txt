@@ -3,3 +3,4 @@ grpcio-tools
 langdetect
 pypdf2
 python-dotenv
+pyspellchecker

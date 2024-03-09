@@ -1,7 +1,9 @@
 package com.ESD.UploadNotes.utility;
 
-import java.util.regex.Pattern;
 
+import lombok.Getter;
+
+@Getter
 public class PageContent {
     String fileId;
     long pageId;
@@ -19,15 +21,5 @@ public class PageContent {
         return content;
     }
 
-    public long getPageId() {
-        return pageId;
-    }
 
-    public String getContent() {
-        return content;
-    }
-
-    public String getFileId() {
-        return fileId;
-    }
 }
