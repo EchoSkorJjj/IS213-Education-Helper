@@ -1,15 +1,12 @@
 FROM ruby:3.3.0-alpine as builder
-RUN apk add --no-cache build-base nodejs npm
 WORKDIR /app
-COPY . .
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 FROM ruby:3.3.0-alpine
 WORKDIR /app
-RUN apk add --no-cache nodejs npm curl && \
-    npm install -g localtunnel && \
-    npm cache clean --force && \
-    rm -rf /var/cache/apk/*
+RUN apk add --no-cache curl
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
-COPY --from=builder /app /app
+COPY --from=builder /app/ /app/
+COPY stripe_service.rb .
 CMD ["ruby", "stripe_service.rb"]
