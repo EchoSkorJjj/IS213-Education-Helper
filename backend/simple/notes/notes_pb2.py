@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bnotes.proto\"h\n\x05Notes\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0e\n\x06\x66ileId\x18\x02 \x01(\t\x12\x0c\n\x04\x66ile\x18\x03 \x01(\x0c\x12\x1f\n\x08metadata\x18\x04 \x01(\x0b\x32\r.FileMetadata\x12\x10\n\x08\x66iletype\x18\x05 \x01(\t\"R\n\x0c\x46ileMetadata\x12\r\n\x05title\x18\x01 \x01(\t\x12\x11\n\tpagecount\x18\x02 \x01(\x03\x12\x10\n\x08\x66ilesize\x18\x03 \x01(\x03\x12\x0e\n\x06locale\x18\x04 \x01(\t\"J\n\x11UploadNoteRequest\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\x12\x13\n\x0b\x66ileContent\x18\x03 \x01(\x0c\"$\n\x12UploadNoteResponse\x12\x0e\n\x06noteId\x18\x01 \x01(\t\"%\n\x13RetrieveNoteRequest\x12\x0e\n\x06noteId\x18\x01 \x01(\t\"M\n\x14RetrieveNoteResponse\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\x12\x13\n\x0b\x66ileContent\x18\x03 \x01(\x0c\x32\x81\x01\n\x0bNoteService\x12\x35\n\nUploadNote\x12\x12.UploadNoteRequest\x1a\x13.UploadNoteResponse\x12;\n\x0cRetrieveNote\x12\x14.RetrieveNoteRequest\x1a\x15.RetrieveNoteResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bnotes.proto\"h\n\x05Notes\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0e\n\x06\x66ileId\x18\x02 \x01(\t\x12\x0c\n\x04\x66ile\x18\x03 \x01(\x0c\x12\x1f\n\x08metadata\x18\x04 \x01(\x0b\x32\r.FileMetadata\x12\x10\n\x08\x66iletype\x18\x05 \x01(\t\"R\n\x0c\x46ileMetadata\x12\r\n\x05title\x18\x01 \x01(\t\x12\x11\n\tpagecount\x18\x02 \x01(\x03\x12\x10\n\x08\x66ilesize\x18\x03 \x01(\x03\x12\x0e\n\x06locale\x18\x04 \x01(\t\"H\n\x11UploadNoteRequest\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0e\n\x06noteId\x18\x02 \x01(\t\x12\x13\n\x0b\x66ileContent\x18\x03 \x01(\x0c\"$\n\x12UploadNoteResponse\x12\x0e\n\x06noteId\x18\x01 \x01(\t\"5\n\x13RetrieveNoteRequest\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0e\n\x06noteId\x18\x02 \x01(\t\";\n\x14RetrieveNoteResponse\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x13\n\x0b\x66ileContent\x18\x02 \x01(\x0c\x32\x81\x01\n\x0bNoteService\x12\x35\n\nUploadNote\x12\x12.UploadNoteRequest\x1a\x13.UploadNoteResponse\x12;\n\x0cRetrieveNote\x12\x14.RetrieveNoteRequest\x1a\x15.RetrieveNoteResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -26,13 +26,13 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_FILEMETADATA']._serialized_start=121
   _globals['_FILEMETADATA']._serialized_end=203
   _globals['_UPLOADNOTEREQUEST']._serialized_start=205
-  _globals['_UPLOADNOTEREQUEST']._serialized_end=279
-  _globals['_UPLOADNOTERESPONSE']._serialized_start=281
-  _globals['_UPLOADNOTERESPONSE']._serialized_end=317
-  _globals['_RETRIEVENOTEREQUEST']._serialized_start=319
-  _globals['_RETRIEVENOTEREQUEST']._serialized_end=356
-  _globals['_RETRIEVENOTERESPONSE']._serialized_start=358
-  _globals['_RETRIEVENOTERESPONSE']._serialized_end=435
-  _globals['_NOTESERVICE']._serialized_start=438
-  _globals['_NOTESERVICE']._serialized_end=567
+  _globals['_UPLOADNOTEREQUEST']._serialized_end=277
+  _globals['_UPLOADNOTERESPONSE']._serialized_start=279
+  _globals['_UPLOADNOTERESPONSE']._serialized_end=315
+  _globals['_RETRIEVENOTEREQUEST']._serialized_start=317
+  _globals['_RETRIEVENOTEREQUEST']._serialized_end=370
+  _globals['_RETRIEVENOTERESPONSE']._serialized_start=372
+  _globals['_RETRIEVENOTERESPONSE']._serialized_end=431
+  _globals['_NOTESERVICE']._serialized_start=434
+  _globals['_NOTESERVICE']._serialized_end=563
 # @@protoc_insertion_point(module_scope)
