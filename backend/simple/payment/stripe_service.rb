@@ -76,39 +76,26 @@ post '/webhook' do
   end
 
   # Handle the checkout.session.completed event
-  if event.type == 'checkout.session.completed'
-    session = event.data.object
-    puts session
-    customer_id = session.customer
-
-    # Now you can use the customer_id
-    # For example, print it:
-    customer = Stripe::Customer.retrieve(customer_id)
-    puts customer
-
-    # Extract the customer's email
-    customer_email = customer.email
-
-    # Now you can use the customer_email
-    # Send over to the complex service somehow
-    # For example, print it:
-    send_to_kong(customer_email)
+  if event.type != 'checkout.session.completed'
+    logger.info "Unhandled event type: #{event.type}"
+    status 400
+    return
   end
 
-  status 200
-end
+  session = event.data.object
+  puts session
+  customer_id = session.customer
 
-def send_to_kong(customer_email)
-  uri = URI.parse("http://kong-gateway:8000/api/v1/payment/success") # replace with your Kong API endpoint
+  # Now you can use the customer_id
+  # For example, print it:
+  customer = Stripe::Customer.retrieve(customer_id)
+  puts customer
 
-  header = {'Content-Type': 'application/json'}
-  data = {email: customer_email}
+  # Extract the customer's email
+  customer_email = customer.email
 
-  # Create the HTTP objects
-  http = Net::HTTP.new(uri.host, uri.port)
-  request = Net::HTTP::Post.new(uri.request_uri, header)
-  request.body = data.to_json
-
-  # Send the request
-  response = http.request(request)
+  # Now you can use the customer_email
+  # Send over to the complex service somehow
+  # For example, print it:
+  { email: customer_email }.to_json
 end

@@ -15,7 +15,7 @@ message CheckoutResponse {
 }
 
 message SuccessfulPaymentRequest {
-  string email = 1;
+  string raw = 1;
 }
 
 message SuccessfulPaymentResponse {

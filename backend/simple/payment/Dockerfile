@@ -12,4 +12,4 @@ RUN apk add --no-cache nodejs npm curl && \
     rm -rf /var/cache/apk/*
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder /app /app
-CMD ["/bin/sh", "start_services.sh"]
+CMD ["ruby", "stripe_service.rb"]

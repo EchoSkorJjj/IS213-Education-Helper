@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
@@ -38,7 +39,7 @@ func (s *Server) Checkout(ctx context.Context, req *makepaymentPb.CheckoutReques
 	data.Set("email", req.Email)
 	dataReader := strings.NewReader(data.Encode())
 
-	httpResp, err := utils.SendHttpRequest(ctx, "GET", checkoutURL, dataReader)
+	httpResp, err := utils.SendHttpRequest(ctx, "GET", checkoutURL, dataReader, nil)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "error sending request: %v", err)
 	}
@@ -67,13 +68,61 @@ func (s *Server) Checkout(ctx context.Context, req *makepaymentPb.CheckoutReques
 }
 
 func (s *Server) SuccessfulPayment(ctx context.Context, req *makepaymentPb.SuccessfulPaymentRequest) (*makepaymentPb.SuccessfulPaymentResponse, error) {
-	subscriptionClient := client.GetClient()
+	var stripeSignature string
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		var values []string
 
+		if values = md["stripe-signature"]; len(values) == 0 {
+			log.Printf("Stripe signature not found in metadata")
+			return nil, status.Errorf(codes.InvalidArgument, "Stripe signature not found in metadata")
+		}
+
+		stripeSignature = values[0]
+	}
+
+	paymentServiceHost := os.Getenv("PAYMENT_SERVICE_HOST")
+	paymentServicePort := os.Getenv("PAYMENT_SERVICE_PORT")
+	webhookURL := fmt.Sprintf("http://%s:%s/webhook", paymentServiceHost, paymentServicePort)
+	dataReader := strings.NewReader(string(req.Raw))
+
+	headerData := map[string]string{
+		"Content-Type":     "application/json", // Overwrite content-type for stripe webhook
+		"stripe-signature": stripeSignature,
+	}
+
+	httpResp, err := utils.SendHttpRequest(ctx, "POST", webhookURL, dataReader, headerData)
+	if err != nil || httpResp.StatusCode != 200 {
+		log.Printf("Failed to validate stripe webhook request")
+		return nil, status.Errorf(codes.Internal, "error validating stripe webhook request")
+	}
+
+	defer httpResp.Body.Close()
+
+	bodyBytes, err := io.ReadAll(httpResp.Body)
+	if err != nil {
+		log.Printf("Failed to read HTTP response body: %v", err)
+		return nil, status.Errorf(codes.Internal, "error reading HTTP response body: %v", err)
+	}
+
+	var respBody map[string]string
+	err = json.Unmarshal(bodyBytes, &respBody)
+	if err != nil {
+		log.Printf("Failed to unmarshal HTTP response body: %v", err)
+		return nil, status.Errorf(codes.Internal, "error unmarshalling HTTP response body: %v", err)
+	}
+
+	customerEmail, ok := respBody["email"]
+	if !ok {
+		log.Printf("Email not found in HTTP response body")
+		return nil, status.Errorf(codes.Internal, "email not found in HTTP response body")
+	}
+
+	subscriptionClient := client.GetClient()
 	oneMonthFromNow := time.Now().AddDate(0, 1, 0)
 	timestamp := timestamppb.New(oneMonthFromNow)
 
 	stubReq := &subscriptionPb.CreateOrUpdateSubscriptionRequest{
-		Email:           req.Email,
+		Email:           customerEmail,
 		SubscribedUntil: timestamp,
 	}
 
@@ -83,6 +132,5 @@ func (s *Server) SuccessfulPayment(ctx context.Context, req *makepaymentPb.Succe
 		return nil, status.Errorf(codes.Internal, "error creating or updating subscription: %v", err)
 	}
 
-	log.Printf("Subscription created or updated: %v", stubResp)
 	return &makepaymentPb.SuccessfulPaymentResponse{SubscribedUntil: stubResp.Details.SubscribedUntil}, nil
 }

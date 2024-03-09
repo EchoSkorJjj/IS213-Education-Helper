@@ -20,13 +20,22 @@ volumes:
   subscriptions-db-volume: {}
 
 services:
+  # Required for Stripe webhook
+  localtunnel:
+    image: localtunnel:1.0
+    build: ../../backend/localtunnel
+    network_mode: host
+    depends_on:
+      kong-gateway:
+        condition: service_healthy
+
   kong-gateway:
     image: kong:latest
     build: ../../backend/kong-gateway
     environment:
       <<: *common-env
       KONG_DATABASE: off
-      KONG_PLUGINS: bundled,authn-kong
+      KONG_PLUGINS: bundled,authn-kong,rawstring-adapter
       KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml 
     ports:
       - "8000:8000" # Proxy
@@ -47,6 +56,7 @@ services:
     volumes:
       - ../../backend/kong-gateway/kong.yml:/etc/kong/kong.yml 
       - ../../backend/kong-gateway/authn-kong:/usr/local/share/lua/5.1/kong/plugins/authn-kong 
+      - ../../backend/kong-gateway/rawstring-adapter:/usr/local/share/lua/5.1/kong/plugins/rawstring-adapter 
       - ../../backend/kong-gateway/protos:/usr/local/share/lua/5.1/kong/protos
 
   subscriptions-db:
@@ -117,6 +127,8 @@ services:
         condition: service_healthy
     volumes:
       - ../../backend/complex/make-payment/.env:/app/.env
+    ports:
+      - "50054:50051"
     healthcheck:
       test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
       interval: 10s

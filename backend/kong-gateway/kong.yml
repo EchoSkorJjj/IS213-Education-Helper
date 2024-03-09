@@ -9,7 +9,7 @@ services:
     tags:
       - make-payment-service
     routes:
-      - name: make-payment
+      - name: make-payment-default
         protocols:
           - http
         paths:
@@ -18,6 +18,16 @@ services:
           - name: grpc-gateway
             config:
               proto: /usr/local/share/lua/5.1/kong/protos/make_payment.proto
+      - name: make-payment-success
+        protocols:
+          - http
+        paths:
+          - /api/v1/payment/success
+        plugins:
+          - name: grpc-gateway
+            config:
+              proto: /usr/local/share/lua/5.1/kong/protos/make_payment.proto
+          - name: rawstring-adapter
 
   - name: user-storage-service
     host: user-storage-service
@@ -36,14 +46,14 @@ services:
           - name: grpc-gateway
             config:
               proto: /usr/local/share/lua/5.1/kong/protos/user_storage.proto
-    
+
 plugins:
   - name: file-log
     service: user-storage-service
     config:
       path: /usr/local/share/lua/5.1/kong/plugins/authn-kong/user-storage.log
   - name: cors
-    config: 
+    config:
       origins:
         - "http://localhost:3001"
       methods:
@@ -78,7 +88,7 @@ plugins:
       echo_downstream: false
 
   - name: rate-limiting
-    config: 
+    config:
       minute: 100
       policy: local
 

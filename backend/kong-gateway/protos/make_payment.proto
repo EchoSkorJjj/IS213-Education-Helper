@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package make_payment_pb;
 
+import "google/protobuf/timestamp.proto";
+
 message CheckoutRequest {
   string email = 1;
 }
@@ -11,11 +13,11 @@ message CheckoutResponse {
 }
 
 message SuccessfulPaymentRequest {
-  string email = 1;
+  string raw = 1;
 }
 
 message SuccessfulPaymentResponse {
-  string message = 1;
+  google.protobuf.Timestamp subscribed_until = 1;
 }
 
 service MakePaymentService {
@@ -29,7 +31,7 @@ service MakePaymentService {
     rpc SuccessfulPayment (SuccessfulPaymentRequest) returns (SuccessfulPaymentResponse) {
         option (google.api.http) = {
             post: "/api/v1/payment/success"
-            body: "*"
+            body: "raw"
         };
     }
 }
