@@ -25,6 +25,7 @@ public class GrpcClientConfig {
                 .keepAliveTime(60, TimeUnit.SECONDS) // Keep alive time
                 .keepAliveTimeout(20, TimeUnit.SECONDS) // Keep alive timeout
                 .usePlaintext()
+                .maxInboundMessageSize(Integer.MAX_VALUE)
                 .build();
     }
 
@@ -37,6 +38,7 @@ public class GrpcClientConfig {
                 .keepAliveTime(60, TimeUnit.SECONDS) // Keep alive time
                 .keepAliveTimeout(20, TimeUnit.SECONDS) // Keep alive timeout
                 .usePlaintext()
+                .maxInboundMessageSize(Integer.MAX_VALUE)
                 .build();
     }
 }

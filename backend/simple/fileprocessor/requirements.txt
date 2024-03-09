@@ -4,3 +4,4 @@ langdetect
 pypdf2
 python-dotenv
 pyspellchecker
+pymupdf

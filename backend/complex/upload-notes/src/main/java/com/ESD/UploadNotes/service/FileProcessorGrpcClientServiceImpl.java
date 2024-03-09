@@ -130,7 +130,7 @@ public class FileProcessorGrpcClientServiceImpl
     } catch (StatusRuntimeException e) {
       throw new GrpcServiceException(
         "Upstream GRPC server returned an error response.",
-        null
+        e.toString()
       );
     } catch (Exception e) {
       logger.error("Failed to process file or send to RabbitMQ", e);

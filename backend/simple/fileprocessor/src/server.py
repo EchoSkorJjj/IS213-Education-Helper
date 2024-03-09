@@ -10,7 +10,11 @@ def setup_logging():
 
 async def serve():
     setup_logging()
-    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10))
+    # Create a gRPC server with no limit on message size
+    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10),options=[
+        ('grpc.max_send_message_length', -1),
+        ('grpc.max_receive_message_length', -1),
+    ])
     file_processor_pb2_grpc.add_FileProcessorServicer_to_server(FileProcessorServicer(), server)
     listen_addr = '[::]:50053'
     server.add_insecure_port(listen_addr)
