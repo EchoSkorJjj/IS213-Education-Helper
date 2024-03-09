@@ -8,7 +8,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	subscription "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb/subscription"
+	"github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb/subscription"
 )
 
 type Client struct {

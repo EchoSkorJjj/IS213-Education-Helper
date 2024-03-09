@@ -32,6 +32,10 @@ options "*" do
   200
 end
 
+get '/health' do
+  status 200
+end
+
 get '/checkout' do
   customer_email = params['email'] 
   #might need to change depending on how the customer_email is retrieved

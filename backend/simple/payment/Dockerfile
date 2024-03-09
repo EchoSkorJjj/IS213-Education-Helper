@@ -1,12 +1,15 @@
-FROM ruby:3.3.0
-RUN apt-get update -qq && apt-get install -y nodejs npm
-RUN npm install -g localtunnel
-
+FROM ruby:3.3.0-alpine as builder
+RUN apk add --no-cache build-base nodejs npm
 WORKDIR /app
-ADD . /app
+COPY . .
 RUN bundle install
-EXPOSE 4567
 
-COPY start_services.sh /start_services.sh
-RUN chmod +x /start_services.sh
-CMD ["/start_services.sh"]
+FROM ruby:3.3.0-alpine
+WORKDIR /app
+RUN apk add --no-cache nodejs npm curl && \
+    npm install -g localtunnel && \
+    npm cache clean --force && \
+    rm -rf /var/cache/apk/*
+COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+COPY --from=builder /app /app
+CMD ["/bin/sh", "start_services.sh"]

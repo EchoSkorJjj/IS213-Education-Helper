@@ -112,16 +112,32 @@ services:
     image: make-payment-service:1.0
     depends_on:
       payment-service:
-        condition: service_started
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
     volumes:
       - ../../backend/complex/make-payment/.env:/app/.env
-    
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   subscription-service:
     restart: always
     build: ../../backend/simple/subscriptions
+    volumes:
+      - ../../backend/simple/subscriptions/.env:/app/.env
     depends_on:
       subscriptions-db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   notes-service:
     build: ../../backend/simple/notes
@@ -149,10 +165,16 @@ services:
       start_period: 30s
 
   payment-service:
-    build: ../../backend/simple/stripe
+    build: ../../backend/simple/payment
     image: payment-service:1.0
     volumes:
-      - ../../backend/simple/stripe/.env:/app/.env
+      - ../../backend/simple/payment/.env:/app/.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4567/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   frontend-client:
     build: ../../client

@@ -1,4 +1,4 @@
-package payment
+package makepayment
 
 import (
 	"context"
@@ -15,25 +15,21 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	client "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/internal/client"
-	utils "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/internal/utils"
-	make_payment "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb/make_payment"
-	subscription "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb/subscription"
+	"github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/internal/client"
+	"github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/internal/utils"
+	makepaymentPb "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb/make_payment"
+	subscriptionPb "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb/subscription"
 )
 
-type PaymentService interface {
-	Checkout(ctx context.Context, req *make_payment.CheckoutRequest) (*make_payment.CheckoutResponse, error)
-}
-
 type Server struct {
-	make_payment.UnimplementedPaymentServiceServer
+	makepaymentPb.UnimplementedMakePaymentServiceServer
 }
 
 func NewServer() *Server {
 	return &Server{}
 }
 
-func (s *Server) Checkout(ctx context.Context, req *make_payment.CheckoutRequest) (*make_payment.CheckoutResponse, error) {
+func (s *Server) Checkout(ctx context.Context, req *makepaymentPb.CheckoutRequest) (*makepaymentPb.CheckoutResponse, error) {
 	paymentServiceHost := os.Getenv("PAYMENT_SERVICE_HOST")
 	paymentServicePort := os.Getenv("PAYMENT_SERVICE_PORT")
 	checkoutURL := fmt.Sprintf("http://%s:%s/checkout", paymentServiceHost, paymentServicePort)
@@ -67,16 +63,16 @@ func (s *Server) Checkout(ctx context.Context, req *make_payment.CheckoutRequest
 		return nil, status.Errorf(codes.Internal, "URL not found in HTTP response body")
 	}
 
-	return &make_payment.CheckoutResponse{Url: stripeRedirectURL}, nil
+	return &makepaymentPb.CheckoutResponse{Url: stripeRedirectURL}, nil
 }
 
-func (s *Server) SuccessfulPayment(ctx context.Context, req *make_payment.SuccessfulPaymentRequest) (*make_payment.SuccessfulPaymentResponse, error) {
+func (s *Server) SuccessfulPayment(ctx context.Context, req *makepaymentPb.SuccessfulPaymentRequest) (*makepaymentPb.SuccessfulPaymentResponse, error) {
 	subscriptionClient := client.GetClient()
 
 	oneMonthFromNow := time.Now().AddDate(0, 1, 0)
 	timestamp := timestamppb.New(oneMonthFromNow)
 
-	stubReq := &subscription.CreateOrUpdateSubscriptionRequest{
+	stubReq := &subscriptionPb.CreateOrUpdateSubscriptionRequest{
 		Email:           req.Email,
 		SubscribedUntil: timestamp,
 	}
@@ -88,5 +84,5 @@ func (s *Server) SuccessfulPayment(ctx context.Context, req *make_payment.Succes
 	}
 
 	log.Printf("Subscription created or updated: %v", stubResp)
-	return &make_payment.SuccessfulPaymentResponse{SubscribedUntil: stubResp.Details.SubscribedUntil}, nil
+	return &makepaymentPb.SuccessfulPaymentResponse{SubscribedUntil: stubResp.Details.SubscribedUntil}, nil
 }

@@ -18,7 +18,7 @@ message SuccessfulPaymentResponse {
   string message = 1;
 }
 
-service PaymentService {
+service MakePaymentService {
     rpc Checkout (CheckoutRequest) returns (CheckoutResponse) {
         option (google.api.http) = {
             get: "/api/v1/payment/checkout"

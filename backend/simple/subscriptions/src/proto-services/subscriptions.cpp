@@ -20,8 +20,7 @@ class SubscriptionService final
     time_t subscribed_until = subscribed_until_timestamp.seconds();
 
     if (email.empty()) {
-      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT,
-                          "Email is empty");
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "Email is empty");
     }
 
     try {
@@ -49,8 +48,7 @@ class SubscriptionService final
       subscription_pb::GetSubscriptionResponse *response) override {
     std::string email = request->email();
     if (email.empty()) {
-      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT,
-                          "Email is empty");
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "Email is empty");
     }
 
     try {
@@ -77,8 +75,7 @@ class SubscriptionService final
       subscription_pb::DeleteSubscriptionResponse *response) override {
     std::string email = request->email();
     if (email.empty()) {
-      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT,
-                          "Email is empty");
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "Email is empty");
     }
 
     try {

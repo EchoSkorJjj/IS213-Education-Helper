@@ -11,7 +11,10 @@ find_library(PQ_LIB pq)
 add_executable(SUBSCRIPTIONS_SERVICE
     pb/subscriptions.pb.cc
     pb/subscriptions.grpc.pb.cc
+    pb/health.pb.cc
+    pb/health.grpc.pb.cc
     src/proto-services/subscriptions.cpp
+    src/proto-services/health.cpp
     src/database/database.cpp
     src/utils/utils.cpp
     src/server.cpp
