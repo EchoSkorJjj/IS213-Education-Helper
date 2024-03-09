@@ -1,15 +1,19 @@
 package com.ESD.UploadNotes.utility;
 
 import com.ESD.UploadNotes.proto.UploadNotesProto;
+
+import lombok.Getter;
+
 import java.util.Map;
 import java.util.HashMap;
 
-public class CleanContent {
+@Getter
+public class ProcessedContent {
     String userId;
     String fileId;
     Map<String, Object> metadata;
 
-    public CleanContent(String userId, String fileId, UploadNotesProto.FileMetadata metadata) {
+    public ProcessedContent(String userId, String fileId, UploadNotesProto.FileMetadata metadata) {
         this.userId = userId;
         this.fileId = fileId;
         this.metadata = convertMetadataToMap(metadata);
@@ -25,15 +29,4 @@ public class CleanContent {
         return map;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getFileId() {
-        return fileId;
-    }
-
-    public Map<String, Object> getMetadata() {
-        return metadata;
-    }
 }

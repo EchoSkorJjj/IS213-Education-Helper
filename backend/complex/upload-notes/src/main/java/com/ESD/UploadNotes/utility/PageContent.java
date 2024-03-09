@@ -1,7 +1,10 @@
 package com.ESD.UploadNotes.utility;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 public class PageContent {
@@ -12,13 +15,7 @@ public class PageContent {
     public PageContent(long pageId, String content, String fileId) {
         this.fileId = fileId;
         this.pageId = pageId;
-        this.content = cleanContent(content);
-    }
-
-    public String cleanContent(String content) {
-        content = content.replaceAll("s{4,}", ""); 
-
-        return content;
+        this.content = content;
     }
 
 

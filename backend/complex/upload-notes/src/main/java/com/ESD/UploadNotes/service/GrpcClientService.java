@@ -15,7 +15,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.ESD.UploadNotes.utility.CleanContent;
+import com.ESD.UploadNotes.utility.ProcessedContent;
 import com.ESD.UploadNotes.utility.PageContent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,12 +82,12 @@ public class GrpcClientService {
         .unpack(UploadNotesProto.FileProcessResponse.class);
 
       if (response.getFileId().equals(fileId)) {
-        CleanContent cleanContent = new CleanContent(userId, response.getFileId(), response.getMetadata());
+        ProcessedContent processedContent = new ProcessedContent(userId, response.getFileId(), response.getMetadata());
 
-        publishToRabbitMQ(cleanContent);
+        publishToRabbitMQ(processedContent);
         
         for (UploadNotesProto.Page page : response.getPagesList()) {
-          PageContent pageContent = new PageContent(page.getPageId(), page.getContent(), cleanContent.getFileId());
+          PageContent pageContent = new PageContent(page.getPageId(), page.getContent(), processedContent.getFileId());
           publishToRabbitMQ(pageContent); 
         }
 
