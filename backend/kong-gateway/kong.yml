@@ -89,7 +89,8 @@ plugins:
       jwt_secret: "KUKUBIRDAIDHAIDHAJKSDAJIDBQIheh09u2jeqinwdjnbqwsdifhnw0euq2e0nqwdo" 
       public_paths:
         - /api/v1/auth/google/callback
-        - /api/v1/auth/apple/callback
+        - /api/v1/auth/sgId/generateAuthUrl
+        - /api/v1/auth/sgId/callback
         - /api/v1/auth/myInfo/generateCodeChallenge
         - /api/v1/auth/myInfo/callback
         - /api/v1/auth/logout

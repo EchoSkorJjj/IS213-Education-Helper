@@ -36,8 +36,11 @@ public class FileProcessorGrpcClientServiceImpl
   @Value("${app.rabbitmq.exchange}")
   private String exchange;
 
-  @Value("${app.rabbitmq.routingkey}")
-  private String routingKey;
+  @Value("${app.rabbitmq.routingkey1}")
+  private String routingKey1;
+
+  @Value("${app.rabbitmq.routingkey2}")
+  private String routingKey2;
 
   private final NotesGrpcClientService notesGrpcClientService;
 
@@ -108,7 +111,7 @@ public class FileProcessorGrpcClientServiceImpl
           response.getMetadata()
         );
 
-        publishToRabbitMQ(processedContent);
+        publishToRabbitMQ(processedContent, routingKey1);
 
         for (UploadNotesProto.Page page : response.getPagesList()) {
           PageContent pageContent = new PageContent(
@@ -116,7 +119,7 @@ public class FileProcessorGrpcClientServiceImpl
             page.getContent(),
             processedContent.getFileId()
           );
-          publishToRabbitMQ(pageContent);
+          publishToRabbitMQ(pageContent, routingKey2);
         }
 
         return fileId;
@@ -138,7 +141,7 @@ public class FileProcessorGrpcClientServiceImpl
     }
   }
 
-  private <T> void publishToRabbitMQ(T response) {
+  private <T> void publishToRabbitMQ(T response, String routingKey) {
     try {
       String jsonMessage = objectMapper.writeValueAsString(response);
       rabbitTemplate.convertAndSend(exchange, routingKey, jsonMessage);

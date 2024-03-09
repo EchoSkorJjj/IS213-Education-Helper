@@ -24,11 +24,17 @@ public class RabbitMQConfig {
     @Value("${app.rabbitmq.exchange}")
     private String exchangeName;
 
-    @Value("${app.rabbitmq.queue}")
-    private String queueName;
+    @Value("${app.rabbitmq.queue1}")
+    private String queueName1;
 
-    @Value("${app.rabbitmq.routingkey}")
-    private String routingKey;
+    @Value("${app.rabbitmq.queue2}")
+    private String queueName2;
+
+    @Value("${app.rabbitmq.routingkey1}")
+    private String routingKey1;
+
+    @Value("${app.rabbitmq.routingkey2}")
+    private String routingKey2;
 
     @Autowired
     private ConnectionFactory connectionFactory;
@@ -39,24 +45,36 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    Queue queue() {
-        return new Queue(queueName, true);
+    Queue queue1() {
+        return new Queue(queueName1, true);
     }
 
     @Bean
-    Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(routingKey);
+    Queue queue2() {
+        return new Queue(queueName2, true);
+    }
+
+    @Bean
+    Binding binding1(Queue queue1, DirectExchange exchange) {
+        return BindingBuilder.bind(queue1).to(exchange).with(routingKey1);
+    }
+
+    @Bean
+    Binding binding2(Queue queue2, DirectExchange exchange) {
+        return BindingBuilder.bind(queue2).to(exchange).with(routingKey2);
     }
 
     @Bean
     public RabbitAdmin rabbitAdmin() {
         RabbitAdmin admin = new RabbitAdmin(connectionFactory);
         admin.setAutoStartup(true);
-        // Declare exchange, queue, and binding programmatically
         admin.declareExchange(exchange());
-        admin.declareQueue(queue());
-        admin.declareBinding(binding(queue(), exchange()));
-        logger.info("RabbitMQ exchange, queue, and binding declared");
+        admin.declareQueue(queue1());
+        admin.declareQueue(queue2());
+        admin.declareBinding(binding1(queue1(), exchange()));
+        admin.declareBinding(binding2(queue2(), exchange()));
+        logger.info("RabbitMQ exchange, two queues, and bindings declared");
         return admin;
     }
 }
+
