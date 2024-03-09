@@ -8,9 +8,9 @@ logger = get_logger(__name__)
 class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
     def UploadNote(self, request, context):
         try:
-            upload_to_s3(request.userId, request.noteId, request.fileContent)
-            logger.info(f"Note {request.noteId} uploaded for user {request.userId}")
-            return notes_pb2.UploadNoteResponse(noteId=request.noteId)
+            upload_to_s3(request.userId, request.fileId, request.fileContent)
+            logger.info(f"Note {request.fileId} uploaded for user {request.userId}")
+            return notes_pb2.UploadNoteResponse(fileId=request.fileId)
         except Exception as e:
             logger.error(f'Error uploading note: {e}', exc_info=True)
             context.set_details(f'Error uploading note: {e}')
@@ -19,8 +19,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
 
     def RetrieveNote(self, request, context):
         try:
-            file_content = retrieve_from_s3(request.userId, request.noteId)
-            logger.info(f"Note {request.noteId} retrieved for user {request.userId}")
+            file_content = retrieve_from_s3(request.userId, request.fileId)
+            logger.info(f"Note {request.fileId} retrieved for user {request.userId}")
             return notes_pb2.RetrieveNoteResponse(userId=request.userId, fileContent=file_content)
         except Exception as e:
             logger.error(f'Error retrieving note: {e}', exc_info=True)

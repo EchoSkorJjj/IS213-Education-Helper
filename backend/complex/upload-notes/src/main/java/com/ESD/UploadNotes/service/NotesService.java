@@ -21,13 +21,13 @@ public class NotesService {
 
   private final FileValidator fileValidator;
   private final FileConverter fileConverter;
-  private final GrpcClientService grpcClientService;
+  private final FileProcessorGrpcClientService grpcClientService;
 
   @Autowired
   public NotesService(
     FileValidator fileValidator,
     FileConverter fileConverter,
-    GrpcClientService grpcClientService,
+    FileProcessorGrpcClientService grpcClientService,
     RequestExtractor requestExtractor
   ) {
     this.fileValidator = fileValidator;

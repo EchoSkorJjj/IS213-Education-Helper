@@ -1,10 +1,14 @@
 package com.ESD.UploadNotes.service;
 
-import com.ESD.UploadNotes.config.GrpcClientConfig;
 import com.ESD.UploadNotes.exception.GrpcServiceException;
 import com.ESD.UploadNotes.proto.FileProcessorGrpc;
 import com.ESD.UploadNotes.proto.UploadNotesProto;
+import com.ESD.UploadNotes.utility.PageContent;
+import com.ESD.UploadNotes.utility.ProcessedContent;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.InvalidProtocolBufferException;
+import io.grpc.ManagedChannel;
 import io.grpc.StatusRuntimeException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,19 +17,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.ESD.UploadNotes.utility.ProcessedContent;
-import com.ESD.UploadNotes.utility.PageContent;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class GrpcClientService {
+public class FileProcessorGrpcClientServiceImpl
+  implements FileProcessorGrpcClientService {
+
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   private static final Logger logger = LoggerFactory.getLogger(
-    GrpcClientService.class
+    FileProcessorGrpcClientServiceImpl.class
   );
   private final FileProcessorGrpc.FileProcessorBlockingStub fileProcessorStub;
   private final RabbitTemplate rabbitTemplate;
@@ -36,16 +39,23 @@ public class GrpcClientService {
   @Value("${app.rabbitmq.routingkey}")
   private String routingKey;
 
+  private final NotesGrpcClientService notesGrpcClientService;
+
   @Autowired
-  public GrpcClientService(
-    GrpcClientConfig grpcClientConfig,
-    RabbitTemplate rabbitTemplate
+  public FileProcessorGrpcClientServiceImpl(
+    @Qualifier(
+      "grpcFileProcessorChannel"
+    ) ManagedChannel grpcFileProcessorChannel,
+    RabbitTemplate rabbitTemplate,
+    NotesGrpcClientService notesGrpcClientService
   ) {
     this.fileProcessorStub =
-      FileProcessorGrpc.newBlockingStub(grpcClientConfig.managedChannel());
+      FileProcessorGrpc.newBlockingStub(grpcFileProcessorChannel);
     this.rabbitTemplate = rabbitTemplate;
+    this.notesGrpcClientService = notesGrpcClientService;
   }
 
+  @Override
   public String send(
     byte[] fileBytes,
     String generateType,
@@ -80,20 +90,38 @@ public class GrpcClientService {
       UploadNotesProto.FileProcessResponse response = responseWrapper
         .getPayload()
         .unpack(UploadNotesProto.FileProcessResponse.class);
+      boolean awsResponse = false;
 
       if (response.getFileId().equals(fileId)) {
-        ProcessedContent processedContent = new ProcessedContent(userId, response.getFileId(), response.getMetadata());
+        awsResponse =
+          notesGrpcClientService.uploadNotesToAws(userId, fileId, fileBytes);
+      }
+      else {
+        logger.error("Preprocessing Failed.");
+        return null;
+      }
+
+      if (awsResponse) {
+        ProcessedContent processedContent = new ProcessedContent(
+          userId,
+          response.getFileId(),
+          response.getMetadata()
+        );
 
         publishToRabbitMQ(processedContent);
-        
+
         for (UploadNotesProto.Page page : response.getPagesList()) {
-          PageContent pageContent = new PageContent(page.getPageId(), page.getContent(), processedContent.getFileId());
-          publishToRabbitMQ(pageContent); 
+          PageContent pageContent = new PageContent(
+            page.getPageId(),
+            page.getContent(),
+            processedContent.getFileId()
+          );
+          publishToRabbitMQ(pageContent);
         }
 
         return fileId;
-      } else {
-        logger.error("File processing failed or file ID mismatch.");
+      }  else {
+        logger.error("Upload to AWS failed.");
         return null;
       }
     } catch (InvalidProtocolBufferException e) {
@@ -101,7 +129,8 @@ public class GrpcClientService {
       return null;
     } catch (StatusRuntimeException e) {
       throw new GrpcServiceException(
-        "Upstream GRPC server returned an error response.",null
+        "Upstream GRPC server returned an error response.",
+        null
       );
     } catch (Exception e) {
       logger.error("Failed to process file or send to RabbitMQ", e);

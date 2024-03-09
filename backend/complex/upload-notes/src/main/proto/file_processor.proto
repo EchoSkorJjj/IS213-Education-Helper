@@ -57,3 +57,5 @@ message Page {
   int64 pageId = 1;
   string content = 2; // Extracted text content of the page
 }
+
+

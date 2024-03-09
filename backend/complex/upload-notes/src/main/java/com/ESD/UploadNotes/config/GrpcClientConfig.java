@@ -10,17 +10,33 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GrpcClientConfig {
 
-  @Value("${grpc.server.address}")
-  private String grpcServerAddress;
+    @Value("${grpc.file.processor.server.address}")
+    private String grpcFileProcessorServerAddress;
 
-  @Bean
-  public ManagedChannel managedChannel() {
-    return ManagedChannelBuilder
-      .forTarget(grpcServerAddress)
-      .keepAliveWithoutCalls(true)
-      .keepAliveTime(60, TimeUnit.SECONDS) // Keep alive time
-      .keepAliveTimeout(20, TimeUnit.SECONDS) // Keep alive timeout
-      .usePlaintext()
-      .build();
-  }
+    @Value("${grpc.notes.server.address}")
+    private String grpcNotesServerAddress;
+
+    // Bean for the File Processor gRPC service
+    @Bean(name = "grpcFileProcessorChannel")
+    public ManagedChannel grpcFileProcessorChannel() {
+        return ManagedChannelBuilder
+                .forTarget(grpcFileProcessorServerAddress)
+                .keepAliveWithoutCalls(true)
+                .keepAliveTime(60, TimeUnit.SECONDS) // Keep alive time
+                .keepAliveTimeout(20, TimeUnit.SECONDS) // Keep alive timeout
+                .usePlaintext()
+                .build();
+    }
+
+    // Bean for the Notes gRPC service
+    @Bean(name = "grpcNotesChannel")
+    public ManagedChannel grpcNotesChannel() {
+        return ManagedChannelBuilder
+                .forTarget(grpcNotesServerAddress)
+                .keepAliveWithoutCalls(true)
+                .keepAliveTime(60, TimeUnit.SECONDS) // Keep alive time
+                .keepAliveTimeout(20, TimeUnit.SECONDS) // Keep alive timeout
+                .usePlaintext()
+                .build();
+    }
 }
