@@ -9,9 +9,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
+	client "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/internal/client"
 	interceptors "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/internal/interceptors"
 	payment "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/internal/server"
-	make_payment "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb"
+	make_payment "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment/pb/make_payment"
 )
 
 func main() {
@@ -31,6 +32,7 @@ func main() {
 	opts = append(opts, grpc.UnaryInterceptor(interceptors.LoggingInterceptor(logger)))
 	grpcServer := grpc.NewServer(opts...)
 	make_payment.RegisterPaymentServiceServer(grpcServer, payment.NewServer())
+	client.GetClient()
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

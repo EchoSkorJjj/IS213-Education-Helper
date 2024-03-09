@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package make_payment_pb;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment";
 
 message CheckoutRequest {
@@ -12,6 +14,15 @@ message CheckoutResponse {
   string url = 1;
 }
 
+message SuccessfulPaymentRequest {
+  string email = 1;
+}
+
+message SuccessfulPaymentResponse {
+  google.protobuf.Timestamp subscribed_until = 1;
+}
+
 service PaymentService {
     rpc Checkout (CheckoutRequest) returns (CheckoutResponse) {}
+    rpc SuccessfulPayment (SuccessfulPaymentRequest) returns (SuccessfulPaymentResponse) {}
 }

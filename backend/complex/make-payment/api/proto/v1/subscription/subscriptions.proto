@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package subscription_pb;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/subscription";
+
+message ResponseMetadata {
+    string request_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+message ServiceResponseWrapper {
+    ResponseMetadata metadata = 1;
+    google.protobuf.Any payload = 2;
+}
+
+// Might need to update message name or service name,
+// temporarily call it SubscriptionMessage for now to
+// prevent naming conflict with the service name.
+message SubscriptionMessage {
+    // could we make email the primary key instead?
+    // For now assume subscription_id is required.
+    string subscription_id = 1;
+    string email = 2;
+    google.protobuf.Timestamp subscribed_until = 3;
+}
+
+message CreateOrUpdateSubscriptionRequest {
+    string email = 1;
+    // may or may not need this, depending on whether we offer different subscription types
+    // (e.g. 1 month, 1 year, unlimited). For now assume it is required.
+    google.protobuf.Timestamp subscribed_until = 2;
+}
+
+message CreateOrUpdateSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+message GetSubscriptionRequest {
+    string email = 1;
+}
+
+message GetSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+message UpdateSubscriptionRequest {
+    string email = 1;
+    google.protobuf.Timestamp subscribed_until = 2;
+}
+
+message UpdateSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+message DeleteSubscriptionRequest {
+    string email = 1;
+}
+
+message DeleteSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    string subscription_id = 2;
+    string email = 3;
+}
+
+// Referenced Microsoft's HealthStatus Enum. See here:
+// https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.diagnostics.healthchecks.healthstatus?view=dotnet-plat-ext-8.0
+enum HealthCheckStatus {
+    UNHEALTHY = 0;
+    DEGRADED = 1;
+    HEALTHY = 2;
+}
+
+message HealthCheckRequest {
+
+}
+
+message HealthCheckResponse {
+    HealthCheckStatus status = 1;
+}
+
+service Subscription {
+    rpc CreateOrUpdateSubscription(CreateOrUpdateSubscriptionRequest) returns (CreateOrUpdateSubscriptionResponse);
+    rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
+    rpc DeleteSubscription(DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse);
+    rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse);
+}

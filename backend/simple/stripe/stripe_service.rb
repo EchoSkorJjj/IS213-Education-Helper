@@ -9,13 +9,14 @@ require 'sinatra/cross_origin'
 require 'sinatra/json'
 
 Dotenv.load
-set :bind, '0.0.0.0'
 
 Stripe.api_key = ENV['STRIPE_SECRET_KEY']
 stripe_webhook_secret = ENV['STRIPE_WEBHOOK_SECRET']
 
 configure do
   enable :cross_origin
+  set :logging, true
+  set :bind, '0.0.0.0'
 end
 
 before do
@@ -46,16 +47,12 @@ get '/checkout' do
     customer_email: customer_email,
   )
 
-  session
-
-  redirect session.url
+  { url: session.url }.to_json
 end
 
 post '/webhook' do
   payload = request.body.read
-  print payload
   sig_header = request.env['HTTP_STRIPE_SIGNATURE']
-  print sig_header
   event = nil
 
   begin
@@ -64,10 +61,12 @@ post '/webhook' do
     )
   rescue JSON::ParserError => e
       # Invalid payload
+      logger.info e
       status 400
       return
   rescue Stripe::SignatureVerificationError => e
       # Invalid signature
+      logger.info e
       status 400
       return
   end
@@ -96,10 +95,10 @@ post '/webhook' do
 end
 
 def send_to_kong(customer_email)
-  uri = URI.parse("http://kong-api-endpoint") # replace with your Kong API endpoint
+  uri = URI.parse("http://kong-gateway:8000/api/v1/payment/success") # replace with your Kong API endpoint
 
   header = {'Content-Type': 'application/json'}
-  data = {customer_email: customer_email}
+  data = {email: customer_email}
 
   # Create the HTTP objects
   http = Net::HTTP.new(uri.host, uri.port)
