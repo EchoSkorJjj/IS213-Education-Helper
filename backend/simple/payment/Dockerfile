@@ -8,5 +8,5 @@ WORKDIR /app
 RUN apk add --no-cache curl
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder /app/ /app/
-COPY stripe_service.rb .
-CMD ["ruby", "stripe_service.rb"]
+COPY payment_service.rb .
+CMD ["ruby", "payment_service.rb"]

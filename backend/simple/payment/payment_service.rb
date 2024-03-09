@@ -94,8 +94,6 @@ post '/webhook' do
   # Extract the customer's email
   customer_email = customer.email
 
-  # Now you can use the customer_email
-  # Send over to the complex service somehow
-  # For example, print it:
+  # Return customer's email
   { email: customer_email }.to_json
 end
