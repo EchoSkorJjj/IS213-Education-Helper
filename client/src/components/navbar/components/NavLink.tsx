@@ -1,3 +1,4 @@
+import { NavLink as RouterLink } from "react-router-dom";
 import { Box, HStack } from "@chakra-ui/react";
 
 interface Props {
@@ -10,6 +11,7 @@ export const AuthLinks = [
   { name: "Generator", href: "/generator" },
   { name: "Marketplace", href: "/marketplace" },
   { name: "Profile", href: "/profile" },
+  { name: "Pricing", href: "/subscribe" },
 ];
 
 export const Links = [{ name: "Login", href: "/login" }];
@@ -17,7 +19,7 @@ export const Links = [{ name: "Login", href: "/login" }];
 export const NavItem = ({ children, href }: Props) => {
   return (
     <Box
-      as="a"
+      as={RouterLink}
       px={2}
       py={1}
       rounded={"md"}
@@ -25,9 +27,19 @@ export const NavItem = ({ children, href }: Props) => {
         textDecoration: "none",
         bg: "gray.600",
       }}
-      href={href}
+      to={href}
     >
-      {children}
+      {({ isActive }: { isActive: boolean }) => (
+        <Box
+          color={isActive ? "white" : "gray.300"}
+          _hover={{
+            color: "white",
+          }}
+          fontWeight={isActive ? "bold" : ""}
+        >
+          {children}
+        </Box>
+      )}
     </Box>
   );
 };

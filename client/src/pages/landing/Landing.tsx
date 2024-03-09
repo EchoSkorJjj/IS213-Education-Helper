@@ -1,35 +1,69 @@
-import { Box, Flex, Image, Stack, Text, VStack } from "@chakra-ui/react";
+import { Helmet } from "react-helmet-async";
+import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 
 import LandingPageImage from "~assets/img/landing_page_image.png";
 
 const LandingPage = () => {
   return (
-    <Flex direction="column" h="100vh">
-      <Flex flex="45%" bg="darkBlue.500" align="center" justify="center">
-        <Box position="relative" height="100%" width="100%">
-          <Image
-            src={LandingPageImage}
-            width={{ base: "3xl", md: "6xl" }}
-            position="absolute"
-            display={{ base: "none", md: "flex" }}
-            bottom="0"
-            left={{ md: "50%" }}
-            transform={{
-              base: "translate(0%, 35%)",
-              md: "translate(-50%, 10%)",
-            }}
-            alt="Centered Image"
-          />
-          <VStack
-            w={"full"}
-            position="absolute"
-            transform={{ md: "translate(-15%, 370%)" }}
-            justify={"center"}
-            mt={{ base: 6, md: "none" }}
-            px={{ base: 4, md: 8 }}
+    <Box w="100%" h="100vh">
+      <Helmet>
+        <title>Landing</title>
+        <meta name="description" content="Landing" />
+      </Helmet>
+      <Flex
+        w="100%"
+        h="40%"
+        bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        pt="5"
+      >
+        <Stack
+          w={"full"}
+          justify={"end"}
+          textAlign={"center"}
+          px={{ base: 4, md: 8 }}
+          display={{ base: "flex", md: "none" }}
+        >
+          <Text
+            color={"white"}
+            lineHeight={1.2}
+            fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
           >
-            <Stack maxW={"2xl"} align={"flex-start"} spacing={6}>
+            We{" "}
+            <Text as="span" fontWeight="bold">
+              empower
+            </Text>{" "}
+            you
+            <br />
+            to learn what you love
+          </Text>
+        </Stack>
+        <Flex
+          display={{ base: "none", md: "flex" }}
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+        >
+          <Flex
+            width={{ base: "3xl", lg: "6xl" }}
+            h={"100%"}
+            backgroundImage={LandingPageImage}
+            backgroundSize={"cover"}
+            backgroundPosition={"center center"}
+          >
+            <Stack
+              w={"full"}
+              justify={"end"}
+              textAlign={"start"}
+              mt={{ base: 6, md: "none" }}
+              px={{ base: 4, md: 8 }}
+            >
               <Text
+                pl={{ base: 11 }}
+                pb={{ base: 11 }}
                 color={"white"}
                 lineHeight={1.2}
                 fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
@@ -43,13 +77,10 @@ const LandingPage = () => {
                 to learn what you love
               </Text>
             </Stack>
-          </VStack>
-        </Box>
+          </Flex>
+        </Flex>
       </Flex>
-      <Flex flex="55%" bg="white" align="center" justify="center">
-        <Box position="relative" height="100%" width="100%"></Box>
-      </Flex>
-    </Flex>
+    </Box>
   );
 };
 

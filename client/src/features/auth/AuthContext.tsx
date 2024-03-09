@@ -173,7 +173,16 @@ const useProvideAuth = (): AuthContextType => {
 
   const signOut = async (): Promise<void> => {
     try {
-      const response = await api.post("/api/v1/user/logout");
+      console.log(authorization);
+      const response = await api.post(
+        "/api/v1/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${authorization}`,
+          },
+        },
+      );
       if (response.status === 200 && isAuthenticated) {
         logout();
         navigate("/");
@@ -186,6 +195,7 @@ const useProvideAuth = (): AuthContextType => {
   return {
     isAuthenticated,
     user,
+    authorization,
     googleAuth,
     myInfoGetCode,
     myInfoAuth,

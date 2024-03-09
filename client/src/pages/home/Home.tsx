@@ -1,23 +1,34 @@
+import { Helmet } from "react-helmet-async";
 import { Box, Flex, Image, Stack, Text } from "@chakra-ui/react";
 
 import LongArrowRight from "~assets/img/right_arrow.svg";
 
 const HomePage = () => {
   return (
-    <Flex direction="column" h="100vh">
-      <Flex flex="45%" bg="darkBlue.500" align="center" justify="center">
-        <Box position="relative" height="100%" width="100%">
-          <Stack
-            position="absolute"
-            spacing="5em"
-            direction={{ base: "column", md: "row" }}
-            bottom="0"
-            left="50%"
-            transform={{
-              base: "translate(-50%, 60%)",
-              md: "translate(-50%, 15%)",
-            }}
-          >
+    <Box
+      h="100vh"
+      w="100%"
+      bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
+    >
+      <Helmet>
+        <title>Home</title>
+        <meta name="description" content="Home" />
+      </Helmet>
+      <Flex
+        w="100%"
+        h="90%"
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        pt="5"
+      >
+        <Flex
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+        >
+          <Stack spacing="5em" direction={{ base: "column", md: "row" }}>
             <Box
               bg="midBlue.500"
               width="30em"
@@ -67,12 +78,9 @@ const HomePage = () => {
               <Image src={LongArrowRight} mt="6" />
             </Box>
           </Stack>
-        </Box>
+        </Flex>
       </Flex>
-      <Flex flex="55%" bg="white" align="center" justify="center">
-        <Box position="relative" height="100%" width="100%"></Box>
-      </Flex>
-    </Flex>
+    </Box>
   );
 };
 
