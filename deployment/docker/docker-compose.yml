@@ -106,8 +106,6 @@ services:
   make-payment-service:
     build: ../../backend/complex/make-payment
     image: make-payment-service:1.0
-    ports:
-      - "50054:50051"
     depends_on:
       payment-service:
         condition: service_started
@@ -117,8 +115,6 @@ services:
   subscription-service:
     restart: always
     build: ../../backend/simple/subscriptions
-    ports:
-      - "50053:50053"
     depends_on:
       subscriptions-db:
         condition: service_healthy
@@ -147,8 +143,6 @@ services:
   payment-service:
     build: ../../backend/simple/stripe
     image: payment-service:1.0
-    ports:
-      - 4567:4567
     volumes:
       - ../../backend/simple/stripe/.env:/app/.env
 
