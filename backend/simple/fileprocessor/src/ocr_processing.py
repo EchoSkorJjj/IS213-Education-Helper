@@ -32,7 +32,7 @@ def process_pdf_file(input_pdf_bytes, generateType, fileName, fileId):
     logging.info(f"Starting processing for file: {fileId}")
     
     # Check the file size before processing
-    max_file_size = 15 * 1024 * 1024 
+    max_file_size = 15 * 1024 * 1024  # 5 MB
     if len(input_pdf_bytes) > max_file_size:
         logging.error(f"File {fileId} exceeds the maximum allowed size of 5 MB.")
         raise ValueError(f"File {fileId} is too large to process.")
@@ -83,7 +83,7 @@ def remove_signatures(input_pdf_bytes):
 @log_time
 def ocr_pdf(input_stream):
     with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp_output:
-        input_data = input_stream.read()
+        input_data = input_stream.getvalue()
         if not input_data:
             raise ValueError("Input PDF data is empty")
 
@@ -94,10 +94,10 @@ def ocr_pdf(input_stream):
             "--optimize",
             "0",
             "--fast-web-view",
-            "999999",
+            "0",
             "--skip-text",
             "--skip-big",
-            "10",
+            "2",
             "--output-type",
             "pdf",
             "-",
@@ -120,14 +120,15 @@ def ocr_pdf(input_stream):
 def extract_text_from_pdf(pdf_path):
     texts = []
     try:
-        pdf_file = open(pdf_path, "rb")
-        reader = PdfReader(pdf_file)
-        for page_num, page in enumerate(reader.pages, start=1):
-            text = page.extract_text() or "Error extracting text"
-            texts.append({"pageId": page_num, "content": text})
+        doc = fitz.open(pdf_path)  # Open the PDF with fitz
+        for page_num in range(len(doc)):
+            page = doc.load_page(page_num)  # Load the current page
+            text = page.get_text()  # Extract text from the current page
+            texts.append({"pageId": page_num + 1, "content": text})
     finally:
-        pdf_file.close()
+        doc.close()  # Make sure to close the document to free resources
     return texts
+
 
 @log_time
 def generate_metadata(generateType, fileName, pdf_path, texts):
