@@ -1,20 +1,22 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
 ENV PYTHONUNBUFFERED=1
-# Set the working directory in the container
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Singapore
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 WORKDIR /app
 
-# Install any needed packages specified in requirements.txt
-# Copy only the requirements.txt first to leverage Docker cache
-COPY requirements.txt .
+RUN pip install grpcio grpcio-tools protobuf
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
-COPY . .
+COPY ./src /app
+COPY process_proto.sh /app/
+RUN chmod +x /app/process_proto.sh
 
-# It's a good practice to expose the port your app runs on. 
-# This does not actually publish the port but serves as documentation.
-EXPOSE 50052
+RUN /app/process_proto.sh
 
-# Run note_upload_service.py when the container launches
-CMD ["python3", "note_upload_service.py"]
+
+CMD ["python3", "-m", "server"]
+# CMD ["sh", "-c", "while true; do sleep 60; done"]

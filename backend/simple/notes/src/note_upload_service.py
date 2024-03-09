@@ -46,7 +46,7 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     notes_pb2_grpc.add_NoteServiceServicer_to_server(NoteServiceServicer(), server)
-    server.add_insecure_port('[::]:50052')
+    server.add_insecure_port('[::]:'+os.getenv('PORT', '50052'))
     server.start()
     server.wait_for_termination()
 
