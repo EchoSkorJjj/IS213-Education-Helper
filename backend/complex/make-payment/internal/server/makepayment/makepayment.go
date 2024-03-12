@@ -134,3 +134,79 @@ func (s *Server) SuccessfulPayment(ctx context.Context, req *makepaymentPb.Succe
 
 	return &makepaymentPb.SuccessfulPaymentResponse{SubscribedUntil: stubResp.Details.SubscribedUntil}, nil
 }
+
+// import (
+//     "context"
+//     "google.golang.org/grpc"
+//     "log"
+//     "os"
+// )
+//
+// Change PaymentServiceClient name to replace 
+// makepaymentPb.PaymentServiceClient, makepaymentPb.CheckoutGrpcRequest, makepaymentPb.WebhookGrpcRequest 
+// with the actual gRPC client and request message types defined in your proto file. 
+// Also, ensure that the payment service has the necessary gRPC server running and the methods Checkout and Webhook implemented.
+//
+// type Server struct {
+//     PaymentServiceClient makepaymentPb.PaymentServiceClient
+// }
+
+// func NewServer() *Server {
+//     paymentServiceHost := os.Getenv("PAYMENT_SERVICE_HOST")
+//     paymentServicePort := os.Getenv("PAYMENT_SERVICE_PORT")
+//     conn, err := grpc.Dial(fmt.Sprintf("%s:%s", paymentServiceHost, paymentServicePort), grpc.WithInsecure())
+//     if err != nil {
+//         log.Fatalf("Failed to connect to payment service: %v", err)
+//     }
+//     client := makepaymentPb.NewPaymentServiceClient(conn)
+
+//     return &Server{PaymentServiceClient: client}
+// }
+
+// func (s *Server) Checkout(ctx context.Context, req *makepaymentPb.CheckoutRequest) (*makepaymentPb.CheckoutResponse, error) {
+//     grpcReq := &makepaymentPb.CheckoutGrpcRequest{Email: req.Email}
+//     grpcResp, err := s.PaymentServiceClient.Checkout(ctx, grpcReq)
+//     if err != nil {
+//         return nil, status.Errorf(codes.Internal, "error sending request: %v", err)
+//     }
+
+//     return &makepaymentPb.CheckoutResponse{Url: grpcResp.Url}, nil
+// }
+
+// func (s *Server) SuccessfulPayment(ctx context.Context, req *makepaymentPb.SuccessfulPaymentRequest) (*makepaymentPb.SuccessfulPaymentResponse, error) {
+//     var stripeSignature string
+//     if md, ok := metadata.FromIncomingContext(ctx); ok {
+//         var values []string
+
+//         if values = md["stripe-signature"]; len(values) == 0 {
+//             log.Printf("Stripe signature not found in metadata")
+//             return nil, status.Errorf(codes.InvalidArgument, "Stripe signature not found in metadata")
+//         }
+
+//         stripeSignature = values[0]
+//     }
+
+//     grpcReq := &makepaymentPb.WebhookGrpcRequest{Raw: req.Raw, StripeSignature: stripeSignature}
+//     grpcResp, err := s.PaymentServiceClient.Webhook(ctx, grpcReq)
+//     if err != nil {
+//         log.Printf("Failed to validate stripe webhook request")
+//         return nil, status.Errorf(codes.Internal, "error validating stripe webhook request")
+//     }
+
+//     subscriptionClient := client.GetClient()
+//     oneMonthFromNow := time.Now().AddDate(0, 1, 0)
+//     timestamp := timestamppb.New(oneMonthFromNow)
+
+//     stubReq := &subscriptionPb.CreateOrUpdateSubscriptionRequest{
+//         Email:           grpcResp.Email,
+//         SubscribedUntil: timestamp,
+//     }
+
+//     stubResp, err := subscriptionClient.Stub.CreateOrUpdateSubscription(ctx, stubReq)
+//     if err != nil {
+//         log.Printf("Failed to create or update subscription: %v", err)
+//         return nil, status.Errorf(codes.Internal, "error creating or updating subscription: %v", err)
+//     }
+
+//     return &makepaymentPb.SuccessfulPaymentResponse{SubscribedUntil: stubResp.Details.SubscribedUntil}, nil
+// }
