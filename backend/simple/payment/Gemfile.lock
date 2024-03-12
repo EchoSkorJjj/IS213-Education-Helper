@@ -3,6 +3,16 @@ GEM
   specs:
     base64 (0.2.0)
     dotenv (3.1.0)
+    google-protobuf (3.25.3)
+    google-protobuf (3.25.3-x86_64-linux)
+    googleapis-common-protos-types (1.13.0)
+      google-protobuf (~> 3.18)
+    grpc (1.62.0)
+      google-protobuf (~> 3.25)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.62.0-x86_64-linux)
+      google-protobuf (~> 3.25)
+      googleapis-common-protos-types (~> 1.0)
     multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
@@ -39,6 +49,7 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv
+  grpc
   rackup (~> 2.1)
   sinatra
   sinatra-contrib

@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package payment;
+
+import "google/protobuf/empty.proto";
+import "make_payment_pb.proto";
+
+service StripeService {
+    rpc Health(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc Checkout(CheckoutRequest) returns (CheckoutResponse);
+    rpc Webhook(WebhookRequest) returns (WebhookResponse);
+
+    rpc MakePayment(MakePaymentRequest) returns (MakePaymentResponse);
+}
+
+message CheckoutRequest {
+    string email = 1;
+}
+
+message CheckoutResponse {
+    string url = 1;
+}
+
+message WebhookRequest {
+    string payload = 1;
+    string sig_header = 2;
+}
+
+message WebhookResponse {
+    string email = 1;
+}
+
+message MakePaymentRequest {
+    string email = 1;
+}
+
+message MakePaymentResponse {
+    google.protobuf.Timestamp subscribed_until = 1;
+}
