@@ -13,9 +13,6 @@ class LoggingInterceptor < GRPC::ServerInterceptor
         start_time = Time.now
         success = true
         result = nil
-        if request.is_a?(Payment::WebhookRequest)
-            @logger.info("Stripes signature: #{call.metadata["stripe-signature"]}")
-        end
         begin
             result = yield
         rescue => e
