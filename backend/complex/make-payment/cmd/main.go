@@ -37,7 +37,7 @@ func main() {
 	makepaymentPb.RegisterMakePaymentServiceServer(grpcServer, makepayment.NewServer())
 	healthPb.RegisterHealthServer(grpcServer, health.NewServer())
 
-	client.GetClient()
+	client.InitClients()
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

@@ -25,6 +25,7 @@ services:
     image: localtunnel:1.0
     build: ../../backend/localtunnel
     network_mode: host
+    restart: always
     depends_on:
       kong-gateway:
         condition: service_healthy
@@ -182,7 +183,7 @@ services:
     volumes:
       - ../../backend/simple/payment/.env:/app/.env
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4567/health"]
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
       interval: 10s
       timeout: 5s
       retries: 3

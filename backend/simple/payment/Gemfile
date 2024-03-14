@@ -1,10 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
 gem 'stripe'
 gem 'dotenv'
-gem 'sinatra-cross_origin'
-gem 'sinatra-contrib'
 gem 'grpc'
 
 gem "rackup", "~> 2.1"
