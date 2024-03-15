@@ -4,5 +4,5 @@ managed:
 plugins:
   - plugin: buf.build/grpc/cpp:v1.62.0
     out: pb
-  - plugin: buf.build/protocolbuffers/cpp
+  - plugin: buf.build/protocolbuffers/cpp:v25.3
     out: pb
