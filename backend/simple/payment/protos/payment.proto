@@ -28,8 +28,18 @@ message CancelSubscriptionResponse {
   string error_message = 2;
 }
 
+message CheckSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CheckSubscriptionResponse {
+  string status = 1;
+  string error_message = 2;
+}
+
 service Payment {
     rpc Checkout(CheckoutRequest) returns (CheckoutResponse);
     rpc Webhook(WebhookRequest) returns (WebhookResponse);
     rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse);
+    rpc CheckSubscription(CheckSubscriptionRequest) returns (CheckSubscriptionResponse);
 }

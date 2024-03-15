@@ -23,6 +23,18 @@ class PaymentServicer < Payment::Payment::Service
         Payment::CheckoutResponse.new(url: session.url)
     end
 
+    def check_subscription(check_request, _call)
+      subscription_id = check_request.subscription_id
+  
+      subscription = configured_stripe::Subscription.retrieve(subscription_id)
+      status = subscription.status
+  
+      Payment::CheckSubscriptionResponse.new(status: status)
+    rescue StandardError => e
+      Payment::CheckSubscriptionResponse.new(status: 'unknown', error_message: e.message)
+    end
+
+
     def cancel_subscription(cancel_request, _call)
         subscription_id = cancel_request.subscription_id
         
@@ -30,10 +42,10 @@ class PaymentServicer < Payment::Payment::Service
         subscription.delete
         Payment::CancelSubscriptionResponse.new(success: true)
       
-        rescue Stripe::InvalidRequestError => e
-          Payment::CancelSubscriptionResponse.new(success: false, error_message: "Stripe error: #{e.message}")
-        rescue StandardError => e
-          Payment::CancelSubscriptionResponse.new(success: false, error_message: e.message)
+    rescue Stripe::InvalidRequestError => e
+        Payment::CancelSubscriptionResponse.new(success: false, error_message: "Stripe error: #{e.message}")
+    rescue StandardError => e
+        Payment::CancelSubscriptionResponse.new(success: false, error_message: e.message)
     end
     
     def webhook(webhook_request, _call)
