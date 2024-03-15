@@ -74,6 +74,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - "5433:5432"
 
   user-storage-db:
     image: postgres
@@ -138,8 +140,8 @@ services:
       start_period: 30s
 
   subscription-service:
-    restart: always
     build: ../../backend/simple/subscriptions
+    image: subscription-service:1.0
     volumes:
       - ../../backend/simple/subscriptions/.env:/app/.env
     depends_on:
