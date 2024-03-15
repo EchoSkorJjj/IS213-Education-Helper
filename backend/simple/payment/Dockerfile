@@ -15,20 +15,19 @@ COPY protos/ protos/
 COPY buf.* .
 RUN buf generate
 
-FROM ruby:3.3.0-alpine as builder
+FROM ruby:3.3.0-slim as builder
 WORKDIR /app
 COPY Gemfile Gemfile.lock ./
-RUN apk add --update --no-cache build-base && \ 
-    bundle install && \
-    rm -rf /usr/local/bundle/cache/*.gem \
-    && find /usr/local/bundle/gems/ -name "*.c" -delete \
-    && find /usr/local/bundle/gems/ -name "*.o" -delete
+RUN bundle install && \
+    rm -rf /usr/local/bundle/cache/*.gem && \
+    find /usr/local/bundle/gems/ -name "*.c" -delete && \
+    find /usr/local/bundle/gems/ -name "*.o" -delete
 
-FROM ruby:3.3.0-alpine
+FROM ruby:3.3.0-slim
 WORKDIR /app
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+COPY --from=builder /app/Gemfile* /app/Gemfile*
 COPY --from=proto-base /bin/grpc_health_probe /bin/grpc_health_probe
-COPY --from=builder /app/ /app/
 COPY --from=proto-base /app/pb/ /app/pb/
 COPY src/ src/
 CMD ["ruby", "src/server.rb"]
