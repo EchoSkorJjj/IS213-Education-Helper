@@ -140,6 +140,12 @@ services:
         condition: service_healthy
       contents-redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   frontend-client:
     build: ../../client

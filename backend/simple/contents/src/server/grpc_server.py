@@ -4,9 +4,11 @@ import logging
 import grpc
 
 import pb.contents_pb2_grpc as contents_pb2_grpc
+import pb.health_pb2_grpc as health_pb2_grpc
 
 from src.interceptors.logging import LoggingInterceptor
 import src.proto_services.content_servicer as content_servicer
+import src.proto_services.health_servicer as health_servicer
 
 class GrpcServer:
     _server: 'GrpcServer' = None
@@ -42,6 +44,9 @@ class GrpcServer:
         
         contents_pb2_grpc.add_ContentServicer_to_server(content_servicer.ContentServicer(), self._server)
         logging.debug("ContentServicer added...")
+
+        health_pb2_grpc.add_HealthServicer_to_server(health_servicer.HealthServicer(), self._server)
+        logging.debug("HealthServicer added...")
         
         self._server.add_insecure_port(f'[::]:{self._port}')
         logging.debug(f"Insecure port on [::]:{self._port} added...")
