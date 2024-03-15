@@ -19,10 +19,23 @@ class PaymentServicer < Payment::Payment::Service
           cancel_url: 'http://localhost:3001/subscribe',
           customer_email: customer_email,
         )
-        
+
         Payment::CheckoutResponse.new(url: session.url)
     end
 
+    def cancel_subscription(cancel_request, _call)
+        subscription_id = cancel_request.subscription_id
+        
+        subscription = configured_stripe::Subscription.retrieve(subscription_id)
+        subscription.delete
+        Payment::CancelSubscriptionResponse.new(success: true)
+      
+        rescue Stripe::InvalidRequestError => e
+          Payment::CancelSubscriptionResponse.new(success: false, error_message: "Stripe error: #{e.message}")
+        rescue StandardError => e
+          Payment::CancelSubscriptionResponse.new(success: false, error_message: e.message)
+    end
+    
     def webhook(webhook_request, _call)
         payload = webhook_request.raw
         stripe_signature = _call.metadata["stripe-signature"]
@@ -44,10 +57,11 @@ class PaymentServicer < Payment::Payment::Service
 
         session = event.data.object
         customer_id = session.customer
+        susbcription_id = session.subscription
       
         customer = configured_stripe::Customer.retrieve(customer_id)
         customer_email = customer.email
       
-        Payment::WebhookResponse.new(email: customer_email)
+        Payment::WebhookResponse.new(email: customer_email, subscription_id: subscription_id)
     end
 end

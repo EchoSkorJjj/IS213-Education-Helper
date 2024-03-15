@@ -16,9 +16,20 @@ message WebhookRequest {
 
 message WebhookResponse {
     string email = 1;
+    string subscription_id = 2;
+}
+
+message CancelSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CancelSubscriptionResponse {
+  bool success = 1;
+  string error_message = 2;
 }
 
 service Payment {
     rpc Checkout(CheckoutRequest) returns (CheckoutResponse);
     rpc Webhook(WebhookRequest) returns (WebhookResponse);
+    rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse);
 }
