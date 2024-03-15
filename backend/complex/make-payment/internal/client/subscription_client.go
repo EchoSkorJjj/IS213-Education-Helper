@@ -16,11 +16,11 @@ type SubscriptionClient struct {
 	Stub subscription.SubscriptionClient
 }
 
-var instance *SubscriptionClient
-var once sync.Once
+var subscriptionClient *SubscriptionClient
+var subscriptionOnce sync.Once
 
 func GetSubscriptionClient() *SubscriptionClient {
-	once.Do(func() {
+	subscriptionOnce.Do(func() {
 		subscriptionServiceHost := os.Getenv("SUBSCRIPTION_SERVICE_HOST")
 		subscriptionServicePort := os.Getenv("SUBSCRIPTION_SERVICE_PORT")
 		subscriptionServiceConnString := fmt.Sprintf("%s:%s", subscriptionServiceHost, subscriptionServicePort)
@@ -29,11 +29,11 @@ func GetSubscriptionClient() *SubscriptionClient {
 		if err != nil {
 			log.Fatalf("Failed to dial subscription server: %v", err)
 		}
-		instance = &SubscriptionClient{
+		subscriptionClient = &SubscriptionClient{
 			Conn: conn,
 			Stub: subscription.NewSubscriptionClient(conn),
 		}
 	})
 
-	return instance
+	return subscriptionClient
 }
