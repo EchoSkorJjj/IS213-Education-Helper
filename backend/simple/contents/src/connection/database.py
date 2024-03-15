@@ -2,11 +2,11 @@ from typing import Type, List, Set
 import logging
 import os
 
+import pb.contents_pb2 as contents_pb2
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 
-import pb.contents_pb2 as contents_pb2
-import src.utils.db as db_utils
+import src.utils.grpc_utils as grpc_utils
 
 class Database:
     _host: str = None
@@ -51,7 +51,7 @@ class Database:
         if not content:
             return None
         
-        return db_utils.db_content_to_grpc_object(content)
+        return grpc_utils.db_content_to_grpc_object(content)
     
     def get_contents_by_note_id(self, note_id: str, content_types: Set[contents_pb2.ContentType]) -> List[contents_pb2.Flashcard | contents_pb2.MultipleChoiceQuestion]:
         if not self._session:
@@ -67,7 +67,7 @@ class Database:
 
             table = 'flashcard' if row.content_type == contents_pb2.ContentType.FLASHCARD else 'mcq'
             content = self.get_content_by_content_id(table, row.content_id)
-            associated_contents.append(db_utils.db_content_to_grpc_object(content))
+            associated_contents.append(grpc_utils.db_content_to_grpc_object(content))
         
         return associated_contents
 

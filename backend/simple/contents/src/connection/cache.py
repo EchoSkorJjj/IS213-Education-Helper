@@ -1,6 +1,8 @@
-from typing import Type
+from typing import Type, List
 import logging
 import os
+import json
+import uuid
 
 import redis
 
@@ -20,9 +22,9 @@ class Cache:
         self._port = port
     
     def connect(self) -> None:
-        if not self._host:
+        if self._host is None:
             raise ValueError('Host not set')
-        if not self._port:
+        if self._port is None:
             raise ValueError('Port not set')
 
         client = redis.Redis(
@@ -35,26 +37,66 @@ class Cache:
 
         self._client = client
     
-    def set(self, key: str, value: str) -> bool | None:
-        if not self._client:
+    def get_all_by_key(self, key: str) -> List[object]:
+        if self._client is None:
             raise ValueError('Not connected')
 
-        return self._client.set(key, value)
+        all_objects = self._client.lrange(key, 0, -1)
+        return [json.loads(obj) for obj in all_objects]
     
-    def get(self, key: str) -> str | None:
-        if not self._client:
+    def create_object(self, key: str, value: object) -> object:
+        if self._client is None:
             raise ValueError('Not connected')
 
-        return self._client.get(key)
-    
-    def hset(self, key: str, mapping: dict) -> int: # Docs say boolean, but function hint says int...
-        if not self._client:
+        try:
+            temp_id = str(uuid.uuid4())
+            id_tagged_value = {"id": temp_id, **value}
+            dumped_value = json.dumps(id_tagged_value)
+
+            self._client.rpush(key, dumped_value)
+            return id_tagged_value
+        except Exception as e:
+            raise e
+
+    def get_object_by_id(self, key: str, temp_id: str) -> object | None:
+        if self._client is None:
             raise ValueError('Not connected')
 
-        return self._client.hset(key, mapping=mapping)
-    
-    def hget(self, key: str) -> dict | None:
-        if not self._client:
+        all_objects = self._client.lrange(key, 0, -1)
+        for obj in all_objects:
+            obj_dict = json.loads(obj)
+            if obj_dict["id"] == temp_id:
+                return obj_dict
+
+        return None
+
+    def update_object_by_id(self, key: str, temp_id: str, new_value: object) -> object:
+        if self._client is None:
             raise ValueError('Not connected')
 
-        return self._client.hget(key)
+        all_objects = self._client.lrange(key, 0, -1)
+        for i, obj in enumerate(all_objects):
+            obj_dict = json.loads(obj)
+            if obj_dict["id"] == temp_id:
+                for field in new_value:
+                    obj_dict[field] = new_value[field]
+
+                self._client.lset(key, i, json.dumps(obj_dict))
+                return obj_dict
+        
+        raise ValueError(f"Object with id {temp_id} not found in {key}")
+
+
+    def delete_object_by_id(self, key: str, temp_id: str) -> object:
+        if self._client is None:
+            raise ValueError('Not connected')
+
+        all_objects = self._client.lrange(key, 0, -1)
+        for obj in all_objects:
+            obj_dict = json.loads(obj)
+            if obj_dict["id"] == temp_id:
+                self._client.lrem(key, 1, obj)
+                return obj_dict
+        
+        raise ValueError(f"Object with id {temp_id} not found in {key}")
+
