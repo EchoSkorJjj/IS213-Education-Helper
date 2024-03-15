@@ -1,7 +1,7 @@
 FROM ubuntu:22.04 as proto-base
 WORKDIR /app
 RUN apt-get update && apt-get install -y \
-curl wget
+    curl wget
 RUN BIN="/usr/local/bin" && \
     VERSION="1.29.0" && \
     curl -sSL \
@@ -18,7 +18,11 @@ RUN buf generate
 FROM ruby:3.3.0-alpine as builder
 WORKDIR /app
 COPY Gemfile Gemfile.lock ./
-RUN apk add --update --no-cache build-base && bundle install
+RUN apk add --update --no-cache build-base && \ 
+    bundle install && \
+    rm -rf /usr/local/bundle/cache/*.gem \
+    && find /usr/local/bundle/gems/ -name "*.c" -delete \
+    && find /usr/local/bundle/gems/ -name "*.o" -delete
 
 FROM ruby:3.3.0-alpine
 WORKDIR /app
