@@ -1,9 +1,11 @@
 from typing import Type
 from concurrent import futures
-import grpc
 import logging
+import grpc
 
 import pb.contents_pb2_grpc as contents_pb2_grpc
+
+from src.interceptors.logging import LoggingInterceptor
 import src.proto_services.content_servicer as content_servicer
 
 class GrpcServer:
@@ -32,7 +34,10 @@ class GrpcServer:
         if not self._max_workers:
             raise ValueError('Max workers not set')
         
-        self._server = grpc.server(futures.ThreadPoolExecutor(max_workers=self._max_workers))
+        self._server = grpc.server(
+            futures.ThreadPoolExecutor(max_workers=self._max_workers),
+            interceptors=[LoggingInterceptor()]
+        )
         logging.debug("Server started with {self._max_workers} workers...")
         
         contents_pb2_grpc.add_ContentServicer_to_server(content_servicer.ContentServicer(), self._server)
