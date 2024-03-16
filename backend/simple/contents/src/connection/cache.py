@@ -86,7 +86,6 @@ class Cache:
         
         raise ValueError(f"Object with id {temp_id} not found in {key}")
 
-
     def delete_object_by_id(self, key: str, temp_id: str) -> object:
         if self._client is None:
             raise ValueError('Not connected')
@@ -99,4 +98,9 @@ class Cache:
                 return obj_dict
         
         raise ValueError(f"Object with id {temp_id} not found in {key}")
+    
+    def delete_all_by_key(self, key: str) -> None:
+        if self._client is None:
+            raise ValueError('Not connected')
 
+        self._client.delete(key)

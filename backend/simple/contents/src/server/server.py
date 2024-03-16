@@ -28,6 +28,7 @@ class Server:
         database: Database = Database()
         database.set_host(os.getenv('DB_HOST', 'localhost'))
         database.set_port(int(os.getenv('DB_PORT', '9042')))
+        database.set_keyspace(os.getenv('DB_KEYSPACE', 'contents'))
         database.connect()
 
         cache: Cache = Cache()

@@ -23,11 +23,17 @@ def object_to_grpc_flashcard(obj):
     flashcard = contents_pb2.Flashcard()
 
     try:
-        flashcard.id = obj['id']
-        flashcard.note_id = obj['note_id']
+        flashcard.id = str(obj['id'])
+        flashcard.note_id = str(obj['note_id'])
         flashcard.question = obj['question']
         flashcard.answer = obj['answer']
         
         return flashcard
     except KeyError as e:
         raise error_utils.construct_key_error(e)
+
+def get_flashcard_content_type_name():
+    return contents_pb2.ContentType.Name(contents_pb2.ContentType.FLASHCARD)
+
+def get_flashcard_content_type_number():
+    return contents_pb2.ContentType.FLASHCARD

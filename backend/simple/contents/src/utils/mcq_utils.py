@@ -45,8 +45,8 @@ def object_to_grpc_mcq(obj):
     mcq = contents_pb2.MultipleChoiceQuestion()
 
     try:
-        mcq.id = obj['id']
-        mcq.note_id = obj['note_id']
+        mcq.id = str(obj['id'])
+        mcq.note_id = str(obj['note_id'])
         mcq.question = obj['question']
         mcq.multiple_answers = obj['multiple_answers']
 
@@ -68,3 +68,8 @@ def object_to_grpc_mcq_option(obj):
     except KeyError as e:
         raise e # raise e because wrapper function will handle it
     
+def get_mcq_content_type_name():
+    return contents_pb2.ContentType.Name(contents_pb2.ContentType.MCQ)
+
+def get_mcq_content_type_number():
+    return contents_pb2.ContentType.MCQ

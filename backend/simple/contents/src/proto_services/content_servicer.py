@@ -194,9 +194,61 @@ class ContentServicer(contents_pb2_grpc.ContentServicer):
             )
 
     def CommitTemporaryContents(self, request, context):
-        # TODO: Implement this method
-        pass
+        response = contents_pb2.CommitTemporaryContentsResponse()
+        temp_store = cache.Cache()
+        db = database.Database()
 
-    def GetSavedContent(self, request, context):
-        # TODO: Implement this method
-        pass
+        try:
+            note_id = request.note_id
+            temp_store_key_flashcards = flashcard_utils.get_flashcard_key(note_id)
+            temp_store_key_mcqs = mcq_utils.get_mcq_key(note_id)
+            flashcards = temp_store.get_all_by_key(temp_store_key_flashcards)
+            mcqs = temp_store.get_all_by_key(temp_store_key_mcqs)
+            flashcards = [{'note_id': note_id, **flashcard} for flashcard in flashcards]
+            mcqs = [{'note_id': note_id, **mcq} for mcq in mcqs]
+            
+            db.batch_create_contents(flashcards, flashcard_utils.get_flashcard_content_type_name())
+            db.batch_create_contents(mcqs, mcq_utils.get_mcq_content_type_name())
+
+            temp_store.delete_all_by_key(temp_store_key_flashcards)
+            temp_store.delete_all_by_key(temp_store_key_mcqs)
+
+            response_metadata = grpc_utils.create_response_metadata(context)
+            response.metadata.CopyFrom(response_metadata)
+            response.flashcards.extend([flashcard_utils.object_to_grpc_flashcard(flashcard) for flashcard in flashcards])
+            response.mcqs.extend([mcq_utils.object_to_grpc_mcq(mcq) for mcq in mcqs])
+
+            return response
+        except Exception as e:
+            error_utils.handle_error(
+                context,
+                'Error committing temporary contents',
+                grpc.StatusCode.INVALID_ARGUMENT,
+                e
+            )
+
+    def GetSavedContents(self, request, context):
+        response = contents_pb2.GetSavedContentsResponse()
+        db = database.Database()
+
+        try:
+            note_id = request.note_id
+            content_types = grpc_utils.grpc_content_type_to_strrep(request.content_type)
+
+            associated_contents = db.get_contents_by_note_id(note_id, content_types)
+            response_metadata = grpc_utils.create_response_metadata(context)
+            response.metadata.CopyFrom(response_metadata)
+
+            for content_type in associated_contents:
+                contents = associated_contents[content_type]
+                interested_field = response.flashcards if content_type == flashcard_utils.get_flashcard_content_type_name() else response.mcqs
+                interested_field.extend(contents)
+
+            return response
+        except Exception as e:
+            error_utils.handle_error(
+                context,
+                'Error getting saved content',
+                grpc.StatusCode.INVALID_ARGUMENT,
+                e
+            )
