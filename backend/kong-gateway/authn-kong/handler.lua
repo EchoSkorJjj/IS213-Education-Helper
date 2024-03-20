@@ -16,6 +16,9 @@ local claim_spec = {
     exp = validators.is_not_expired()
 }
 
+-- TODO: HANDLE TOKEN VERIFICATION
+
+
 -- Access phase handler
 function MyAuthHandler:access(conf)
     local path = kong.request.get_path()
@@ -28,6 +31,25 @@ function MyAuthHandler:access(conf)
         return
         end
     end
+    local token = kong.request.get_header("Authorization")
+    -- remove bearer and take the token only
+    token = string.gsub(token, "Bearer ", "")
+    kong.log.notice("The token is ", token)
+    if token == nil then
+        kong.response.exit(401, { message = "Unauthorized" })
+    end
+    kong.log.notice("The token is ", token)
+    local decoded_token, err = jwt:verify(conf.jwt_secret, token, claim_spec)
+
+    if err then
+        kong.log.err("Error decoding token: ", err)
+        kong.response.exit(401, { message = "Unauthorized" })
+    end
+    kong.log.notice("The decoded token is ", cjson.encode(decoded_token))
+    local userId = decoded_token.payload.user_id
+    kong.log.notice("The user id is ", userId)
+
+    kong.service.request.set_header("x-user-id", userId)
 end
 
 -- Return the handler
