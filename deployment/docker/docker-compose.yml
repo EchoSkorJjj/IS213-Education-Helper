@@ -126,7 +126,7 @@ services:
       - ../../backend/complex/view-notes/.env:/app/.env
     depends_on:
       notes-service:
-        # TODO: Set up healthcheck for health service
+        # TODO: Set up healthcheck for notes service
         condition: service_started
       contents-service:
         condition: service_healthy
