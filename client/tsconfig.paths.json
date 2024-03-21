@@ -6,6 +6,7 @@
       "~config": ["./src/config"],
       "~pages/*": ["./src/pages/*"],
       "~shared/*": ["./src/shared/*"],
+      "~util": ["./src/shared/util"],
       "~types/*": ["./src/shared/types/*"],
       "~features/*": ["./src/features/*"],
       "~api": ["./src/features/api"],

@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Box, useToast } from "@chakra-ui/react";
 
-import { getNotes } from "./generateNote";
-import Market from "./Market";
-import Topics from "./Topics";
+import MarketHeader from "./components/MarketHeader";
+import MarketList from "./components/MarketList";
+import TopicsList from "./components/TopicsList";
 
 import { getTopics } from "~api";
+import { getNotes } from "~util";
 
 interface NotesProp {
+  unique_id: string;
   topic: string;
   title: string;
   imageURL: string;
@@ -61,15 +64,20 @@ const MarketplacePage = () => {
   }, [topic, notesTitle, currentMarketPage]);
 
   return (
-    <Box>
-      <Topics
+    <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)">
+      <Helmet>
+        <title>Marketplace</title>
+        <meta name="description" content="Marketplace" />
+      </Helmet>
+      <MarketHeader />
+      <TopicsList
         topics={topics}
         setTopic={setTopic}
         topic={topic}
         setCurrentTopicPage={setCurrentTopicPage}
         currentTopicPage={currentTopicPage}
       />
-      <Market
+      <MarketList
         notes={notes}
         setNotesTitle={setNotesTitle}
         setCurrentMarketPage={setCurrentMarketPage}

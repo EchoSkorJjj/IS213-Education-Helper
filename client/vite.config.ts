@@ -70,6 +70,7 @@ export default defineConfig({
       "~config": path.resolve(__dirname, "src/config"),
       "~components": path.resolve(__dirname, "src/components"),
       "~shared": path.resolve(__dirname, "src/shared"),
+      "~util": path.resolve(__dirname, "src/shared/util"),
       "~types": path.resolve(__dirname, "src/shared/types"),
       "~features": path.resolve(__dirname, "src/features"),
       "~api": path.resolve(__dirname, "src/features/api"),

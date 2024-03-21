@@ -27,7 +27,6 @@ RUN apt-get update && \
 # Install gRPC tools for Python
 RUN pip install grpcio grpcio-tools protobuf
 
-
 # Set the working directory in the container
 WORKDIR /app
 
@@ -35,11 +34,15 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the proto files and application files into the container
+# Copy the application files and scripts into the container
 COPY ./src /app
+COPY process_proto.sh /app/
 
-# Compile the proto files to generate Python code
-RUN python -m grpc_tools.protoc -I/app --python_out=/app --grpc_python_out=/app /app/file_processor.proto
+# Ensure the script is executable
+RUN chmod +x /app/process_proto.sh
+
+# Compile the proto files to generate Python code using the script
+RUN /app/process_proto.sh
 
 # Set the default command to run the app
-CMD ["python3", "-m", "service"]
+CMD ["python3", "-m", "server"]

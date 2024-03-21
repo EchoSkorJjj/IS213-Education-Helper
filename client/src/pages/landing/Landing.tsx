@@ -1,16 +1,28 @@
-import { Box, Flex, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Helmet } from "react-helmet-async";
+import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 
 import LandingPageImage from "~assets/img/landing_page_image.png";
 
 const LandingPage = () => {
   return (
-    <Flex direction="column" h="100vh">
-      <Flex flex="45%" bg="darkBlue.500" align="center" justify="center">
+    <Box w="100%" h="100vh">
+      <Helmet>
+        <title>Landing</title>
+        <meta name="description" content="Landing" />
+      </Helmet>
+      <Flex
+        w="100%"
+        h="40%"
+        bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        pt="5"
+      >
         <Stack
           w={"full"}
           justify={"end"}
           textAlign={"center"}
-          mt={{ base: 6, md: "none" }}
           px={{ base: 4, md: 8 }}
           display={{ base: "flex", md: "none" }}
         >
@@ -28,11 +40,12 @@ const LandingPage = () => {
             to learn what you love
           </Text>
         </Stack>
-        <Box
-          position="relative"
-          height="100%"
-          width="100%"
+        <Flex
           display={{ base: "none", md: "flex" }}
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
         >
           <Flex
             width={{ base: "3xl", lg: "6xl" }}
@@ -40,13 +53,6 @@ const LandingPage = () => {
             backgroundImage={LandingPageImage}
             backgroundSize={"cover"}
             backgroundPosition={"center center"}
-            position="absolute"
-            bottom="0"
-            left={{ md: "50%" }}
-            transform={useBreakpointValue({
-              base: "translate(0%, 35%)",
-              md: "translate(-50%, 10%)",
-            })}
           >
             <Stack
               w={"full"}
@@ -72,12 +78,9 @@ const LandingPage = () => {
               </Text>
             </Stack>
           </Flex>
-        </Box>
+        </Flex>
       </Flex>
-      <Flex flex="55%" bg="white" align="center" justify="center">
-        <Box position="relative" height="100%" width="100%"></Box>
-      </Flex>
-    </Flex>
+    </Box>
   );
 };
 

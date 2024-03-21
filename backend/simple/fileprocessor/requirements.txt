@@ -1,5 +1,8 @@
 grpcio
 grpcio-tools
-tika
 langdetect
 pypdf2
+python-dotenv
+pyspellchecker
+pymupdf
+pypdfium2

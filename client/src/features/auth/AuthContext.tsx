@@ -173,7 +173,16 @@ const useProvideAuth = (): AuthContextType => {
 
   const signOut = async (): Promise<void> => {
     try {
-      const response = await api.post("/api/v1/user/logout");
+      console.log(authorization);
+      const response = await api.post(
+        "/api/v1/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${authorization}`,
+          },
+        },
+      );
       if (response.status === 200 && isAuthenticated) {
         logout();
         navigate("/");
@@ -183,14 +192,41 @@ const useProvideAuth = (): AuthContextType => {
     }
   };
 
+  const generateNotes = async (
+    file: File,
+    generateType: string,
+  ): Promise<void> => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("generateType", generateType);
+      formData.append("fileName", file.name);
+
+      const response = await api.post("/api/v1/notes/upload", formData, {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const data = await handleResponse(response);
+      console.log(data);
+      console.log(data.fileId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     isAuthenticated,
     user,
+    authorization,
     googleAuth,
     myInfoGetCode,
     myInfoAuth,
     sgIdGetAuthUrl,
     sgIdAuth,
     signOut,
+    generateNotes,
   };
 };

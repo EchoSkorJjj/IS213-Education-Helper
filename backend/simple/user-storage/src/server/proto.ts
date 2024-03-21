@@ -42,17 +42,25 @@ class GRPCServer {
         let pathToProto = path.resolve(__dirname, '../../protos/', protoName);
         if (!pathToProto.endsWith('.proto')) pathToProto += '.proto';
         const protoDescriptor = this.loadProto(pathToProto);
-        const protoPbKey = protoName + '_pb';
 
-        if (typeof protoDescriptor[protoPbKey] == 'object') {
-            const protoServiceKey = toPascalCase(protoName);
-
-            const serviceClient = (protoDescriptor[protoPbKey] as { [key: string]: any })[protoServiceKey];
+        if (protoName === 'health') {
+            const serviceClient = ((protoDescriptor as any).grpc.health.v1 as { [key: string]: any })['Health'];
             this.server.addService(serviceClient.service, new serviceDefinitions.default());
 
             logger.info(`Registered service ${protoName}`);
         } else {
-            logger.error(`Failed to register service ${protoName}: pb object not found`);
+            const protoPbKey = protoName + '_pb';
+
+            if (typeof protoDescriptor[protoPbKey] == 'object') {
+                const protoServiceKey = toPascalCase(protoName);
+
+                const serviceClient = (protoDescriptor[protoPbKey] as { [key: string]: any })[protoServiceKey];
+                this.server.addService(serviceClient.service, new serviceDefinitions.default());
+
+                logger.info(`Registered service ${protoName}`);
+            } else {
+                logger.error(`Failed to register service ${protoName}: pb object not found`);
+            }
         }
     }
 

@@ -32,7 +32,10 @@ services:
       - "8000:8000" # Proxy
       # - "8001:8001" # Admin API
       - "8443:8443" # Proxy SSL
-      - "8444:8444" # Admin API SSL
+      - "8444:8444" # Admin API SSL # hide
+    depends_on:
+      user-storage-service:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s
@@ -63,6 +66,32 @@ services:
       timeout: 5s
       retries: 5
 
+  user-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5   
+
+  user-storage-service:
+    build: ../../backend/simple/user-storage
+    image: user-storage-service:1.0
+    depends_on:
+      user-storage-db:
+        condition: service_healthy
+      user-redis:
+        condition: service_healthy
+    ports:
+      - "50051:50051"
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   notes-db:
     image: mysql:latest
     environment:
@@ -78,6 +107,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
+
   
   contents-db:
     image: bitnami/cassandra:4.1.4
@@ -100,20 +131,11 @@ services:
       timeout: 5s
       retries: 5
 
-  user-redis:
-    image: redis:7.2-rc2-alpine3.18
-    command: redis-server --requirepass password
-    healthcheck:
-      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   notes-service:
     build: ../../backend/simple/notes
+    env_file:
+      - ../../backend/simple/notes/.env
     depends_on:
-      kong-gateway:
-        condition: service_healthy
       notes-db:
         condition: service_healthy
     ports:
@@ -136,17 +158,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
-
-  user-storage-service:
-    build: ../../backend/simple/user-storage
-    image: user-storage-service:1.0
-    depends_on:
-      kong-gateway:
-        condition: service_healthy
-      user-storage-db:
-        condition: service_healthy
-    ports:
-      - "50051:50051"
     
   contents-service:
     build: ../../backend/simple/contents
@@ -173,3 +184,37 @@ services:
         condition: service_healthy
     ports:
       - "3001:3001"
+
+  upload-notes:
+    build: ../../backend/complex/upload-notes
+    image: upload-notes:1.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: "user"
+      RABBITMQ_DEFAULT_PASS: "password"
+    ports:
+      - "5672:5672" 
+      - "15672:15672" # to hide later
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  pdf-reader:
+    build:
+      context: ../../backend/simple/fileprocessor
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: localhost:24224
+    #     tag: docker.container.pdf-reader
+    ports:
+      - "50053:50053"

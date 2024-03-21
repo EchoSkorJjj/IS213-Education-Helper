@@ -59,14 +59,15 @@ const LoginPage = () => {
               bg="white"
               colorScheme="black"
               size="lg"
-              leftIcon={<Image src={SgIDLogo} boxSize="60px" height="30px" />}
-              rightIcon={
+              leftIcon={
                 <Image src={SingPassLogo} boxSize="100px" height="20px" />
               }
+              rightIcon={<Image src={SgIDLogo} boxSize="60px" height="30px" />}
               onClick={sgIdGetAuthUrl}
             />
             <IconButton
               aria-label="myinfo"
+              border="none"
               size="lg"
               icon={<Image src={MyInfoLogo} boxSize="100%" objectFit="cover" />}
               onClick={myInfoGetCode}

@@ -841,15 +841,15 @@ export namespace user_storage_pb {
             return DeleteUserRequest.deserialize(bytes);
         }
     }
-    export class HealthCheckRequest extends pb_1.Message {
+    export class LogoutRequest extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {}) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") { }
         }
-        static fromObject(data: {}): HealthCheckRequest {
-            const message = new HealthCheckRequest({});
+        static fromObject(data: {}): LogoutRequest {
+            const message = new LogoutRequest({});
             return message;
         }
         toObject() {
@@ -863,8 +863,8 @@ export namespace user_storage_pb {
             if (!w)
                 return writer.getResultBuffer();
         }
-        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): HealthCheckRequest {
-            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new HealthCheckRequest();
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): LogoutRequest {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new LogoutRequest();
             while (reader.nextField()) {
                 if (reader.isEndGroup())
                     break;
@@ -877,75 +877,8 @@ export namespace user_storage_pb {
         serializeBinary(): Uint8Array {
             return this.serialize();
         }
-        static deserializeBinary(bytes: Uint8Array): HealthCheckRequest {
-            return HealthCheckRequest.deserialize(bytes);
-        }
-    }
-    export class HealthCheckResponse extends pb_1.Message {
-        #one_of_decls: number[][] = [];
-        constructor(data?: any[] | {
-            status?: string;
-        }) {
-            super();
-            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
-            if (!Array.isArray(data) && typeof data == "object") {
-                if ("status" in data && data.status != undefined) {
-                    this.status = data.status;
-                }
-            }
-        }
-        get status() {
-            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
-        }
-        set status(value: string) {
-            pb_1.Message.setField(this, 1, value);
-        }
-        static fromObject(data: {
-            status?: string;
-        }): HealthCheckResponse {
-            const message = new HealthCheckResponse({});
-            if (data.status != null) {
-                message.status = data.status;
-            }
-            return message;
-        }
-        toObject() {
-            const data: {
-                status?: string;
-            } = {};
-            if (this.status != null) {
-                data.status = this.status;
-            }
-            return data;
-        }
-        serialize(): Uint8Array;
-        serialize(w: pb_1.BinaryWriter): void;
-        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
-            const writer = w || new pb_1.BinaryWriter();
-            if (this.status.length)
-                writer.writeString(1, this.status);
-            if (!w)
-                return writer.getResultBuffer();
-        }
-        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): HealthCheckResponse {
-            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new HealthCheckResponse();
-            while (reader.nextField()) {
-                if (reader.isEndGroup())
-                    break;
-                switch (reader.getFieldNumber()) {
-                    case 1:
-                        message.status = reader.readString();
-                        break;
-                    default: reader.skipField();
-                }
-            }
-            return message;
-        }
-        serializeBinary(): Uint8Array {
-            return this.serialize();
-        }
-        static deserializeBinary(bytes: Uint8Array): HealthCheckResponse {
-            return HealthCheckResponse.deserialize(bytes);
+        static deserializeBinary(bytes: Uint8Array): LogoutRequest {
+            return LogoutRequest.deserialize(bytes);
         }
     }
     interface GrpcUnaryServiceInterface<P, R> {
@@ -1019,6 +952,15 @@ export namespace user_storage_pb {
                 responseSerialize: (message: ServiceResponseWrapper) => Buffer.from(message.serialize()),
                 responseDeserialize: (bytes: Buffer) => ServiceResponseWrapper.deserialize(new Uint8Array(bytes))
             },
+            Logout: {
+                path: "/user_storage_pb.UserStorage/Logout",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: LogoutRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => LogoutRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: ServiceResponseWrapper) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => ServiceResponseWrapper.deserialize(new Uint8Array(bytes))
+            },
             GetUser: {
                 path: "/user_storage_pb.UserStorage/GetUser",
                 requestStream: false,
@@ -1045,15 +987,6 @@ export namespace user_storage_pb {
                 requestDeserialize: (bytes: Buffer) => DeleteUserRequest.deserialize(new Uint8Array(bytes)),
                 responseSerialize: (message: ServiceResponseWrapper) => Buffer.from(message.serialize()),
                 responseDeserialize: (bytes: Buffer) => ServiceResponseWrapper.deserialize(new Uint8Array(bytes))
-            },
-            CheckHealth: {
-                path: "/user_storage_pb.UserStorage/CheckHealth",
-                requestStream: false,
-                responseStream: false,
-                requestSerialize: (message: HealthCheckRequest) => Buffer.from(message.serialize()),
-                requestDeserialize: (bytes: Buffer) => HealthCheckRequest.deserialize(new Uint8Array(bytes)),
-                responseSerialize: (message: HealthCheckResponse) => Buffer.from(message.serialize()),
-                responseDeserialize: (bytes: Buffer) => HealthCheckResponse.deserialize(new Uint8Array(bytes))
             }
         };
         [method: string]: grpc_1.UntypedHandleCall;
@@ -1062,10 +995,10 @@ export namespace user_storage_pb {
         abstract MyInfoAuth(call: grpc_1.ServerUnaryCall<AuthRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract SgIdAuthUrl(call: grpc_1.ServerUnaryCall<SgIdAuthUrlRequest, SgIdAuthUrlResponse>, callback: grpc_1.sendUnaryData<SgIdAuthUrlResponse>): void;
         abstract SgIdAuth(call: grpc_1.ServerUnaryCall<AuthRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
+        abstract Logout(call: grpc_1.ServerUnaryCall<LogoutRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract GetUser(call: grpc_1.ServerUnaryCall<GetUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract UpdateUser(call: grpc_1.ServerUnaryCall<UpdateUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract DeleteUser(call: grpc_1.ServerUnaryCall<DeleteUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
-        abstract CheckHealth(call: grpc_1.ServerUnaryCall<HealthCheckRequest, HealthCheckResponse>, callback: grpc_1.sendUnaryData<HealthCheckResponse>): void;
     }
     export class UserStorageClient extends grpc_1.makeGenericClientConstructor(UnimplementedUserStorageService.definition, "UserStorage", {}) {
         constructor(address: string, credentials: grpc_1.ChannelCredentials, options?: Partial<grpc_1.ChannelOptions>) {
@@ -1086,6 +1019,9 @@ export namespace user_storage_pb {
         SgIdAuth: GrpcUnaryServiceInterface<AuthRequest, ServiceResponseWrapper> = (message: AuthRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
             return super.SgIdAuth(message, metadata, options, callback);
         };
+        Logout: GrpcUnaryServiceInterface<LogoutRequest, ServiceResponseWrapper> = (message: LogoutRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
+            return super.Logout(message, metadata, options, callback);
+        };
         GetUser: GrpcUnaryServiceInterface<GetUserRequest, ServiceResponseWrapper> = (message: GetUserRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
             return super.GetUser(message, metadata, options, callback);
         };
@@ -1094,9 +1030,6 @@ export namespace user_storage_pb {
         };
         DeleteUser: GrpcUnaryServiceInterface<DeleteUserRequest, ServiceResponseWrapper> = (message: DeleteUserRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
             return super.DeleteUser(message, metadata, options, callback);
-        };
-        CheckHealth: GrpcUnaryServiceInterface<HealthCheckRequest, HealthCheckResponse> = (message: HealthCheckRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<HealthCheckResponse>, options?: grpc_1.CallOptions | grpc_1.requestCallback<HealthCheckResponse>, callback?: grpc_1.requestCallback<HealthCheckResponse>): grpc_1.ClientUnaryCall => {
-            return super.CheckHealth(message, metadata, options, callback);
         };
     }
 }
