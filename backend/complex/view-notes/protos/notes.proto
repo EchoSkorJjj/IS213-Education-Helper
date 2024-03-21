@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+message Notes {
+  string userId = 1;
+  string fileId = 2; 
+  bytes file = 3; 
+  FileMetadata metadata = 4; 
+  string filetype = 5; 
+}
+
+message FileMetadata {
+  string title = 1;
+  int64 pagecount = 2; 
+  int64 filesize = 3;
+  string locale = 4;
+}
+
+// Define a service with RPC methods
+service NoteService {
+  // Define an RPC method to upload a note
+  rpc UploadNote (UploadNoteRequest) returns (UploadNoteResponse);
+
+  // Define an RPC method to retrieve a note
+  rpc RetrieveNote (RetrieveNoteRequest) returns (RetrieveNoteResponse);
+}
+
+// Request message for uploading a note
+message UploadNoteRequest {
+  string userId = 1;
+  string filename = 2;
+  bytes fileContent = 3;
+}
+
+// Response message for uploading a note
+message UploadNoteResponse {
+  string noteId = 1;
+}
+
+// Request message for retrieving a note
+message RetrieveNoteRequest {
+  string noteId = 1;
+}
+
+// Response message for retrieving a note
+message RetrieveNoteResponse {
+  string userId = 1;
+  string filename = 2;
+  bytes fileContent = 3;
+}

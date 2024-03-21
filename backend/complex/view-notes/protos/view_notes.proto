@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package view_notes_pb;
+
+message Note {
+    string user_id = 1;
+    string filename = 2;
+    bytes file_content = 3;
+}
+
+message Flashcard {
+    string id = 1;
+    string note_id = 2;
+    string question = 3;
+    string answer = 4;
+}
+
+message MultipleChoiceQuestionOption {
+    string option = 1;
+    bool is_correct = 2;
+}
+
+message MultipleChoiceQuestion {
+    string id = 1;
+    string note_id = 2;
+    string question = 3;
+    repeated MultipleChoiceQuestionOption options = 4;
+    bool multiple_answers = 5;
+}
+
+message AssociatedContents {
+    repeated Flashcard flashcards = 1;
+    repeated MultipleChoiceQuestion mcqs = 2;
+}
+
+message ViewOneNoteRequest {
+    string note_id = 1;
+}
+
+message ViewOneNoteResponse {
+    string note_id = 1;
+    Note note = 2;
+    AssociatedContents associated_contents = 3;
+}
+
+message ViewAllNotesRequest {
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message ViewAllNotesResponse {
+    int32 next_page = 1;
+    repeated Note notes = 2;
+}
+
+service ViewNotes {
+    rpc ViewOneNote (ViewOneNoteRequest) returns (ViewOneNoteResponse);
+    rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse);
+}

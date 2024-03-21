@@ -119,6 +119,24 @@ services:
     ports:
       - "50052:50052"      
 
+  view-notes-service:
+    build: ../../backend/complex/view-notes
+    image: view-notes-service:1.0
+    volumes:
+      - ../../backend/complex/view-notes/.env:/app/.env
+    depends_on:
+      notes-service:
+        # TODO: Set up healthcheck for health service
+        condition: service_started
+      contents-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   user-storage-service:
     build: ../../backend/simple/user-storage
     image: user-storage-service:1.0
