@@ -160,3 +160,13 @@ services:
     #     tag: docker.container.pdf-reader
     ports:
       - "50053:50053"
+      
+  
+  process-chunks:
+    build:
+      context: ../../backend/complex/process-chunks
+    ports:
+      - "50054:50054"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
