@@ -2,35 +2,17 @@ syntax = "proto3";
 
 package view_notes_pb;
 
-message Note {
-    string user_id = 1;
-    string filename = 2;
-    bytes file_content = 3;
-}
+import "notes.proto";
+import "contents.proto";
 
-message Flashcard {
-    string id = 1;
-    string note_id = 2;
-    string question = 3;
-    string answer = 4;
-}
-
-message MultipleChoiceQuestionOption {
-    string option = 1;
-    bool is_correct = 2;
-}
-
-message MultipleChoiceQuestion {
-    string id = 1;
-    string note_id = 2;
-    string question = 3;
-    repeated MultipleChoiceQuestionOption options = 4;
-    bool multiple_answers = 5;
+message NoteAndContent {
+    notes.Note note = 1;
+    AssociatedContents associated_contents = 2;
 }
 
 message AssociatedContents {
-    repeated Flashcard flashcards = 1;
-    repeated MultipleChoiceQuestion mcqs = 2;
+    repeated content_pb.Flashcard flashcards = 1;
+    repeated content_pb.MultipleChoiceQuestion mcqs = 2;
 }
 
 message ViewOneNoteRequest {
@@ -39,21 +21,36 @@ message ViewOneNoteRequest {
 
 message ViewOneNoteResponse {
     string note_id = 1;
-    Note note = 2;
-    AssociatedContents associated_contents = 3;
+    NoteAndContent note_and_content = 2;
 }
 
 message ViewAllNotesRequest {
-    int32 page = 1;
-    int32 limit = 2;
+    int32 limit = 1;
+    int32 offset = 2;
+    int32 page = 3;
 }
 
 message ViewAllNotesResponse {
-    int32 next_page = 1;
-    repeated Note notes = 2;
+    int32 count = 1;
+    repeated NoteAndContent notes_and_contents = 2;
+    int32 next_page = 3;
+}
+
+message ViewNotesByUserIdRequest {
+    string user_id = 1;
+    int32 limit = 2;
+    int32 offset = 3;
+    int32 page = 4;
+}
+
+message ViewNotesByUserIdResponse {
+    int32 count = 1;
+    repeated NoteAndContent notes_and_contents = 2;
+    int32 next_page = 3;
 }
 
 service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (ViewOneNoteResponse);
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse);
+    rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse);
 }

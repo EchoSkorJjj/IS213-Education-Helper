@@ -57,5 +57,33 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
             context.set_details(f'Error retrieving multiple notes: {e}')
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return notes_pb2.RetrieveMultipleNotesResponse()
+    
+    def RetrieveMultipleNotesByUserId(self, request, context):
+        try:
+            limit, offset, page, user_id = request.limit, request.offset, request.page, request.userId
+            if offset == 0 and page == 0:
+                raise ValueError('Offset and page cannot be 0 at the same time')
+            if offset == 0: # offset takes precedence over page
+                offset = (page - 1) * limit
+            elif page == 0:
+                page = offset // max(1, limit) + 1
+            
+            file_contents = retrieve_multiple_from_s3(limit=limit, offset=offset, user_id=user_id)
+            logger.info(f"Retrieved {len(file_contents)} notes for user {user_id}")
 
-
+            response = notes_pb2.RetrieveMultipleNotesResponse()
+            for file_content in file_contents:
+                response.notes.append(notes_pb2.Note(
+                    userId=file_content['user_id'],
+                    fileId=file_content['file_id'],
+                    fileContent=file_content['file_content']
+                ))
+            
+            response.count = len(file_contents)
+            response.nextPage = page + 1
+            return response
+        except Exception as e:
+            logger.error(f'Error retrieving multiple notes by user ID: {e}', exc_info=True)
+            context.set_details(f'Error retrieving multiple notes by user ID: {e}')
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return notes_pb2.RetrieveMultipleNotesResponse()

@@ -17,6 +17,16 @@ service NoteService {
 
   // Define an RPC method to retrieve multiple notes
   rpc RetrieveMultipleNotes (RetrieveMultipleNotesRequest) returns (RetrieveMultipleNotesResponse);
+
+  // Define an RPC method to retrieve multiple notes by user id
+  rpc RetrieveMultipleNotesByUserId (RetrieveMultipleNotesByUserIdRequest) returns (RetrieveMultipleNotesByUserIdResponse);
+}
+
+// Note message for storing a note
+message Note {
+  string userId = 1;
+  string fileId = 2;
+  bytes fileContent = 3;
 }
 
 // Request message for uploading a note
@@ -55,15 +65,24 @@ message RetrieveMultipleNotesRequest {
   int32 page = 3;
 }
 
-message Note {
-  string userId = 1;
-  string fileId = 2;
-  bytes fileContent = 3;
-}
-
 // Response message for retrieving multiple notes
 message RetrieveMultipleNotesResponse {
   int32 count = 1;
-  repeated Note notes = 2; // Lazy way to return multiple notes
+  repeated Note notes = 2;
+  int32 nextPage = 3;
+}
+
+// Request message for retrieving multiple notes by user id
+message RetrieveMultipleNotesByUserIdRequest {
+  string userId = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  int32 page = 4;
+}
+
+// Response message for retrieving multiple notes by user id
+message RetrieveMultipleNotesByUserIdResponse {
+  int32 count = 1;
+  repeated Note notes = 2;
   int32 nextPage = 3;
 }
