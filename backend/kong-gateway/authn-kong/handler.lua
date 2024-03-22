@@ -33,8 +33,12 @@ function MyAuthHandler:access(conf)
     end
     local token = kong.request.get_header("Authorization")
     -- remove bearer and take the token only
+    if token == nil then
+        kong.response.exit(401, { message = "Unauthorized" })
+    end
+
     token = string.gsub(token, "Bearer ", "")
-    kong.log.notice("The token is ", token)
+    -- Check again in case of empty token in header
     if token == nil then
         kong.response.exit(401, { message = "Unauthorized" })
     end
