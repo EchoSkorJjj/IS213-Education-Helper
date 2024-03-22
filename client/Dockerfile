@@ -1,24 +1,20 @@
-# Stage 1: Build the application
-FROM node:latest AS builder
+# Use an official Node.js runtime as a parent image
+FROM node:current-alpine3.19
+
+# RUN apt update && apt install curl -y
+# Set the working directory in the container to /app
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
+ENV NODE_ENV=development
+
+# Copying package.json and package-lock.json first for better cache utilization
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Installing dependencies
+RUN npm install
 
-# Copy the rest of the application code
+# Copying the rest of the files in our project
 COPY . .
 
-# Build the application, output goes to dev-dist
-RUN npm run build
-
-# Stage 2: Setup the production environment with Nginx
-FROM nginx:latest
-
-# Copy the built files from the builder stage to Nginx's serve directory
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-CMD ["nginx","-g","daemon off;"]
+# Starting our application
+CMD [ "npm", "run", "dev" ]
