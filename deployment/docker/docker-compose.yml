@@ -121,6 +121,8 @@ services:
   frontend-client:
     build: ../../client
     image: client:1.0
+    volumes:
+      - ../../client/:/app/
     depends_on:
       kong-gateway:
         condition: service_healthy
