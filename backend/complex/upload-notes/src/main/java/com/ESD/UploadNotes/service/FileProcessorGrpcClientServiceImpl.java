@@ -67,8 +67,7 @@ public class FileProcessorGrpcClientServiceImpl
     String userId
   ) {
     try {
-      String fileId =
-        generateFileSignature(fileBytes) + "-" + UUID.randomUUID().toString();
+      String fileId = UUID.randomUUID().toString();
 
       UploadNotesProto.FileUploadRequest request = UploadNotesProto.FileUploadRequest
         .newBuilder()
