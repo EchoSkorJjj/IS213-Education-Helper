@@ -8,6 +8,7 @@ import pb.health_pb2_grpc as health_pb2_grpc
 
 from src.clients.init_clients import init_clients
 from src.interceptors.logging import LoggingInterceptor
+from src.interceptors.validation import ValidationInterceptor
 import src.proto_services.view_notes_servicer as view_notes_servicer
 import src.proto_services.health_servicer as health_servicer
 
@@ -39,7 +40,7 @@ class GrpcServer:
         
         self._server = grpc.server(
             futures.ThreadPoolExecutor(max_workers=self._max_workers),
-            interceptors=[LoggingInterceptor()]
+            interceptors=[LoggingInterceptor(), ValidationInterceptor()]
         )
         logging.debug("Server started with {self._max_workers} workers...")
         
