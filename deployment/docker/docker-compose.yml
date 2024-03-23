@@ -3,6 +3,8 @@ version: "3.8"
 secrets:
   kong_db_password:
     file: ./kong_db_password.txt
+  ngrok_config:
+    file: ../../backend/ngrok/ngrok.yml
 
 x-common-env:
   &common-env
@@ -21,14 +23,15 @@ volumes:
 
 services:
   # Required for Stripe webhook
-  localtunnel:
-    image: localtunnel:1.0
-    build: ../../backend/localtunnel
-    network_mode: host
-    restart: always
-    depends_on:
-      kong-gateway:
-        condition: service_healthy
+  ngrok:
+    image: ngrok/ngrok:alpine
+    secrets:
+      - ngrok_config
+    command:
+      - start
+      - --all
+      - --config
+      - /run/secrets/ngrok_config
 
   kong-gateway:
     image: kong:latest
