@@ -20,6 +20,14 @@ message SuccessfulPaymentResponse {
   google.protobuf.Timestamp subscribed_until = 1;
 }
 
+message CancelSubscriptionRequest {
+  string email = 1;
+}
+
+message CancelSubscriptionResponse {
+  google.protobuf.Timestamp cancelled_at = 1;
+}
+
 service MakePaymentService {
     rpc Checkout (CheckoutRequest) returns (CheckoutResponse) {
         option (google.api.http) = {
@@ -32,6 +40,13 @@ service MakePaymentService {
         option (google.api.http) = {
             post: "/api/v1/payment/success"
             body: "raw"
+        };
+    }
+
+    rpc CancelSubscription (CancelSubscriptionRequest) returns (CancelSubscriptionResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/payment/cancel"
+            body: "*"
         };
     }
 }

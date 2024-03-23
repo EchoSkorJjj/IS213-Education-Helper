@@ -2,13 +2,30 @@ package interceptors
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
+type CustomFormatter struct {
+	logrus.TextFormatter
+}
+
+func (f *CustomFormatter) Format(entry *logrus.Entry) ([]byte, error) {
+	output := make([]string, 0, len(entry.Data))
+	for key, value := range entry.Data {
+		output = append(output, fmt.Sprintf("%s: %v", key, value))
+	}
+	entry.Message = strings.Join(output, " - ") + " - " + entry.Message
+	return f.TextFormatter.Format(entry)
+}
+
 func LoggingInterceptor(logger *logrus.Logger) grpc.UnaryServerInterceptor {
+	logger.Formatter = &CustomFormatter{}
+
 	return func(
 		ctx context.Context,
 		req interface{},
@@ -16,12 +33,6 @@ func LoggingInterceptor(logger *logrus.Logger) grpc.UnaryServerInterceptor {
 		handler grpc.UnaryHandler,
 	) (res interface{}, err error) {
 		start := time.Now()
-
-		logger.WithFields(logrus.Fields{
-			"call_type": "Unary",
-			"method":    info.FullMethod,
-			"start":     start.Format(time.RFC3339),
-		}).Info("request received")
 
 		res, err = handler(ctx, req)
 

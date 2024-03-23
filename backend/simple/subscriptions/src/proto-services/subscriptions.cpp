@@ -14,6 +14,7 @@ class SubscriptionService final
       grpc::ServerContext *context,
       const subscription_pb::CreateOrUpdateSubscriptionRequest *request,
       subscription_pb::CreateOrUpdateSubscriptionResponse *response) override {
+    std::string stripe_subscription_id = request->stripe_subscription_id();
     std::string email = request->email();
     google::protobuf::Timestamp subscribed_until_timestamp =
         request->subscribed_until();
@@ -26,7 +27,8 @@ class SubscriptionService final
     try {
       Database &db = Database::GetInstance();
       subscription_pb::SubscriptionMessage created_subscription =
-          db.CreateOrUpdateSubscriptionByEmail(email, subscribed_until);
+          db.CreateOrUpdateSubscription(email, subscribed_until,
+                                        stripe_subscription_id);
 
       subscription_pb::ResponseMetadata metadata = GenerateMetadata("1");
 
@@ -69,10 +71,10 @@ class SubscriptionService final
     return grpc::Status::OK;
   }
 
-  grpc::Status DeleteSubscription(
+  grpc::Status CancelSubscription(
       grpc::ServerContext *context,
-      const subscription_pb::DeleteSubscriptionRequest *request,
-      subscription_pb::DeleteSubscriptionResponse *response) override {
+      const subscription_pb::CancelSubscriptionRequest *request,
+      subscription_pb::CancelSubscriptionResponse *response) override {
     std::string email = request->email();
     if (email.empty()) {
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "Email is empty");
@@ -80,14 +82,12 @@ class SubscriptionService final
 
     try {
       Database &db = Database::GetInstance();
-      subscription_pb::SubscriptionMessage deleted_subscription =
-          db.DeleteSubscriptionByEmail(email);
+      subscription_pb::SubscriptionMessage cancelled_subscription =
+          db.CancelSubscriptionByEmail(email);
       subscription_pb::ResponseMetadata metadata = GenerateMetadata("1");
 
       response->mutable_metadata()->CopyFrom(metadata);
-      *response->mutable_subscription_id() =
-          deleted_subscription.subscription_id();
-      *response->mutable_email() = deleted_subscription.email();
+      response->mutable_details()->CopyFrom(cancelled_subscription);
     } catch (const std::exception &e) {
       std::cout << "Error deleting subscription: " << e.what() << "\n"
                 << std::endl;
@@ -98,11 +98,56 @@ class SubscriptionService final
     return grpc::Status::OK;
   }
 
-  grpc::Status CheckHealth(
+  grpc::Status GetExpiredSubscriptions(
       grpc::ServerContext *context,
-      const subscription_pb::HealthCheckRequest *request,
-      subscription_pb::HealthCheckResponse *response) override {
-    response->set_status(subscription_pb::HealthCheckStatus::HEALTHY);
+      const subscription_pb::GetExpiredSubscriptionsRequest *request,
+      subscription_pb::GetExpiredSubscriptionsResponse *response) override {
+    try {
+      Database &db = Database::GetInstance();
+      std::vector<subscription_pb::SubscriptionMessage> expired_subscriptions =
+          db.GetExpiredSubscriptions();
+      subscription_pb::ResponseMetadata metadata = GenerateMetadata("1");
+
+      response->mutable_metadata()->CopyFrom(metadata);
+      for (const auto &subscription : expired_subscriptions) {
+        subscription_pb::SubscriptionMessage *expired_subscription =
+            response->add_expired_subscriptions();
+        expired_subscription->CopyFrom(subscription);
+      }
+    } catch (const std::exception &e) {
+      std::cout << "Error getting expired subscriptions: " << e.what() << "\n"
+                << std::endl;
+      return grpc::Status(grpc::StatusCode::INTERNAL, e.what());
+    }
+
+    std::cout << "Successfully retrieved expired subscriptions" << std::endl;
+    return grpc::Status::OK;
+  }
+
+  grpc::Status DeleteExpiredSubscription(
+      grpc::ServerContext *context,
+      const subscription_pb::DeleteExpiredSubscriptionRequest *request,
+      subscription_pb::DeleteExpiredSubscriptionResponse *response) override {
+    std::string email = request->email();
+    if (email.empty()) {
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "Email is empty");
+    }
+
+    try {
+      Database &db = Database::GetInstance();
+      subscription_pb::SubscriptionMessage deleted_subscription =
+          db.DeleteExpiredSubscriptionByEmail(email);
+      subscription_pb::ResponseMetadata metadata = GenerateMetadata("1");
+
+      response->mutable_metadata()->CopyFrom(metadata);
+      response->mutable_details()->CopyFrom(deleted_subscription);
+    } catch (const std::exception &e) {
+      std::cout << "Error deleting subscription: " << e.what() << "\n"
+                << std::endl;
+      return grpc::Status(grpc::StatusCode::INTERNAL, e.what());
+    }
+
+    std::cout << "Successfully deleted subscription" << std::endl;
     return grpc::Status::OK;
   }
 };

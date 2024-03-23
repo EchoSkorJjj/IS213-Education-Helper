@@ -1,3 +1,5 @@
+STDOUT.sync = true # By default, outputs are buffered. Setting sync to true will flush the output.
+
 require 'grpc'
 require 'dotenv'
 

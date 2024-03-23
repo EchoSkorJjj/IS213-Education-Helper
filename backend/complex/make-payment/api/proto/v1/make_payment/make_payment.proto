@@ -22,7 +22,16 @@ message SuccessfulPaymentResponse {
   google.protobuf.Timestamp subscribed_until = 1;
 }
 
+message CancelSubscriptionRequest {
+  string email = 1;
+}
+
+message CancelSubscriptionResponse {
+  google.protobuf.Timestamp cancelled_at = 1;
+}
+
 service MakePaymentService {
     rpc Checkout (CheckoutRequest) returns (CheckoutResponse) {}
     rpc SuccessfulPayment (SuccessfulPaymentRequest) returns (SuccessfulPaymentResponse) {}
+    rpc CancelSubscription (CancelSubscriptionRequest) returns (CancelSubscriptionResponse) {}
 }

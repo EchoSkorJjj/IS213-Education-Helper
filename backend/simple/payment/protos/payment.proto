@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package payment;
 
+import "google/protobuf/timestamp.proto";
+
 message CheckoutRequest {
     string email = 1;
 }
@@ -25,7 +27,7 @@ message CancelSubscriptionRequest {
 
 message CancelSubscriptionResponse {
   bool success = 1;
-  string error_message = 2;
+  google.protobuf.Timestamp cancelled_at = 3;
 }
 
 message CheckSubscriptionRequest {
@@ -34,7 +36,6 @@ message CheckSubscriptionRequest {
 
 message CheckSubscriptionResponse {
   string status = 1;
-  string error_message = 2;
 }
 
 service Payment {

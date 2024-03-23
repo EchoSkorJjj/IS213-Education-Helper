@@ -38,14 +38,15 @@ class PaymentServicer < Payment::Payment::Service
     def cancel_subscription(cancel_request, _call)
         subscription_id = cancel_request.subscription_id
         
-        subscription = configured_stripe::Subscription.retrieve(subscription_id)
-        subscription.delete
-        Payment::CancelSubscriptionResponse.new(success: true)
+        configured_stripe::Subscription.cancel(subscription_id)
+        timestamp = Google::Protobuf::Timestamp.new(seconds: Time.now.to_i, nanos: Time.now.nsec)
+        
+        Payment::CancelSubscriptionResponse.new(success: true, cancelled_at: timestamp)
       
     rescue Stripe::InvalidRequestError => e
-        Payment::CancelSubscriptionResponse.new(success: false, error_message: "Stripe error: #{e.message}")
+        raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, "Stripe error: #{e.message}")
     rescue StandardError => e
-        Payment::CancelSubscriptionResponse.new(success: false, error_message: e.message)
+        raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, e.message)
     end
     
     def webhook(webhook_request, _call)
@@ -69,7 +70,7 @@ class PaymentServicer < Payment::Payment::Service
 
         session = event.data.object
         customer_id = session.customer
-        susbcription_id = session.subscription
+        subscription_id = session.subscription
       
         customer = configured_stripe::Customer.retrieve(customer_id)
         customer_email = customer.email

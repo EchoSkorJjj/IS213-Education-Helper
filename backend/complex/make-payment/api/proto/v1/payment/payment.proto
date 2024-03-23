@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package payment;
 
 option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/payment";
@@ -18,9 +20,29 @@ message WebhookRequest {
 
 message WebhookResponse {
     string email = 1;
+    string subscription_id = 2;
+}
+
+message CancelSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CancelSubscriptionResponse {
+  bool success = 1;
+  google.protobuf.Timestamp cancelled_at = 3;
+}
+
+message CheckSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CheckSubscriptionResponse {
+  string status = 1;
 }
 
 service Payment {
     rpc Checkout(CheckoutRequest) returns (CheckoutResponse);
     rpc Webhook(WebhookRequest) returns (WebhookResponse);
+    rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse);
+    rpc CheckSubscription(CheckSubscriptionRequest) returns (CheckSubscriptionResponse);
 }

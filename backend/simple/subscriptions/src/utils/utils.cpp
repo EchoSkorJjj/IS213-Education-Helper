@@ -49,3 +49,23 @@ subscription_pb::ResponseMetadata GenerateMetadata(
 
   return metadata;
 }
+
+subscription_pb::SubscriptionMessage CreateSubscriptionMessage(pqxx::row &row) {
+  subscription_pb::SubscriptionMessage subscription_message;
+  subscription_message.set_id(row["id"].c_str());
+  subscription_message.set_email(row["email"].c_str());
+  subscription_message.set_stripe_subscription_id(
+      row["stripe_subscription_id"].c_str());
+  subscription_message.set_status(row["status"].c_str());
+
+  auto first_subscribed_ptr = subscription_message.mutable_first_subscribed();
+  *first_subscribed_ptr = PqxxField2GoogleTimestamp(row["first_subscribed"]);
+
+  auto subscribed_until_ptr = subscription_message.mutable_subscribed_until();
+  *subscribed_until_ptr = PqxxField2GoogleTimestamp(row["subscribed_until"]);
+
+  auto cancelled_at_ptr = subscription_message.mutable_cancelled_at();
+  *cancelled_at_ptr = PqxxField2GoogleTimestamp(row["cancelled_at"]);
+
+  return subscription_message;
+}
