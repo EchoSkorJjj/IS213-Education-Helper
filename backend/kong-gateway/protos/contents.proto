@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package content_pb;
+
+import "google/protobuf/timestamp.proto";
+
+message Flashcard {
+    string id = 1;
+    string note_id = 2;
+    string question = 3;
+    string answer = 4;
+}
+
+message MultipleChoiceQuestionOption {
+    string option = 1;
+    bool is_correct = 2;
+}
+
+message MultipleChoiceQuestion {
+    string id = 1;
+    string note_id = 2;
+    string question = 3;
+    repeated MultipleChoiceQuestionOption options = 4;
+    bool multiple_answers = 5;
+}
+
+message ResponseMetadata {
+    string request_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+enum ContentType {
+    FLASHCARD = 0;
+    MCQ = 1;
+}
+
+message CreateTemporaryFlashcardRequest {
+    string note_id = 1;
+    string question = 2;
+    string answer = 3;
+}
+
+message CreateTemporaryFlashcardResponse {
+    ResponseMetadata metadata = 1;
+    Flashcard flashcard = 2;
+}
+
+message CreateTemporaryMultipleChoiceQuestionRequest {
+    string note_id = 1;
+    string question = 2;
+    repeated MultipleChoiceQuestionOption options = 3;
+}
+
+message CreateTemporaryMultipleChoiceQuestionResponse {
+    ResponseMetadata metadata = 1;
+    MultipleChoiceQuestion mcq = 2;
+}
+
+message UpdateTemporaryFlashcardRequest {
+    string id = 1;
+    string note_id = 2;
+    string question = 3;
+    string answer = 4;
+}
+
+message UpdateTemporaryFlashcardResponse {
+    ResponseMetadata metadata = 1;
+    Flashcard flashcard = 2;
+}
+
+message UpdateTemporaryMultipleChoiceQuestionRequest {
+    string id = 1;
+    string note_id = 2;
+    string question = 3;
+    repeated MultipleChoiceQuestionOption options = 4;
+}
+
+message UpdateTemporaryMultipleChoiceQuestionResponse {
+    ResponseMetadata metadata = 1;
+    MultipleChoiceQuestion mcq = 2;
+}
+
+message DeleteTemporaryFlashcardRequest {
+    string id = 1;
+    string note_id = 2;
+}
+
+message DeleteTemporaryFlashcardResponse {
+    ResponseMetadata metadata = 1;
+    Flashcard flashcard = 2;
+}
+
+message DeleteTemporaryMultipleChoiceQuestionRequest {
+    string id = 1;
+    string note_id = 2;
+}
+
+message DeleteTemporaryMultipleChoiceQuestionResponse {
+    ResponseMetadata metadata = 1;
+    MultipleChoiceQuestion mcq = 2;
+}
+
+message GetAllTemporaryContentsRequest {
+    string note_id = 1;
+}
+
+message GetAllTemporaryContentsResponse {
+    ResponseMetadata metadata = 1;
+    repeated Flashcard flashcards = 2;
+    repeated MultipleChoiceQuestion mcqs = 3;
+}
+
+message CommitTemporaryContentsRequest {
+    string note_id = 1;
+}
+
+message CommitTemporaryContentsResponse {
+    ResponseMetadata metadata = 1;
+    repeated Flashcard flashcards = 2;
+    repeated MultipleChoiceQuestion mcqs = 3;
+}
+
+message GetSavedContentsRequest {
+    string note_id = 1;
+    repeated ContentType content_type = 2;
+}
+
+message GetSavedContentsResponse {
+    ResponseMetadata metadata = 1;
+    repeated Flashcard flashcards = 2;
+    repeated MultipleChoiceQuestion mcqs = 3;
+}
+
+service Content {
+    rpc CreateTemporaryFlashcard(CreateTemporaryFlashcardRequest) returns (CreateTemporaryFlashcardResponse);
+    rpc CreateTemporaryMultipleChoiceQuestion(CreateTemporaryMultipleChoiceQuestionRequest) returns (CreateTemporaryMultipleChoiceQuestionResponse);
+    rpc UpdateTemporaryFlashcard(UpdateTemporaryFlashcardRequest) returns (UpdateTemporaryFlashcardResponse);
+    rpc UpdateTemporaryMultipleChoiceQuestion(UpdateTemporaryMultipleChoiceQuestionRequest) returns (UpdateTemporaryMultipleChoiceQuestionResponse);
+    rpc DeleteTemporaryFlashcard(DeleteTemporaryFlashcardRequest) returns (DeleteTemporaryFlashcardResponse);
+    rpc DeleteTemporaryMultipleChoiceQuestion(DeleteTemporaryMultipleChoiceQuestionRequest) returns (DeleteTemporaryMultipleChoiceQuestionResponse);
+    rpc GetAllTemporaryContents(GetAllTemporaryContentsRequest) returns (GetAllTemporaryContentsResponse);
+    rpc CommitTemporaryContents(CommitTemporaryContentsRequest) returns (CommitTemporaryContentsResponse);
+
+    rpc GetSavedContents(GetSavedContentsRequest) returns (GetSavedContentsResponse);
+}

@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package view_notes_pb;
 
+import "google/api/annotations.proto";
+
 import "contents.proto";
 
 message NoteAndContent {
@@ -13,7 +15,7 @@ message B64Note {
     string user_id = 1;
     string file_id = 2;
     string file_content = 3;
-  }
+}
 
 message AssociatedContents {
     repeated content_pb.Flashcard flashcards = 1;
@@ -55,7 +57,25 @@ message ViewNotesByUserIdResponse {
 }
 
 service ViewNotes {
-    rpc ViewOneNote (ViewOneNoteRequest) returns (ViewOneNoteResponse);
-    rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse);
-    rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse);
+    rpc ViewOneNote (ViewOneNoteRequest) returns (ViewOneNoteResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/notes/{note_id}"
+            body: "*"
+        };
+    };
+    rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/notes"
+            additional_bindings {
+                get: "/api/v1/notes"
+                body: "*"
+            }
+        };
+    };
+    rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/notes/user/{user_id}"
+            body: "*"
+        };
+    };
 }

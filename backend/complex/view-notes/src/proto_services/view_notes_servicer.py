@@ -1,5 +1,4 @@
 import grpc
-import logging
 
 import pb.view_notes_pb2 as view_notes_pb2
 import pb.view_notes_pb2_grpc as view_notes_pb2_grpc
@@ -7,6 +6,7 @@ import pb.contents_pb2 as contents_pb2
 import pb.notes_pb2 as notes_pb2
 
 import src.utils.error_utils as error_utils
+import src.utils.grpc_utils as grpc_utils
 import src.clients.notes_client as notes_client
 import src.clients.contents_client as contents_client
 
@@ -27,10 +27,7 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
             content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
             content_response = contents_stub.GetSavedContents(content_request)
 
-            retrieved_note = view_notes_pb2.Note()
-            retrieved_note.user_id = note_response.userId
-            retrieved_note.filename = note_response.filename
-            retrieved_note.file_content = note_response.fileContent
+            retrieved_note = grpc_utils.note_to_b64_note(note_response)
 
             associated_contents = view_notes_pb2.AssociatedContents()
             associated_contents.flashcards.extend(content_response.flashcards)
@@ -73,7 +70,6 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
                 content_request.note_id = note.fileId
                 content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
 
-                logging.info(content_request.note_id)
                 content_response = contents_stub.GetSavedContents(content_request)
 
                 associated_contents = view_notes_pb2.AssociatedContents()
@@ -81,7 +77,7 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
                 associated_contents.mcqs.extend(content_response.mcqs)
 
                 note_and_content = view_notes_pb2.NoteAndContent()
-                note_and_content.note.CopyFrom(note)
+                note_and_content.note.CopyFrom(grpc_utils.note_to_b64_note(note))
                 note_and_content.associated_contents.CopyFrom(associated_contents)
                 response.notes_and_contents.append(note_and_content)
             
@@ -124,7 +120,7 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
                 associated_contents.mcqs.extend(content_response.mcqs)
 
                 note_and_content = view_notes_pb2.NoteAndContent()
-                note_and_content.note.CopyFrom(note)
+                note_and_content.note.CopyFrom(grpc_utils.note_to_b64_note(note))
                 note_and_content.associated_contents.CopyFrom(associated_contents)
                 response.notes_and_contents.append(note_and_content)
             
