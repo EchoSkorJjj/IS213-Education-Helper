@@ -30,3 +30,10 @@ func CreateNewContext(ctx context.Context, kvp ...string) (context.Context, erro
 	md := metadata.Pairs(kvp...)
 	return metadata.NewOutgoingContext(ctx, md), nil
 }
+
+func KongRequestIDCriticallyMissing(md metadata.MD, environment string, method string) bool {
+	if _, ok := md["kong-request-id"]; !ok {
+		return environment != "development" && method != "/grpc.health.v1.Health/Check"
+	}
+	return false
+}

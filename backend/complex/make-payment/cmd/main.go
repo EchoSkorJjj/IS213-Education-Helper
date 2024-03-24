@@ -5,6 +5,7 @@ import (
 	"net"
 	"os"
 
+	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -31,7 +32,14 @@ func main() {
 	}
 
 	var opts []grpc.ServerOption
-	opts = append(opts, grpc.UnaryInterceptor(interceptors.LoggingInterceptor(logger)))
+	loggingInterceptor := interceptors.LoggingInterceptor(logger)
+	vaidationInterceptor := interceptors.ValidationInterceptor(logger)
+	opts = append(opts, grpc.UnaryInterceptor(
+		grpc_middleware.ChainUnaryServer(
+			loggingInterceptor,
+			vaidationInterceptor,
+		)))
+
 	grpcServer := grpc.NewServer(opts...)
 
 	makepaymentPb.RegisterMakePaymentServiceServer(grpcServer, makepayment.NewServer())
