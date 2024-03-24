@@ -3,7 +3,7 @@ COPY buf.* .
 COPY protos/ protos/
 RUN buf generate
 
-FROM developwithzt/esd-cpp-grpc-base:1.0 AS builder
+FROM developwithzt/esd-cpp-grpc-base:multi-platform AS builder
 WORKDIR /app
 RUN apt-get update && apt-get install -y \
     libpqxx-dev \
