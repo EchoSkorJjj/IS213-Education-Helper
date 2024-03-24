@@ -21,7 +21,7 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
         try:
             file_content = retrieve_from_s3(request.userId, request.fileId)
             logger.info(f"Note {request.fileId} retrieved for user {request.userId}")
-            return notes_pb2.RetrieveNoteResponse(userId=request.userId, fileContent=file_content)
+            return notes_pb2.RetrieveNoteResponse(userId=request.userId, fileId=request.fileId, fileContent=file_content)
         except Exception as e:
             logger.error(f'Error retrieving note: {e}', exc_info=True)
             context.set_details(f'Error retrieving note: {e}')

@@ -12,7 +12,7 @@ import src.clients.contents_client as contents_client
 
 class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
     def ViewOneNote(self, request, context):
-        response = view_notes_pb2.ViewOneNoteResponse()
+        response = view_notes_pb2.NoteAndContent()
         try:
             note_id = request.note_id
             notes_stub = notes_client.NotesClient().get_notes_stub()
@@ -20,6 +20,7 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
 
             note_request = notes_pb2.RetrieveNoteRequest()
             note_request.fileId = note_id
+            note_request.userId = request.user_id
             note_response = notes_stub.RetrieveNote(note_request)
 
             content_request = contents_pb2.GetSavedContentsRequest()
@@ -33,11 +34,8 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
             associated_contents.flashcards.extend(content_response.flashcards)
             associated_contents.mcqs.extend(content_response.mcqs)
 
-            note_and_content = view_notes_pb2.NoteAndContent()
-            note_and_content.note.CopyFrom(retrieved_note)
-            note_and_content.associated_contents.CopyFrom(associated_contents)
-
-            response.note_and_content.CopyFrom(note_and_content)
+            response.note.CopyFrom(retrieved_note)
+            response.associated_contents.CopyFrom(associated_contents)
 
             return response
         except Exception as e:

@@ -24,11 +24,7 @@ message AssociatedContents {
 
 message ViewOneNoteRequest {
     string note_id = 1;
-}
-
-message ViewOneNoteResponse {
-    string note_id = 1;
-    NoteAndContent note_and_content = 2;
+    string user_id = 2;
 }
 
 message ViewAllNotesRequest {
@@ -57,10 +53,13 @@ message ViewNotesByUserIdResponse {
 }
 
 service ViewNotes {
-    rpc ViewOneNote (ViewOneNoteRequest) returns (ViewOneNoteResponse) {
+    rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent) {
         option (google.api.http) = {
             get: "/api/v1/notes/{note_id}"
-            body: "*"
+            additional_bindings {
+                get: "/api/v1/notes/{note_id}"
+                body: "*"
+            }
         };
     };
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse) {
@@ -75,7 +74,10 @@ service ViewNotes {
     rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse) {
         option (google.api.http) = {
             get: "/api/v1/notes/user/{user_id}"
-            body: "*"
+            additional_bindings {
+                get: "/api/v1/notes/user/{user_id}"
+                body: "*"
+            }
         };
     };
 }
