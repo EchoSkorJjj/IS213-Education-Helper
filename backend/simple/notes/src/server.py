@@ -8,6 +8,7 @@ import notes_pb2_grpc
 from config.settings import get_config
 import asyncio
 
+
 load_dotenv()
 config = get_config()
 

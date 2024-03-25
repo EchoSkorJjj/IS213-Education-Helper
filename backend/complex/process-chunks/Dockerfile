@@ -1,38 +1,22 @@
-# Start with a Python slim base image
-FROM python:3.11-slim
-
-# Avoid prompts from apt
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim
+ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
-
-# Set timezone (required for some configurations)
 ENV TZ=Asia/Singapore
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Install OCRmyPDF, Tesseract OCR, Protocol Buffers Compiler, and other dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    libpq-dev \
-    gcc\
-    python3-dev\
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-RUN pip install --upgrade setuptools pip
-
-
-# Install gRPC tools for Python
-# RUN pip install grpcio grpcio-tools protobuf Faker
-
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file and install Python dependencies
+RUN pip install grpcio grpcio-tools protobuf
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application files and scripts into the container
 COPY ./src /app
+COPY process_proto.sh /app/
+RUN chmod +x /app/process_proto.sh
+
+RUN /app/process_proto.sh
 
 
-# Set the default command to run the app
-CMD ["python3", "-m", "main.py"]
-# ENTRYPOINT ["sh", "-c", "echo $JAVA_HOME && while true; do sleep 1; done"]
+CMD ["python3", "-m", "main"]
+# CMD ["sh", "-c", "while true; do sleep 60; done"]
