@@ -17,6 +17,7 @@ volumes:
   kong-data: {}
   user-storage-db-volume: {}
   notes-db-volume: {}
+  contents-db-volume: {}
 
 services:
   kong-gateway:
@@ -108,6 +109,28 @@ services:
       retries: 5
       start_period: 30s
 
+  
+  contents-db:
+    image: bitnami/cassandra:4.1.4
+    volumes:
+      - contents-db-volume:/bitnami
+      - ../sql_table/create_contents_table.cql:/docker-entrypoint-initdb.d/create_contents_table.cql
+    healthcheck:
+      # TODO: Not secure. Username and password are exposed in the command.
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  contents-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   notes-service:
     build: ../../backend/simple/notes
     env_file:
@@ -116,7 +139,42 @@ services:
       notes-db:
         condition: service_healthy
     ports:
-      - "50052:50052"
+      - "50052:50052"      
+
+  view-notes-service:
+    build: ../../backend/complex/view-notes
+    image: view-notes-service:1.0
+    volumes:
+      - ../../backend/complex/view-notes/.env:/app/.env
+    depends_on:
+      notes-service:
+        # TODO: Set up healthcheck for notes service
+        condition: service_started
+      contents-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    
+  contents-service:
+    build: ../../backend/simple/contents
+    image: content-service:1.0
+    volumes:
+      - ../../backend/simple/contents/.env:/app/.env
+    depends_on:
+      contents-db:
+        condition: service_healthy
+      contents-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   frontend-client:
     build: ../../client

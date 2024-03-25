@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package view_notes_pb;
+
+import "contents.proto";
+
+message NoteAndContent {
+    B64Note note = 1;
+    AssociatedContents associated_contents = 2;
+}
+
+message B64Note {
+    string user_id = 1;
+    string file_id = 2;
+    string file_content = 3;
+  }
+
+message AssociatedContents {
+    repeated content_pb.Flashcard flashcards = 1;
+    repeated content_pb.MultipleChoiceQuestion mcqs = 2;
+}
+
+message ViewOneNoteRequest {
+    string note_id = 1;
+    string user_id = 2;
+}
+
+message ViewAllNotesRequest {
+    int32 limit = 1;
+    int32 offset = 2;
+    int32 page = 3;
+}
+
+message ViewAllNotesResponse {
+    int32 count = 1;
+    repeated NoteAndContent notes_and_contents = 2;
+    int32 next_page = 3;
+}
+
+message ViewNotesByUserIdRequest {
+    string user_id = 1;
+    int32 limit = 2;
+    int32 offset = 3;
+    int32 page = 4;
+}
+
+message ViewNotesByUserIdResponse {
+    int32 count = 1;
+    repeated NoteAndContent notes_and_contents = 2;
+    int32 next_page = 3;
+}
+
+service ViewNotes {
+    rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent);
+    rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse);
+    rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse);
+}
