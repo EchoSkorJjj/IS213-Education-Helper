@@ -110,13 +110,13 @@ services:
   make-payment-service:
     build: ../../backend/complex/make-payment
     image: make-payment-service:1.0
+    env_file:
+      - ../../backend/complex/make-payment/.env
     depends_on:
       payment-service:
         condition: service_healthy
       subscription-service:
         condition: service_healthy
-    volumes:
-      - ../../backend/complex/make-payment/.env:/app/.env
     ports:
       - "50054:50051"
     healthcheck:
@@ -129,8 +129,8 @@ services:
   subscription-service:
     build: ../../backend/simple/subscriptions
     image: subscription-service:1.0
-    volumes:
-      - ../../backend/simple/subscriptions/.env:/app/.env
+    env_file:
+      - ../../backend/simple/subscriptions/.env
     depends_on:
       subscriptions-db:
         condition: service_healthy
@@ -143,11 +143,11 @@ services:
 
   notes-service:
     build: ../../backend/simple/notes
+    env_file:
+      - ../../backend/simple/notes/.env
     depends_on:
       notes-db:
         condition: service_healthy
-    ports:
-      - "50052:50052"      
 
   user-storage-service:
     build: ../../backend/simple/user-storage
@@ -169,8 +169,15 @@ services:
   payment-service:
     build: ../../backend/simple/payment
     image: payment-service:1.0
-    volumes:
-      - ../../backend/simple/payment/.env:/app/.env
+    env_file:
+      - ../../backend/simple/payment/.env
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   notes-db:
     image: mysql:latest
     environment:
@@ -212,8 +219,8 @@ services:
   view-notes-service:
     build: ../../backend/complex/view-notes
     image: view-notes-service:1.0
-    volumes:
-      - ../../backend/complex/view-notes/.env:/app/.env
+    env_file:
+      - ../../backend/complex/view-notes/.env
     depends_on:
       notes-service:
         # TODO: Set up healthcheck for notes service
@@ -230,8 +237,8 @@ services:
   contents-service:
     build: ../../backend/simple/contents
     image: content-service:1.0
-    volumes:
-      - ../../backend/simple/contents/.env:/app/.env
+    env_file:
+      - ../../backend/simple/contents/.env
     depends_on:
       contents-db:
         condition: service_healthy
