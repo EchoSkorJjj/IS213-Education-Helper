@@ -8,7 +8,7 @@ const NotFound = () => {
       py={10}
       px={6}
       height="100vh"
-      bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
+      
     >
       <Helmet>
         <title>Not Found</title>

@@ -56,7 +56,7 @@ const Profile = () => {
   }, [savedNotesTitle, currentSavedNotePage]);
 
   return (
-    <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)" mb="5em">
+    <Box  mb="5em">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />

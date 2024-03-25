@@ -36,7 +36,9 @@ const ProfileHeader = () => {
             >
               {user?.username}
             </Text>
-            <Text color="gray.500">{user?.email}</Text>
+            <Text mt="-19" color="gray.500">
+              {user?.email}
+            </Text>
           </Flex>
         </Flex>
         <Box>
@@ -58,7 +60,7 @@ const ProfileHeader = () => {
         >
           <Text color="gray.500" as="a" href="/subscribe">
             This is a free account. Go{" "}
-            <Text color="white" fontWeight="bold" as="span">
+            <Text color="black" fontWeight="bold" as="span">
               pro{" "}
             </Text>
             here!

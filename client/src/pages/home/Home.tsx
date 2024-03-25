@@ -8,7 +8,7 @@ const HomePage = () => {
     <Box
       h="100vh"
       w="100%"
-      bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
+      
     >
       <Helmet>
         <title>Home</title>

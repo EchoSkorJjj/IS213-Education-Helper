@@ -68,7 +68,7 @@ const NotesGeneratorPage = () => {
     // console.log(data);
   };
   return (
-    <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)">
+    <Box >
       <Helmet>
         <title>Notes</title>
         <meta name="description" content="Notes" />

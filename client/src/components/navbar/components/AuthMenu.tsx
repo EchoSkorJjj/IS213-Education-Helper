@@ -28,6 +28,7 @@ export const AuthMenu = ({ user, handleSignOutClick }: AuthMenuProps) => {
         variant={"link"}
         cursor={"pointer"}
         minW={0}
+        color={"white"}
       >
         <HStack>
           <Avatar

@@ -47,7 +47,7 @@ const UpdateProfile = () => {
 
   return (
     <Box
-      bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
+      
       mb="5em"
       height="100vh"
     >

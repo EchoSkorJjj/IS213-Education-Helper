@@ -64,7 +64,7 @@ const MarketplacePage = () => {
   }, [topic, notesTitle, currentMarketPage]);
 
   return (
-    <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)">
+    <Box >
       <Helmet>
         <title>Marketplace</title>
         <meta name="description" content="Marketplace" />

@@ -212,6 +212,7 @@ const useProvideAuth = (): AuthContextType => {
       const data = await handleResponse(response);
       console.log(data);
       console.log(data.fileId);
+      navigate(`/generated/${data.fileId}`);
     } catch (error) {
       console.log(error);
     }

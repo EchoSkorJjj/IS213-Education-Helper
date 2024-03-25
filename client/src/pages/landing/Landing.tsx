@@ -13,7 +13,6 @@ const LandingPage = () => {
       <Flex
         w="100%"
         h="40%"
-        bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
         direction="column"
         justifyContent="center"
         alignItems="center"

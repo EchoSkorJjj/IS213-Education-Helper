@@ -33,6 +33,7 @@ function PriceWrapper(props: Props) {
       alignSelf={{ base: "center", lg: "flex-start" }}
       borderColor={"gray.200"}
       borderRadius={"xl"}
+      width={"20%"}
     >
       {children}
     </Box>
@@ -60,11 +61,7 @@ const SubscribePage = () => {
   };
 
   return (
-    <Box
-      py={12}
-      h="100vh"
-      bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
-    >
+    <Box py={12} h="100vh">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />
@@ -90,10 +87,10 @@ const SubscribePage = () => {
               Free
             </Text>
             <HStack justifyContent="center">
-              <Text fontSize="3xl" fontWeight="600">
+              <Text fontSize="3xl" color="black" fontWeight="600">
                 $
               </Text>
-              <Text fontSize="5xl" fontWeight="900">
+              <Text fontSize="5xl" color="black" fontWeight="900">
                 0
               </Text>
               <Text fontSize="3xl" color="gray.500">
@@ -117,6 +114,7 @@ const SubscribePage = () => {
                 w="full"
                 variant="outline"
                 disabled={true}
+                isDisabled={true}
                 onClick={() => handleFreePlan()}
               >
                 {user?.is_paid ? "You are on Pro Plan" : "Already on Free Plan"}
@@ -138,7 +136,7 @@ const SubscribePage = () => {
                 bg={"blue.500"}
                 px={3}
                 py={1}
-                color={"gray.900"}
+                color={"white"}
                 fontSize="sm"
                 fontWeight="600"
                 rounded="xl"
@@ -151,10 +149,10 @@ const SubscribePage = () => {
                 Pro
               </Text>
               <HStack justifyContent="center">
-                <Text fontSize="3xl" fontWeight="600">
+                <Text fontSize="3xl" color="black" fontWeight="600">
                   $
                 </Text>
-                <Text fontSize="5xl" fontWeight="900">
+                <Text fontSize="5xl" color="black" fontWeight="900">
                   1
                 </Text>
                 <Text fontSize="3xl" color="gray.500">
