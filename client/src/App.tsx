@@ -27,9 +27,7 @@ const MarketplacePage = lazy(() => import("~pages/marketplace/Marketplace"));
 const SubscribePage = lazy(() => import("~pages/subscribe/Subscribe"));
 const ProfilePage = lazy(() => import("~pages/profile/Profile"));
 const UpdateProfilePage = lazy(() => import("~pages/profile/UpdateProfile"));
-const ViewNotesPage = lazy(() => import("~pages/notes/ViewNotes"));
-const SuccessPage = lazy(() => import("~pages/subscribe/Success"));
-const FailedPage = lazy(() => import("~pages/subscribe/Failed"));
+const ViewNotesPage = lazy(() => import("~pages/viewnotes/ViewNotes"));
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -91,8 +89,6 @@ const App = () => {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/update" element={<UpdateProfilePage />} />
                 <Route path="/viewnotes" element={<ViewNotesPage />} />
-                <Route path="/subscribe/success" element={<SuccessPage />} />
-                <Route path="/subscribe/failed" element={<FailedPage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
