@@ -20,7 +20,6 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
 
             note_request = notes_pb2.RetrieveNoteRequest()
             note_request.fileId = note_id
-            note_request.userId = request.user_id
             note_response = notes_stub.RetrieveNote(note_request)
 
             content_request = contents_pb2.GetSavedContentsRequest()
@@ -51,7 +50,6 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
         try:
             limit, offset, page = request.limit, request.offset, request.page
             notes_stub = notes_client.NotesClient().get_notes_stub()
-            contents_stub = contents_client.ContentsClient().get_contents_stub()
 
             notes_request = notes_pb2.RetrieveMultipleNotesRequest()
             notes_request.limit = limit
@@ -59,25 +57,32 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
             notes_request.page = page
 
             notes_response = notes_stub.RetrieveMultipleNotes(notes_request)
-            notes = notes_response.notes
+            note_previews = notes_response.notes
             response.next_page = notes_response.nextPage
-            response.count = len(notes)
+            response.count = len(note_previews)
 
-            for note in notes:
-                content_request = contents_pb2.GetSavedContentsRequest()
-                content_request.note_id = note.fileId
-                content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
+            for note_preview in note_previews:
+                response.notes.append(note_preview)
+            
+            # notes = notes_response.notes
+            # response.next_page = notes_response.nextPage
+            # response.count = len(notes)
 
-                content_response = contents_stub.GetSavedContents(content_request)
+            # for note in notes:
+            #     content_request = contents_pb2.GetSavedContentsRequest()
+            #     content_request.note_id = note.fileId
+            #     content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
 
-                associated_contents = view_notes_pb2.AssociatedContents()
-                associated_contents.flashcards.extend(content_response.flashcards)
-                associated_contents.mcqs.extend(content_response.mcqs)
+            #     content_response = contents_stub.GetSavedContents(content_request)
 
-                note_and_content = view_notes_pb2.NoteAndContent()
-                note_and_content.note.CopyFrom(grpc_utils.note_to_b64_note(note))
-                note_and_content.associated_contents.CopyFrom(associated_contents)
-                response.notes_and_contents.append(note_and_content)
+            #     associated_contents = view_notes_pb2.AssociatedContents()
+            #     associated_contents.flashcards.extend(content_response.flashcards)
+            #     associated_contents.mcqs.extend(content_response.mcqs)
+
+            #     note_and_content = view_notes_pb2.NoteAndContent()
+            #     note_and_content.note.CopyFrom(grpc_utils.note_to_b64_note(note))
+            #     note_and_content.associated_contents.CopyFrom(associated_contents)
+            #     response.notes_and_contents.append(note_and_content)
             
             return response
         except Exception as e:
@@ -93,7 +98,6 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
         try:
             limit, offset, page = request.limit, request.offset, request.page
             notes_stub = notes_client.NotesClient().get_notes_stub()
-            contents_stub = contents_client.ContentsClient().get_contents_stub()
 
             notes_request = notes_pb2.RetrieveMultipleNotesByUserIdRequest()
             notes_request.limit = limit
@@ -102,25 +106,28 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
             notes_request.userId = request.user_id
 
             notes_response = notes_stub.RetrieveMultipleNotesByUserId(notes_request)
-            notes = notes_response.notes
+            note_previews = notes_response.notes
             response.next_page = notes_response.nextPage
-            response.count = len(notes)
+            response.count = len(note_previews)
 
-            for note in notes:
-                content_request = contents_pb2.GetSavedContentsRequest()
-                content_request.note_id = note.fileId
-                content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
+            for note_preview in note_previews:
+                response.notes.append(note_preview)
 
-                content_response = contents_stub.GetSavedContents(content_request)
+            # for note in notes:
+            #     content_request = contents_pb2.GetSavedContentsRequest()
+            #     content_request.note_id = note.fileId
+            #     content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
 
-                associated_contents = view_notes_pb2.AssociatedContents()
-                associated_contents.flashcards.extend(content_response.flashcards)
-                associated_contents.mcqs.extend(content_response.mcqs)
+            #     content_response = contents_stub.GetSavedContents(content_request)
 
-                note_and_content = view_notes_pb2.NoteAndContent()
-                note_and_content.note.CopyFrom(grpc_utils.note_to_b64_note(note))
-                note_and_content.associated_contents.CopyFrom(associated_contents)
-                response.notes_and_contents.append(note_and_content)
+            #     associated_contents = view_notes_pb2.AssociatedContents()
+            #     associated_contents.flashcards.extend(content_response.flashcards)
+            #     associated_contents.mcqs.extend(content_response.mcqs)
+
+            #     note_and_content = view_notes_pb2.NoteAndContent()
+            #     note_and_content.note.CopyFrom(grpc_utils.note_to_b64_note(note))
+            #     note_and_content.associated_contents.CopyFrom(associated_contents)
+            #     response.notes_and_contents.append(note_and_content)
             
             return response
         except Exception as e:

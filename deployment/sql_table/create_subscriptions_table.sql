@@ -1,4 +1,4 @@
-CREATE TABLE subscriptions (
+CREATE TABLE IF NOT EXISTS subscriptions (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     stripe_subscription_id VARCHAR(255) UNIQUE NOT NULL,

@@ -132,7 +132,7 @@ plugins:
     config:
       jwt_secret: "KUKUBIRDAIDHAIDHAJKSDAJIDBQIheh09u2jeqinwdjnbqwsdifhnw0euq2e0nqwdo" 
       public_paths:
-        - /api/v1/notes
+        - /api/v1/payment/success # Better practice is to pass request through a Stripe plugin to verify
         - /api/v1/auth/google/callback
         - /api/v1/auth/sgId/generateAuthUrl
         - /api/v1/auth/sgId/callback

@@ -21,7 +21,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+		log.Printf("Error loading .env file: %v. Defaulting to base configurations.", err)
 	}
 
 	logger := logrus.New()
@@ -39,7 +39,7 @@ func main() {
 			loggingInterceptor,
 			vaidationInterceptor,
 		)))
-
+	
 	grpcServer := grpc.NewServer(opts...)
 
 	makepaymentPb.RegisterMakePaymentServiceServer(grpcServer, makepayment.NewServer())

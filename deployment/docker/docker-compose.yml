@@ -17,9 +17,10 @@ networks:
 
 volumes:
   kong-data: {}
-  user-storage-db-volume: {}
-  notes-db-volume: {}
-  subscriptions-db-volume: {}
+  postgres-db-volume: {}
+  # user-storage-db-volume: {}
+  # notes-db-volume: {}
+  # subscriptions-db-volume: {}
   contents-db-volume: {}
 
 services:
@@ -64,39 +65,25 @@ services:
       - ../../backend/kong-gateway/rawstring-adapter:/usr/local/share/lua/5.1/kong/plugins/rawstring-adapter 
       - ../../backend/kong-gateway/protos:/usr/local/share/lua/5.1/kong/protos
 
-  subscriptions-db:
-    image: postgres
+  
+  postgres-db:
+    image: postgres:alpine3.18
     volumes:
-      - subscriptions-db-volume:/var/lib/postgresql/data
-      - ../sql_table/create_subscriptions_table.sql:/docker-entrypoint-initdb.d/subscriptions.sql
-    environment:
-      POSTGRES_DB: subscriptions_db
-      POSTGRES_USER: subscription
-      POSTGRES_PASSWORD: subscription123
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U subscription -d subscriptions_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    ports:
-      - "5433:5432"
-
-  user-storage-db:
-    image: postgres
-    volumes:
-      - user-storage-db-volume:/var/lib/postgresql/data
+      - postgres-db-volume:/var/lib/postgresql/data
       - ../sql_table/create_user_storage_table.sql:/docker-entrypoint-initdb.d/user_storage.sql
+      - ../sql_table/create_subscriptions_table.sql:/docker-entrypoint-initdb.d/subscriptions.sql
+      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
     environment:
-      POSTGRES_DB: user_storage_db
-      POSTGRES_USER: user_storage_user
-      POSTGRES_PASSWORD: user_storage_password
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: esd-db
+      POSTGRES_USER: esd-user
+      POSTGRES_PASSWORD: esd-password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user_storage_user -d user_storage_db"]
+      test: ["CMD-SHELL", "pg_isready -U esd-user -d esd-db"]
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - "5432:5432" # For debugging purposes
 
   user-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -132,7 +119,7 @@ services:
     env_file:
       - ../../backend/simple/subscriptions/.env
     depends_on:
-      subscriptions-db:
+      postgres-db:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
@@ -146,14 +133,14 @@ services:
     env_file:
       - ../../backend/simple/notes/.env
     depends_on:
-      notes-db:
+      postgres-db:
         condition: service_healthy
 
   user-storage-service:
     build: ../../backend/simple/user-storage
     image: user-storage-service:1.0
     depends_on:
-      user-storage-db:
+      postgres-db:
         condition: service_healthy
       user-redis:
         condition: service_healthy
@@ -176,23 +163,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 30s
-
-  notes-db:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=my_notes_app
-    ports:
-      - "3306:3306"
-    volumes:
-      - notes-db-volume:/var/lib/mysql
-      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
       start_period: 30s
 
   contents-db:

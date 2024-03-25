@@ -27,13 +27,24 @@ message Note {
   string userId = 1;
   string fileId = 2;
   bytes fileContent = 3;
+  string fileName = 4;
+  string title = 5;
+  string topic = 6;
+}
+
+message NotePreview {
+  string userId = 1;
+  string fileId = 2;
+  string fileName = 3;
+  string title = 4;
+  string topic = 5;
+  int32 sizeInBytes = 6;
+  int32 numPages = 7;
 }
 
 // Request message for uploading a note
 message UploadNoteRequest {
-  string userId = 1;
-  string fileId = 2;
-  bytes fileContent = 3;
+  Note note = 1;
 }
 
 // Response message for uploading a note
@@ -43,15 +54,12 @@ message UploadNoteResponse {
 
 // Request message for retrieving a note
 message RetrieveNoteRequest {
-  string userId = 1;
-  string fileId = 2;
+  string fileId = 1;
 }
 
 // Response message for retrieving a note
 message RetrieveNoteResponse {
-  string userId = 1;
-  string fileId = 2;
-  bytes fileContent = 3;
+  Note note = 1;
 }
 
 // Request message for retrieving multiple notes
@@ -68,7 +76,7 @@ message RetrieveMultipleNotesRequest {
 // Response message for retrieving multiple notes
 message RetrieveMultipleNotesResponse {
   int32 count = 1;
-  repeated Note notes = 2;
+  repeated NotePreview notes = 2;
   int32 nextPage = 3;
 }
 
@@ -83,6 +91,6 @@ message RetrieveMultipleNotesByUserIdRequest {
 // Response message for retrieving multiple notes by user id
 message RetrieveMultipleNotesByUserIdResponse {
   int32 count = 1;
-  repeated Note notes = 2;
+  repeated NotePreview notes = 2;
   int32 nextPage = 3;
 }

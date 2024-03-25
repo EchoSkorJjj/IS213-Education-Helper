@@ -4,6 +4,7 @@ package view_notes_pb;
 
 import "google/api/annotations.proto";
 
+import "notes.proto";
 import "contents.proto";
 
 message NoteAndContent {
@@ -15,6 +16,9 @@ message B64Note {
     string user_id = 1;
     string file_id = 2;
     string file_content = 3;
+    string file_name = 4;
+    string title = 5;
+    string topic = 6;
 }
 
 message AssociatedContents {
@@ -24,7 +28,6 @@ message AssociatedContents {
 
 message ViewOneNoteRequest {
     string note_id = 1;
-    string user_id = 2;
 }
 
 message ViewAllNotesRequest {
@@ -35,7 +38,7 @@ message ViewAllNotesRequest {
 
 message ViewAllNotesResponse {
     int32 count = 1;
-    repeated NoteAndContent notes_and_contents = 2;
+    repeated notes.NotePreview notes = 2;
     int32 next_page = 3;
 }
 
@@ -48,7 +51,7 @@ message ViewNotesByUserIdRequest {
 
 message ViewNotesByUserIdResponse {
     int32 count = 1;
-    repeated NoteAndContent notes_and_contents = 2;
+    repeated notes.NotePreview notes = 2;
     int32 next_page = 3;
 }
 
@@ -56,10 +59,11 @@ service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent) {
         option (google.api.http) = {
             get: "/api/v1/notes/{note_id}"
-            additional_bindings {
-                get: "/api/v1/notes/{note_id}"
-                body: "*"
-            }
+            body: "*"
+            // additional_bindings {
+            //     get: "/api/v1/notes/{note_id}"
+            //     body: "*"
+            // }
         };
     };
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse) {
