@@ -38,6 +38,23 @@ services:
             config:
               minute: 100
               policy: local
+    
+  - name: view-notes-service
+    host: view-notes-service
+    port: 50051
+    protocol: grpc
+    tags:
+      - view-notes-service
+    routes:
+      - name: view-notes
+        protocols:
+          - http
+        paths:
+          - /api/v1/notes
+        plugins:
+          - name: grpc-gateway
+            config:
+              proto: /usr/local/share/lua/5.1/kong/protos/view_notes.proto
 
 plugins:
   - name: file-log
@@ -88,6 +105,7 @@ plugins:
     config:
       jwt_secret: "KUKUBIRDAIDHAIDHAJKSDAJIDBQIheh09u2jeqinwdjnbqwsdifhnw0euq2e0nqwdo" 
       public_paths:
+        - /api/v1/notes
         - /api/v1/auth/google/callback
         - /api/v1/auth/sgId/generateAuthUrl
         - /api/v1/auth/sgId/callback
