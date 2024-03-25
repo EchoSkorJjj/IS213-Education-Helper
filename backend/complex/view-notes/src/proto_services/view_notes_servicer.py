@@ -27,7 +27,7 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
             content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
             content_response = contents_stub.GetSavedContents(content_request)
 
-            retrieved_note = grpc_utils.note_to_b64_note(note_response)
+            retrieved_note = grpc_utils.note_to_b64_note(note_response.note)
 
             associated_contents = view_notes_pb2.AssociatedContents()
             associated_contents.flashcards.extend(content_response.flashcards)
@@ -64,26 +64,6 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
             for note_preview in note_previews:
                 response.notes.append(note_preview)
             
-            # notes = notes_response.notes
-            # response.next_page = notes_response.nextPage
-            # response.count = len(notes)
-
-            # for note in notes:
-            #     content_request = contents_pb2.GetSavedContentsRequest()
-            #     content_request.note_id = note.fileId
-            #     content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
-
-            #     content_response = contents_stub.GetSavedContents(content_request)
-
-            #     associated_contents = view_notes_pb2.AssociatedContents()
-            #     associated_contents.flashcards.extend(content_response.flashcards)
-            #     associated_contents.mcqs.extend(content_response.mcqs)
-
-            #     note_and_content = view_notes_pb2.NoteAndContent()
-            #     note_and_content.note.CopyFrom(grpc_utils.note_to_b64_note(note))
-            #     note_and_content.associated_contents.CopyFrom(associated_contents)
-            #     response.notes_and_contents.append(note_and_content)
-            
             return response
         except Exception as e:
             error_utils.handle_error(
@@ -113,22 +93,6 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
             for note_preview in note_previews:
                 response.notes.append(note_preview)
 
-            # for note in notes:
-            #     content_request = contents_pb2.GetSavedContentsRequest()
-            #     content_request.note_id = note.fileId
-            #     content_request.content_type.extend([contents_pb2.ContentType.FLASHCARD, contents_pb2.ContentType.MCQ])
-
-            #     content_response = contents_stub.GetSavedContents(content_request)
-
-            #     associated_contents = view_notes_pb2.AssociatedContents()
-            #     associated_contents.flashcards.extend(content_response.flashcards)
-            #     associated_contents.mcqs.extend(content_response.mcqs)
-
-            #     note_and_content = view_notes_pb2.NoteAndContent()
-            #     note_and_content.note.CopyFrom(grpc_utils.note_to_b64_note(note))
-            #     note_and_content.associated_contents.CopyFrom(associated_contents)
-            #     response.notes_and_contents.append(note_and_content)
-            
             return response
         except Exception as e:
             error_utils.handle_error(

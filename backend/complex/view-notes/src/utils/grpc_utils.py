@@ -16,7 +16,4 @@ def note_to_b64_note(note):
         file_name=note.fileName,
         title=note.title,
         topic=note.topic
-        )
-        # user_id=note.userId,
-        # file_id=note.fileId,
-        # file_content=base64.b64encode(note.fileContent).decode('utf-8')
+    )
