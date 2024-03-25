@@ -1,0 +1,5 @@
+pika
+requests
+openai
+tiktoken
+python-dotenv
