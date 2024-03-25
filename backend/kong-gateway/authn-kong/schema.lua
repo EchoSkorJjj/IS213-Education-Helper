@@ -1,19 +1,24 @@
 return {
     name = "authn-kong",
-    fields = {
-        { config = {
+    fields = {{
+        config = {
             type = "record",
-            fields = {
-                {
-                    public_paths = {
-                      type = "array",
-                      default = {},
-                      required = false,
-                      elements = { type = "string" },
+            fields = {{
+                jwt_secret = {
+                    type = "string",
+                    required = true
+                }
+            }, {
+
+                public_paths = {
+                    type = "array",
+                    default = {},
+                    required = false,
+                    elements = {
+                        type = "string"
                     }
-                },
-            },
-          },
-        },
-    },
+                }
+            }}
+        }
+    }}
 }

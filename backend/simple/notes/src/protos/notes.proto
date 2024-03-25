@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package notes;
+
+
+option java_package = "com.ESD.Notes.proto";
+option java_outer_classname = "NotesServiceProto";
+
+
+// Define a service with RPC methods
+service NoteService {
+  // Define an RPC method to upload a note
+  rpc UploadNote (UploadNoteRequest) returns (UploadNoteResponse);
+
+  // Define an RPC method to retrieve a note
+  rpc RetrieveNote (RetrieveNoteRequest) returns (RetrieveNoteResponse);
+
+  // Define an RPC method to retrieve multiple notes
+  rpc RetrieveMultipleNotes (RetrieveMultipleNotesRequest) returns (RetrieveMultipleNotesResponse);
+
+  // Define an RPC method to retrieve multiple notes by user id
+  rpc RetrieveMultipleNotesByUserId (RetrieveMultipleNotesByUserIdRequest) returns (RetrieveMultipleNotesByUserIdResponse);
+}
+
+// Note message for storing a note
+message Note {
+  string userId = 1;
+  string fileId = 2;
+  bytes fileContent = 3;
+}
+
+// Request message for uploading a note
+message UploadNoteRequest {
+  string userId = 1;
+  string fileId = 2;
+  bytes fileContent = 3;
+}
+
+// Response message for uploading a note
+message UploadNoteResponse {
+  string fileId = 1;
+}
+
+// Request message for retrieving a note
+message RetrieveNoteRequest {
+  string userId = 1;
+  string fileId = 2;
+}
+
+// Response message for retrieving a note
+message RetrieveNoteResponse {
+  string userId = 1;
+  string fileId = 2;
+  bytes fileContent = 3;
+}
+
+// Request message for retrieving multiple notes
+ // if page exists, offset is calculated as (page - 1) * limit.
+ // if offset exists, page is calculated as (offset / limit) + 1.
+ // Existence determined by whether offset or page == 0 (default value).
+ // If both are 0, then application should throw an error.
+message RetrieveMultipleNotesRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  int32 page = 3;
+}
+
+// Response message for retrieving multiple notes
+message RetrieveMultipleNotesResponse {
+  int32 count = 1;
+  repeated Note notes = 2;
+  int32 nextPage = 3;
+}
+
+// Request message for retrieving multiple notes by user id
+message RetrieveMultipleNotesByUserIdRequest {
+  string userId = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  int32 page = 4;
+}
+
+// Response message for retrieving multiple notes by user id
+message RetrieveMultipleNotesByUserIdResponse {
+  int32 count = 1;
+  repeated Note notes = 2;
+  int32 nextPage = 3;
+}

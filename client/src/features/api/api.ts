@@ -8,7 +8,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 300000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -48,7 +48,7 @@ export const generateNotes = async (file: File, generateType: string) => {
     formData.append("generateType", generateType);
 
     const response = await api.post(
-      "/api/v1/notes/generate",
+      "/api/v1/notes/upload",
       {
         formData: formData,
       },

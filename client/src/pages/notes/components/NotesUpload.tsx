@@ -20,7 +20,7 @@ const NotesUpload = ({
   setGenerateType,
 }: NotesUploadProps) => {
   const DropZoneAccept = [".pdf"];
-  const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+  const maxSize = 16 * 1024 * 1024; // 16MB in bytes
 
   const handleError = (error: string) => {
     console.error("Error uploading file:", error);

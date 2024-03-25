@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package fileprocessor;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+option java_package = "com.ESD.UploadNotes.proto";
+option java_outer_classname = "UploadNotesProto";
+
+// Metadata associated with each response
+message ResponseMetadata {
+    string request_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+// Generic wrapper for service responses
+message ServiceResponseWrapper {
+    ResponseMetadata metadata = 1;
+    google.protobuf.Any payload = 2;
+}  
+
+// Existing definitions below, with modifications to response messages
+
+// Service definition
+service FileProcessor {
+  rpc ProcessFile(FileUploadRequest) returns (ServiceResponseWrapper);
+}
+
+// Message for file upload request
+message FileUploadRequest {
+  string userId = 1;
+  string fileId = 2;
+  string generateType = 3;
+  string fileName = 4;
+  bytes file = 5; // PDF file content
+}
+
+// Metadata associated with the file
+message FileMetadata {
+  string title = 1;
+  string generateType = 2;
+  int64 pageCount = 3;
+  int64 filesize = 4;
+  string locale = 5;
+}
+
+// Modified response message to include in the payload of ServiceResponseWrapper
+message FileProcessResponse {
+  string fileId = 1;
+  FileMetadata metadata = 2;
+  repeated Page pages = 3; // Processed pages from AWS Textract
+}
+
+// Processed page content from the file
+message Page {
+  int64 pageId = 1;
+  string content = 2; // Extracted text content of the page
+}
+
+
