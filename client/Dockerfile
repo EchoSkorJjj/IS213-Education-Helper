@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:current-alpine3.19
+FROM node:latest
 
 # RUN apt update && apt install curl -y
 # Set the working directory in the container to /app
@@ -11,7 +11,7 @@ ENV NODE_ENV=development
 COPY package*.json ./
 
 # Installing dependencies
-RUN npm install
+# RUN npm install
 
 # Copying the rest of the files in our project
 COPY . .

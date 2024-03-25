@@ -8,7 +8,9 @@ interface LogoProps {
 export const Logo: React.FC<LogoProps> = ({ destination }) => {
   return (
     <Link href={destination}>
-      <Heading>EduHelper</Heading>
+      <Heading color="white" style={{textDecoration: "none"}}>
+        EduHelper
+      </Heading>
     </Link>
   );
 };

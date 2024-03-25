@@ -42,8 +42,10 @@ export const AuthMenu = ({ user, handleSignOutClick }: AuthMenuProps) => {
             spacing="1px"
             ml="2"
           >
-            <Text fontSize="sm">{user?.username}</Text>
-            <Text fontSize="xs" color="gray.600">
+            <Text fontSize="sm" color="white">
+              {user?.username}
+            </Text>
+            <Text fontSize="xs" color="white">
               {user?.role}
             </Text>
           </VStack>
