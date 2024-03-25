@@ -1,5 +1,5 @@
 const urlEnvironmentPrefix =
-  process.env.NODE_ENV === "production"
+  import.meta.env.VITE_NODE_ENV === "production"
     ? ""
     : `${import.meta.env.VITE_URL_ENVIRONMENT_PREFIX}.`;
 

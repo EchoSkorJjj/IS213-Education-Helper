@@ -1,7 +1,5 @@
-import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Box } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 
 const EmptyPage = () => {
   return (

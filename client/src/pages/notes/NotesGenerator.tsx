@@ -68,7 +68,7 @@ const NotesGeneratorPage = () => {
     // console.log(data);
   };
   return (
-    <Box >
+    <Box>
       <Helmet>
         <title>Notes</title>
         <meta name="description" content="Notes" />

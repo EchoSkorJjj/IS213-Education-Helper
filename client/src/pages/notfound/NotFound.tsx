@@ -3,13 +3,7 @@ import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 
 const NotFound = () => {
   return (
-    <Box
-      textAlign="center"
-      py={10}
-      px={6}
-      height="100vh"
-      
-    >
+    <Box textAlign="center" py={10} px={6} height="100vh">
       <Helmet>
         <title>Not Found</title>
         <meta name="description" content="Not Found" />

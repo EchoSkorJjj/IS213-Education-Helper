@@ -32,6 +32,23 @@ const NotesUpload = ({
     return null;
   };
 
+  const handleAttachmentChange = (fileOrFiles?: File | File[]) => {
+    // If it's an array, handle the first file or all files based on your requirement
+    if (Array.isArray(fileOrFiles)) {
+      // Example: handling only the first file from the array
+      const file = fileOrFiles[0];
+      if (file) {
+        handleChange(file);
+      }
+    } else if (fileOrFiles) {
+      // It's a single File object
+      handleChange(fileOrFiles);
+    } else {
+      // No file is provided, handle accordingly
+      console.log("No file selected");
+    }
+  };
+
   const generateFlashcard = generateType === "flashcard";
 
   return (
@@ -46,14 +63,13 @@ const NotesUpload = ({
       <Flex maxW={"6xl"} width="100%" height="90%" direction="column">
         <Box width="100%">
           <Attachment
-            height="210px"
             maxSize={maxSize}
             imagePreview="large"
             accept={DropZoneAccept}
             showFileSize={true}
             value={selectedFile}
             name="file-upload"
-            onChange={handleChange}
+            onChange={handleAttachmentChange}
             onError={handleError}
             onFileValidation={handleFileValidation}
           />

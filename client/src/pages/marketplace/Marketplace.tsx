@@ -64,7 +64,7 @@ const MarketplacePage = () => {
   }, [topic, notesTitle, currentMarketPage]);
 
   return (
-    <Box >
+    <Box>
       <Helmet>
         <title>Marketplace</title>
         <meta name="description" content="Marketplace" />

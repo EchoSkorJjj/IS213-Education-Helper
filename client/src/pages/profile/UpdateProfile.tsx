@@ -46,11 +46,7 @@ const UpdateProfile = () => {
   };
 
   return (
-    <Box
-      
-      mb="5em"
-      height="100vh"
-    >
+    <Box mb="5em" height="100vh">
       <Helmet>
         <title>Update Profile</title>
         <meta name="description" content="Update Profile" />

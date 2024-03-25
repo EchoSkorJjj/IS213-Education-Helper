@@ -5,11 +5,7 @@ import LongArrowRight from "~assets/img/right_arrow.svg";
 
 const HomePage = () => {
   return (
-    <Box
-      h="100vh"
-      w="100%"
-      
-    >
+    <Box h="100vh" w="100%">
       <Helmet>
         <title>Home</title>
         <meta name="description" content="Home" />

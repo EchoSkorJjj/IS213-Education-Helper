@@ -56,7 +56,7 @@ const Profile = () => {
   }, [savedNotesTitle, currentSavedNotePage]);
 
   return (
-    <Box  mb="5em">
+    <Box mb="5em">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />
