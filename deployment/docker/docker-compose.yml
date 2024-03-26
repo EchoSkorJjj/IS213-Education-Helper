@@ -78,6 +78,8 @@ services:
   user-storage-service:
     build: ../../backend/simple/user-storage
     image: user-storage-service:1.0
+    env_file:
+      - ../../backend/simple/user-storage/.env
     depends_on:
       user-storage-db:
         condition: service_healthy
@@ -144,8 +146,8 @@ services:
   view-notes-service:
     build: ../../backend/complex/view-notes
     image: view-notes-service:1.0
-    volumes:
-      - ../../backend/complex/view-notes/.env:/app/.env
+    env_file:
+      - ../../backend/complex/view-notes/.env
     depends_on:
       notes-service:
         # TODO: Set up healthcheck for notes service
@@ -162,8 +164,8 @@ services:
   contents-service:
     build: ../../backend/simple/contents
     image: content-service:1.0
-    volumes:
-      - ../../backend/simple/contents/.env:/app/.env
+    env_file:
+      - ../../backend/simple/contents/.env
     depends_on:
       contents-db:
         condition: service_healthy
