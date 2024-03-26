@@ -28,6 +28,9 @@ const SubscribePage = lazy(() => import("~pages/subscribe/Subscribe"));
 const ProfilePage = lazy(() => import("~pages/profile/Profile"));
 const UpdateProfilePage = lazy(() => import("~pages/profile/UpdateProfile"));
 const ViewNotesPage = lazy(() => import("~pages/viewnotes/ViewNotes"));
+const SuccessPage = lazy(() => import("~pages/subscribe/Success"));
+const FailedPage = lazy(() => import("~pages/subscribe/Failed"));
+
 const GeneratedContentPage = lazy(
   () => import("~pages/notes/GeneratedContent"),
 );
@@ -91,7 +94,9 @@ const App = () => {
                 <Route path="/subscribe" element={<SubscribePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/update" element={<UpdateProfilePage />} />
-                <Route path="/viewnotes" element={<ViewNotesPage />} />
+                <Route path="/viewnotes/:noteId" element={<ViewNotesPage />} />
+                <Route path="/subscribe/success" element={<SuccessPage />} />
+                <Route path="/subscribe/failed" element={<FailedPage />} />
                 <Route
                   path="/generated/:noteId"
                   element={<GeneratedContentPage />}

@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
+import { GetContentResponse } from "~shared/types/data";
 import { UpdateProfileType } from "~shared/types/form";
 
 import { useAuth } from "~features/auth";
@@ -141,6 +142,26 @@ export const updateProfile = async (data: UpdateProfileType) => {
 
     const responseData = await handleResponse(response);
     return responseData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getContent = async (
+  noteId: string,
+  authorization: string,
+): Promise<GetContentResponse | undefined> => {
+  try {
+    const response = await api.get(
+      `/api/v1/notes/${noteId}?user_id=7821c92e-2e29-4bb6-a890-edb8f7f11379`,
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+      },
+    );
+    const data = response.data as GetContentResponse;
+    return data;
   } catch (error) {
     console.log(error);
   }
