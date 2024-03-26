@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package subscription_pb;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/subscription";
+
+message ResponseMetadata {
+    string request_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+message ServiceResponseWrapper {
+    ResponseMetadata metadata = 1;
+    google.protobuf.Any payload = 2;
+}
+
+// Might need to update message name or service name,
+// temporarily call it SubscriptionMessage for now to
+// prevent naming conflict with the service name.
+message SubscriptionMessage {
+    string id = 1;
+    string email = 2;
+    string stripe_subscription_id = 3;
+    google.protobuf.Timestamp first_subscribed = 4;
+    google.protobuf.Timestamp subscribed_until = 5;
+    google.protobuf.Timestamp cancelled_at = 6;
+    string status = 7;
+}
+
+message CreateOrUpdateSubscriptionRequest {
+    string stripe_subscription_id = 1;
+    string email = 2;
+    // may or may not need this, depending on whether we offer different subscription types
+    // (e.g. 1 month, 1 year, unlimited). For now assume it is required.
+    google.protobuf.Timestamp subscribed_until = 3;
+}
+
+message CreateOrUpdateSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+message GetSubscriptionRequest {
+    string email = 1;
+}
+
+message GetSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+message UpdateSubscriptionRequest {
+    string email = 1;
+    google.protobuf.Timestamp subscribed_until = 2;
+}
+
+message UpdateSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+message CancelSubscriptionRequest {
+    string email = 1;
+}
+
+message CancelSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+message GetExpiredSubscriptionsRequest {}
+
+message GetExpiredSubscriptionsResponse {
+    ResponseMetadata metadata = 1;
+    repeated SubscriptionMessage expired_subscriptions = 2;
+}
+
+message DeleteExpiredSubscriptionRequest {
+    string email = 1;
+}
+
+message DeleteExpiredSubscriptionResponse {
+    ResponseMetadata metadata = 1;
+    SubscriptionMessage details = 2;
+}
+
+service Subscription {
+    rpc CreateOrUpdateSubscription(CreateOrUpdateSubscriptionRequest) returns (CreateOrUpdateSubscriptionResponse);
+    rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
+    rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse);
+    rpc GetExpiredSubscriptions(GetExpiredSubscriptionsRequest) returns (GetExpiredSubscriptionsResponse);
+    rpc DeleteExpiredSubscription(DeleteExpiredSubscriptionRequest) returns (DeleteExpiredSubscriptionResponse); // Ideally this should be streaming client... but I don't have the bandwith now
+}

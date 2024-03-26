@@ -2,6 +2,8 @@ import os
 from concurrent import futures
 import grpc
 from dotenv import load_dotenv
+
+from connection.database import Database
 from services.note_service import NoteServiceServicer
 from utils.logger import get_logger
 import notes_pb2_grpc
@@ -15,6 +17,14 @@ config = get_config()
 logger = get_logger(__name__)
 
 async def serve():
+    db = Database()
+    db.set_user(os.getenv('DB_USER'))
+    db.set_password(os.getenv('DB_PASSWORD'))
+    db.set_database(os.getenv('DB_NAME'))
+    db.set_host(os.getenv('DB_HOST'))
+    db.set_port(os.getenv('DB_PORT'))
+    db.connect()
+    
     server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10), options=[
         ('grpc.max_send_message_length', -1),
         ('grpc.max_receive_message_length', -1),
