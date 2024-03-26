@@ -16,7 +16,6 @@ local claim_spec = {
     exp = validators.is_not_expired()
 }
 
--- TODO: HANDLE TOKEN VERIFICATION
 
 
 -- Access phase handler
@@ -28,31 +27,39 @@ function MyAuthHandler:access(conf)
 
     for i, pub_path in ipairs(publicPaths) do
         if pub_path == path then
-        return
+            return
         end
     end
+
     local token = kong.request.get_header("Authorization")
-    -- remove bearer and take the token only
+    -- Exit if the Authorization header is missing
     if token == nil then
         kong.response.exit(401, { message = "Unauthorized" })
+        return 
     end
 
-    token = string.gsub(token, "Bearer ", "")
-    -- Check again in case of empty token in header
-    if token == nil then
+    -- Remove "Bearer " from the start of the token
+    token = string.gsub(token, "Bearer%s+", "")
+    if token == "" then 
         kong.response.exit(401, { message = "Unauthorized" })
+        return 
     end
+
     kong.log.notice("The token is ", token)
+    -- Verify the token
     local decoded_token, err = jwt:verify(conf.jwt_secret, token, claim_spec)
 
-    if err then
+    if not decoded_token or err then
         kong.log.err("Error decoding token: ", err)
-        kong.response.exit(401, { message = "Unauthorized" })
+        kong.response.exit(401, { message = "Unauthorized: " .. tostring(err) })
+        return
     end
+
     kong.log.notice("The decoded token is ", cjson.encode(decoded_token))
     local userId = decoded_token.payload.user_id
     kong.log.notice("The user id is ", userId)
 
+    -- Inject the user ID into the request header
     kong.service.request.set_header("x-user-id", userId)
 end
 

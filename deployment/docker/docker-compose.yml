@@ -139,6 +139,8 @@ services:
   user-storage-service:
     build: ../../backend/simple/user-storage
     image: user-storage-service:1.0
+    env_file:
+      - ../../backend/simple/user-storage/.env
     depends_on:
       postgres-db:
         condition: service_healthy
