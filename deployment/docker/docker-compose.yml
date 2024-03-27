@@ -36,7 +36,7 @@ services:
       - /run/secrets/ngrok_config
 
   kong-gateway:
-    image: kong:latest
+    image: kong-gateway:1.0
     build: ../../backend/kong-gateway
     environment:
       <<: *common-env
