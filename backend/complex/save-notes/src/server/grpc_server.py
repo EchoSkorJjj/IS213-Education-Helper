@@ -9,7 +9,7 @@ import pb.health_pb2_grpc as health_pb2_grpc
 from src.clients.init_clients import init_clients
 from src.interceptors.logging import LoggingInterceptor
 from src.interceptors.validation import ValidationInterceptor
-import src.proto_services.save_notes_servicer as save_notes_servicer
+import src.proto_services.save_notes_servicer as save_notes_servicer_module
 import src.proto_services.health_servicer as health_servicer
 
 class GrpcServer:
@@ -44,7 +44,7 @@ class GrpcServer:
         )
         logging.debug("Server started with {self._max_workers} workers...")
         
-        save_notes_pb2_grpc.add_SaveNotesServicer_to_server(save_notes_servicer.SaveNotesServicer(), self._server)
+        save_notes_pb2_grpc.add_SaveNotesServicer_to_server(save_notes_servicer_module.SaveNotesServicer(), self._server)
         logging.debug("ContentServicer added...")
 
         health_pb2_grpc.add_HealthServicer_to_server(health_servicer.HealthServicer(), self._server)

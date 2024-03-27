@@ -483,18 +483,6 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
     }
 
     async SaveNote(call: grpc.ServerUnaryCall<user_storage_pb.SaveNoteRequest, user_storage_pb.SaveNoteResponse>, callback: grpc.sendUnaryData<user_storage_pb.SaveNoteResponse>): Promise<void> {
-        const metadata = call.metadata.getMap();
-        const requestId = getMetaData(metadata, 'kong-request-id');
-
-        if (!requestId) {
-            const error = {
-                code: grpc.status.INVALID_ARGUMENT,
-                message: 'Request ID is required',
-            };
-            callback(error, null);
-            return;
-        }
-
         const user_id = call.request.user_id;
         const note = call.request.notes_ids;
 
@@ -532,18 +520,6 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
     }
 
     async DeleteSavedNote(call: grpc.ServerUnaryCall<user_storage_pb.DeleteSavedNoteRequest, user_storage_pb.DeleteSavedNoteResponse>, callback: grpc.sendUnaryData<user_storage_pb.DeleteSavedNoteResponse>): Promise<void> {
-        const metadata = call.metadata.getMap();
-        const requestId = getMetaData(metadata, 'kong-request-id');
-
-        if (!requestId) {
-            const error = {
-                code: grpc.status.INVALID_ARGUMENT,
-                message: 'Request ID is required',
-            };
-            callback(error, null);
-            return;
-        }
-        
         const user_id = call.request.user_id;
         const note_id = call.request.note_id;
 

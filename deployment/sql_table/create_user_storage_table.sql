@@ -12,3 +12,7 @@ CREATE TABLE IF NOT EXISTS user_storage_table (
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     saved_notes_ids TEXT[] DEFAULT ARRAY[]::TEXT[]
 );
+
+INSERT INTO user_storage_table (user_id, username, email, first_name, last_name, role, profile_pic, is_paid)
+VALUES ('536217b2-17c7-4e84-880a-4cba12a4eabd', 'johndoe', 'john.doe@example.com', 'John', 'Doe', 'User', NULL, FALSE);
+

@@ -147,7 +147,7 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
             )
             
             # Returning a single note's metadata as a response
-            return notes_pb2.RetrieveNoteResponse(note=note_preview)
+            return notes_pb2.RetrieveNoteMetadataResponse(noteMetadata=note_preview)
 
         except Exception as e:
             logger.error(f'Error retrieving note metadata: {e}', exc_info=True)
