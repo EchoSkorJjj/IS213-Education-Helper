@@ -39,7 +39,7 @@ down:
 	@docker compose -p ${PROJECT_NAME} \
 		-f ${LOCAL_DEPLOY_DIR}/docker-compose.yml \
 		down
-		
+
 down-clean: prune-esd-images
 	@docker compose -p ${PROJECT_NAME} \
 		-f ${LOCAL_DEPLOY_DIR}/docker-compose.yml \
@@ -58,7 +58,7 @@ prune-esd-images:
 	@echo "This will remove all unused images associated with the esd project. Continue? [y/N]"; \
 	read ans; \
 	if [ "$$ans" = "y" ] || [ "$$ans" = "Y" ]; then \
-		docker images | grep 'esd' | awk '{print $$3}' | xargs docker rmi -f; \
+		docker images | grep 'esd' | awk '{print $$3}' | grep -q . && xargs docker rmi -f || echo "No esd related images to remove."; \
 	else \
-		echo "Abortion."; \
+		echo "Aborting."; \
 	fi
