@@ -65,7 +65,6 @@ services:
       - ../../backend/kong-gateway/rawstring-adapter:/usr/local/share/lua/5.1/kong/plugins/rawstring-adapter 
       - ../../backend/kong-gateway/protos:/usr/local/share/lua/5.1/kong/protos
 
-  
   postgres-db:
     image: postgres:alpine3.18
     volumes:
@@ -102,8 +101,6 @@ services:
         condition: service_healthy
       subscription-service:
         condition: service_healthy
-    ports:
-      - "50055:50051"
     healthcheck:
       test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
       interval: 10s
