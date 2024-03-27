@@ -7,4 +7,5 @@ export interface ClientUserData {
     role: string,
     profile_pic: string,
     is_paid: boolean,
+    saved_notes_ids: string[],
 }
