@@ -9,8 +9,6 @@ CREATE TABLE IF NOT EXISTS user_storage_table (
     role VARCHAR(50) DEFAULT 'User',
     profile_pic VARCHAR(255) DEFAULT NULL,
     is_paid BOOLEAN DEFAULT FALSE,
-    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
-
-ALTER TABLE user_storage_table
-ADD COLUMN saved_notes_ids TEXT[] DEFAULT ARRAY[]::TEXT[];
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    saved_notes_ids TEXT[] DEFAULT ARRAY[]::TEXT[]
+);

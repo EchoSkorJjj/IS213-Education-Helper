@@ -82,8 +82,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "5432:5432" # For debugging purposes
+
 
   user-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -205,6 +204,24 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+
+  save-notes-service:
+    build: ../../backend/complex/save-notes
+    image: save-notes-service:1.0
+    env_file:
+      - ../../backend/complex/save-notes/.env
+    depends_on:
+      notes-service:
+        # TODO: Set up healthcheck for notes service
+        condition: service_started
+      contents-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     
   contents-service:
     build: ../../backend/simple/contents
@@ -271,7 +288,7 @@ services:
     build:
       context: ../../backend/complex/process-chunks
     ports:
-      - "50054:50054"
+      - "50055:50054"
     depends_on:
       rabbitmq:
         condition: service_healthy
