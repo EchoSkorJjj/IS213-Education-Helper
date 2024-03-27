@@ -11,15 +11,17 @@ RUN mvn dependency:go-offline
 COPY src /app/src
 RUN mvn clean package -DskipTests
 
-# Run stage
-FROM amazoncorretto:17.0.10-al2023-headless
+FROM maven:3.9.6-amazoncorretto-17-debian AS jlink
+RUN apt-get update && apt-get install -y binutils
+RUN jlink --no-header-files \
+    --no-man-pages \
+    --compress=2 \
+    --strip-debug \
+    --add-modules java.base,java.desktop,java.naming,java.management,java.security.jgss,java.instrument \
+    --output /spring-boot-runtime
+
+FROM debian:stretch-slim
+COPY --from=jlink /spring-boot-runtime /usr/lib/jvm/spring-boot-runtime
 WORKDIR /app
-
-# Copy the JAR from the build stage
 COPY --from=build /app/target/UploadNotes-0.0.1-SNAPSHOT.jar app.jar
-
-# EXPOSE 50055
-
-# ENTRYPOINT ["sh", "-c", "echo $JAVA_HOME && while true; do sleep 1; done"]
-
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
+CMD ["/usr/lib/jvm/spring-boot-runtime/bin/java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
