@@ -100,6 +100,7 @@ func (s *Server) CreateTemporaryContent(ctx context.Context, req *htcPb.CreateTe
 		}
 	}
 
+	response.Success = true
 	return response, nil
 }
 

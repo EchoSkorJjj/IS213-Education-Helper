@@ -79,7 +79,7 @@ class Cache:
             obj_dict = json.loads(obj)
             if obj_dict["id"] == temp_id:
                 for field in new_value:
-                    obj_dict[field] = new_value[field]
+                    if new_value[field]: obj_dict[field] = new_value[field]
 
                 self._client.lset(key, i, json.dumps(obj_dict))
                 return obj_dict

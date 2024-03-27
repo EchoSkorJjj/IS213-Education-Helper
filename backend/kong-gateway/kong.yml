@@ -94,7 +94,7 @@ services:
         protocols:
           - http
         paths:
-          - /api/v1/temporary-contents
+          - /api/v1/contents/temporary
         plugins:
           - name: grpc-gateway
             config:
