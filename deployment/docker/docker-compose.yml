@@ -82,8 +82,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "5432:5432" # For debugging purposes
 
   user-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -94,6 +92,25 @@ services:
       timeout: 5s
       retries: 5
     
+  handle-temporary-contents-service:
+    build: ../../backend/complex/handle-temporary-contents
+    image: handle-temporary-contents-service:1.0
+    env_file:
+      - ../../backend/complex/handle-temporary-contents/.env
+    depends_on:
+      payment-service:
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
+    ports:
+      - "50055:50051"
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   make-payment-service:
     build: ../../backend/complex/make-payment
     image: make-payment-service:1.0
@@ -104,8 +121,6 @@ services:
         condition: service_healthy
       subscription-service:
         condition: service_healthy
-    ports:
-      - "50054:50051"
     healthcheck:
       test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
       interval: 10s
@@ -146,8 +161,6 @@ services:
         condition: service_healthy
       user-redis:
         condition: service_healthy
-    ports:
-      - "50051:50051"
     healthcheck:
       test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
       interval: 10s
@@ -235,8 +248,6 @@ services:
   upload-notes:
     build: ../../backend/complex/upload-notes
     image: upload-notes:1.0
-    ports:
-      - "8080:8080"
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -246,9 +257,6 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: "user"
       RABBITMQ_DEFAULT_PASS: "password"
-    ports:
-      - "5672:5672" 
-      - "15672:15672" # to hide later
     healthcheck:
       test: ["CMD", "rabbitmqctl", "status"]
       interval: 30s
@@ -263,15 +271,13 @@ services:
     #   options:
     #     fluentd-address: localhost:24224
     #     tag: docker.container.pdf-reader
-    ports:
-      - "50053:50053"
       
   
   process-chunks:
     build:
       context: ../../backend/complex/process-chunks
-    ports:
-      - "50054:50054"
+    env_file:
+      - ../../backend/complex/process-chunks/.env
     depends_on:
       rabbitmq:
         condition: service_healthy
