@@ -11,3 +11,6 @@ CREATE TABLE IF NOT EXISTS user_storage_table (
     is_paid BOOLEAN DEFAULT FALSE,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
+
+ALTER TABLE user_storage_table
+ADD COLUMN saved_notes_ids TEXT[] DEFAULT ARRAY[]::TEXT[];
