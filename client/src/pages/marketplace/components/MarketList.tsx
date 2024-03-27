@@ -7,10 +7,12 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useBreakpointValue
 } from "@chakra-ui/react";
 import { Searchbar } from "@opengovsg/design-system-react";
 
 import { Pagination } from "~components/pagination";
+
 
 interface NotesProp {
   unique_id: string;
@@ -36,6 +38,8 @@ const MarketList = ({
   totalNotesCount,
 }: MarketProps) => {
   const pageSize = 8;
+  const isExpanded = useBreakpointValue({ base: true, md: false});
+
 
   return (
     <Flex
@@ -47,9 +51,9 @@ const MarketList = ({
     >
       <Flex maxW={"6xl"} mt={{ md: "4em" }} width="100%" direction="column">
         <Flex
-          direction="row"
           alignItems="center"
           justifyContent="space-between"
+          direction={{ base: "column", md: "row" }} // Add this line
         >
           <Box>
             <Text
@@ -60,7 +64,7 @@ const MarketList = ({
               Marketplace
             </Text>
           </Box>
-          <Box>
+          <Box w={{ base: "100%", md: "auto" }}> 
             <Searchbar
               placeholder="Search notes"
               style={{
@@ -69,7 +73,7 @@ const MarketList = ({
               onSearch={(value: string) => {
                 setNotesTitle(value);
               }}
-              isExpanded={true}
+              isExpanded={isExpanded}
             />
           </Box>
         </Flex>

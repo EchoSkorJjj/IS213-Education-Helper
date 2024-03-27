@@ -74,11 +74,11 @@ const NotesUpload = ({
             onFileValidation={handleFileValidation}
           />
         </Box>
-        <Box width="100%" textAlign={"center"}>
+        <Box width="100%" textAlign="center">
           <Text
             color="black"
             fontWeight="bold"
-            fontSize={{ base: "2xl", md: "3xl" }}
+            fontSize={{ base: "xl", md: "3xl" }}
           >
             Select Notes Type
           </Text>
@@ -95,24 +95,22 @@ const NotesUpload = ({
             as="button"
             bg={generateFlashcard ? "midBlue.500" : ""}
             width={{ base: "100%", md: "50%" }}
-            pl="5em"
-            pr="8em"
-            pt="2em"
-            pb="2em"
-            justifyContent={"center"}
+            px={{ base: "4", md: "5em" }}
+            py={{ base: "6", md: "2em" }}
+            justifyContent="center"
             alignContent="center"
             color={generateFlashcard ? "white" : "midBlue.500"}
             textAlign="start"
             onClick={() => setGenerateType("flashcard")}
           >
-            <Text fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}>
+            <Text fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}>
               Generate
               <br />
               <Text as="span" fontWeight="bold">
                 Flashcard
               </Text>
             </Text>
-            <Text fontSize={{ base: "lg" }}>
+            <Text fontSize={{ base: "sm", md: "lg" }} mt={{ base: "2", md: "0" }}>
               Flashcards are a great study tool if you need to memorize
               definitions, facts, or short pieces of information for a test
             </Text>
@@ -121,28 +119,26 @@ const NotesUpload = ({
             as="button"
             bg={generateFlashcard ? "" : "midBlue.500"}
             width={{ base: "100%", md: "50%" }}
-            pl="5em"
-            pr="8em"
-            pt="1.5em"
-            pb="1.4em"
-            justifyContent={"center"}
+            px={{ base: "4", md: "5em" }}
+            py={{ base: "6", md: "1.5em" }}
+            justifyContent="center"
             alignContent="center"
             color={generateFlashcard ? "midBlue.500" : "white"}
             textAlign="start"
             onClick={() => handleGenerationChange()}
           >
-            <Text fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}>
+            <Text fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}>
               Generate
               <br />
               <Text as="span" fontWeight="bold">
                 MCQs
               </Text>
             </Text>
-            <Text fontSize={{ base: "lg" }}>
+            <Text fontSize={{ base: "sm", md: "lg" }} mt={{ base: "2", md: "0" }}>
               MCQs (multiple choice questions) will be generated to test your
               understanding
             </Text>
-            <HStack mt="5">
+            <HStack mt={{ base: "4", md: "5" }}>
               <LockIcon />
               <Text color={generateFlashcard ? "midBlue.400" : "white"}>
                 This is a paid feature. Unlock it with Pro!
@@ -153,14 +149,14 @@ const NotesUpload = ({
         <Flex
           width="100%"
           alignItems="center"
-          justifyContent={"center"}
-          mt="3em"
+          justifyContent="center"
+          mt={{ base: "6", md: "3em" }}
         >
           <Button
             bg="midBlue.500"
             size="lg"
-            width="15%"
-            mb="3em"
+            width={{ base: "80%", md: "15%" }}
+            mb={{ base: "6", md: "3em" }}
             onClick={handleGenerate}
           >
             Generate

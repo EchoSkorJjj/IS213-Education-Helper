@@ -41,7 +41,7 @@ const Navbar = ({ ...rest }) => {
         justifyContent={"space-between"}
         {...rest}
         h="20"
-        maxW={"6xl"}
+        maxW={"100%"}
         direction={"row"}
       >
         <IconButton

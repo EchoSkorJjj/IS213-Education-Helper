@@ -8,10 +8,10 @@ import {
   List,
   ListIcon,
   ListItem,
-  Stack,
   Text,
   useToast,
   VStack,
+  SimpleGrid,
 } from "@chakra-ui/react";
 
 import { useAuth } from "~features/auth";
@@ -33,7 +33,7 @@ function PriceWrapper(props: Props) {
       alignSelf={{ base: "center", lg: "flex-start" }}
       borderColor={"gray.200"}
       borderRadius={"xl"}
-      width={"20%"}
+      width={{ base: "90%", md: "70%", lg: "50%" }}
     >
       {children}
     </Box>
@@ -61,30 +61,30 @@ const SubscribePage = () => {
   };
 
   return (
-    <Box py={12} h="100vh">
+      <Box py={12} minHeight="100vh">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />
       </Helmet>
       <VStack spacing={2} textAlign="center">
-        <Heading as="h1" fontSize="4xl" color="white">
+        <Heading as="h1" fontSize={{ base: "3xl", md: "4xl" }} color="white">
           Plans that fit your need
         </Heading>
         <Text fontSize="lg" color={"gray.500"}>
           You may cancel the subscription at anytime.
         </Text>
       </VStack>
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        textAlign="center"
-        justify="center"
-        spacing={{ base: 4, lg: 10 }}
+      <SimpleGrid
+        columns={{ base: 1, md: 2}}
+        spacing={5}
         py={10}
+        justifyItems="center"
+        alignItems="flex-start"
       >
         <PriceWrapper>
-          <Box py={4} px={12} color="white">
-            <Text fontWeight="500" fontSize="2xl">
-              Free
+          <Box color="white">
+            <Text textAlign='center' fontWeight="500" color="blue.600" fontSize="2xl">
+              Free Tier
             </Text>
             <HStack justifyContent="center">
               <Text fontSize="3xl" color="black" fontWeight="600">
@@ -107,6 +107,14 @@ const SubscribePage = () => {
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="blue.500" />
                 Access to Marketplace
+              </ListItem>
+              <ListItem>
+                <ListIcon as={FaCheckCircle} color="blue.500" />
+                Flashcard Generation
+              </ListItem>
+              <ListItem>
+                <ListIcon as={FaCheckCircle} color="blue.500" />
+                Unlock Flashcard in Marketplace
               </ListItem>
             </List>
             <Box w="80%" pt={7}>
@@ -145,7 +153,7 @@ const SubscribePage = () => {
               </Text>
             </Box>
             <Box py={4} px={12} color="white">
-              <Text fontWeight="500" fontSize="2xl">
+              <Text textAlign='center' color="blue.600" fontWeight="500" fontSize="2xl">
                 Pro
               </Text>
               <HStack justifyContent="center">
@@ -164,19 +172,15 @@ const SubscribePage = () => {
               <List spacing={3} textAlign="start" px={12}>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
-                  Notes Generation
+                  Everything from the Free Tier
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
-                  Access to Marketplace
+                  Quiz Generation
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
-                  Flashcard / Quiz Generation
-                </ListItem>
-                <ListItem>
-                  <ListIcon as={FaCheckCircle} color="blue.500" />
-                  Unlock Flashcard / Quiz in Marketplace
+                  Unlock Quiz in Marketplace
                 </ListItem>
               </List>
               <Box w="80%" pt={7}>
@@ -187,7 +191,7 @@ const SubscribePage = () => {
             </VStack>
           </Box>
         </PriceWrapper>
-      </Stack>
+      </SimpleGrid>
     </Box>
   );
 };
