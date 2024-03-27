@@ -9,7 +9,6 @@ const FailedPage = () => {
     <Box
       py={12}
       minHeight="100vh"
-      bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
     >
       <Helmet>
         <title>Subscription Unsuccessful</title>

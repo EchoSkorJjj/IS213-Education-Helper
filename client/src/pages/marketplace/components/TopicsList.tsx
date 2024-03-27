@@ -1,4 +1,4 @@
-import { Box, Button, Flex, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Button, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import { Searchbar } from "@opengovsg/design-system-react";
 
 import { Pagination } from "~components/pagination";
@@ -21,7 +21,6 @@ const TopicsList = ({
 }: TopicsProps) => {
   const pageSize = 8;
 
-  const isExpanded = useBreakpointValue({ base: true, md: false});
   const indexOfLastTopic = currentTopicPage * pageSize;
   const indexOfFirstTopic = indexOfLastTopic - pageSize;
   const currentTopics = topics.slice(indexOfFirstTopic, indexOfLastTopic);
@@ -60,7 +59,6 @@ const TopicsList = ({
                 onSearch={(value: string) => {
                   setTopic(value);
                 }}
-                isExpanded={isExpanded}
 
               />
             </Box>

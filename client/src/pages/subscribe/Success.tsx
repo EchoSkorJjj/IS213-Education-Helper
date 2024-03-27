@@ -15,7 +15,6 @@ const SuccessPage = () => {
     <Box
       py={12}
       h="100vh"
-      bgGradient="linear(to-t, white 10%, darkBlue.500 90%)"
     >
       <Helmet>
         <title>Subscription Successful</title>

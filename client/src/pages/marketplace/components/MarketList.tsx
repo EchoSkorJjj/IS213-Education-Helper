@@ -6,8 +6,7 @@ import {
   Image,
   SimpleGrid,
   Stack,
-  Text,
-  useBreakpointValue
+  Text
 } from "@chakra-ui/react";
 import { Searchbar } from "@opengovsg/design-system-react";
 
@@ -38,8 +37,6 @@ const MarketList = ({
   totalNotesCount,
 }: MarketProps) => {
   const pageSize = 8;
-  const isExpanded = useBreakpointValue({ base: true, md: false});
-
 
   return (
     <Flex
@@ -73,12 +70,11 @@ const MarketList = ({
               onSearch={(value: string) => {
                 setNotesTitle(value);
               }}
-              isExpanded={isExpanded}
             />
           </Box>
         </Flex>
         <SimpleGrid
-          columns={{ base: 2, md: 3, lg: 4 }}
+          columns={{ base: 1, md: 3, lg: 4 }}
           spacing={5}
           paddingTop="5"
           paddingBottom="5"
@@ -108,7 +104,6 @@ const MarketList = ({
                   >
                     {note.title}
                   </Text>
-
                   <Text color="gray.400">{note.creator}</Text>
                 </Stack>
               </CardBody>
