@@ -12,10 +12,7 @@ import {
 
 const SuccessPage = () => {
   return (
-    <Box
-      py={12}
-      h="100vh"
-    >
+    <Box py={12} h="100vh">
       <Helmet>
         <title>Subscription Successful</title>
         <meta name="description" content="Subscription successful" />

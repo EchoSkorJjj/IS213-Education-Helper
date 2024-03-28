@@ -6,12 +6,11 @@ import {
   Image,
   SimpleGrid,
   Stack,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { Searchbar } from "@opengovsg/design-system-react";
 
 import { Pagination } from "~components/pagination";
-
 
 interface NotesProp {
   unique_id: string;
@@ -61,7 +60,7 @@ const MarketList = ({
               Marketplace
             </Text>
           </Box>
-          <Box w={{ base: "100%", md: "auto" }}> 
+          <Box w={{ base: "100%", md: "auto" }}>
             <Searchbar
               placeholder="Search notes"
               style={{

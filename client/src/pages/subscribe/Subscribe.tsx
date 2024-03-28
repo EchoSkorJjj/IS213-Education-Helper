@@ -8,10 +8,10 @@ import {
   List,
   ListIcon,
   ListItem,
+  SimpleGrid,
   Text,
   useToast,
   VStack,
-  SimpleGrid,
 } from "@chakra-ui/react";
 
 import { useAuth } from "~features/auth";
@@ -61,7 +61,7 @@ const SubscribePage = () => {
   };
 
   return (
-      <Box py={12} minHeight="100vh">
+    <Box py={12} minHeight="100vh">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />
@@ -75,7 +75,7 @@ const SubscribePage = () => {
         </Text>
       </VStack>
       <SimpleGrid
-        columns={{ base: 1, md: 2}}
+        columns={{ base: 1, md: 2 }}
         spacing={5}
         py={10}
         justifyItems="center"
@@ -83,7 +83,12 @@ const SubscribePage = () => {
       >
         <PriceWrapper>
           <Box color="white">
-            <Text textAlign='center' fontWeight="500" color="blue.600" fontSize="2xl">
+            <Text
+              textAlign="center"
+              fontWeight="500"
+              color="blue.600"
+              fontSize="2xl"
+            >
               Free Tier
             </Text>
             <HStack justifyContent="center">
@@ -153,7 +158,12 @@ const SubscribePage = () => {
               </Text>
             </Box>
             <Box py={4} px={12} color="white">
-              <Text textAlign='center' color="blue.600" fontWeight="500" fontSize="2xl">
+              <Text
+                textAlign="center"
+                color="blue.600"
+                fontWeight="500"
+                fontSize="2xl"
+              >
                 Pro
               </Text>
               <HStack justifyContent="center">

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "question": "What is the capital of France?",
+    "options": [
+      { "option": "A", "text": "Paris", "isCorrect": true },
+      { "option": "B", "text": "Rome", "isCorrect": false },
+      { "option": "C", "text": "Madrid", "isCorrect": false },
+      { "option": "D", "text": "Berlin", "isCorrect": false }
+    ]
+  },
+  {
+    "id": "2",
+    "question": "Who wrote '1984'?",
+    "options": [
+      { "option": "A", "text": "Aldous Huxley", "isCorrect": false },
+      { "option": "B", "text": "George Orwell", "isCorrect": true },
+      { "option": "C", "text": "Ray Bradbury", "isCorrect": false },
+      { "option": "D", "text": "Philip K. Dick", "isCorrect": false }
+    ]
+  }
+]

@@ -110,7 +110,10 @@ const NotesUpload = ({
                 Flashcard
               </Text>
             </Text>
-            <Text fontSize={{ base: "sm", md: "lg" }} mt={{ base: "2", md: "0" }}>
+            <Text
+              fontSize={{ base: "sm", md: "lg" }}
+              mt={{ base: "2", md: "0" }}
+            >
               Flashcards are a great study tool if you need to memorize
               definitions, facts, or short pieces of information for a test
             </Text>
@@ -134,7 +137,10 @@ const NotesUpload = ({
                 MCQs
               </Text>
             </Text>
-            <Text fontSize={{ base: "sm", md: "lg" }} mt={{ base: "2", md: "0" }}>
+            <Text
+              fontSize={{ base: "sm", md: "lg" }}
+              mt={{ base: "2", md: "0" }}
+            >
               MCQs (multiple choice questions) will be generated to test your
               understanding
             </Text>

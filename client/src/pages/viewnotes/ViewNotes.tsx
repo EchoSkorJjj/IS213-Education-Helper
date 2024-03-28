@@ -28,7 +28,7 @@ import MCQ from "./components/MCQ";
 
 import { getContent } from "~api";
 
-const ViewNotes = () => {
+function ViewNotes() {
   const navigate = useNavigate();
   const { noteId } = useParams<{ noteId: string }>();
   const [content, setContent] = useState<ContentType>();
@@ -50,45 +50,40 @@ const ViewNotes = () => {
 
   const extractFileData = (fileContent: string) => {
     const byteCharacters = atob(fileContent);
-    const byteNumbers = Array.from(byteCharacters, (char) => char.charCodeAt(0));
+    const byteNumbers = Array.from(byteCharacters, (char) =>
+      char.charCodeAt(0),
+    );
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: "application/pdf" });
   };
-  
+
+  const setFileHook = (data: any) => {
+    setContent(data.associated_contents);
+    setOwnerId(data.note.user_id);
+    setNoteTitle(data.note.title);
+    setNoteTopic(data.note.topic);
+    setFileName(data.note.file_name);
+  };
+
   const setNoteData = (data: any) => {
-    const {
-      associated_contents: content,
-      note: {
-        file_content: fileContent,
-        user_id: ownerId,
-        title: noteTitle,
-        topic: noteTopic,
-        file_name: fileName,
-      },
-    } = data;
-  
-    setContent(content);
-    setOwnerId(ownerId);
-    setNoteTitle(noteTitle);
-    setNoteTopic(noteTopic);
-    setFileName(fileName);
-  
-    const blob = extractFileData(fileContent);
-    const blobUrl = URL.createObjectURL(blob);
+    setFileHook(data);
+    const fileContent = data.note.file_content;
+
+    const blobUrl = URL.createObjectURL(extractFileData(fileContent));
     setBlobUrl(blobUrl);
   };
-  
+
   const handleGetContent = async () => {
     if (!noteId || !authorization) {
       return;
     }
-  
+
     const data = await getContent(noteId, authorization);
-  
+
     if (!data) {
       return;
     }
-  
+
     setNoteData(data);
   };
 

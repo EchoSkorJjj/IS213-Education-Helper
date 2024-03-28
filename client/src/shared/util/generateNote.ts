@@ -73,7 +73,7 @@ export const getUserNotes = async (
   currentPage: number,
 ) => {
   const totalNotesCount = 100 - currentPage + currentPage;
-  let selectedTopics: any[] = [];
+  let selectedTopics: string[] = [];
 
   if (userNoteType === "created") {
     // Take the first 4 topics

@@ -6,10 +6,7 @@ const FailedPage = () => {
   const textColor = "white";
 
   return (
-    <Box
-      py={12}
-      minHeight="100vh"
-    >
+    <Box py={12} minHeight="100vh">
       <Helmet>
         <title>Subscription Unsuccessful</title>
         <meta name="description" content="Subscription unsuccessful" />

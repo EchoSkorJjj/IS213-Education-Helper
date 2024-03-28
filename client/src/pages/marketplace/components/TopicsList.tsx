@@ -3,7 +3,6 @@ import { Searchbar } from "@opengovsg/design-system-react";
 
 import { Pagination } from "~components/pagination";
 
-
 interface TopicsProps {
   topics: string[];
   setTopic: (topic: string) => void;
@@ -39,7 +38,7 @@ const TopicsList = ({
           <Flex
             alignItems="center"
             justifyContent="space-between"
-            direction={{ base: "column", md: "row" }} 
+            direction={{ base: "column", md: "row" }}
           >
             <Box>
               <Text
@@ -54,12 +53,11 @@ const TopicsList = ({
               <Searchbar
                 placeholder="Search topics"
                 style={{
-                  bg: "black"
+                  bg: "black",
                 }}
                 onSearch={(value: string) => {
                   setTopic(value);
                 }}
-
               />
             </Box>
           </Flex>
