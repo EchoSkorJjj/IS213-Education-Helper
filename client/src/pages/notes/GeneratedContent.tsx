@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { AttachmentIcon } from "@chakra-ui/icons";
+import FlipMove from 'react-flip-move';
 import {
   Box,
   Button,
@@ -25,10 +26,6 @@ import { isFlashcardType } from "~shared/util";
 import {
   getTemporaryContents,
   deleteTemporaryContent,
-  deleteAllTemporaryContents,
-  updateTemporaryContent,
-  createTemporaryContent,
-  commitTemporaryContents
 } from "~features/api";
 import { useAuth } from "~features/auth";
 
@@ -103,7 +100,6 @@ const GeneratedContent: React.FC = () => {
     if (!noteId || !authorization || !fileId) {
       return;
     }
-
     const response = await deleteTemporaryContent(noteId, fileId, type, authorization);
     if (!response) {
       toast({
@@ -125,11 +121,6 @@ const GeneratedContent: React.FC = () => {
       const updatedMCQs = MCQs.filter((mcq) => mcq.id !== fileId);
       setMCQs(updatedMCQs);
     }
-  };
-
-  const removeMCQById = (id: string) => {
-    const updatedMCQs = MCQs.filter((mcq) => mcq.id !== id);
-    setMCQs(updatedMCQs);
   };
 
   const updateFlashcard = (
@@ -232,6 +223,7 @@ const GeneratedContent: React.FC = () => {
 
   return (
     <Box>
+
       <Helmet>
         <title>Generated Notes</title>
         <meta
@@ -276,7 +268,6 @@ const GeneratedContent: React.FC = () => {
                 size="lg"
                 pl={3}
                 width="150%"
-                value={selectedTopic}
                 onChange={handleTopicChange}
                 placeholder="Select option"
               >
@@ -334,24 +325,35 @@ const GeneratedContent: React.FC = () => {
       >
         {/* Show Flashcard or MCQ depending on type */}
         {type === "flashcard"
-          ? GPTContent.map((data) => (
-            <PreFlashcard
-              key={data.id}
-              GPTContent={data}
-              onDelete={() => removeById(noteId, data.id, "flashcard", authorization)}
-              onUpdate={updateFlashcard}
-            />
-          ))
-          : MCQs.map((mcq) => (
-            <PreMCQ
-              key={mcq.id}
-              id={mcq.id}
-              question={mcq.question}
-              options={mcq.options}
-              onDelete={() => removeById(noteId, mcq.id, "mcq", authorization)}
-              onUpdate={updateMCQ}
-            />
-          ))}
+          ? <FlipMove>
+            {GPTContent.map((data) => (
+              <div key={data.id}>
+                <PreFlashcard
+                  GPTContent={data}
+                  onDelete={() => {
+                    removeById(noteId, data.id, "flashcard", authorization);
+                  }}
+                  onUpdate={updateFlashcard}
+                />
+              </div>
+            ))}
+          </FlipMove>
+          : <FlipMove>
+            {MCQs.map((mcq) => (
+              <div key={mcq.id}>
+                <PreMCQ
+                  id={mcq.id}
+                  question={mcq.question}
+                  options={mcq.options}
+                  onDelete={() => {
+                    removeById(noteId, mcq.id, "mcq", authorization);
+                  }}
+                  onUpdate={updateMCQ}
+                />
+              </div>
+            ))}
+          </FlipMove>
+        }
 
         <Button
           m={10}
@@ -377,3 +379,4 @@ const GeneratedContent: React.FC = () => {
 };
 
 export default GeneratedContent;
+
