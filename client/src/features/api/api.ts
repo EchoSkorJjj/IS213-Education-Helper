@@ -227,15 +227,19 @@ export const updateTemporaryContent = async (
 export const deleteTemporaryContent = async (
   noteId: string,
   contentId: string,
+  contentType: string,
   authorization: string,
 ): Promise<DeleteTemporaryContentsResponse | undefined> => {
   try {
+
+    const contentTypeAsNumber: number = contentType === "flashcard" ? 0 : 1;
     const response = await api.delete("/api/v1/contents/temporary", {
       headers: {
         Authorization: `Bearer ${authorization}`,
       },
       data: {
         note_id: noteId,
+        content_type: contentTypeAsNumber,
         content_id: contentId,
       },
     });

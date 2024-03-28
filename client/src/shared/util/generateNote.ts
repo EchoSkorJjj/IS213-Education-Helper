@@ -91,5 +91,5 @@ export const getUserNotes = async (
 };
 
 export const isFlashcardType = (obj: any): boolean => {
-  return obj.hasOwnProperty("flashcards");
+  return obj.hasOwnProperty("flashcard");
 };

@@ -22,7 +22,14 @@ import {
 } from "~shared/types/data";
 import { isFlashcardType } from "~shared/util";
 
-import { getTemporaryContents } from "~features/api";
+import {
+  getTemporaryContents,
+  deleteTemporaryContent,
+  deleteAllTemporaryContents,
+  updateTemporaryContent,
+  createTemporaryContent,
+  commitTemporaryContents
+} from "~features/api";
 import { useAuth } from "~features/auth";
 
 import PreFlashcard from "./components/PreFlashcard";
@@ -39,7 +46,8 @@ const GeneratedContent: React.FC = () => {
   const [title, setTitle] = useState<string>("Type your title here"); // State for the editable title
   const [selectedTopic, setSelectedTopic] =
     useState<string>("science-technology"); // State for the selected topic
-  const type = "flashcard"; // State whether Flashcards or MCQ
+  // const type = "flashcard"; // State whether Flashcards or MCQ
+  const [type, setType] = useState<string>("flashcard");
 
   useEffect(() => {
     handleGetTemporaryContents(noteId, authorization);
@@ -62,6 +70,7 @@ const GeneratedContent: React.FC = () => {
           flashcards.push((content as FlashcardTypeWrapper).flashcard);
         });
 
+        setType("flashcard");
         setFlashcards(flashcards);
       } else {
         const multipleChoiceQuestions: MultipleChoiceQuestion[] = [];
@@ -70,6 +79,8 @@ const GeneratedContent: React.FC = () => {
             (content as MultipleChoiceQuestionTypeWrapper).mcq,
           );
         });
+
+        setType("mcq");
         setMCQs(multipleChoiceQuestions);
       }
     }
@@ -83,11 +94,37 @@ const GeneratedContent: React.FC = () => {
     setSelectedTopic(event.target.value);
   };
 
-  const removeFlashcardById = (id: string) => {
-    const updatedFlashcards = GPTContent.filter(
-      (flashcard) => flashcard.id !== id,
-    );
-    setFlashcards(updatedFlashcards);
+  const removeById = async (
+    noteId: string | undefined,
+    fileId: string | undefined,
+    type: string,
+    authorization: string | null,
+  ) => {
+    if (!noteId || !authorization || !fileId) {
+      return;
+    }
+
+    const response = await deleteTemporaryContent(noteId, fileId, type, authorization);
+    if (!response) {
+      toast({
+        title: "Error",
+        description: "Failed to delete content",
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+
+    if (type === "flashcard") {
+      const updatedFlashcards = GPTContent.filter(
+        (flashcard) => flashcard.id !== fileId,
+      );
+      setFlashcards(updatedFlashcards);
+    } else {
+      const updatedMCQs = MCQs.filter((mcq) => mcq.id !== fileId);
+      setMCQs(updatedMCQs);
+    }
   };
 
   const removeMCQById = (id: string) => {
@@ -298,23 +335,23 @@ const GeneratedContent: React.FC = () => {
         {/* Show Flashcard or MCQ depending on type */}
         {type === "flashcard"
           ? GPTContent.map((data) => (
-              <PreFlashcard
-                key={data.id}
-                GPTContent={data}
-                onDelete={() => removeFlashcardById(data.id)}
-                onUpdate={updateFlashcard}
-              />
-            ))
+            <PreFlashcard
+              key={data.id}
+              GPTContent={data}
+              onDelete={() => removeById(noteId, data.id, "flashcard", authorization)}
+              onUpdate={updateFlashcard}
+            />
+          ))
           : MCQs.map((mcq) => (
-              <PreMCQ
-                key={mcq.id}
-                id={mcq.id}
-                question={mcq.question}
-                options={mcq.options}
-                onDelete={removeMCQById}
-                onUpdate={updateMCQ}
-              />
-            ))}
+            <PreMCQ
+              key={mcq.id}
+              id={mcq.id}
+              question={mcq.question}
+              options={mcq.options}
+              onDelete={() => removeById(noteId, mcq.id, "mcq", authorization)}
+              onUpdate={updateMCQ}
+            />
+          ))}
 
         <Button
           m={10}

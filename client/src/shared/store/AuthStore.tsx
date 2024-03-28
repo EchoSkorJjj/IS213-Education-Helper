@@ -7,7 +7,7 @@ import { AuthStateType, ZustandStorageType } from "~types/store";
 const STORAGE_KEY = import.meta.env.VITE_STORAGE_KEY;
 
 const encryptedStorage = new EncryptStorage(STORAGE_KEY, {
-  storageType: "sessionStorage",
+  storageType: "localStorage",
   stateManagementUse: true,
 });
 
