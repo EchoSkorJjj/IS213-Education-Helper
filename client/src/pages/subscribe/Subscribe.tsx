@@ -12,6 +12,7 @@ import {
   Text,
   useToast,
   VStack,
+  Link
 } from "@chakra-ui/react";
 
 import { useAuth } from "~features/auth";
@@ -21,6 +22,7 @@ import { getCheckoutUrl } from "~api";
 interface Props {
   children: React.ReactNode;
 }
+
 
 function PriceWrapper(props: Props) {
   const { children } = props;
@@ -42,11 +44,17 @@ function PriceWrapper(props: Props) {
 }
 
 const SubscribePage = () => {
-  const { user } = useAuth();
+  const { user, authorization } = useAuth();
+  const email = user?.email;
   const toast = useToast();
 
   const handleSubscribe = async () => {
-    const url = await getCheckoutUrl();
+    if (!email || !authorization) {
+      return;
+    }
+
+    const url = await getCheckoutUrl(email, authorization);
+    console.log(url);
     window.location.href = url;
   };
 

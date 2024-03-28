@@ -1,9 +1,23 @@
 import { Helmet } from "react-helmet-async";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { Box, Button, Heading, Icon, Text, VStack } from "@chakra-ui/react";
+import { getCheckoutUrl } from "~features/api";
+import { useAuth } from "~features/auth";
 
 const FailedPage = () => {
   const textColor = "white";
+  const { user, authorization } = useAuth();
+  const email = user?.email;
+
+  const handleSubscribe = async () => {
+    if (!email || !authorization) {
+      return;
+    }
+
+    const url = await getCheckoutUrl(email, authorization);
+    console.log(url);
+    window.location.href = url;
+  };
 
   return (
     <Box py={12} minHeight="100vh">
@@ -24,9 +38,7 @@ const FailedPage = () => {
           <Button
             size="lg"
             colorScheme="blue"
-            onClick={() => {
-              /* Handle retry subscription */
-            }}
+            onClick={handleSubscribe}
           >
             Retry Subscription
           </Button>

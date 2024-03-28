@@ -32,10 +32,16 @@ export async function handleResponse<T>(
   throw new Error(`HTTP error! Status: ${response.status}`);
 }
 
-export const getCheckoutUrl = async () => {
-  const { authorization } = useAuth();
+export const getCheckoutUrl = async (
+  email: string,
+  authorization: string
+) => {
   try {
-    const response = await api.get("/api/v1/payment/checkout", {
+
+    const response = await api.post("/api/v1/payment/checkout",
+      {
+        email: email
+      }, {
       headers: {
         Authorization: `Bearer ${authorization}`,
       },

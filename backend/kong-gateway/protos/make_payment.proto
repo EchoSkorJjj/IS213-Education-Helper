@@ -31,7 +31,7 @@ message CancelSubscriptionResponse {
 service MakePaymentService {
     rpc Checkout (CheckoutRequest) returns (CheckoutResponse) {
         option (google.api.http) = {
-            get: "/api/v1/payment/checkout"
+            post: "/api/v1/payment/checkout"
             body: "*"
         };
     }

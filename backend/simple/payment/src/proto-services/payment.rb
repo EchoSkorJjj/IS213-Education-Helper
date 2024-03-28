@@ -15,8 +15,8 @@ class PaymentServicer < Payment::Payment::Service
             quantity: 1,
           }],
           mode: 'subscription',
-          success_url: 'http://localhost:3001/subscribe',
-          cancel_url: 'http://localhost:3001/subscribe',
+          success_url: 'http://localhost:3001/subscribe/success',
+          cancel_url: 'http://localhost:3001/subscribe/failed',
           customer_email: customer_email,
         )
 
