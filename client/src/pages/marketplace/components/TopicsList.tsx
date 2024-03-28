@@ -42,7 +42,7 @@ const TopicsList = ({
           >
             <Box>
               <Text
-                color="midBlue.500"
+                color="white"
                 fontSize={{ base: "2xl", md: "5xl", lg: "7xl" }}
                 fontWeight="bold"
               >
@@ -58,14 +58,15 @@ const TopicsList = ({
                 onSearch={(value: string) => {
                   setTopic(value);
                 }}
+                isExpanded={true}
               />
             </Box>
           </Flex>
           <SimpleGrid
             columns={{ base: 2, md: 3, lg: 4 }}
-            spacing={5}
+            spacing={10}
             paddingTop="5"
-            paddingBottom="5"
+            paddingBottom="39.5"
           >
             {currentTopics.map((currentTopic) => (
               <Button
@@ -74,6 +75,11 @@ const TopicsList = ({
                 size="lg"
                 key={currentTopic}
                 onClick={() => setTopic(currentTopic)}
+                rounded="none"
+                height="150%"
+                justifyContent="flex-start"
+                pl={8}
+                border={0}
               >
                 {currentTopic}
               </Button>

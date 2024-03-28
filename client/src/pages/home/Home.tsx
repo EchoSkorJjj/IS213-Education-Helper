@@ -10,89 +10,77 @@ const HomePage = () => {
         <title>Home</title>
         <meta name="description" content="Home" />
       </Helmet>
-      <Flex
-        w="100%"
-        minH="90vh"
-        direction={{ base: "column", md: "row" }}
-        justifyContent="center"
-        pt={{ base: "10", md: "5" }}
-        pb={{ base: "10", md: "0" }}
-      >
-        <Stack spacing={{ base: "3em", md: "5em" }}>
-          <Box
-            bg="midBlue.500"
-            width={{ base: "90%", md: "30em" }}
-            height={{ base: "auto", md: "25em" }}
-            p={{ base: "4em 2em", md: "8em 5em 8em 8em" }}
-            as="a"
-            href="/generator"
-            textAlign={{ base: "center", md: "left" }}
+
+      <Box position="relative" bg={"darkBlue.500"} w="100%" h="400">
+        <Flex
+          position={"absolute"}
+          mt="100"
+          w="100%"
+          h="90%"
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          pt="10"
+        >
+          <Flex
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            height="100%"
           >
-            <Text
-              color="white"
-              lineHeight={1.2}
-              fontSize={{ base: "2xl", md: "3xl" }}
-            >
-              Create notes with
-              <br />
-              <Text
-                fontSize={{ base: "3xl", md: "4xl" }}
-                as="span"
-                fontWeight="bold"
+            <Stack spacing="5em" direction={{ base: "column", md: "row" }}>
+              <Box
+                bg="midBlue.500"
+                width="30em"
+                height="25em"
+                pl="5em"
+                pr="8em"
+                pt="8em"
+                as="a"
+                href="/generator"
+                justifyContent={"center"}
+                alignContent="center"
               >
-                Notes
-              </Text>
-              <br />
-              <Text
-                fontSize={{ base: "3xl", md: "4xl" }}
-                as="span"
-                fontWeight="bold"
+                <Text color={"white"} lineHeight={1.2} fontSize="3xl">
+                  Create notes with
+                  <br />
+                  <Text fontSize="4xl" as="span" fontWeight="bold">
+                    Notes
+                  </Text>
+                  <br />
+                  <Text fontSize="4xl" as="span" fontWeight="bold">
+                    Generator
+                  </Text>
+                </Text>
+                <Image src={LongArrowRight} mt="6" />
+              </Box>
+              <Box
+                bg="midBlue.500"
+                width="30em"
+                height="25em"
+                pl="5em"
+                pr="8em"
+                pt="8em"
+                as="a"
+                href="/marketplace"
               >
-                Generator
-              </Text>
-            </Text>
-            <Flex justifyContent={{ base: "center", md: "flex-start" }}>
-              <Image src={LongArrowRight} mt="6" />
-            </Flex>
-          </Box>
-          <Box
-            bg="midBlue.500"
-            width={{ base: "90%", md: "30em" }}
-            height={{ base: "auto", md: "25em" }}
-            p={{ base: "4em 2em", md: "8em 5em 8em 8em" }}
-            as="a"
-            href="/marketplace"
-            textAlign={{ base: "center", md: "left" }}
-          >
-            <Text
-              color="white"
-              lineHeight={1.2}
-              fontSize={{ base: "2xl", md: "3xl" }}
-            >
-              View our
-              <br />
-              <Text
-                fontSize={{ base: "3xl", md: "4xl" }}
-                as="span"
-                fontWeight="bold"
-              >
-                Notes
-              </Text>
-              <br />
-              <Text
-                fontSize={{ base: "3xl", md: "4xl" }}
-                as="span"
-                fontWeight="bold"
-              >
-                Marketplace
-              </Text>
-            </Text>
-            <Flex justifyContent={{ base: "center", md: "flex-start" }}>
-              <Image src={LongArrowRight} mt="6" />
-            </Flex>
-          </Box>
-        </Stack>
-      </Flex>
+                <Text color={"white"} lineHeight={1.2} fontSize="3xl">
+                  View our
+                  <br />
+                  <Text fontSize="4xl" as="span" fontWeight="bold">
+                    Notes
+                  </Text>
+                  <br />
+                  <Text fontSize="4xl" as="span" fontWeight="bold">
+                    Marketplace
+                  </Text>
+                </Text>
+                <Image src={LongArrowRight} mt="6" />
+              </Box>
+            </Stack>
+          </Flex>
+        </Flex>
+      </Box>
     </Box>
   );
 };
