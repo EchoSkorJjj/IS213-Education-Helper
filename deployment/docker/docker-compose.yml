@@ -140,7 +140,6 @@ services:
       retries: 3
       start_period: 30s
 
-  
   contents-db:
     image: bitnami/cassandra:4.1.4
     volumes:
@@ -198,27 +197,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
-
-  contents-db:
-    image: bitnami/cassandra:4.1.4
-    volumes:
-      - contents-db-volume:/bitnami
-      - ../sql_table/create_contents_table.cql:/docker-entrypoint-initdb.d/create_contents_table.cql
-    healthcheck:
-      # TODO: Not secure. Username and password are exposed in the command.
-      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  contents-redis:
-    image: redis:7.2-rc2-alpine3.18
-    command: redis-server --requirepass password
-    healthcheck:
-      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   view-notes-service:
     build: ../../backend/complex/view-notes
