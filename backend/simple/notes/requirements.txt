@@ -6,3 +6,4 @@ python-dotenv
 PyMuPDF
 SQLAlchemy
 psycopg2-binary
+protobuf

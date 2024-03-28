@@ -82,6 +82,23 @@ services:
           - name: grpc-gateway
             config:
               proto: /usr/local/share/lua/5.1/kong/protos/view_notes.proto
+  
+  - name: handle-temporary-contents-service
+    host: handle-temporary-contents-service
+    port: 50051
+    protocol: grpc
+    tags:
+      - handle-temporary-contents-service
+    routes:
+      - name: handle-temporary-contents
+        protocols:
+          - http
+        paths:
+          - /api/v1/contents/temporary
+        plugins:
+          - name: grpc-gateway
+            config:
+              proto: /usr/local/share/lua/5.1/kong/protos/handle_temporary_contents.proto
 
 plugins:
   - name: file-log

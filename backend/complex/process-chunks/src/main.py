@@ -62,7 +62,7 @@ class ContentFetcher:
         message_data = json.loads(message_from_queue1)
         logging.info(f"Message data: {message_data}")
         generate_type = message_data.get("metadata", {}).get("generateType", "")
-        note_id = message_data.get("metadata", {}).get("fileId", "")
+        note_id = message_data.get("fileId", "")
         strategy = PromptStrategyFactory.get_strategy(generate_type)
         return strategy.construct_prompt(message_from_queue1, messages_from_queue2),generate_type,note_id
 

@@ -60,10 +60,6 @@ service ViewNotes {
         option (google.api.http) = {
             get: "/api/v1/notes/{note_id}"
             body: "*"
-            // additional_bindings {
-            //     get: "/api/v1/notes/{note_id}"
-            //     body: "*"
-            // }
         };
     };
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse) {
