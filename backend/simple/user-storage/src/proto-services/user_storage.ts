@@ -4,6 +4,7 @@ import { generatePkcePair } from '@opengovsg/sgid-client'
 import { user_storage_pb } from '../../pb/user_storage';
 import logger from '../logger/logger';
 import AuthService from '../services/auth.service';
+import UserService from '../services/user.service';
 import RedisService from '../services/redis.service';
 import OAuthClientService from '../services/oauth.service';
 import JWTHandler from '../middleware/jwtMiddleware';
@@ -336,32 +337,222 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
         }
     }
 
-    GetUser(call: grpc.ServerUnaryCall<user_storage_pb.GetUserRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): void {
-        logger.info(call.request.user_id);
+    async GetUser(call: grpc.ServerUnaryCall<user_storage_pb.GetUserRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): Promise<void> {
+        const user_id = call.request.user_id;
+        
+        const metadata = call.metadata.getMap();
+        const requestId = getMetaData(metadata, 'kong-request-id');
 
-        callback(null, new user_storage_pb.ServiceResponseWrapper(
-            
-        ));
+        try {
+            const userService = UserService.getInstance();
+
+            const userData = await userService.getUserById(user_id);
+
+            if (!userData) {
+                const error = {
+                    code: grpc.status.NOT_FOUND,
+                    message: 'User not found',
+                };
+                callback(error, null);
+                return;
+            }
+
+            // Current date and convert to Google Timestamp
+            const currentDate = new Date();
+            const timestamp = dateToGoogleTimeStamp(currentDate);
+
+            // Create a payload
+            const payload = getPayload('user_storage.AuthResponse', {
+                user_id: userData.user_id,
+                username: userData.username,
+                first_name: userData.first_name,
+                last_name: userData.last_name,
+                email: userData.email,
+                role: userData.role,
+                profile_pic: userData.profile_pic,
+                is_paid: userData.is_paid,
+            });
+
+            const responseMetadata = getResponseMetaData(requestId, timestamp);
+            const serviceResponse = getServiceResponse(responseMetadata, payload);
+
+            callback(null, serviceResponse);
+        } catch (err: any) {
+            logger.error(err);
+            const error = {
+                code: grpc.status.INVALID_ARGUMENT,
+                message: err.message,
+            };
+            callback(error, null);
+        }
     }
 
-    UpdateUser(call: grpc.ServerUnaryCall<user_storage_pb.UpdateUserRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): void {
-        logger.info(call.request.user.user_id);
-        logger.info(call.request.user.username);
-        logger.info(call.request.user.first_name);
-        logger.info(call.request.user.last_name);
-        logger.info(call.request.user.email);
+    async UpdateUser(call: grpc.ServerUnaryCall<user_storage_pb.UpdateUserRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): Promise<void> {
+        const metadata = call.metadata.getMap();
+        const requestId = getMetaData(metadata, 'kong-request-id');
 
-        callback(null, new user_storage_pb.ServiceResponseWrapper(
-            
-        ));
+        try {
+            const userService = UserService.getInstance();
+
+            const userData = await userService.updateUser({
+                user_id: call.request.user.user_id,
+                username: call.request.user.username,
+                first_name: call.request.user.first_name,
+                last_name: call.request.user.last_name,
+                email: call.request.user.email,
+            })
+
+            if (!userData) {
+                const error = {
+                    code: grpc.status.NOT_FOUND,
+                    message: 'Error updating user',
+                };
+                callback(error, null);
+                return;
+            }
+
+            // Current date and convert to Google Timestamp
+            const currentDate = new Date();
+            const timestamp = dateToGoogleTimeStamp(currentDate);
+
+            // Create a payload
+            const payload = getPayload('user_storage.AuthResponse', {
+                user_id: userData.user_id,
+                username: userData.username,
+                first_name: userData.first_name,
+                last_name: userData.last_name,
+                email: userData.email,
+                role: userData.role,
+                profile_pic: userData.profile_pic,
+                is_paid: userData.is_paid,
+            });
+
+            const responseMetadata = getResponseMetaData(requestId, timestamp);
+            const serviceResponse = getServiceResponse(responseMetadata, payload);
+
+            callback(null, serviceResponse);
+        } catch (err: any) {
+            logger.error(err);
+            const error = {
+                code: grpc.status.INVALID_ARGUMENT,
+                message: err.message,
+            };
+            callback(error, null);
+        }
     }
 
-    DeleteUser(call: grpc.ServerUnaryCall<user_storage_pb.DeleteUserRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): void {
-        logger.info(call.request.user_id);
+    async DeleteUser(call: grpc.ServerUnaryCall<user_storage_pb.DeleteUserRequest, user_storage_pb.ServiceResponseWrapper>, callback: grpc.sendUnaryData<user_storage_pb.ServiceResponseWrapper>): Promise<void> {
+        const metadata = call.metadata.getMap();
+        const requestId = getMetaData(metadata, 'kong-request-id');
 
-        callback(null, new user_storage_pb.ServiceResponseWrapper(
-            
-        ));
+        try {
+            const userService = UserService.getInstance();
+
+            const isDeleted = await userService.deleteUser(call.request.user_id);
+
+            if (!isDeleted) {
+                const error = {
+                    code: grpc.status.NOT_FOUND,
+                    message: 'Error updating user',
+                };
+                callback(error, null);
+                return;
+            }
+
+            // Current date and convert to Google Timestamp
+            const currentDate = new Date();
+            const timestamp = dateToGoogleTimeStamp(currentDate);
+
+            // Create a payload
+            const payload = getPayload('user_storage.AuthResponse', {
+                message: 'User deleted successfully',
+            });
+
+            const responseMetadata = getResponseMetaData(requestId, timestamp);
+            const serviceResponse = getServiceResponse(responseMetadata, payload);
+
+            callback(null, serviceResponse);
+        } catch (err: any) {
+            logger.error(err);
+            const error = {
+                code: grpc.status.INVALID_ARGUMENT,
+                message: err.message,
+            };
+            callback(error, null);
+        }
+    }
+
+    async SaveNote(call: grpc.ServerUnaryCall<user_storage_pb.SaveNoteRequest, user_storage_pb.SaveNoteResponse>, callback: grpc.sendUnaryData<user_storage_pb.SaveNoteResponse>): Promise<void> {
+        const user_id = call.request.user_id;
+        const note = call.request.notes_ids;
+
+        try {
+            const userService = UserService.getInstance();
+
+            const userData = await userService.saveNotes({
+                user_id: user_id,
+                notes_ids: note,
+            });
+
+            if (!userData) {
+                const error = {
+                    code: grpc.status.NOT_FOUND,
+                    message: 'Error saving note',
+                };
+                callback(error, null);
+                return;
+            }
+
+            const response = new user_storage_pb.SaveNoteResponse({
+                success: true,
+                saved_notes_ids: userData.saved_notes_ids,
+            });
+
+            callback(null, response);
+        } catch (err: any) {
+            logger.error(err);
+            const error = {
+                code: grpc.status.INVALID_ARGUMENT,
+                message: err.message,
+            };
+            callback(error, null);
+        }
+    }
+
+    async DeleteSavedNote(call: grpc.ServerUnaryCall<user_storage_pb.DeleteSavedNoteRequest, user_storage_pb.DeleteSavedNoteResponse>, callback: grpc.sendUnaryData<user_storage_pb.DeleteSavedNoteResponse>): Promise<void> {
+        const user_id = call.request.user_id;
+        const note_id = call.request.note_id;
+
+        try {
+            const userService = UserService.getInstance();
+
+            const userData = await userService.deleteNotes({
+                user_id: user_id,
+                note_id: note_id,
+            });
+
+            if (!userData) {
+                const error = {
+                    code: grpc.status.NOT_FOUND,
+                    message: 'Error deleting note',
+                };
+                callback(error, null);
+                return;
+            }
+
+            const response = new user_storage_pb.DeleteSavedNoteResponse({
+                success: true,
+            });
+
+            callback(null, response);
+        } catch (err: any) {
+            logger.error(err);
+            const error = {
+                code: grpc.status.INVALID_ARGUMENT,
+                message: err.message,
+            };
+            callback(error, null);
+        }
     }
 }
 

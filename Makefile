@@ -39,11 +39,14 @@ down:
 	@docker compose -p ${PROJECT_NAME} \
 		-f ${LOCAL_DEPLOY_DIR}/docker-compose.yml \
 		down
+
 down-clean:
+	@echo "Taking down services and removing volumes..."
 	@docker compose -p ${PROJECT_NAME} \
 		-f ${LOCAL_DEPLOY_DIR}/docker-compose.yml \
 		down --volumes --remove-orphans
-	@docker system prune -f
+	@$(MAKE) prune-esd-images
+
 
 prune-all:
 	@echo "Running this command will prune all images. Do you want to proceed [y/N]?"; \
@@ -53,3 +56,12 @@ prune-all:
 		*) echo "Aborting." ;; \
 	esac
 
+
+prune-esd-images:
+	@echo "This will remove all unused images associated with the esd project. Continue? [y/N]"; \
+	read ans; \
+	if [ "$$ans" = "y" ] || [ "$$ans" = "Y" ]; then \
+		docker images | grep 'esd' | awk '{print $$3}' | xargs -r docker rmi -f || echo "No esd related images to remove."; \
+	else \
+		echo "Aborting."; \
+	fi

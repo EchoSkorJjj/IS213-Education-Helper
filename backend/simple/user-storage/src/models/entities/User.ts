@@ -10,6 +10,7 @@ export interface IUser {
     profile_pic: string;
     is_paid: boolean;
     creation_date: Date;
+    saved_notes_ids: string[];
 }
 
 export interface CreateUserDTO {
@@ -50,6 +51,9 @@ export class User {
     @CreateDateColumn()
     creation_date: Date;
 
+    @Column("text", { array: true, default: () => "array[]::text[]" })
+    saved_notes_ids: string[];
+
     // Constructor is ignored when we initialise our DataSource.
     // This constructor is still required, however, as TypeScript's strict typing
     // enforces that the properties of the class are assigned a value.
@@ -63,5 +67,6 @@ export class User {
         this.profile_pic = user.profile_pic;
         this.is_paid = user.is_paid;
         this.creation_date = user.creation_date;
+        this.saved_notes_ids = user.saved_notes_ids;
     }
 }
