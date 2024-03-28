@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import FlipMove from "react-flip-move";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { AttachmentIcon } from "@chakra-ui/icons";
-import FlipMove from 'react-flip-move';
 import {
   Box,
   Button,
@@ -23,11 +23,11 @@ import {
 import { isFlashcardType } from "~shared/util";
 
 import {
-  getTemporaryContents,
-  deleteTemporaryContent,
-  updateTemporaryContent,
-  createTemporaryContent,
   commitTemporaryContents,
+  createTemporaryContent,
+  deleteTemporaryContent,
+  getTemporaryContents,
+  updateTemporaryContent,
 } from "~features/api";
 import { useAuth } from "~features/auth";
 
@@ -54,15 +54,18 @@ const GeneratedContent: React.FC = () => {
     // Call once to fetch immediately
     handleGetTemporaryContents(noteId, authorization);
 
-    // ... then set up polling for every 5 seconds in case
-    // fetch was called when content was still being fed to
-    // the contents service. Stops polling after 5 consecutive
-    // polls with no change to number of contents.
+    /*
+     * ... then set up polling for every 5 seconds in case
+     * fetch was called when content was still being fed to
+     * the contents service. Stops polling after 5 consecutive
+     * polls with no change to number of contents.
+     */
     intervalIdRef.current = setInterval(() => {
       handleGetTemporaryContents(noteId, authorization);
     }, 5000);
 
-    return () => clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>); // Clean up on component unmount
+    return () =>
+      clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>); // Clean up on component unmount
   }, [noteId, authorization]);
 
   const handleGetTemporaryContents = async (
@@ -76,10 +79,15 @@ const GeneratedContent: React.FC = () => {
     const response = await getTemporaryContents(noteId, authorization);
     if (response) {
       const contents = response.contents;
-      if ( previousCountRef.current > 0 && contents.length === previousCountRef.current) {
+      if (
+        previousCountRef.current > 0 &&
+        contents.length === previousCountRef.current
+      ) {
         pollCountRef.current++;
         if (pollCountRef.current >= 5) {
-          clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>);
+          clearInterval(
+            intervalIdRef.current as ReturnType<typeof setInterval>,
+          );
           return;
         }
       } else {
@@ -118,7 +126,12 @@ const GeneratedContent: React.FC = () => {
     if (!noteId || !authorization || !contentId) {
       return;
     }
-    const response = await deleteTemporaryContent(noteId, contentId, type, authorization);
+    const response = await deleteTemporaryContent(
+      noteId,
+      contentId,
+      type,
+      authorization,
+    );
     if (!response) {
       toast({
         title: "Error",
@@ -165,14 +178,19 @@ const GeneratedContent: React.FC = () => {
       wrapper = { flashcard: newContentObj };
       setter = setFlashcards;
       state = GPTContent;
-
     } else {
       wrapper = { mcq: newContentObj };
       setter = setMCQs;
       state = MCQs;
     }
 
-    const response = await updateTemporaryContent(noteId, contentId, type == "flashcard" ? 0 : 1, wrapper, authorization);
+    const response = await updateTemporaryContent(
+      noteId,
+      contentId,
+      type == "flashcard" ? 0 : 1,
+      wrapper,
+      authorization,
+    );
     if (!response) {
       toast({
         title: "Error",
@@ -204,11 +222,20 @@ const GeneratedContent: React.FC = () => {
           note_id: noteId,
           question: "Write your questions here!",
           answer: "Write your answers here!",
-        }
+        },
       };
 
-      const response = await createTemporaryContent(noteId, 0, newFlashcard, authorization);
-      if (!response || !response.success || !response.created_content.flashcard) {
+      const response = await createTemporaryContent(
+        noteId,
+        0,
+        newFlashcard,
+        authorization,
+      );
+      if (
+        !response ||
+        !response.success ||
+        !response.created_content.flashcard
+      ) {
         toast({
           title: "Error",
           description: "Failed to create content",
@@ -233,10 +260,15 @@ const GeneratedContent: React.FC = () => {
             { option: "", is_correct: false },
           ],
           multiple_answers: false,
-        }
+        },
       };
 
-      const response = await createTemporaryContent(noteId, 1, newMCQ, authorization);
+      const response = await createTemporaryContent(
+        noteId,
+        1,
+        newMCQ,
+        authorization,
+      );
       if (!response || !response.success || !response.created_content.mcq) {
         toast({
           title: "Error",
@@ -258,7 +290,12 @@ const GeneratedContent: React.FC = () => {
       return;
     }
 
-    const response = await commitTemporaryContents(noteId, title, selectedTopic, authorization);
+    const response = await commitTemporaryContents(
+      noteId,
+      title,
+      selectedTopic,
+      authorization,
+    );
     if (!response || !response.success) {
       toast({
         title: "Error",
@@ -271,7 +308,7 @@ const GeneratedContent: React.FC = () => {
       return;
     }
 
-    // Navigate to another page?
+    navigate(`/viewnotes/${noteId}`);
   };
 
   const handleTitleChange = (event: any) => {
@@ -299,7 +336,6 @@ const GeneratedContent: React.FC = () => {
 
   return (
     <Box>
-
       <Helmet>
         <title>Generated Notes</title>
         <meta
@@ -400,23 +436,35 @@ const GeneratedContent: React.FC = () => {
         pb="4"
       >
         {/* Show Flashcard or MCQ depending on type */}
-        {type === "flashcard"
-          ? <FlipMove>
+        {type === "flashcard" ? (
+          <FlipMove>
             {GPTContent.map((data) => (
               <div key={data.id}>
                 <PreFlashcard
                   GPTContent={data}
                   onDelete={() => {
-                    handleRemoveTemporaryContent(noteId, data.id, "flashcard", authorization);
+                    handleRemoveTemporaryContent(
+                      noteId,
+                      data.id,
+                      "flashcard",
+                      authorization,
+                    );
                   }}
                   onUpdate={(id, newData) => {
-                    handleUpdateTemporaryContent(noteId, id, "flashcard", newData, authorization);
+                    handleUpdateTemporaryContent(
+                      noteId,
+                      id,
+                      "flashcard",
+                      newData,
+                      authorization,
+                    );
                   }}
                 />
               </div>
             ))}
           </FlipMove>
-          : <FlipMove>
+        ) : (
+          <FlipMove>
             {MCQs.map((mcq) => (
               <div key={mcq.id}>
                 <PreMCQ
@@ -424,16 +472,27 @@ const GeneratedContent: React.FC = () => {
                   question={mcq.question}
                   options={mcq.options}
                   onDelete={() => {
-                    handleRemoveTemporaryContent(noteId, mcq.id, "mcq", authorization);
+                    handleRemoveTemporaryContent(
+                      noteId,
+                      mcq.id,
+                      "mcq",
+                      authorization,
+                    );
                   }}
                   onUpdate={(id, newData) => {
-                    handleUpdateTemporaryContent(noteId, id, "mcq", newData, authorization);
+                    handleUpdateTemporaryContent(
+                      noteId,
+                      id,
+                      "mcq",
+                      newData,
+                      authorization,
+                    );
                   }}
                 />
               </div>
             ))}
           </FlipMove>
-        }
+        )}
 
         <Button
           m={10}
@@ -449,7 +508,11 @@ const GeneratedContent: React.FC = () => {
 
       <Container maxW="6xl" mb={10}>
         <Flex justifyContent="flex-end">
-          <Button bg="blue" color="white" onClick={handleCommitTemporaryContents}>
+          <Button
+            bg="blue"
+            color="white"
+            onClick={handleCommitTemporaryContents}
+          >
             Submit
           </Button>{" "}
         </Flex>
@@ -459,4 +522,3 @@ const GeneratedContent: React.FC = () => {
 };
 
 export default GeneratedContent;
-

@@ -42,7 +42,7 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
       setPressState(false);
       onUpdate?.(GPTContent.id, { question: editQuestion, answer: editAnswer });
     }
-  }
+  };
 
   return (
     <Box width="100%">

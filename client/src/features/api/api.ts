@@ -166,7 +166,7 @@ export const getContent = async (
 ): Promise<GetContentResponse | undefined> => {
   try {
     const response = await api.get(
-      `/api/v1/notes/${noteId}?user_id=7821c92e-2e29-4bb6-a890-edb8f7f11379`,
+      `/api/v1/notes/${noteId}`,
       {
         headers: {
           Authorization: `Bearer ${authorization}`,

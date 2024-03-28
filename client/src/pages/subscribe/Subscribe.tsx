@@ -27,8 +27,10 @@ function PriceWrapper(props: Props) {
 
   return (
     <Box
-      // mb={4}
-      // padding={0}
+      /*
+       * mb={4}
+       * padding={0}
+       */
       shadow="base"
       borderWidth="1px"
       // alignSelf={{ base: "center", lg: "flex-start" }}
@@ -84,7 +86,6 @@ const SubscribePage = () => {
 
       <SimpleGrid
         columns={{ base: 1, md: 2 }}
-
         // spacingX={-10}
         py={10}
         justifyItems="center"

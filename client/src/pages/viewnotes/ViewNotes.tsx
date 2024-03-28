@@ -87,22 +87,27 @@ function ViewNotes() {
     setNoteData(data);
   };
 
+  const getCards = (contents: ContentType) => {
+    const flashcards = Array.isArray(contents.flashcards) ? contents.flashcards : [];
+    const mcqs = Array.isArray(contents.mcqs) ? contents.mcqs : [];
+
+    return [
+      ...flashcards.map((flashcard: FlashcardType) => ({
+        ...flashcard,
+        type: "flashcard",
+      })),
+      ...mcqs.map((mcq: MultipleChoiceQuestion) => ({
+        ...mcq,
+        type: "mcq",
+      })),
+    ];
+  };
+
   useEffect(() => {
     handleGetContent();
   }, [noteId]);
 
-  const cards = content
-    ? [
-        ...content.flashcards.map((flashcard: FlashcardType) => ({
-          ...flashcard,
-          type: "flashcard",
-        })),
-        ...content.mcqs.map((mcq: MultipleChoiceQuestion) => ({
-          ...mcq,
-          type: "mcq",
-        })),
-      ]
-    : [];
+  const cards = content ? getCards(content) : [];
 
   const totalCards = cards.length;
 
@@ -132,7 +137,6 @@ function ViewNotes() {
             color="white"
             fontSize="sm"
             cursor={userId !== ownerId ? "pointer" : "default"}
-            // onClick={userId !== ownerId ? saveCardsSet : undefined}
           >
             {userId === ownerId ? "Already saved" : "Save this set"}
           </Text>
