@@ -123,3 +123,35 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
             context.set_details(f'Error retrieving multiple notes by user ID: {e}')
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return notes_pb2.RetrieveMultipleNotesByUserIdResponse()
+        
+    def RetrieveNoteMetadata(self, request, context):
+        """
+        Retrieves metadata for a specific note identified by fileId.
+        """
+        try:
+            db = Database()
+            file_id = request.fileId
+            note_metadata = db.get_note_metadata(file_id)
+            if not note_metadata:
+                raise ValueError(f'Note with ID {file_id} not found')
+            
+            # Since note_metadata is a dictionary, we directly access its values to create a NotePreview message
+            note_preview = notes_pb2.NotePreview(
+                userId=note_metadata['user_id'],
+                fileId=note_metadata['id'],
+                fileName=note_metadata['file_name'],
+                title=note_metadata['title'],
+                topic=note_metadata['topic'],
+                sizeInBytes=note_metadata['size_in_bytes'],
+                numPages=note_metadata['num_pages']
+            )
+            
+            # Returning a single note's metadata as a response
+            return notes_pb2.RetrieveNoteMetadataResponse(noteMetadata=note_preview)
+
+        except Exception as e:
+            logger.error(f'Error retrieving note metadata: {e}', exc_info=True)
+            context.set_details(f'Error retrieving note metadata: {e}')
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            # Return an empty response indicating failure
+            return notes_pb2.RetrieveNoteResponse()

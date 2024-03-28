@@ -93,3 +93,23 @@ class Database:
 
         self._session.query(Notes).filter(Notes.id == uuid.UUID(note["id"], version=4)).delete()
         self._session.commit()
+
+
+    def get_note_metadata(self, note_id):
+        self.ready()
+        columns = [Notes.id, Notes.user_id, Notes.file_name, Notes.size_in_bytes, Notes.num_pages, Notes.title, Notes.topic]
+        result = self._session.query(*columns).filter(Notes.id == uuid.UUID(note_id, version=4)).first()
+
+        if result:
+            metadata = {
+                "id": str(result.id),  
+                "user_id": result.user_id,
+                "file_name": result.file_name,
+                "size_in_bytes": result.size_in_bytes,
+                "num_pages": result.num_pages,
+                "title": result.title,
+                "topic": result.topic
+            }
+            return metadata
+
+        return None

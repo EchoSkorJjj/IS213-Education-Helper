@@ -1,5 +1,5 @@
 import UserDatabaseService from '../models/user-service';
-import { UserInfo, ClientUserData } from '../types';
+import { UserInfo, ClientUserData, UpdateUserDTO, SaveNoteDTO, DeleteNoteDTO } from '../types';
 
 class UserService {
     private static instance: UserService;
@@ -37,7 +37,8 @@ class UserService {
                 email: newUser.email,
                 role: newUser.role,
                 profile_pic: newUser.profile_pic,
-                is_paid: newUser.is_paid
+                is_paid: newUser.is_paid,
+                saved_notes_ids: newUser.saved_notes_ids
             };
         } else {
             return {
@@ -48,9 +49,47 @@ class UserService {
                 email: user.email,
                 role: user.role,
                 profile_pic: user.profile_pic,
-                is_paid: user.is_paid
+                is_paid: user.is_paid,
+                saved_notes_ids: user.saved_notes_ids
             };
         }
+    }
+
+    public async getUserById(userId: string): Promise<ClientUserData | null> {
+        const user = await this.userDatabaseService.findUserById(userId);
+        if (!user) {
+            return null;
+        }
+
+        return user;
+    }
+
+    public async updateUser(user: UpdateUserDTO): Promise<ClientUserData> {
+        const updatedUser = await this.userDatabaseService.updateUser(user);
+        return updatedUser;
+    }
+
+    public async deleteUser(userId: string): Promise<boolean> {
+        try {
+            const result = await this.userDatabaseService.deleteUser(userId);
+            if (result.affected && result.affected > 0) {
+                return true;
+            } else {
+                throw new Error("User not found or not deleted");
+            }
+        } catch (error) {
+            throw new Error("Error handling delete user");
+        }
+    }
+
+    public async saveNotes(notes: SaveNoteDTO): Promise<ClientUserData> {
+        const user = await this.userDatabaseService.saveNotes(notes);
+        return user;
+    }
+
+    public async deleteNotes(notes: DeleteNoteDTO): Promise<ClientUserData> {
+        const user = await this.userDatabaseService.deleteNotes(notes);
+        return user;
     }
 }
 

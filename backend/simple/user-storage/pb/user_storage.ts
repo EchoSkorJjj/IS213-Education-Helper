@@ -881,6 +881,343 @@ export namespace user_storage_pb {
             return LogoutRequest.deserialize(bytes);
         }
     }
+    export class SaveNoteRequest extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            user_id?: string;
+            notes_ids?: string[];
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [2], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("user_id" in data && data.user_id != undefined) {
+                    this.user_id = data.user_id;
+                }
+                if ("notes_ids" in data && data.notes_ids != undefined) {
+                    this.notes_ids = data.notes_ids;
+                }
+            }
+        }
+        get user_id() {
+            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        }
+        set user_id(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get notes_ids() {
+            return pb_1.Message.getFieldWithDefault(this, 2, []) as string[];
+        }
+        set notes_ids(value: string[]) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        static fromObject(data: {
+            user_id?: string;
+            notes_ids?: string[];
+        }): SaveNoteRequest {
+            const message = new SaveNoteRequest({});
+            if (data.user_id != null) {
+                message.user_id = data.user_id;
+            }
+            if (data.notes_ids != null) {
+                message.notes_ids = data.notes_ids;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                user_id?: string;
+                notes_ids?: string[];
+            } = {};
+            if (this.user_id != null) {
+                data.user_id = this.user_id;
+            }
+            if (this.notes_ids != null) {
+                data.notes_ids = this.notes_ids;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.user_id.length)
+                writer.writeString(1, this.user_id);
+            if (this.notes_ids.length)
+                writer.writeRepeatedString(2, this.notes_ids);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): SaveNoteRequest {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new SaveNoteRequest();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.user_id = reader.readString();
+                        break;
+                    case 2:
+                        pb_1.Message.addToRepeatedField(message, 2, reader.readString());
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): SaveNoteRequest {
+            return SaveNoteRequest.deserialize(bytes);
+        }
+    }
+    export class SaveNoteResponse extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            success?: boolean;
+            saved_notes_ids?: string[];
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [2], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("success" in data && data.success != undefined) {
+                    this.success = data.success;
+                }
+                if ("saved_notes_ids" in data && data.saved_notes_ids != undefined) {
+                    this.saved_notes_ids = data.saved_notes_ids;
+                }
+            }
+        }
+        get success() {
+            return pb_1.Message.getFieldWithDefault(this, 1, false) as boolean;
+        }
+        set success(value: boolean) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get saved_notes_ids() {
+            return pb_1.Message.getFieldWithDefault(this, 2, []) as string[];
+        }
+        set saved_notes_ids(value: string[]) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        static fromObject(data: {
+            success?: boolean;
+            saved_notes_ids?: string[];
+        }): SaveNoteResponse {
+            const message = new SaveNoteResponse({});
+            if (data.success != null) {
+                message.success = data.success;
+            }
+            if (data.saved_notes_ids != null) {
+                message.saved_notes_ids = data.saved_notes_ids;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                success?: boolean;
+                saved_notes_ids?: string[];
+            } = {};
+            if (this.success != null) {
+                data.success = this.success;
+            }
+            if (this.saved_notes_ids != null) {
+                data.saved_notes_ids = this.saved_notes_ids;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.success != false)
+                writer.writeBool(1, this.success);
+            if (this.saved_notes_ids.length)
+                writer.writeRepeatedString(2, this.saved_notes_ids);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): SaveNoteResponse {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new SaveNoteResponse();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.success = reader.readBool();
+                        break;
+                    case 2:
+                        pb_1.Message.addToRepeatedField(message, 2, reader.readString());
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): SaveNoteResponse {
+            return SaveNoteResponse.deserialize(bytes);
+        }
+    }
+    export class DeleteSavedNoteRequest extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            user_id?: string;
+            note_id?: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("user_id" in data && data.user_id != undefined) {
+                    this.user_id = data.user_id;
+                }
+                if ("note_id" in data && data.note_id != undefined) {
+                    this.note_id = data.note_id;
+                }
+            }
+        }
+        get user_id() {
+            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        }
+        set user_id(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get note_id() {
+            return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+        }
+        set note_id(value: string) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        static fromObject(data: {
+            user_id?: string;
+            note_id?: string;
+        }): DeleteSavedNoteRequest {
+            const message = new DeleteSavedNoteRequest({});
+            if (data.user_id != null) {
+                message.user_id = data.user_id;
+            }
+            if (data.note_id != null) {
+                message.note_id = data.note_id;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                user_id?: string;
+                note_id?: string;
+            } = {};
+            if (this.user_id != null) {
+                data.user_id = this.user_id;
+            }
+            if (this.note_id != null) {
+                data.note_id = this.note_id;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.user_id.length)
+                writer.writeString(1, this.user_id);
+            if (this.note_id.length)
+                writer.writeString(2, this.note_id);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): DeleteSavedNoteRequest {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new DeleteSavedNoteRequest();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.user_id = reader.readString();
+                        break;
+                    case 2:
+                        message.note_id = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): DeleteSavedNoteRequest {
+            return DeleteSavedNoteRequest.deserialize(bytes);
+        }
+    }
+    export class DeleteSavedNoteResponse extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            success?: boolean;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("success" in data && data.success != undefined) {
+                    this.success = data.success;
+                }
+            }
+        }
+        get success() {
+            return pb_1.Message.getFieldWithDefault(this, 1, false) as boolean;
+        }
+        set success(value: boolean) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        static fromObject(data: {
+            success?: boolean;
+        }): DeleteSavedNoteResponse {
+            const message = new DeleteSavedNoteResponse({});
+            if (data.success != null) {
+                message.success = data.success;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                success?: boolean;
+            } = {};
+            if (this.success != null) {
+                data.success = this.success;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.success != false)
+                writer.writeBool(1, this.success);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): DeleteSavedNoteResponse {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new DeleteSavedNoteResponse();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.success = reader.readBool();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): DeleteSavedNoteResponse {
+            return DeleteSavedNoteResponse.deserialize(bytes);
+        }
+    }
     interface GrpcUnaryServiceInterface<P, R> {
         (message: P, metadata: grpc_1.Metadata, options: grpc_1.CallOptions, callback: grpc_1.requestCallback<R>): grpc_1.ClientUnaryCall;
         (message: P, metadata: grpc_1.Metadata, callback: grpc_1.requestCallback<R>): grpc_1.ClientUnaryCall;
@@ -987,6 +1324,24 @@ export namespace user_storage_pb {
                 requestDeserialize: (bytes: Buffer) => DeleteUserRequest.deserialize(new Uint8Array(bytes)),
                 responseSerialize: (message: ServiceResponseWrapper) => Buffer.from(message.serialize()),
                 responseDeserialize: (bytes: Buffer) => ServiceResponseWrapper.deserialize(new Uint8Array(bytes))
+            },
+            SaveNote: {
+                path: "/user_storage_pb.UserStorage/SaveNote",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: SaveNoteRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => SaveNoteRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: SaveNoteResponse) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => SaveNoteResponse.deserialize(new Uint8Array(bytes))
+            },
+            DeleteSavedNote: {
+                path: "/user_storage_pb.UserStorage/DeleteSavedNote",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: DeleteSavedNoteRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => DeleteSavedNoteRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: DeleteSavedNoteResponse) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => DeleteSavedNoteResponse.deserialize(new Uint8Array(bytes))
             }
         };
         [method: string]: grpc_1.UntypedHandleCall;
@@ -999,6 +1354,8 @@ export namespace user_storage_pb {
         abstract GetUser(call: grpc_1.ServerUnaryCall<GetUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract UpdateUser(call: grpc_1.ServerUnaryCall<UpdateUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract DeleteUser(call: grpc_1.ServerUnaryCall<DeleteUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
+        abstract SaveNote(call: grpc_1.ServerUnaryCall<SaveNoteRequest, SaveNoteResponse>, callback: grpc_1.sendUnaryData<SaveNoteResponse>): void;
+        abstract DeleteSavedNote(call: grpc_1.ServerUnaryCall<DeleteSavedNoteRequest, DeleteSavedNoteResponse>, callback: grpc_1.sendUnaryData<DeleteSavedNoteResponse>): void;
     }
     export class UserStorageClient extends grpc_1.makeGenericClientConstructor(UnimplementedUserStorageService.definition, "UserStorage", {}) {
         constructor(address: string, credentials: grpc_1.ChannelCredentials, options?: Partial<grpc_1.ChannelOptions>) {
@@ -1030,6 +1387,12 @@ export namespace user_storage_pb {
         };
         DeleteUser: GrpcUnaryServiceInterface<DeleteUserRequest, ServiceResponseWrapper> = (message: DeleteUserRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, options?: grpc_1.CallOptions | grpc_1.requestCallback<ServiceResponseWrapper>, callback?: grpc_1.requestCallback<ServiceResponseWrapper>): grpc_1.ClientUnaryCall => {
             return super.DeleteUser(message, metadata, options, callback);
+        };
+        SaveNote: GrpcUnaryServiceInterface<SaveNoteRequest, SaveNoteResponse> = (message: SaveNoteRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<SaveNoteResponse>, options?: grpc_1.CallOptions | grpc_1.requestCallback<SaveNoteResponse>, callback?: grpc_1.requestCallback<SaveNoteResponse>): grpc_1.ClientUnaryCall => {
+            return super.SaveNote(message, metadata, options, callback);
+        };
+        DeleteSavedNote: GrpcUnaryServiceInterface<DeleteSavedNoteRequest, DeleteSavedNoteResponse> = (message: DeleteSavedNoteRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<DeleteSavedNoteResponse>, options?: grpc_1.CallOptions | grpc_1.requestCallback<DeleteSavedNoteResponse>, callback?: grpc_1.requestCallback<DeleteSavedNoteResponse>): grpc_1.ClientUnaryCall => {
+            return super.DeleteSavedNote(message, metadata, options, callback);
         };
     }
 }

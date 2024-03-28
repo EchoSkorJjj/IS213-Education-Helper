@@ -215,6 +215,24 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+
+  save-notes-service:
+    build: ../../backend/complex/save-notes
+    image: save-notes-service:1.0
+    env_file:
+      - ../../backend/complex/save-notes/.env
+    depends_on:
+      notes-service:
+        # TODO: Set up healthcheck for notes service
+        condition: service_started
+      contents-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     
   contents-service:
     build: ../../backend/simple/contents
