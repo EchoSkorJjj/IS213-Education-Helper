@@ -1,6 +1,7 @@
 import grpc
 import pika
 import os
+import re
 import json
 import logging
 from itertools import cycle
@@ -84,13 +85,17 @@ class ContentFetcher:
         logging.info(f"Key used: {client.api_key}")
         response = None
         try:
-            response = client.chat.completions.create(model=self.model, messages=[{"role": "system", "content": prompt}])
+            response = client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "system", "content": prompt}]
+            )
             logging.info(f"OpenAI Response: {response.choices[0].message.content}")
         except Exception as e:
             logging.error(f"Error during OpenAI API call or response handling: {str(e)}")
 
         try:
-            formatted_response = "[" + response.choices[0].message.content.replace("}\n{", "},\n{") + "]"
+            formatted_response = re.sub(r'}\s*{', '},\n{', response.choices[0].message.content)
+            formatted_response = "[" + formatted_response + "]"
             self.send_content(formatted_response, generate_type,note_id)
         except Exception as e:
             logging.error(f"Error during content sending: {str(e)}")
