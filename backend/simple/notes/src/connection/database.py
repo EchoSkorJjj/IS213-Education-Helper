@@ -85,7 +85,7 @@ class Database:
 
         note["id"] = uuid.UUID(note["id"], version=4)
 
-        self._session.query(Notes).filter(Notes.id == note["id"]).update(Notes(**note))
+        self._session.query(Notes).filter(Notes.id == note["id"]).update(note)
         self._session.commit()
     
     def delete_note(self, note):

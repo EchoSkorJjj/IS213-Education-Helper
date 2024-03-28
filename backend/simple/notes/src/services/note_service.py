@@ -155,3 +155,30 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             # Return an empty response indicating failure
             return notes_pb2.RetrieveNoteResponse()
+    
+    def UpdateNote(self, request, context):
+        try:
+            db = Database()
+            note_preview = request.notePreview
+            note = db.get_note(note_preview.fileId)
+            if not note:
+                raise ValueError(f'Note with ID {note_preview.fileId} not found')
+            
+            note_to_update = {
+                'id': note_preview.fileId, # Assume file itself cannot change
+                'user_id': note.user_id,
+                'file_name': note_preview.fileName if note_preview.fileName else note.file_name,
+                'size_in_bytes': note.size_in_bytes, # Assume file itself cannot change
+                'num_pages': note.num_pages, # Assume file itself cannot change
+                'title': note_preview.title if note_preview.title else note.title,
+                'topic': note_preview.topic if note_preview.topic else note.topic
+            }
+
+            db.update_note(note_to_update)
+            return notes_pb2.UpdateNoteResponse(success=True)
+
+        except Exception as e:
+            logger.error(f'Error updating note: {e}', exc_info=True)
+            context.set_details(f'Error updating note: {e}')
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return notes_pb2.UpdateNoteResponse()
