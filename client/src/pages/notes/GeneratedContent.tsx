@@ -402,8 +402,8 @@ const GeneratedContent: React.FC = () => {
                   onDelete={() => {
                     handleRemoveTemporaryContent(noteId, mcq.id, "mcq", authorization);
                   }}
-                  onUpdate={() => {
-                    handleUpdateTemporaryContent(noteId, mcq.id, "mcq", mcq, authorization);
+                  onUpdate={(id, newData) => {
+                    handleUpdateTemporaryContent(noteId, id, "mcq", newData, authorization);
                   }}
                 />
               </div>
