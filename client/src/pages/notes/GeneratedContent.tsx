@@ -18,7 +18,6 @@ import {
   FlashcardType,
   FlashcardTypeWrapper,
   MultipleChoiceQuestion,
-  MultipleChoiceQuestionOption,
   MultipleChoiceQuestionTypeWrapper,
 } from "~shared/types/data";
 import { isFlashcardType } from "~shared/util";
@@ -77,7 +76,7 @@ const GeneratedContent: React.FC = () => {
     const response = await getTemporaryContents(noteId, authorization);
     if (response) {
       const contents = response.contents;
-      if (contents.length === previousCountRef.current) {
+      if ( previousCountRef.current > 0 && contents.length === previousCountRef.current) {
         pollCountRef.current++;
         if (pollCountRef.current >= 5) {
           clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>);
