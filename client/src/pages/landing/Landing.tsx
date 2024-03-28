@@ -1,8 +1,9 @@
 import { Helmet } from "react-helmet-async";
-import { Box, Flex, Text, Button, Link } from "@chakra-ui/react";
-import SkyLineVideo from "~assets/SkylineVideo.mp4";
-import ReactPlayer from 'react-player';
+import ReactPlayer from "react-player";
 import Typewriter from "react-ts-typewriter";
+import { Box, Button, Flex, Link, Text } from "@chakra-ui/react";
+
+import SkyLineVideo from "~assets/SkylineVideo.mp4";
 
 const LandingPage = () => {
   return (
@@ -39,20 +40,42 @@ const LandingPage = () => {
         zIndex={3}
       >
         <Box textAlign="center" color="white">
-          <Text fontSize={{ base: "4xl", md: "80px" }} fontWeight="bold" >EduHelper</Text>
-          <Text textAlign='center' fontSize={{ base: "2xl", md: "4xl" }}>
-            By <Text as="span" color="blue.300"> democratising education</Text>, 
+          <Text fontSize={{ base: "4xl", md: "80px" }} fontWeight="bold">
+            EduHelper
+          </Text>
+          <Text textAlign="center" fontSize={{ base: "2xl", md: "4xl" }}>
+            By{" "}
+            <Text as="span" color="blue.300">
+              {" "}
+              democratising education
+            </Text>
+            ,
           </Text>
           <Text textAlign="left" fontSize={{ base: "2xl", md: "4xl" }} mb={8}>
-            we <Text as="span" color="blue.300">empower</Text> you to learn&nbsp;
+            we{" "}
+            <Text as="span" color="blue.300">
+              empower
+            </Text>{" "}
+            you to learn&nbsp;
             <Box display="inline-block" width="250px">
-              <Typewriter text={["what you love", "Data Science", "Philosophy", "History", "Literature", "Medicine"]} loop={true} speed={80} />
+              <Typewriter
+                text={[
+                  "what you love",
+                  "Data Science",
+                  "Philosophy",
+                  "History",
+                  "Literature",
+                  "Medicine",
+                ]}
+                loop={true}
+                speed={80}
+              />
             </Box>
           </Text>
-        <Link href="/login">
-          <Button colorScheme="blue" size="lg">
-            Begin your learning now!
-          </Button>
+          <Link href="/login">
+            <Button colorScheme="blue" size="lg">
+              Begin your learning now!
+            </Button>
           </Link>
         </Box>
       </Flex>

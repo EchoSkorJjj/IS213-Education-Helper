@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package save_notes_service;
+
+import "google/api/annotations.proto";
+
+message SaveNotesRequest {
+  string user_id = 1; 
+  repeated string file_ids = 2; 
+}
+
+message SaveNotesResponse {
+  repeated string saved_file_ids = 1; 
+  bool success = 2; 
+}
+
+message DeleteSavedNoteRequest {
+  string user_id = 1; 
+  string file_id = 2; 
+}
+
+message DeleteSavedNoteResponse {
+  bool success = 1; 
+}
+
+service SaveNotes {
+  rpc SaveNotes (SaveNotesRequest) returns (SaveNotesResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/notes/save"
+      body: "*"
+  };
+  }
+
+  rpc DeleteSavedNote (DeleteSavedNoteRequest) returns (DeleteSavedNoteResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/notes/delete"
+      body: "*"
+    }
+  }
+}

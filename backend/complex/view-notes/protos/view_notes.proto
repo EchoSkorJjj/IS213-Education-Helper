@@ -53,8 +53,18 @@ message ViewNotesByUserIdResponse {
     int32 next_page = 3;
 }
 
+message ViewSavedNotesRequest {
+    string user_id = 1;
+}
+
+message ViewSavedNotesResponse {
+    repeated notes.NotePreview notes = 2;
+}
+
+
 service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent);
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse);
     rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse);
+    rpc ViewSavedNotes (ViewSavedNotesRequest) returns (ViewSavedNotesResponse);
 }

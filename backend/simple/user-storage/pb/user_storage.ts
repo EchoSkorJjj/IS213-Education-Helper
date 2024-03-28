@@ -1218,6 +1218,140 @@ export namespace user_storage_pb {
             return DeleteSavedNoteResponse.deserialize(bytes);
         }
     }
+    export class GetSavedNotesRequest extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            user_id?: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("user_id" in data && data.user_id != undefined) {
+                    this.user_id = data.user_id;
+                }
+            }
+        }
+        get user_id() {
+            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        }
+        set user_id(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        static fromObject(data: {
+            user_id?: string;
+        }): GetSavedNotesRequest {
+            const message = new GetSavedNotesRequest({});
+            if (data.user_id != null) {
+                message.user_id = data.user_id;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                user_id?: string;
+            } = {};
+            if (this.user_id != null) {
+                data.user_id = this.user_id;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.user_id.length)
+                writer.writeString(1, this.user_id);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetSavedNotesRequest {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetSavedNotesRequest();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.user_id = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): GetSavedNotesRequest {
+            return GetSavedNotesRequest.deserialize(bytes);
+        }
+    }
+    export class GetSavedNotesResponse extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            saved_notes_ids?: string[];
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [2], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("saved_notes_ids" in data && data.saved_notes_ids != undefined) {
+                    this.saved_notes_ids = data.saved_notes_ids;
+                }
+            }
+        }
+        get saved_notes_ids() {
+            return pb_1.Message.getFieldWithDefault(this, 2, []) as string[];
+        }
+        set saved_notes_ids(value: string[]) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        static fromObject(data: {
+            saved_notes_ids?: string[];
+        }): GetSavedNotesResponse {
+            const message = new GetSavedNotesResponse({});
+            if (data.saved_notes_ids != null) {
+                message.saved_notes_ids = data.saved_notes_ids;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                saved_notes_ids?: string[];
+            } = {};
+            if (this.saved_notes_ids != null) {
+                data.saved_notes_ids = this.saved_notes_ids;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.saved_notes_ids.length)
+                writer.writeRepeatedString(2, this.saved_notes_ids);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetSavedNotesResponse {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetSavedNotesResponse();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 2:
+                        pb_1.Message.addToRepeatedField(message, 2, reader.readString());
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): GetSavedNotesResponse {
+            return GetSavedNotesResponse.deserialize(bytes);
+        }
+    }
     interface GrpcUnaryServiceInterface<P, R> {
         (message: P, metadata: grpc_1.Metadata, options: grpc_1.CallOptions, callback: grpc_1.requestCallback<R>): grpc_1.ClientUnaryCall;
         (message: P, metadata: grpc_1.Metadata, callback: grpc_1.requestCallback<R>): grpc_1.ClientUnaryCall;
@@ -1342,6 +1476,15 @@ export namespace user_storage_pb {
                 requestDeserialize: (bytes: Buffer) => DeleteSavedNoteRequest.deserialize(new Uint8Array(bytes)),
                 responseSerialize: (message: DeleteSavedNoteResponse) => Buffer.from(message.serialize()),
                 responseDeserialize: (bytes: Buffer) => DeleteSavedNoteResponse.deserialize(new Uint8Array(bytes))
+            },
+            GetSavedNotes: {
+                path: "/user_storage_pb.UserStorage/GetSavedNotes",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: GetSavedNotesRequest) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => GetSavedNotesRequest.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: GetSavedNotesResponse) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => GetSavedNotesResponse.deserialize(new Uint8Array(bytes))
             }
         };
         [method: string]: grpc_1.UntypedHandleCall;
@@ -1356,6 +1499,7 @@ export namespace user_storage_pb {
         abstract DeleteUser(call: grpc_1.ServerUnaryCall<DeleteUserRequest, ServiceResponseWrapper>, callback: grpc_1.sendUnaryData<ServiceResponseWrapper>): void;
         abstract SaveNote(call: grpc_1.ServerUnaryCall<SaveNoteRequest, SaveNoteResponse>, callback: grpc_1.sendUnaryData<SaveNoteResponse>): void;
         abstract DeleteSavedNote(call: grpc_1.ServerUnaryCall<DeleteSavedNoteRequest, DeleteSavedNoteResponse>, callback: grpc_1.sendUnaryData<DeleteSavedNoteResponse>): void;
+        abstract GetSavedNotes(call: grpc_1.ServerUnaryCall<GetSavedNotesRequest, GetSavedNotesResponse>, callback: grpc_1.sendUnaryData<GetSavedNotesResponse>): void;
     }
     export class UserStorageClient extends grpc_1.makeGenericClientConstructor(UnimplementedUserStorageService.definition, "UserStorage", {}) {
         constructor(address: string, credentials: grpc_1.ChannelCredentials, options?: Partial<grpc_1.ChannelOptions>) {
@@ -1393,6 +1537,9 @@ export namespace user_storage_pb {
         };
         DeleteSavedNote: GrpcUnaryServiceInterface<DeleteSavedNoteRequest, DeleteSavedNoteResponse> = (message: DeleteSavedNoteRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<DeleteSavedNoteResponse>, options?: grpc_1.CallOptions | grpc_1.requestCallback<DeleteSavedNoteResponse>, callback?: grpc_1.requestCallback<DeleteSavedNoteResponse>): grpc_1.ClientUnaryCall => {
             return super.DeleteSavedNote(message, metadata, options, callback);
+        };
+        GetSavedNotes: GrpcUnaryServiceInterface<GetSavedNotesRequest, GetSavedNotesResponse> = (message: GetSavedNotesRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<GetSavedNotesResponse>, options?: grpc_1.CallOptions | grpc_1.requestCallback<GetSavedNotesResponse>, callback?: grpc_1.requestCallback<GetSavedNotesResponse>): grpc_1.ClientUnaryCall => {
+            return super.GetSavedNotes(message, metadata, options, callback);
         };
     }
 }

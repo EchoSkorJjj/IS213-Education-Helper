@@ -55,6 +55,14 @@ message ViewNotesByUserIdResponse {
     int32 next_page = 3;
 }
 
+message ViewSavedNotesRequest {
+    string user_id = 1;
+}
+
+message ViewSavedNotesResponse {
+    repeated string saved_notes_ids = 2;
+}
+
 service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent) {
         option (google.api.http) = {
@@ -76,6 +84,16 @@ service ViewNotes {
             get: "/api/v1/notes/user/{user_id}"
             additional_bindings {
                 get: "/api/v1/notes/user/{user_id}"
+                body: "*"
+            }
+        };
+    };
+
+    rpc ViewSavedNotes (ViewSavedNotesRequest) returns (ViewSavedNotesResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/notes/saved/{user_id}"
+            additional_bindings {
+                get: "/api/v1/notes/saved/{user_id}"
                 body: "*"
             }
         };

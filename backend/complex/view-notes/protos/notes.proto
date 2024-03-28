@@ -20,6 +20,8 @@ service NoteService {
 
   // Define an RPC method to retrieve multiple notes by user id
   rpc RetrieveMultipleNotesByUserId (RetrieveMultipleNotesByUserIdRequest) returns (RetrieveMultipleNotesByUserIdResponse);
+
+  rpc RetrieveNoteMetadata (RetrieveNoteMetadataRequest) returns (RetrieveNoteMetadataResponse);
 }
 
 // Note message for storing a note
@@ -60,6 +62,17 @@ message RetrieveNoteRequest {
 // Response message for retrieving a note
 message RetrieveNoteResponse {
   Note note = 1;
+}
+
+// Request message for retrieving metadata of a single note
+message RetrieveNoteMetadataRequest {
+  string fileId = 1; // ID of the note whose metadata is to be retrieved
+}
+
+// Response message for retrieving metadata of a single note
+message RetrieveNoteMetadataResponse {
+  // Using NotePreview to represent the metadata, assuming it has the fields needed
+  NotePreview noteMetadata = 1; // Contains metadata of the requested note
 }
 
 // Request message for retrieving multiple notes

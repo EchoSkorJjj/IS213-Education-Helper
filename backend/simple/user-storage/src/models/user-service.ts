@@ -69,6 +69,16 @@ class UserDatabaseService {
         user.saved_notes_ids = user.saved_notes_ids.filter(note => !notes.note_id.includes(note));
         return await this.repository.save(user);
     }
+
+    public async getNotes(user_id: string): Promise<string[]> {
+        const user = await this.findUserById(user_id);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const notes_id = user.saved_notes_ids;
+        return notes_id;
+    }
 };
 
 export default UserDatabaseService;

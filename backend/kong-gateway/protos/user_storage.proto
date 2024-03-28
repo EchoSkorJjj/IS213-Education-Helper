@@ -63,6 +63,34 @@ message DeleteUserRequest {
 message LogoutRequest {
 }
 
+message SaveNoteRequest {
+    string user_id = 1;
+    repeated string notes_ids = 2; // Allows for one or more notes to be specified
+  }
+  
+  message SaveNoteResponse {
+    bool success = 1;
+    repeated string saved_notes_ids = 2; // IDs of notes successfully saved
+  }
+  
+  // New message for deleting a saved note
+  message DeleteSavedNoteRequest {
+    string user_id = 1;
+    string note_id = 2;
+  }
+  
+  message DeleteSavedNoteResponse {
+    bool success = 1;
+  }
+
+message GetSavedNotesRequest {
+    string user_id = 1;
+}
+
+message GetSavedNotesResponse {
+    repeated string saved_notes_ids = 2;
+}
+
 service UserStorage {
     rpc GoogleAuth(AuthRequest) returns (ServiceResponseWrapper) {
         option (google.api.http) = {
@@ -126,4 +154,9 @@ service UserStorage {
             body: "*"
         };
     }
+
+    rpc SaveNote(SaveNoteRequest) returns (SaveNoteResponse);
+    rpc DeleteSavedNote(DeleteSavedNoteRequest) returns (DeleteSavedNoteResponse);
+
+    rpc GetSavedNotes(GetSavedNotesRequest) returns (GetSavedNotesResponse);
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Checkbox, Flex, Spacer } from "@chakra-ui/react";
+
 import { MultipleChoiceQuestionOption } from "~shared/types/data";
 
 interface PreMCQProps {
@@ -21,7 +22,8 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   onUpdate,
 }) => {
   // Define the localOptions state here
-  const [localOptions, setLocalOptions] = useState<MultipleChoiceQuestionOption[]>(options);
+  const [localOptions, setLocalOptions] =
+    useState<MultipleChoiceQuestionOption[]>(options);
 
   useEffect(() => {
     // This ensures localOptions is updated whenever the options prop changes

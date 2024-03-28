@@ -91,6 +91,11 @@ class UserService {
         const user = await this.userDatabaseService.deleteNotes(notes);
         return user;
     }
+
+    public async getNotes(user_id: string): Promise<string[]> {
+        const notes_id = await this.userDatabaseService.getNotes(user_id);
+        return notes_id;
+    }
 }
 
 export default UserService;

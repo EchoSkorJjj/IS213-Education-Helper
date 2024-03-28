@@ -52,35 +52,35 @@ export interface GetTemporaryContentsResponse {
 export interface UpdateTemporaryContentsResponse {
   success: boolean;
   updated_content: {
-    content: string,
+    content: string;
     flashcard?: FlashcardType;
     mcq?: MultipleChoiceQuestion;
-  }
+  };
 }
 
 export interface DeleteTemporaryContentsResponse {
   success: boolean;
   deleted_content: {
-    content: string,
+    content: string;
     flashcard?: FlashcardType;
     mcq?: MultipleChoiceQuestion;
-  }
+  };
 }
 
 export interface DeleteAllTemporaryContentsResponse {
   success: boolean;
   deleted_contents: {
-    content: string,
+    content: string;
     flashcard?: FlashcardType;
     mcq?: MultipleChoiceQuestion;
-  }[]
+  }[];
 }
 
 export interface CreateTemporaryContentResponse {
   success: boolean;
   created_content: {
-    content: string,
+    content: string;
     flashcard?: FlashcardType;
     mcq?: MultipleChoiceQuestion;
-  }
+  };
 }

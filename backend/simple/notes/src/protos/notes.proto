@@ -22,7 +22,6 @@ service NoteService {
   rpc RetrieveMultipleNotesByUserId (RetrieveMultipleNotesByUserIdRequest) returns (RetrieveMultipleNotesByUserIdResponse);
 
   rpc RetrieveNoteMetadata (RetrieveNoteMetadataRequest) returns (RetrieveNoteMetadataResponse);
-
 }
 
 // Note message for storing a note
