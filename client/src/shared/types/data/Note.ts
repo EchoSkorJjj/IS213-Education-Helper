@@ -36,3 +36,51 @@ export interface GetContentResponse {
   note: Note;
   associated_contents: ContentType;
 }
+
+export interface FlashcardTypeWrapper {
+  flashcard: FlashcardType;
+}
+
+export interface MultipleChoiceQuestionTypeWrapper {
+  mcq: MultipleChoiceQuestion;
+}
+
+export interface GetTemporaryContentsResponse {
+  contents: FlashcardTypeWrapper[] | MultipleChoiceQuestionTypeWrapper[];
+}
+
+export interface UpdateTemporaryContentsResponse {
+  success: boolean;
+  updated_content: {
+    content: string,
+    flashcard?: FlashcardType;
+    mcq?: MultipleChoiceQuestion;
+  }
+}
+
+export interface DeleteTemporaryContentsResponse {
+  success: boolean;
+  deleted_content: {
+    content: string,
+    flashcard?: FlashcardType;
+    mcq?: MultipleChoiceQuestion;
+  }
+}
+
+export interface DeleteAllTemporaryContentsResponse {
+  success: boolean;
+  deleted_contents: {
+    content: string,
+    flashcard?: FlashcardType;
+    mcq?: MultipleChoiceQuestion;
+  }[]
+}
+
+export interface CreateTemporaryContentResponse {
+  success: boolean;
+  created_content: {
+    content: string,
+    flashcard?: FlashcardType;
+    mcq?: MultipleChoiceQuestion;
+  }
+}

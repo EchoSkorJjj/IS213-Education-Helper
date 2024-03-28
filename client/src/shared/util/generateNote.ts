@@ -89,3 +89,7 @@ export const getUserNotes = async (
 
   return { notes: notes, totalNotesCount: totalNotesCount };
 };
+
+export const isFlashcardType = (obj: any): boolean => {
+  return obj.hasOwnProperty('flashcards');
+};

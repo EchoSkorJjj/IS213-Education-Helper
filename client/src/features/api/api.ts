@@ -1,6 +1,13 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-import { GetContentResponse } from "~shared/types/data";
+import {
+  DeleteAllTemporaryContentsResponse,
+  DeleteTemporaryContentsResponse,
+  GetContentResponse,
+  GetTemporaryContentsResponse,
+  UpdateTemporaryContentsResponse,
+  CreateTemporaryContentResponse
+} from "~shared/types/data";
 import { UpdateProfileType } from "~shared/types/form";
 
 import { useAuth } from "~features/auth";
@@ -166,3 +173,150 @@ export const getContent = async (
     console.log(error);
   }
 };
+
+export const getTemporaryContents = async (
+  noteId: string,
+  authorization: string,
+): Promise<GetTemporaryContentsResponse | undefined> => {
+  try {
+    const response = await api.get(
+      `/api/v1/contents/temporary`,
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+        params: {
+          note_id: noteId,
+        },
+      }
+    );
+
+    return response.data as GetTemporaryContentsResponse;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateTemporaryContent = async (
+  noteId: string,
+  contentId: string,
+  authorization: string,
+  updatedContent: any,
+): Promise<UpdateTemporaryContentsResponse | undefined> => {
+  try {
+    const response = await api.put(
+      '/api/v1/contents/temporary',
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+        data: {
+          note_id: noteId,
+          content_id: contentId,
+          content: updatedContent,
+        },
+      });
+
+    return response.data as UpdateTemporaryContentsResponse;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteTemporaryContent = async (
+  noteId: string,
+  contentId: string,
+  authorization: string
+): Promise<DeleteTemporaryContentsResponse | undefined> => {
+  try {
+    const response = await api.delete(
+      '/api/v1/contents/temporary',
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+        data: {
+          note_id: noteId,
+          content_id: contentId,
+        },
+      });
+
+    return response.data as DeleteTemporaryContentsResponse;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteAllTemporaryContents = async (
+  noteId: string,
+  authorization: string
+): Promise<DeleteAllTemporaryContentsResponse | undefined> => {
+  try {
+    const response = await api.delete(
+      '/api/v1/contents/temporary/all',
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+        data: {
+          note_id: noteId,
+        },
+      });
+
+    return response.data as DeleteAllTemporaryContentsResponse;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const createTemporaryContent = async (
+  noteId: string,
+  authorization: string,
+  contentType: number,
+  content: any
+): Promise<CreateTemporaryContentResponse | undefined> => {
+  try {
+    const response = await api.post(
+      '/api/v1/contents/temporary',
+      {
+        note_id: noteId,
+        content_type: contentType,
+        content: content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+      });
+
+    return response.data as CreateTemporaryContentResponse;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const commitTemporaryContents = async (
+  noteId: string,
+  title: string,
+  topic: string,
+  authorization: string
+): Promise<{ success: boolean } | undefined> => {
+  try {
+    const response = await api.post(
+      '/api/v1/contents/commit',
+      {
+        note_id: noteId,
+        title: title,
+        topic: topic,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+      });
+
+    return { success: response.data.success };
+  } catch (error) {
+    console.error(error);
+  }
+}

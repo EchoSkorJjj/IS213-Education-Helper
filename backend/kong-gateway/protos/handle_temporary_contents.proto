@@ -66,6 +66,16 @@ message UpdateTemporaryContentResponse {
     OneOfContent updated_content = 2;
 }
 
+message CommitTemporaryContentsRequest {
+    string note_id = 1;
+    string title = 2;
+    string topic = 3;
+}
+
+message CommitTemporaryContentsResponse {
+    bool success = 1;
+}
+
 service HandleTemporaryContents {
     rpc PollTemporaryContents(PollTemporaryContentsRequest) returns (PollTemporaryContentsResponse) {
         option (google.api.http) = {
@@ -101,6 +111,13 @@ service HandleTemporaryContents {
     rpc UpdateTemporaryContent(UpdateTemporaryContentRequest) returns (UpdateTemporaryContentResponse) {
         option (google.api.http) = {
             put: "/api/v1/contents/temporary"
+            body: "*"
+        };
+    }
+
+    rpc CommitTemporaryContents(CommitTemporaryContentsRequest) returns (CommitTemporaryContentsResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/contents/temporary/commit"
             body: "*"
         };
     }
