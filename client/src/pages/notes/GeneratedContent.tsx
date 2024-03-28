@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { AttachmentIcon } from "@chakra-ui/icons";
@@ -47,10 +47,24 @@ const GeneratedContent: React.FC = () => {
   const [selectedTopic, setSelectedTopic] =
     useState<string>("science-technology"); // State for the selected topic
   const [type, setType] = useState<string>("flashcard");
+  const pollCountRef = useRef<number>(0);
+  const previousCountRef = useRef<number>(0);
+  const intervalIdRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    // Call once to fetch immediately
     handleGetTemporaryContents(noteId, authorization);
-  }, []);
+
+    // ... then set up polling for every 5 seconds in case
+    // fetch was called when content was still being fed to
+    // the contents service. Stops polling after 5 consecutive
+    // polls with no change to number of contents.
+    intervalIdRef.current = setInterval(() => {
+      handleGetTemporaryContents(noteId, authorization);
+    }, 5000);
+
+    return () => clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>); // Clean up on component unmount
+  }, [noteId, authorization]);
 
   const handleGetTemporaryContents = async (
     noteId: string | undefined,
@@ -63,6 +77,17 @@ const GeneratedContent: React.FC = () => {
     const response = await getTemporaryContents(noteId, authorization);
     if (response) {
       const contents = response.contents;
+      if (contents.length === previousCountRef.current) {
+        pollCountRef.current++;
+        if (pollCountRef.current >= 5) {
+          clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>);
+          return;
+        }
+      } else {
+        pollCountRef.current = 0;
+        previousCountRef.current = contents.length;
+      }
+
       if (isFlashcardType(contents[0])) {
         const flashcards: FlashcardType[] = [];
         contents.forEach((content) => {
