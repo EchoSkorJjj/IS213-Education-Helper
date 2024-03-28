@@ -12,7 +12,6 @@ import {
   Text,
   useToast,
   VStack,
-  Link
 } from "@chakra-ui/react";
 
 import { useAuth } from "~features/auth";
@@ -23,20 +22,19 @@ interface Props {
   children: React.ReactNode;
 }
 
-
 function PriceWrapper(props: Props) {
   const { children } = props;
 
   return (
     <Box
-      mb={4}
-      padding={0}
+      // mb={4}
+      // padding={0}
       shadow="base"
       borderWidth="1px"
-      alignSelf={{ base: "center", lg: "flex-start" }}
+      // alignSelf={{ base: "center", lg: "flex-start" }}
       borderColor={"gray.200"}
       borderRadius={"xl"}
-      width={{ base: "90%", md: "70%", lg: "50%" }}
+      // width={{ base: "90%", md: "80%", lg: "40%" }} // Increase the width
     >
       {children}
     </Box>
@@ -86,7 +84,8 @@ const SubscribePage = () => {
 
       <SimpleGrid
         columns={{ base: 1, md: 2 }}
-        spacingX={0} // Decrease horizontal spacing
+
+        // spacingX={-10}
         py={10}
         justifyItems="center"
         alignItems="flex-start"
@@ -98,6 +97,7 @@ const SubscribePage = () => {
               fontWeight="500"
               color="blue.600"
               fontSize="2xl"
+              mt={4}
             >
               Free Tier
             </Text>

@@ -81,7 +81,14 @@ const NotesList = ({
           paddingBottom="5"
         >
           {notes.map((note) => (
-            <Card maxW="sm" maxH="sm" key={note.unique_id} as="button">
+            <Card
+              maxW="sm"
+              maxH="sm"
+              key={note.unique_id}
+              as="button"
+              border={0}
+              rounded="0"
+            >
               <Image
                 objectFit="cover"
                 src={note.imageURL}
@@ -89,6 +96,8 @@ const NotesList = ({
                 borderRadius="lg"
                 height="50%"
                 width="100%"
+                border={0}
+                rounded="0"
               />
               <CardBody pl="4" p="0">
                 <Stack

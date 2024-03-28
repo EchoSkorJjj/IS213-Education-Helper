@@ -32,7 +32,7 @@ const MarketplacePage = () => {
   const handleGetNotes = async (
     topic: string,
     notesTitle: string,
-    currentMarketPage: number,
+    currentMarketPage: number
   ): Promise<void> => {
     const data = await getNotes(topic, notesTitle, currentMarketPage);
 
@@ -64,34 +64,32 @@ const MarketplacePage = () => {
   }, [topic, notesTitle, currentMarketPage]);
 
   return (
-    <VStack spacing={0} minHeight="100vh" h="1800">
-      <Box bg={"darkBlue.500"} w="100%" h="350">
-        <Helmet>
-          <title>Marketplace</title>
-          <meta name="description" content="Marketplace" />
-        </Helmet>
-        <MarketHeader />
+    <Box>
+      <Helmet>
+        <title>Marketplace</title>
+        <meta name="description" content="Marketplace" />
+      </Helmet>
+      <MarketHeader />
 
-        <Box bg="blue.800" w="100%" h="400">
-          <TopicsList
-            topics={topics}
-            setTopic={setTopic}
-            topic={topic}
-            setCurrentTopicPage={setCurrentTopicPage}
-            currentTopicPage={currentTopicPage}
-          />
-        </Box>
-        <Box h="450">
-          <MarketList
-            notes={notes}
-            setNotesTitle={setNotesTitle}
-            setCurrentMarketPage={setCurrentMarketPage}
-            currentMarketPage={currentMarketPage}
-            totalNotesCount={totalNotesCount}
-          />
-        </Box>
+      <Box w="100%">
+        <TopicsList
+          topics={topics}
+          setTopic={setTopic}
+          topic={topic}
+          setCurrentTopicPage={setCurrentTopicPage}
+          currentTopicPage={currentTopicPage}
+        />
       </Box>
-    </VStack>
+      <Box >
+        <MarketList
+          notes={notes}
+          setNotesTitle={setNotesTitle}
+          setCurrentMarketPage={setCurrentMarketPage}
+          currentMarketPage={currentMarketPage}
+          totalNotesCount={totalNotesCount}
+        />
+      </Box>
+    </Box>
   );
 };
 export default MarketplacePage;

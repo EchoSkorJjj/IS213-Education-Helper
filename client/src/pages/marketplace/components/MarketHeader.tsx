@@ -11,6 +11,7 @@ const MarketHeader = () => {
       justifyContent="center"
       alignItems="center"
       pt={{ md: "5" }}
+      bg={"darkBlue.500"}
     >
       <Flex
         display={{ base: "flex", md: "none" }}

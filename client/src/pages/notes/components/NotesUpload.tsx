@@ -103,16 +103,21 @@ const NotesUpload = ({
             textAlign="start"
             onClick={() => setGenerateType("flashcard")}
           >
-            <Text fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}>
+            <Text fontSize={{ base: "lg", md: "lg", lg: "lg" }} mb={8}>
               Generate
               <br />
-              <Text as="span" fontWeight="bold">
+              <Text
+                as="span"
+                fontWeight="bold"
+                fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
+              >
                 Flashcard
               </Text>
             </Text>
             <Text
               fontSize={{ base: "sm", md: "lg" }}
               mt={{ base: "2", md: "0" }}
+              mb={20}
             >
               Flashcards are a great study tool if you need to memorize
               definitions, facts, or short pieces of information for a test
@@ -130,16 +135,21 @@ const NotesUpload = ({
             textAlign="start"
             onClick={() => handleGenerationChange()}
           >
-            <Text fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}>
+            <Text fontSize={{ base: "lg", md: "lg", lg: "lg" }} mb={8}>
               Generate
               <br />
-              <Text as="span" fontWeight="bold">
+              <Text
+                as="span"
+                fontWeight="bold"
+                fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
+              >
                 MCQs
               </Text>
             </Text>
             <Text
               fontSize={{ base: "sm", md: "lg" }}
               mt={{ base: "2", md: "0" }}
+              mb={20}
             >
               MCQs (multiple choice questions) will be generated to test your
               understanding

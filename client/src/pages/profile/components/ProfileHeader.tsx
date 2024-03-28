@@ -14,6 +14,7 @@ const ProfileHeader = () => {
       pt="10"
       px="10"
       mb="3em"
+      bg="darkBlue.500"
     >
       <Flex
         maxW={"6xl"}
@@ -33,6 +34,7 @@ const ProfileHeader = () => {
               color="white"
               fontWeight="bold"
               fontSize={{ base: "1xl", sm: "2xl", lg: "3xl" }}
+              mb="5"
             >
               {user?.username}
             </Text>
@@ -58,9 +60,9 @@ const ProfileHeader = () => {
           w={"full"}
           justifyContent="end"
         >
-          <Text color="gray.500" as="a" href="/subscribe">
+          <Text color="gray" as="a" href="/subscribe" mb="10">
             This is a free account. Go{" "}
-            <Text color="black" fontWeight="bold" as="span">
+            <Text color="white" fontWeight="bold" as="span">
               pro{" "}
             </Text>
             here!
