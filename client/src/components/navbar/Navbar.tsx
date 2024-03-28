@@ -63,21 +63,7 @@ const Navbar = ({ ...rest }) => {
         <HStack alignItems="center">
           {isAuthenticated ? (
             <AuthMenu user={user} handleSignOutClick={signOut} />
-          ) : (
-            <Button
-              as={"a"}
-              fontSize={"sm"}
-              fontWeight={600}
-              color={"white"}
-              bg={"blue.400"}
-              href={"/login"}
-              _hover={{
-                bg: "blue.300",
-              }}
-            >
-              Sign In
-            </Button>
-          )}
+          ) : "" }
         </HStack>
       </Container>
       {isNavOpen ? (

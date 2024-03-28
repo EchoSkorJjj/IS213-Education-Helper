@@ -9,7 +9,6 @@ import {
   VisuallyHidden,
 } from "@chakra-ui/react";
 
-import { Logo } from "~components/logo/Logo";
 
 const SocialButton = ({
   children,
@@ -50,26 +49,13 @@ const Footer = () => {
         as={Stack}
         maxW={"6xl"}
         py={4}
-        direction={{ base: "column", md: "row" }}
         spacing={4}
         justify={{ base: "center", md: "space-between" }}
         align={{ base: "center", md: "center" }}
       >
-        <Logo destination="/" />
         <Text>
-          © {new Date().getFullYear()} EduHelper. All rights reserved
+          © {new Date().getFullYear()} EduHelper. All rights reserved.
         </Text>
-        <Stack direction={"row"} spacing={6}>
-          <SocialButton label={"Twitter"} href={"#"}>
-            <FaTwitter />
-          </SocialButton>
-          <SocialButton label={"YouTube"} href={"#"}>
-            <FaYoutube />
-          </SocialButton>
-          <SocialButton label={"Instagram"} href={"#"}>
-            <FaInstagram />
-          </SocialButton>
-        </Stack>
       </Container>
     </Box>
   );

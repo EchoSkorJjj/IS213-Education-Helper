@@ -29,8 +29,11 @@
     "react-hook-form": "^7.49.3",
     "react-icons": "^4.12.0",
     "react-markdown": "^9.0.1",
+    "react-player": "^2.15.1",
     "react-router-dom": "^6.22.1",
     "react-spring": "^9.7.3",
+    "react-ts-typewriter": "^0.1.8-b",
+    "styled-components": "^6.1.8",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
