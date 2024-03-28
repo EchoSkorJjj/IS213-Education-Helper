@@ -13,21 +13,61 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
+import {
+  MultipleChoiceQuestionOption,
+  MultipleChoiceQuestion,
+  FlashcardType,
+  FlashcardTypeWrapper,
+  MultipleChoiceQuestionTypeWrapper
+} from "~shared/types/data";
+import { getTemporaryContents } from "~features/api";
+import { isFlashcardType } from "~shared/util";
+import { useAuth } from "~features/auth";
+
 import PreFlashcard from "./components/PreFlashcard";
 import PreMCQ from "./components/PreMCQ";
-import flashcardsData from "./flashcardsData.json";
-import mcqData from "./mcqData.json";
 
-function GeneratedContent(): React.FC {
+const GeneratedContent: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { noteId } = useParams<{ noteId: string }>();
+  const { authorization } = useAuth();
 
-  const [GPTContent, setFlashcards] = useState(flashcardsData);
-  const [MCQs, setMCQs] = useState(mcqData); // Initialize state for MCQs
-  const [title, setTitle] = useState("Type your title here"); // State for the editable title
-  const [selectedTopic, setSelectedTopic] = useState("science-technology"); // State for the selected topic
+  const [GPTContent, setFlashcards] = useState<FlashcardType[]>([]);
+  const [MCQs, setMCQs] = useState<MultipleChoiceQuestion[]>([]); // Initialize state for MCQs
+  const [title, setTitle] = useState<string>("Type your title here"); // State for the editable title
+  const [selectedTopic, setSelectedTopic] = useState<string>("science-technology"); // State for the selected topic
   const type = "flashcard"; // State whether Flashcards or MCQ
+
+  useEffect(() => {
+    handleGetTemporaryContents(noteId, authorization);
+  }, []);
+
+
+  const handleGetTemporaryContents = async (noteId: string | undefined, authorization: string | null) => {
+    if (!noteId || !authorization) {
+      return;
+    }
+
+    const response = await getTemporaryContents(noteId, authorization);
+    if (response) {
+      const contents = response.contents;
+      if (isFlashcardType(contents[0])) {
+        const flashcards: FlashcardType[] = [];
+        contents.forEach((content) => {
+          flashcards.push((content as FlashcardTypeWrapper).flashcard);
+        });
+
+        setFlashcards(flashcards);
+      } else {
+        const multipleChoiceQuestions: MultipleChoiceQuestion[] = [];
+        contents.forEach((content) => {
+          multipleChoiceQuestions.push((content as MultipleChoiceQuestionTypeWrapper).mcq);
+        });
+        setMCQs(multipleChoiceQuestions);
+      }
+    }
+  };
 
   const handleTitleChange = (event: any) => {
     setTitle(event.target.innerText);
@@ -64,7 +104,7 @@ function GeneratedContent(): React.FC {
 
   const updateMCQ = (
     id: string,
-    updatedMCQ: { question: string; options: MCQOption[] },
+    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] },
   ) => {
     const updatedMCQs = MCQs.map((mcq) => {
       if (mcq.id === id) {
@@ -81,24 +121,27 @@ function GeneratedContent(): React.FC {
       // Calculate new ID based on the highest ID in GPTContent
       newId =
         Math.max(0, ...GPTContent.map((item) => parseInt(item.id, 10))) + 1;
-      const newFlashcard = {
+      const newFlashcard: FlashcardType = {
         id: newId.toString(),
+        note_id: noteId as string,
         question: "",
         answer: "",
-      };
+      }
       setFlashcards([...GPTContent, newFlashcard]);
     } else if (type === "mcq") {
       // Calculate new ID based on the highest ID in MCQs
       newId = Math.max(0, ...MCQs.map((mcq) => parseInt(mcq.id, 10))) + 1;
-      const newMCQ = {
+      const newMCQ: MultipleChoiceQuestion = {
         id: newId.toString(),
+        note_id: noteId as string,
         question: "",
         options: [
-          { option: "A", text: "", isCorrect: false },
-          { option: "B", text: "", isCorrect: false },
-          { option: "C", text: "", isCorrect: false },
-          { option: "D", text: "", isCorrect: false },
+          { option: "", is_correct: false },
+          { option: "", is_correct: false },
+          { option: "", is_correct: false },
+          { option: "", is_correct: false },
         ],
+        multiple_answers: false,
       };
       setMCQs([...MCQs, newMCQ]);
     }
@@ -122,7 +165,7 @@ function GeneratedContent(): React.FC {
         console.log(`Question: ${mcq.question}`);
         mcq.options.forEach((option, index) => {
           console.log(
-            `Option ${index + 1}: ${option.text} - Correct: ${option.isCorrect ? "Yes" : "No"}`,
+            `Option ${index + 1}: ${option.option} - Correct: ${option.is_correct ? "Yes" : "No"}`,
           );
         });
       });
@@ -247,28 +290,28 @@ function GeneratedContent(): React.FC {
         pb="4"
       >
         {/* Show Flashcard or MCQ depending on type */}
-
-        {type === "flashcard" &&
-          GPTContent.map((data) => (
-            <PreFlashcard
-              key={data.id}
-              GPTContent={data}
-              onDelete={() => removeFlashcardById(data.id)}
-              onUpdate={updateFlashcard}
-            />
-          ))}
-
-        {type === "mcq" &&
-          MCQs.map((mcq) => (
-            <PreMCQ
-              key={mcq.id}
-              id={mcq.id}
-              question={mcq.question}
-              options={mcq.options}
-              onDelete={removeMCQById}
-              onUpdate={updateMCQ}
-            />
-          ))}
+        {
+          type === "flashcard" ?
+            GPTContent.map((data) => (
+              <PreFlashcard
+                key={data.id}
+                GPTContent={data}
+                onDelete={() => removeFlashcardById(data.id)}
+                onUpdate={updateFlashcard}
+              />
+            ))
+            :
+            MCQs.map((mcq) => (
+              <PreMCQ
+                key={mcq.id}
+                id={mcq.id}
+                question={mcq.question}
+                options={mcq.options}
+                onDelete={removeMCQById}
+                onUpdate={updateMCQ}
+              />
+            ))
+        }
 
         <Button
           m={10}

@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Checkbox, Flex, Spacer } from "@chakra-ui/react";
-
-interface MCQOption {
-  option: string;
-  text: string;
-  isCorrect: boolean;
-}
+import { MultipleChoiceQuestionOption } from "~shared/types/data";
 
 interface PreMCQProps {
   id: string;
   question: string;
-  options: MCQOption[];
+  options: MultipleChoiceQuestionOption[];
   onDelete: (id: string) => void;
   onUpdate: (
     id: string,
-    updatedMCQ: { question: string; options: MCQOption[] },
+    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] },
   ) => void;
 }
 
@@ -26,7 +21,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   onUpdate,
 }) => {
   // Define the localOptions state here
-  const [localOptions, setLocalOptions] = useState<MCQOption[]>(options);
+  const [localOptions, setLocalOptions] = useState<MultipleChoiceQuestionOption[]>(options);
 
   useEffect(() => {
     // This ensures localOptions is updated whenever the options prop changes
@@ -87,7 +82,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
         {localOptions.map((opt, index) => (
           <Flex key={index} align="center" mb={4}>
             <Checkbox
-              isChecked={opt.isCorrect}
+              isChecked={opt.is_correct}
               onChange={(event: any) =>
                 handleCorrectnessToggle(index, event.target.checked)
               }
@@ -111,7 +106,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
                 )
               }
             >
-              {opt.text}
+              {opt.option}
             </Box>
           </Flex>
         ))}

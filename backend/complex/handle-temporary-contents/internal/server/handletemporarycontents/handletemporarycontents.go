@@ -243,3 +243,16 @@ func (s *Server) UpdateTemporaryContent(ctx context.Context, req *htcPb.UpdateTe
 	response.Success = true
 	return response, nil
 }
+
+func (s *Server) CommitTemporaryContents(ctx context.Context, req *htcPb.CommitTemporaryContentsRequest) (*htcPb.CommitTemporaryContentsResponse, error) {
+	contentsClient := client.GetContentClient()
+	contentsStubReq := &contentsPb.CommitTemporaryContentsRequest{NoteId: req.NoteId}
+	_, err := contentsClient.Stub.CommitTemporaryContents(ctx, contentsStubReq)
+	if err != nil {
+		log.Printf("Failed to commit temporary contents: %v", err)
+		return nil, status.Errorf(codes.Internal, "error committing temporary contents: %v", err)
+	}
+
+	response := &htcPb.CommitTemporaryContentsResponse{Success: true}
+	return response, nil
+}
