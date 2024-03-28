@@ -18,7 +18,7 @@ import {
   MultipleChoiceQuestion,
   FlashcardType,
   FlashcardTypeWrapper,
-  MultipleChoiceQuestionTypeWrapper
+  MultipleChoiceQuestionTypeWrapper,
 } from "~shared/types/data";
 import { getTemporaryContents } from "~features/api";
 import { isFlashcardType } from "~shared/util";
@@ -36,15 +36,18 @@ const GeneratedContent: React.FC = () => {
   const [GPTContent, setFlashcards] = useState<FlashcardType[]>([]);
   const [MCQs, setMCQs] = useState<MultipleChoiceQuestion[]>([]); // Initialize state for MCQs
   const [title, setTitle] = useState<string>("Type your title here"); // State for the editable title
-  const [selectedTopic, setSelectedTopic] = useState<string>("science-technology"); // State for the selected topic
+  const [selectedTopic, setSelectedTopic] =
+    useState<string>("science-technology"); // State for the selected topic
   const type = "flashcard"; // State whether Flashcards or MCQ
 
   useEffect(() => {
     handleGetTemporaryContents(noteId, authorization);
   }, []);
 
-
-  const handleGetTemporaryContents = async (noteId: string | undefined, authorization: string | null) => {
+  const handleGetTemporaryContents = async (
+    noteId: string | undefined,
+    authorization: string | null
+  ) => {
     if (!noteId || !authorization) {
       return;
     }
@@ -62,7 +65,9 @@ const GeneratedContent: React.FC = () => {
       } else {
         const multipleChoiceQuestions: MultipleChoiceQuestion[] = [];
         contents.forEach((content) => {
-          multipleChoiceQuestions.push((content as MultipleChoiceQuestionTypeWrapper).mcq);
+          multipleChoiceQuestions.push(
+            (content as MultipleChoiceQuestionTypeWrapper).mcq
+          );
         });
         setMCQs(multipleChoiceQuestions);
       }
@@ -79,7 +84,7 @@ const GeneratedContent: React.FC = () => {
 
   const removeFlashcardById = (id: string) => {
     const updatedFlashcards = GPTContent.filter(
-      (flashcard) => flashcard.id !== id,
+      (flashcard) => flashcard.id !== id
     );
     setFlashcards(updatedFlashcards);
   };
@@ -91,7 +96,7 @@ const GeneratedContent: React.FC = () => {
 
   const updateFlashcard = (
     id: string,
-    updatedContent: { question: string; answer: string },
+    updatedContent: { question: string; answer: string }
   ) => {
     const updatedFlashcards = GPTContent.map((flashcard) => {
       if (flashcard.id === id) {
@@ -104,7 +109,7 @@ const GeneratedContent: React.FC = () => {
 
   const updateMCQ = (
     id: string,
-    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] },
+    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] }
   ) => {
     const updatedMCQs = MCQs.map((mcq) => {
       if (mcq.id === id) {
@@ -126,7 +131,7 @@ const GeneratedContent: React.FC = () => {
         note_id: noteId as string,
         question: "",
         answer: "",
-      }
+      };
       setFlashcards([...GPTContent, newFlashcard]);
     } else if (type === "mcq") {
       // Calculate new ID based on the highest ID in MCQs
@@ -156,7 +161,7 @@ const GeneratedContent: React.FC = () => {
       console.log("Final Flashcards:");
       GPTContent.forEach((flashcard) => {
         console.log(
-          `Question: ${flashcard.question}, Answer: ${flashcard.answer}`,
+          `Question: ${flashcard.question}, Answer: ${flashcard.answer}`
         );
       });
     } else if (type === "mcq") {
@@ -165,7 +170,7 @@ const GeneratedContent: React.FC = () => {
         console.log(`Question: ${mcq.question}`);
         mcq.options.forEach((option, index) => {
           console.log(
-            `Option ${index + 1}: ${option.option} - Correct: ${option.is_correct ? "Yes" : "No"}`,
+            `Option ${index + 1}: ${option.option} - Correct: ${option.is_correct ? "Yes" : "No"}`
           );
         });
       });
@@ -290,9 +295,8 @@ const GeneratedContent: React.FC = () => {
         pb="4"
       >
         {/* Show Flashcard or MCQ depending on type */}
-        {
-          type === "flashcard" ?
-            GPTContent.map((data) => (
+        {type === "flashcard"
+          ? GPTContent.map((data) => (
               <PreFlashcard
                 key={data.id}
                 GPTContent={data}
@@ -300,8 +304,7 @@ const GeneratedContent: React.FC = () => {
                 onUpdate={updateFlashcard}
               />
             ))
-            :
-            MCQs.map((mcq) => (
+          : MCQs.map((mcq) => (
               <PreMCQ
                 key={mcq.id}
                 id={mcq.id}
@@ -310,8 +313,7 @@ const GeneratedContent: React.FC = () => {
                 onDelete={removeMCQById}
                 onUpdate={updateMCQ}
               />
-            ))
-        }
+            ))}
 
         <Button
           m={10}

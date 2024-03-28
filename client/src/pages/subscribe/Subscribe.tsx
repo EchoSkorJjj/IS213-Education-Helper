@@ -28,6 +28,7 @@ function PriceWrapper(props: Props) {
   return (
     <Box
       mb={4}
+      padding={0}
       shadow="base"
       borderWidth="1px"
       alignSelf={{ base: "center", lg: "flex-start" }}
@@ -67,16 +68,17 @@ const SubscribePage = () => {
         <meta name="description" content="Profile" />
       </Helmet>
       <VStack spacing={2} textAlign="center">
-        <Heading as="h1" fontSize={{ base: "3xl", md: "4xl" }} color="white">
+        <Heading as="h1" fontSize={{ base: "3xl", md: "4xl" }}>
           Plans that fit your need
         </Heading>
         <Text fontSize="lg" color={"gray.500"}>
           You may cancel the subscription at anytime.
         </Text>
       </VStack>
+      
       <SimpleGrid
         columns={{ base: 1, md: 2 }}
-        spacing={5}
+        spacingX={0} // Decrease horizontal spacing
         py={10}
         justifyItems="center"
         alignItems="flex-start"

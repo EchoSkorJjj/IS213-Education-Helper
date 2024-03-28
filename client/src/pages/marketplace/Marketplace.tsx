@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Box, useToast } from "@chakra-ui/react";
+import { Box, useToast, VStack } from "@chakra-ui/react";
 
 import MarketHeader from "./components/MarketHeader";
 import MarketList from "./components/MarketList";
@@ -32,7 +32,7 @@ const MarketplacePage = () => {
   const handleGetNotes = async (
     topic: string,
     notesTitle: string,
-    currentMarketPage: number,
+    currentMarketPage: number
   ): Promise<void> => {
     const data = await getNotes(topic, notesTitle, currentMarketPage);
 
@@ -64,28 +64,34 @@ const MarketplacePage = () => {
   }, [topic, notesTitle, currentMarketPage]);
 
   return (
-    <Box>
-      <Helmet>
-        <title>Marketplace</title>
-        <meta name="description" content="Marketplace" />
-      </Helmet>
-      <MarketHeader />
-      <TopicsList
-        topics={topics}
-        setTopic={setTopic}
-        topic={topic}
-        setCurrentTopicPage={setCurrentTopicPage}
-        currentTopicPage={currentTopicPage}
-      />
-      <MarketList
-        notes={notes}
-        setNotesTitle={setNotesTitle}
-        setCurrentMarketPage={setCurrentMarketPage}
-        currentMarketPage={currentMarketPage}
-        totalNotesCount={totalNotesCount}
-      />
-    </Box>
+    <VStack spacing={0} minHeight="100vh" h="1800">
+      <Box bg={"darkBlue.500"} w="100%" h="350">
+        <Helmet>
+          <title>Marketplace</title>
+          <meta name="description" content="Marketplace" />
+        </Helmet>
+        <MarketHeader />
+
+        <Box bg="blue.800" w="100%" h="400">
+          <TopicsList
+            topics={topics}
+            setTopic={setTopic}
+            topic={topic}
+            setCurrentTopicPage={setCurrentTopicPage}
+            currentTopicPage={currentTopicPage}
+          />
+        </Box>
+        <Box h="450">
+          <MarketList
+            notes={notes}
+            setNotesTitle={setNotesTitle}
+            setCurrentMarketPage={setCurrentMarketPage}
+            currentMarketPage={currentMarketPage}
+            totalNotesCount={totalNotesCount}
+          />
+        </Box>
+      </Box>
+    </VStack>
   );
 };
-
 export default MarketplacePage;

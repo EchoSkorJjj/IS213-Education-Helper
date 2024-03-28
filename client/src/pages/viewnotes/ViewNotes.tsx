@@ -191,6 +191,6 @@ function ViewNotes() {
       </Container>
     </Box>
   );
-};
+}
 
 export default ViewNotes;
