@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package handle_temporary_contents_pb;
+
+option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/handle-temporary-contents/pb/handle-temporary-contents";
+
+import "contents/contents.proto";
+
+// Feels really verbose... but protobuf doesn't currently support
+// repeated oneofs. This was recommended by a collaborator on the project.
+message OneOfContent {
+    oneof content {
+        content_pb.Flashcard flashcard = 1;
+        content_pb.MultipleChoiceQuestion mcq = 2;
+    }
+}
+
+message PollTemporaryContentsRequest {
+    string note_id = 1;
+}
+
+message PollTemporaryContentsResponse {
+    repeated OneOfContent contents = 1;
+}
+
+message CreateTemporaryContentRequest {
+    string note_id = 1;
+    content_pb.ContentType content_type = 2;
+    OneOfContent content = 3;
+}
+
+message CreateTemporaryContentResponse {
+    bool success = 1;
+    OneOfContent created_content = 2;
+}
+
+message DeleteTemporaryContentRequest {
+    string note_id = 1;
+    content_pb.ContentType content_type = 2;
+    string content_id = 3;
+}
+
+message DeleteTemporaryContentResponse {
+    bool success = 1;
+    OneOfContent deleted_content = 2;
+}
+
+message DeleteAllTemporaryContentsRequest {
+    string note_id = 1;
+}
+
+message DeleteAllTemporaryContentsResponse {
+    bool success = 1;
+    repeated OneOfContent deleted_contents = 2;
+}
+
+message UpdateTemporaryContentRequest {
+    string note_id = 1;
+    content_pb.ContentType content_type = 2;
+    string content_id = 3;
+    OneOfContent content = 4;
+}
+
+message UpdateTemporaryContentResponse {
+    bool success = 1;
+    OneOfContent updated_content = 2;
+}
+
+service HandleTemporaryContents {
+    rpc PollTemporaryContents(PollTemporaryContentsRequest) returns (PollTemporaryContentsResponse) {}
+    rpc CreateTemporaryContent(CreateTemporaryContentRequest) returns (CreateTemporaryContentResponse) {}
+    rpc DeleteTemporaryContent(DeleteTemporaryContentRequest) returns (DeleteTemporaryContentResponse) {}
+    rpc DeleteAllTemporaryContents(DeleteAllTemporaryContentsRequest) returns (DeleteAllTemporaryContentsResponse) {}
+    rpc UpdateTemporaryContent(UpdateTemporaryContentRequest) returns (UpdateTemporaryContentResponse) {}
+}
