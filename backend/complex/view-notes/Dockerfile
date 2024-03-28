@@ -1,17 +1,6 @@
-FROM ubuntu:22.04 as proto-base
-RUN apt-get update && apt-get install -y curl wget
-RUN BIN="/usr/local/bin" && \
-    VERSION="1.29.0" && \
-    curl -sSL \
-    "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
-    -o "${BIN}/buf" && \
-    chmod +x "${BIN}/buf"
-RUN GRPC_HEALTH_PROBE_VERSION=v0.4.13 && \
-    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
-    chmod +x /bin/grpc_health_probe
-WORKDIR /app
-COPY protos/ protos/
+FROM developwithzt/esd-buf-healthprobe-base:general-1.0 as proto-base
 COPY buf.* .
+COPY protos/ protos/
 RUN buf generate
 
 FROM python:3.11.7 as builder

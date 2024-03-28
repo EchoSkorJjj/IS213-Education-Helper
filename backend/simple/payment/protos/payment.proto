@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package payment;
+
+import "google/protobuf/timestamp.proto";
+
+message CheckoutRequest {
+    string email = 1;
+}
+
+message CheckoutResponse {
+    string url = 1;
+}
+
+message WebhookRequest {
+    string raw = 1;
+}
+
+message WebhookResponse {
+    string email = 1;
+    string subscription_id = 2;
+}
+
+message CancelSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CancelSubscriptionResponse {
+  bool success = 1;
+  google.protobuf.Timestamp cancelled_at = 3;
+}
+
+message CheckSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CheckSubscriptionResponse {
+  string status = 1;
+}
+
+service Payment {
+    rpc Checkout(CheckoutRequest) returns (CheckoutResponse);
+    rpc Webhook(WebhookRequest) returns (WebhookResponse);
+    rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse);
+    rpc CheckSubscription(CheckSubscriptionRequest) returns (CheckSubscriptionResponse);
+}

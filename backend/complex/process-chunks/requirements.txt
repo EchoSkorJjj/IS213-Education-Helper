@@ -1,0 +1,8 @@
+pika
+requests
+openai
+tiktoken
+python-dotenv
+grpcio
+grpcio-tools
+protobuf

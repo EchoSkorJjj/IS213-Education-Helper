@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package make_payment_pb;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/make-payment";
+
+message CheckoutRequest {
+  string email = 1;
+}
+
+message CheckoutResponse {
+  string url = 1;
+}
+
+message SuccessfulPaymentRequest {
+  string raw = 1;
+}
+
+message SuccessfulPaymentResponse {
+  google.protobuf.Timestamp subscribed_until = 1;
+}
+
+message CancelSubscriptionRequest {
+  string email = 1;
+}
+
+message CancelSubscriptionResponse {
+  google.protobuf.Timestamp cancelled_at = 1;
+}
+
+service MakePaymentService {
+    rpc Checkout (CheckoutRequest) returns (CheckoutResponse) {}
+    rpc SuccessfulPayment (SuccessfulPaymentRequest) returns (SuccessfulPaymentResponse) {}
+    rpc CancelSubscription (CancelSubscriptionRequest) returns (CancelSubscriptionResponse) {}
+}

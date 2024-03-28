@@ -3,3 +3,7 @@ grpcio-tools
 boto3
 mysql-connector-python
 python-dotenv
+PyMuPDF
+SQLAlchemy
+psycopg2-binary
+protobuf

@@ -32,7 +32,7 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.13 && \
 FROM node:20.11.1-alpine3.19
 ENV NODE_ENV production
 WORKDIR /app
-COPY .env .env
+
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /bin/grpc_health_probe /bin/grpc_health_probe

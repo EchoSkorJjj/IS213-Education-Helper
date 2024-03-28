@@ -2,6 +2,33 @@ _format_version: "3.0"
 _transform: true
 
 services:
+  - name: make-payment-service
+    host: make-payment-service
+    port: 50051
+    protocol: grpc
+    tags:
+      - make-payment-service
+    routes:
+      - name: make-payment-default
+        protocols:
+          - http
+        paths:
+          - /api/v1/payment
+        plugins:
+          - name: grpc-gateway
+            config:
+              proto: /usr/local/share/lua/5.1/kong/protos/make_payment.proto
+      - name: make-payment-success
+        protocols:
+          - http
+        paths:
+          - /api/v1/payment/success
+        plugins:
+          - name: grpc-gateway
+            config:
+              proto: /usr/local/share/lua/5.1/kong/protos/make_payment.proto
+          - name: rawstring-adapter
+
   - name: user-storage-service
     host: user-storage-service
     port: 50051
@@ -55,6 +82,23 @@ services:
           - name: grpc-gateway
             config:
               proto: /usr/local/share/lua/5.1/kong/protos/view_notes.proto
+  
+  - name: handle-temporary-contents-service
+    host: handle-temporary-contents-service
+    port: 50051
+    protocol: grpc
+    tags:
+      - handle-temporary-contents-service
+    routes:
+      - name: handle-temporary-contents
+        protocols:
+          - http
+        paths:
+          - /api/v1/contents/temporary
+        plugins:
+          - name: grpc-gateway
+            config:
+              proto: /usr/local/share/lua/5.1/kong/protos/handle_temporary_contents.proto
 
 plugins:
   - name: file-log
@@ -62,7 +106,7 @@ plugins:
     config:
       path: /usr/local/share/lua/5.1/kong/plugins/authn-kong/user-storage.log
   - name: cors
-    config: 
+    config:
       origins:
         - "http://localhost:3001"
       methods:
@@ -97,7 +141,7 @@ plugins:
       echo_downstream: false
 
   - name: rate-limiting
-    config: 
+    config:
       minute: 100
       policy: local
 
@@ -105,7 +149,7 @@ plugins:
     config:
       jwt_secret: "KUKUBIRDAIDHAIDHAJKSDAJIDBQIheh09u2jeqinwdjnbqwsdifhnw0euq2e0nqwdo" 
       public_paths:
-        - /api/v1/notes
+        - /api/v1/payment/success # Better practice is to pass request through a Stripe plugin to verify
         - /api/v1/auth/google/callback
         - /api/v1/auth/sgId/generateAuthUrl
         - /api/v1/auth/sgId/callback

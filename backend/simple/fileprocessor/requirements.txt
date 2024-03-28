@@ -6,3 +6,4 @@ python-dotenv
 pyspellchecker
 pymupdf
 pypdfium2
+protobuf

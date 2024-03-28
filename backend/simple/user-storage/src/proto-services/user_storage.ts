@@ -8,6 +8,7 @@ import RedisService from '../services/redis.service';
 import OAuthClientService from '../services/oauth.service';
 import JWTHandler from '../middleware/jwtMiddleware';
 import { isNullOrUndefined } from '../utils';
+import * as jwt from 'jsonwebtoken';
 
 import { 
     dateToGoogleTimeStamp, 
@@ -147,7 +148,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 is_paid: userData.is_paid,
             });
 
-            const access_token = jwtHandler.createJWT('10m', {
+            const access_token = jwtHandler.createJWT('1m', {
                 user_id: userData.user_id,
                 role: userData.role
             });
@@ -312,12 +313,26 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             
             callback(null, serviceResponse);
         } catch (err: any) {
-            logger.error(err);
-            const error = {
-                code: grpc.status.INTERNAL,
-                message: err.message,
-            };
-            callback(error, null);
+            if (err instanceof jwt.TokenExpiredError) {
+                logger.info('Token has expired.');
+                const currentDate = new Date();
+                const timestamp = dateToGoogleTimeStamp(currentDate);
+
+                const payload = getPayload('userStorage.LogoutResponse', {
+                    message: 'User logged out successfully',
+                })
+
+                const responseMetadata = getResponseMetaData(requestId, timestamp);
+                const serviceResponse = getServiceResponse(responseMetadata, payload);
+                callback(null, serviceResponse);
+            } else {
+                logger.error(err);
+                const error = {
+                    code: grpc.status.INTERNAL,
+                    message: err.message,
+                };
+                callback(error, null);
+            }
         }
     }
 

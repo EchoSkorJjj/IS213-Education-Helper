@@ -16,11 +16,18 @@ service NoteService {
   rpc RetrieveNote (RetrieveNoteRequest) returns (RetrieveNoteResponse);
 }
 
-// Request message for uploading a note
-message UploadNoteRequest {
+message Note {
   string userId = 1;
   string fileId = 2;
   bytes fileContent = 3;
+  string fileName = 4;
+  string title = 5;
+  string topic = 6;
+}
+
+// Request message for uploading a note
+message UploadNoteRequest {
+  Note note = 1;
 }
 
 // Response message for uploading a note
@@ -30,12 +37,12 @@ message UploadNoteResponse {
 
 // Request message for retrieving a note
 message RetrieveNoteRequest {
-  string userId = 1;
-  string fileId = 2;
+  string fileId = 1;
 }
 
 // Response message for retrieving a note
 message RetrieveNoteResponse {
-  string userId = 1;
-  bytes fileContent = 2;
+  Note note = 1;
+  // string userId = 1;
+  // bytes fileContent = 2;
 }

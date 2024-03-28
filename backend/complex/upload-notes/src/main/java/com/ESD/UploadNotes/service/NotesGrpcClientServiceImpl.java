@@ -2,6 +2,7 @@ package com.ESD.UploadNotes.service;
 
 import com.ESD.Notes.proto.NoteServiceGrpc;
 import com.ESD.Notes.proto.NoteServiceGrpc.NoteServiceBlockingStub;
+import com.ESD.Notes.proto.NotesServiceProto.Note;
 import com.ESD.Notes.proto.NotesServiceProto.UploadNoteRequest;
 import com.ESD.Notes.proto.NotesServiceProto.UploadNoteResponse;
 import com.ESD.UploadNotes.exception.GrpcServiceException;
@@ -33,15 +34,28 @@ public class NotesGrpcClientServiceImpl implements NotesGrpcClientService {
     }
 
 @Override
-public boolean uploadNotesToAws(String userId, String fileId, byte[] file) {
+public boolean uploadNotesToAws(String userId, String fileId, byte[] file, String fileName) {
     try {
- 
+        Note note = Note.newBuilder()
+        .setUserId(userId)
+        .setFileId(fileId)
+        .setFileName(fileName)
+        .setTitle("Test title") // Until title is added to the request
+        .setTopic("Test topic") // Until topic is added to the request
+        .setFileContent(com.google.protobuf.ByteString.copyFrom(file))
+        .build();
+
         UploadNoteRequest request = UploadNoteRequest
           .newBuilder()
-          .setUserId(userId)
-          .setFileId(fileId)
-          .setFileContent(com.google.protobuf.ByteString.copyFrom(file))
+          .setNote(note)
           .build();
+        // UploadNoteRequest request = UploadNoteRequest
+        //   .newBuilder()
+        //   .setUserId(userId)
+        //   .setFileId(fileId)
+        //   .setFileName(fileName)
+        //   .setFileContent(com.google.protobuf.ByteString.copyFrom(file))
+        //   .build();
   
         UploadNoteResponse responseWrapper = NotesStub.uploadNote(
           request

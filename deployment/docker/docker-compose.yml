@@ -3,6 +3,8 @@ version: "3.8"
 secrets:
   kong_db_password:
     file: ./kong_db_password.txt
+  ngrok_config:
+    file: ../../backend/ngrok/ngrok.yml
 
 x-common-env:
   &common-env
@@ -15,18 +17,31 @@ networks:
 
 volumes:
   kong-data: {}
-  user-storage-db-volume: {}
-  notes-db-volume: {}
+  postgres-db-volume: {}
+  # user-storage-db-volume: {}
+  # notes-db-volume: {}
+  # subscriptions-db-volume: {}
   contents-db-volume: {}
 
 services:
+  # Required for Stripe webhook
+  ngrok:
+    image: ngrok/ngrok:alpine
+    secrets:
+      - ngrok_config
+    command:
+      - start
+      - --all
+      - --config
+      - /run/secrets/ngrok_config
+
   kong-gateway:
-    image: kong:latest
+    image: kong-gateway:1.0
     build: ../../backend/kong-gateway
     environment:
       <<: *common-env
       KONG_DATABASE: off
-      KONG_PLUGINS: bundled,authn-kong
+      KONG_PLUGINS: bundled,authn-kong,rawstring-adapter
       KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml 
     ports:
       - "8000:8000" # Proxy
@@ -47,21 +62,22 @@ services:
     volumes:
       - ../../backend/kong-gateway/kong.yml:/etc/kong/kong.yml 
       - ../../backend/kong-gateway/authn-kong:/usr/local/share/lua/5.1/kong/plugins/authn-kong 
+      - ../../backend/kong-gateway/rawstring-adapter:/usr/local/share/lua/5.1/kong/plugins/rawstring-adapter 
       - ../../backend/kong-gateway/protos:/usr/local/share/lua/5.1/kong/protos
 
-  user-storage-db:
-    image: postgres
+  postgres-db:
+    image: postgres:alpine3.18
     volumes:
-      - user-storage-db-volume:/var/lib/postgresql/data
+      - postgres-db-volume:/var/lib/postgresql/data
       - ../sql_table/create_user_storage_table.sql:/docker-entrypoint-initdb.d/user_storage.sql
+      - ../sql_table/create_subscriptions_table.sql:/docker-entrypoint-initdb.d/subscriptions.sql
+      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
     environment:
-      POSTGRES_DB: user_storage_db
-      POSTGRES_USER: user_storage_user
-      POSTGRES_PASSWORD: user_storage_password
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: esd-db
+      POSTGRES_USER: esd-user
+      POSTGRES_PASSWORD: esd-password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user_storage_user -d user_storage_db"]
+      test: ["CMD-SHELL", "pg_isready -U esd-user -d esd-db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -73,18 +89,18 @@ services:
       test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
       interval: 5s
       timeout: 5s
-      retries: 5   
-
-  user-storage-service:
-    build: ../../backend/simple/user-storage
-    image: user-storage-service:1.0
+      retries: 5
+    
+  handle-temporary-contents-service:
+    build: ../../backend/complex/handle-temporary-contents
+    image: handle-temporary-contents-service:1.0
+    env_file:
+      - ../../backend/complex/handle-temporary-contents/.env
     depends_on:
-      user-storage-db:
+      payment-service:
         condition: service_healthy
-      user-redis:
+      subscription-service:
         condition: service_healthy
-    ports:
-      - "50051:50051"
     healthcheck:
       test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
       interval: 10s
@@ -92,21 +108,36 @@ services:
       retries: 3
       start_period: 30s
 
-  notes-db:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=my_notes_app
-    ports:
-      - "3306:3306"
-    volumes:
-      - notes-db-volume:/var/lib/mysql
-      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
+  make-payment-service:
+    build: ../../backend/complex/make-payment
+    image: make-payment-service:1.0
+    env_file:
+      - ../../backend/complex/make-payment/.env
+    depends_on:
+      payment-service:
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 3
+      start_period: 30s
+
+  subscription-service:
+    build: ../../backend/simple/subscriptions
+    image: subscription-service:1.0
+    env_file:
+      - ../../backend/simple/subscriptions/.env
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
       start_period: 30s
 
   
@@ -136,16 +167,64 @@ services:
     env_file:
       - ../../backend/simple/notes/.env
     depends_on:
-      notes-db:
+      postgres-db:
         condition: service_healthy
-    ports:
-      - "50052:50052"      
+
+  user-storage-service:
+    build: ../../backend/simple/user-storage
+    image: user-storage-service:1.0
+    env_file:
+      - ../../backend/simple/user-storage/.env
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      user-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  payment-service:
+    build: ../../backend/simple/payment
+    image: payment-service:1.0
+    env_file:
+      - ../../backend/simple/payment/.env
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  contents-db:
+    image: bitnami/cassandra:4.1.4
+    volumes:
+      - contents-db-volume:/bitnami
+      - ../sql_table/create_contents_table.cql:/docker-entrypoint-initdb.d/create_contents_table.cql
+    healthcheck:
+      # TODO: Not secure. Username and password are exposed in the command.
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  contents-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   view-notes-service:
     build: ../../backend/complex/view-notes
     image: view-notes-service:1.0
-    volumes:
-      - ../../backend/complex/view-notes/.env:/app/.env
+    env_file:
+      - ../../backend/complex/view-notes/.env
     depends_on:
       notes-service:
         # TODO: Set up healthcheck for notes service
@@ -162,8 +241,8 @@ services:
   contents-service:
     build: ../../backend/simple/contents
     image: content-service:1.0
-    volumes:
-      - ../../backend/simple/contents/.env:/app/.env
+    env_file:
+      - ../../backend/simple/contents/.env
     depends_on:
       contents-db:
         condition: service_healthy
@@ -190,8 +269,6 @@ services:
   upload-notes:
     build: ../../backend/complex/upload-notes
     image: upload-notes:1.0
-    ports:
-      - "8080:8080"
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -201,9 +278,6 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: "user"
       RABBITMQ_DEFAULT_PASS: "password"
-    ports:
-      - "5672:5672" 
-      - "15672:15672" # to hide later
     healthcheck:
       test: ["CMD", "rabbitmqctl", "status"]
       interval: 30s
@@ -218,5 +292,13 @@ services:
     #   options:
     #     fluentd-address: localhost:24224
     #     tag: docker.container.pdf-reader
-    ports:
-      - "50053:50053"
+      
+  
+  process-chunks:
+    build:
+      context: ../../backend/complex/process-chunks
+    env_file:
+      - ../../backend/complex/process-chunks/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy

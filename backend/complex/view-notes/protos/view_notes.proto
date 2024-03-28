@@ -2,18 +2,22 @@ syntax = "proto3";
 
 package view_notes_pb;
 
+import "notes.proto";
 import "contents.proto";
 
 message NoteAndContent {
-    B64Note note = 1;
-    AssociatedContents associated_contents = 2;
+B64Note note = 1;
+AssociatedContents associated_contents = 2;
 }
 
 message B64Note {
     string user_id = 1;
     string file_id = 2;
     string file_content = 3;
-  }
+    string file_name = 4;
+    string title = 5;
+    string topic = 6;
+}
 
 message AssociatedContents {
     repeated content_pb.Flashcard flashcards = 1;
@@ -22,7 +26,6 @@ message AssociatedContents {
 
 message ViewOneNoteRequest {
     string note_id = 1;
-    string user_id = 2;
 }
 
 message ViewAllNotesRequest {
@@ -33,7 +36,7 @@ message ViewAllNotesRequest {
 
 message ViewAllNotesResponse {
     int32 count = 1;
-    repeated NoteAndContent notes_and_contents = 2;
+    repeated notes.NotePreview notes = 2;
     int32 next_page = 3;
 }
 
@@ -46,7 +49,7 @@ message ViewNotesByUserIdRequest {
 
 message ViewNotesByUserIdResponse {
     int32 count = 1;
-    repeated NoteAndContent notes_and_contents = 2;
+    repeated notes.NotePreview notes = 2;
     int32 next_page = 3;
 }
 
