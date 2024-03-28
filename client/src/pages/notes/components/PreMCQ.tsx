@@ -89,6 +89,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
           <Flex key={index} align="center" mb={4}>
             <Checkbox
               isChecked={opt.is_correct}
+              isReadOnly={!pressState}
               onChange={(event: any) =>
                 handleCorrectnessToggle(index, event.target.checked)
               }
