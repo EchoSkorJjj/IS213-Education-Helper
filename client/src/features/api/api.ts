@@ -203,20 +203,22 @@ export const getTemporaryContents = async (
 export const updateTemporaryContent = async (
   noteId: string,
   contentId: string,
-  authorization: string,
+  contentType: number,
   updatedContent: any,
+  authorization: string,
 ): Promise<UpdateTemporaryContentsResponse | undefined> => {
   try {
     const response = await api.put("/api/v1/contents/temporary", {
-      headers: {
-        Authorization: `Bearer ${authorization}`,
-      },
-      data: {
-        note_id: noteId,
-        content_id: contentId,
-        content: updatedContent,
-      },
-    });
+      note_id: noteId,
+      content_id: contentId,
+      content_type: contentType,
+      content: updatedContent,
+    },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        }
+      });
 
     return response.data as UpdateTemporaryContentsResponse;
   } catch (error) {
@@ -272,9 +274,9 @@ export const deleteAllTemporaryContents = async (
 
 export const createTemporaryContent = async (
   noteId: string,
-  authorization: string,
   contentType: number,
   content: any,
+  authorization: string,
 ): Promise<CreateTemporaryContentResponse | undefined> => {
   try {
     const response = await api.post(
@@ -305,7 +307,7 @@ export const commitTemporaryContents = async (
 ): Promise<{ success: boolean } | undefined> => {
   try {
     const response = await api.post(
-      "/api/v1/contents/commit",
+      "/api/v1/contents/temporary/commit",
       {
         note_id: noteId,
         title: title,
