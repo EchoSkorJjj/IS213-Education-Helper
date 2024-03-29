@@ -98,6 +98,12 @@ class ContentFetcher:
             formatted_response = re.sub(r',\s*}', '}', response.choices[0].message.content)
             # Replaces whitespace between objects with commas
             formatted_response = re.sub(r'}\s*{', '},\n{', formatted_response)
+            # Strip square brackets from opening and start of GAI response.
+            # We do this because the response is inconsistent and sometimes
+            # has incomplete square brackets.
+            formatted_response = re.sub(r'^\[\s*', '', formatted_response)
+            formatted_response = re.sub(r'\s*\]$', '', formatted_response)
+
             formatted_response = f"[{formatted_response}]"
 
             self.send_content(formatted_response, generate_type,note_id)
