@@ -16,7 +16,6 @@ interface NotesProp {
   type: "MCQ" | "Flashcard";
 }
 
-
 const Profile = () => {
   // For created notes
   const [createdNotes, setCreatedNotes] = useState<NotesProp[]>([]);

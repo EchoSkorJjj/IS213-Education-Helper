@@ -9,6 +9,7 @@ interface NotesUploadProps {
   handleGenerate: () => void;
   handleChange: (file: File) => void;
   handleGenerationChange: () => void;
+  handleDelete: () => void;
 }
 
 const NotesUpload = ({
@@ -18,6 +19,7 @@ const NotesUpload = ({
   handleGenerationChange,
   handleGenerate,
   setGenerateType,
+  handleDelete,
 }: NotesUploadProps) => {
   const DropZoneAccept = [".pdf"];
   const maxSize = 15 * 1024 * 1024; // 16MB in bytes
@@ -45,8 +47,12 @@ const NotesUpload = ({
       handleChange(fileOrFiles);
     } else {
       // No file is provided, handle accordingly
-      console.log("No file selected");
+      handleDelete();
     }
+  };
+
+  const onDelete = () => {
+    handleDelete(); // Call the provided handleDelete method to remove the selected file
   };
 
   const generateFlashcard = generateType === "flashcard";
@@ -74,6 +80,8 @@ const NotesUpload = ({
             onFileValidation={handleFileValidation}
             height="300px"
             border="none"
+            required
+            onDelete={onDelete}
           />
         </Box>
         <Box width="100%" textAlign="center">
