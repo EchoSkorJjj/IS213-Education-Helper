@@ -6,7 +6,6 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-
 import {
   Box,
   Container,
@@ -27,7 +26,7 @@ import { useAuth } from "~features/auth";
 import Flashcard from "./components/Flashcard";
 import MCQ from "./components/MCQ";
 
-import { getContent, saveNotes, deleteNote, getSavedNotes } from "~api";
+import { deleteNote, getContent, getSavedNotes, saveNotes } from "~api";
 
 function ViewNotes() {
   const navigate = useNavigate();
@@ -155,9 +154,16 @@ function ViewNotes() {
           outline="none"
         />
 
-        <Text color={"white"} mt={4} mb={2}>Topic: {noteTopic}</Text>
+        <Text color={"white"} mt={4} mb={2}>
+          Topic: {noteTopic}
+        </Text>
         <Flex justifyContent="space-between" alignItems="center">
-          <Heading fontSize="2xl" fontWeight={750} mb={2} style={{ color: "white" }}>
+          <Heading
+            fontSize="2xl"
+            fontWeight={750}
+            mb={2}
+            style={{ color: "white" }}
+          >
             {noteTitle}
           </Heading>
           <Text

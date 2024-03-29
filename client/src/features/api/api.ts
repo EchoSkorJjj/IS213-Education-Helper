@@ -367,24 +367,26 @@ export const deleteNote = async (
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const getSavedNotes = async (
   authorization: string,
-  userId: string
-): Promise<{
-  includes(noteId: string | undefined): unknown; saved_notes_ids: string[] 
-} | undefined> => {
+  userId: string,
+): Promise<
+  | {
+      includes(noteId: string | undefined): unknown;
+      saved_notes_ids: string[];
+    }
+  | undefined
+> => {
   try {
-    const response = await api.get(`/api/v1/notes/saved/${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authorization}`
-        }
-      });
+    const response = await api.get(`/api/v1/notes/saved/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${authorization}`,
+      },
+    });
     return response.data.saved_notes_ids;
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
 };
