@@ -6,6 +6,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
+
 import {
   Box,
   Container,
@@ -26,7 +27,7 @@ import { useAuth } from "~features/auth";
 import Flashcard from "./components/Flashcard";
 import MCQ from "./components/MCQ";
 
-import { deleteNote, getContent, saveNotes } from "~api";
+import { getContent, saveNotes, deleteNote, getSavedNotes } from "~api";
 
 function ViewNotes() {
   const navigate = useNavigate();
@@ -37,10 +38,23 @@ function ViewNotes() {
   const { user } = useAuth();
   const userId = user?.user_id;
   const { authorization } = useAuth();
-  const [ownerId, setOwnerId] = useState<string>();
   const [noteTitle, setNoteTitle] = useState<string>();
   const [noteTopic, setNoteTopic] = useState<string>();
   const [fileName, setFileName] = useState<string>();
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+
+  const checkIfUserSaved = async () => {
+    if (!authorization || !userId) {
+      return;
+    }
+    const notesList = await getSavedNotes(authorization, userId);
+
+    if (notesList && notesList.includes(noteId)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const deleteSavedCard = async () => {
     if (!noteId || !authorization) {
@@ -67,7 +81,6 @@ function ViewNotes() {
 
   const setFileHook = (data: any) => {
     setContent(data.associated_contents);
-    setOwnerId(data.note.user_id);
     setNoteTitle(data.note.title);
     setNoteTopic(data.note.topic);
     setFileName(data.note.file_name);
@@ -93,6 +106,10 @@ function ViewNotes() {
     }
 
     setNoteData(data);
+
+    const saved = await checkIfUserSaved();
+
+    setIsSaved(saved || false);
   };
 
   const getCards = (contents: ContentType) => {
@@ -147,9 +164,17 @@ function ViewNotes() {
             color="white"
             fontSize="sm"
             cursor="pointer"
-            onClick={userId === ownerId ? deleteSavedCard : saveCardsSet}
+            onClick={async () => {
+              if (isSaved) {
+                await deleteSavedCard();
+                setIsSaved(false);
+              } else {
+                await saveCardsSet();
+                setIsSaved(true);
+              }
+            }}
           >
-            {userId === ownerId ? "Delete this saved note" : "Save this set"}
+            {isSaved ? "Delete this saved note" : "Save this set"}
           </Text>
         </Flex>
 
