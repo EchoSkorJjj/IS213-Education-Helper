@@ -40,7 +40,7 @@ export interface NotePreview {
   topic: string;
   sizeInBytes: number;
   numPages: number;
-  generate_type: string;
+  generateType: string;
 }
 
 export interface GetContentResponse {
