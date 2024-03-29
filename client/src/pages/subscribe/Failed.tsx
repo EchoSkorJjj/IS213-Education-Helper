@@ -6,7 +6,7 @@ import { getCheckoutUrl } from "~features/api";
 import { useAuth } from "~features/auth";
 
 const FailedPage = () => {
-  const textColor = "white";
+  const textColor = "black";
   const { user, authorization } = useAuth();
   const email = user?.email;
 
@@ -28,7 +28,7 @@ const FailedPage = () => {
       </Helmet>
       <VStack spacing={6} textAlign="center">
         <Icon as={FaExclamationTriangle} boxSize={16} color="yellow.500" />
-        <Heading as="h1" fontSize="4xl" color="white">
+        <Heading as="h1" fontSize="4xl" color="black">
           Oops! Subscription Unsuccessful...
         </Heading>
         <Text fontSize="lg" color={textColor} maxW="lg">
