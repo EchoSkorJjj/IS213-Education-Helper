@@ -72,6 +72,8 @@ const NotesUpload = ({
             onChange={handleAttachmentChange}
             onError={handleError}
             onFileValidation={handleFileValidation}
+            height="300px"
+            border="none"
           />
         </Box>
         <Box width="100%" textAlign="center">

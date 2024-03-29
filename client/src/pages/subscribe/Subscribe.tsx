@@ -8,7 +8,7 @@ import {
   List,
   ListIcon,
   ListItem,
-  SimpleGrid,
+  Flex,
   Text,
   useToast,
   VStack,
@@ -34,7 +34,7 @@ function PriceWrapper(props: Props) {
       // alignSelf={{ base: "center", lg: "flex-start" }}
       borderColor={"gray.200"}
       borderRadius={"xl"}
-      // width={{ base: "90%", md: "80%", lg: "40%" }} // Increase the width
+      width={{ base: "80%", sm: "70%", md: "45%", lg: "40%", xl: "24%" }} // Adjust widths as necessary for responsiveness
     >
       {children}
     </Box>
@@ -68,7 +68,7 @@ const SubscribePage = () => {
   };
 
   return (
-    <Box py={12} minHeight="100vh">
+    <Box py={12} minHeight="50vh">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />
@@ -82,68 +82,66 @@ const SubscribePage = () => {
         </Text>
       </VStack>
 
-      <SimpleGrid
-        columns={{ base: 1, md: 2 }}
-
-        // spacingX={-10}
+      <Flex
+        direction={{ base: "column", md: "row" }} // Stack vertically on small screens, horizontally on medium+ screens
         py={10}
-        justifyItems="center"
-        alignItems="flex-start"
+        justify="center" // Center the items horizontally
+        align={{ base: "center", md: "flex-start" }} // Center items on small screens, align items to the start on medium+ screens
+        gap={{ base: 20, md: 4 }} // Larger gap on small screens, smaller gap on medium+ screens
       >
         <PriceWrapper>
-          <Box color="white">
-            <Text
-              textAlign="center"
-              fontWeight="500"
-              color="blue.600"
-              fontSize="2xl"
-              mt={4}
-            >
-              Free Tier
-            </Text>
-            <HStack justifyContent="center">
-              <Text fontSize="3xl" color="black" fontWeight="600">
-                $
-              </Text>
-              <Text fontSize="5xl" color="black" fontWeight="900">
-                0
-              </Text>
-              <Text fontSize="3xl" color="gray.500">
-                /month
-              </Text>
-            </HStack>
-          </Box>
-          <VStack bg={"gray.50"} py={4} borderBottomRadius={"xl"}>
-            <List spacing={3} textAlign="start" px={12}>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="blue.500" />
-                Notes Generation
-              </ListItem>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="blue.500" />
-                Access to Marketplace
-              </ListItem>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="blue.500" />
-                Flashcard Generation
-              </ListItem>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="blue.500" />
-                Unlock Flashcard in Marketplace
-              </ListItem>
-            </List>
-            <Box w="80%" pt={7}>
-              <Button
-                w="full"
-                variant="outline"
-                disabled={true}
-                isDisabled={true}
-                onClick={() => handleFreePlan()}
+          <Box position="relative">
+            <Box py={4} px={12} color="white">
+              <Text
+                textAlign="center"
+                color="blue.600"
+                fontWeight="500"
+                fontSize="2xl"
               >
-                {user?.is_paid ? "You are on Pro Plan" : "Already on Free Plan"}
-              </Button>
+                Free Tier
+              </Text>
+              <HStack justifyContent="center">
+                <Text fontSize="3xl" color="black" fontWeight="600">
+                  $
+                </Text>
+                <Text fontSize="5xl" color="black" fontWeight="900">
+                  0
+                </Text>
+                <Text fontSize="3xl" color="gray.500">
+                  /month
+                </Text>
+              </HStack>
             </Box>
-          </VStack>
+            <VStack bg={"gray.50"} py={4} borderBottomRadius={"xl"}>
+              <List spacing={3} textAlign="start" px={12}>
+                <ListItem>
+                  <ListIcon as={FaCheckCircle} color="blue.500" />
+                  Notes Generation
+                </ListItem>
+                <ListItem>
+                  <ListIcon as={FaCheckCircle} color="blue.500" />
+                  Access to Marketplace
+                </ListItem>
+                <ListItem>
+                  <ListIcon as={FaCheckCircle} color="blue.500" />
+                  Flashcard Generation
+                </ListItem>
+              </List>
+              <Box w="80%" pt={7}>
+                <Button
+                  w="full"
+                  variant="outline"
+                  disabled={true}
+                  isDisabled={true}
+                  onClick={() => handleFreePlan()}
+                >
+                  {user?.is_paid
+                    ? "You are on Pro Plan"
+                    : "Already on Free Plan"}
+                </Button>
+              </Box>
+            </VStack>
+          </Box>
         </PriceWrapper>
 
         <PriceWrapper>
@@ -192,7 +190,7 @@ const SubscribePage = () => {
               <List spacing={3} textAlign="start" px={12}>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
-                  Everything from the Free Tier
+                  Everything from Free Tier
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
@@ -211,7 +209,7 @@ const SubscribePage = () => {
             </VStack>
           </Box>
         </PriceWrapper>
-      </SimpleGrid>
+      </Flex>
     </Box>
   );
 };
