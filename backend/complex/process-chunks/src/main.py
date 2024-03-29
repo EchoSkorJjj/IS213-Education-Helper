@@ -94,8 +94,12 @@ class ContentFetcher:
             logging.error(f"Error during OpenAI API call or response handling: {str(e)}")
 
         try:
-            formatted_response = re.sub(r'}\s*{', '},\n{', response.choices[0].message.content)
-            formatted_response = "[" + formatted_response + "]"
+            # Removes trailing commas
+            formatted_response = re.sub(r',\s*}', '}', response.choices[0].message.content)
+            # Replaces whitespace between objects with commas
+            formatted_response = re.sub(r'}\s*{', '},\n{', formatted_response)
+            formatted_response = f"[{formatted_response}]"
+
             self.send_content(formatted_response, generate_type,note_id)
         except Exception as e:
             logging.error(f"Error during content sending: {str(e)}")
