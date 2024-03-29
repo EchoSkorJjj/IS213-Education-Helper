@@ -17,6 +17,7 @@ message B64Note {
     string file_name = 4;
     string title = 5;
     string topic = 6;
+    string generate_type = 7;
 }
 
 message AssociatedContents {

@@ -34,7 +34,7 @@ public class NotesGrpcClientServiceImpl implements NotesGrpcClientService {
     }
 
 @Override
-public boolean uploadNotesToAws(String userId, String fileId, byte[] file, String fileName) {
+public boolean uploadNotesToAws(String userId, String fileId, byte[] file, String fileName, String generateType) {
     try {
         Note note = Note.newBuilder()
         .setUserId(userId)
@@ -42,6 +42,7 @@ public boolean uploadNotesToAws(String userId, String fileId, byte[] file, Strin
         .setFileName(fileName)
         .setTitle("Test title") // Until title is added to the request
         .setTopic("Test topic") // Until topic is added to the request
+        .setGenerateType(generateType)
         .setFileContent(com.google.protobuf.ByteString.copyFrom(file))
         .build();
 

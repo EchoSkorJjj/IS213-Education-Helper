@@ -96,7 +96,7 @@ public class FileProcessorGrpcClientServiceImpl
 
       if (response.getFileId().equals(fileId)) {
         awsResponse =
-          notesGrpcClientService.uploadNotesToAws(userId, fileId, fileBytes, fileName);
+          notesGrpcClientService.uploadNotesToAws(userId, fileId, fileBytes, fileName, generateType);
       }
       else {
         logger.error("Preprocessing Failed.");

@@ -23,6 +23,7 @@ message Note {
   string fileName = 4;
   string title = 5;
   string topic = 6;
+  string generateType = 7;
 }
 
 // Request message for uploading a note

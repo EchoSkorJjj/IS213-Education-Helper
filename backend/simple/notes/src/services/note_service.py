@@ -22,7 +22,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                 'size_in_bytes': content_length_in_bytes,
                 'num_pages': num_pages,
                 'title': note.title,
-                'topic': note.topic
+                'topic': note.topic,
+                'generate_type': note.generateType
             }
 
             db.insert_note(note_to_create)
@@ -78,7 +79,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                     title=note.title,
                     topic=note.topic,
                     sizeInBytes=note.size_in_bytes,
-                    numPages=note.num_pages
+                    numPages=note.num_pages,
+                    generateType=note.generate_type
                 )
 
                 response.notes.append(note_preview)
@@ -112,7 +114,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                     title=note.title,
                     topic=note.topic,
                     sizeInBytes=note.size_in_bytes,
-                    numPages=note.num_pages
+                    numPages=note.num_pages,
+                    generateType=note.generate_type
                 )
 
                 response.notes.append(note_preview)
@@ -143,7 +146,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                 title=note_metadata['title'],
                 topic=note_metadata['topic'],
                 sizeInBytes=note_metadata['size_in_bytes'],
-                numPages=note_metadata['num_pages']
+                numPages=note_metadata['num_pages'],
+                generateType=note_metadata['generate_type']
             )
             
             # Returning a single note's metadata as a response
@@ -171,7 +175,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                 'size_in_bytes': note.size_in_bytes, # Assume file itself cannot change
                 'num_pages': note.num_pages, # Assume file itself cannot change
                 'title': note_preview.title if note_preview.title else note.title,
-                'topic': note_preview.topic if note_preview.topic else note.topic
+                'topic': note_preview.topic if note_preview.topic else note.topic,
+                'generate_type': note.generate_type
             }
 
             db.update_note(note_to_update)

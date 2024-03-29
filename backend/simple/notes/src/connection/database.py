@@ -19,6 +19,7 @@ class Notes(base):
     num_pages = Column(Integer)
     title = Column(String)
     topic = Column(String)
+    generate_type = Column(String)
 
 class Database:
     _engine = None
@@ -97,7 +98,7 @@ class Database:
 
     def get_note_metadata(self, note_id):
         self.ready()
-        columns = [Notes.id, Notes.user_id, Notes.file_name, Notes.size_in_bytes, Notes.num_pages, Notes.title, Notes.topic]
+        columns = [Notes.id, Notes.user_id, Notes.file_name, Notes.size_in_bytes, Notes.num_pages, Notes.title, Notes.topic, Notes.generate_type]
         result = self._session.query(*columns).filter(Notes.id == uuid.UUID(note_id, version=4)).first()
 
         if result:
@@ -108,7 +109,8 @@ class Database:
                 "size_in_bytes": result.size_in_bytes,
                 "num_pages": result.num_pages,
                 "title": result.title,
-                "topic": result.topic
+                "topic": result.topic,
+                "generate_type": result.generate_type,
             }
             return metadata
 
