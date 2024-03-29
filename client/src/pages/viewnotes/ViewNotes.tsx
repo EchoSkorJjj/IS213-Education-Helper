@@ -138,9 +138,9 @@ function ViewNotes() {
           outline="none"
         />
 
-        <Text mt={4}>{noteTopic}</Text>
+        <Text color={"white"} mt={4} mb={2}>Topic: {noteTopic}</Text>
         <Flex justifyContent="space-between" alignItems="center">
-          <Heading fontSize="2xl" fontWeight={750} style={{ color: "white" }}>
+          <Heading fontSize="2xl" fontWeight={750} mb={2} style={{ color: "white" }}>
             {noteTitle}
           </Heading>
           <Text
