@@ -55,6 +55,8 @@ const NotesGeneratorPage = () => {
       });
       return;
     }
+    localStorage.setItem("filename", selectedFile.name);
+
     toast({
       title: `Generating ${generateType}`,
       status: "info",

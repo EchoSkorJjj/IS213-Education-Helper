@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-statements */
 /* eslint-disable max-params */
 /* eslint-disable max-lines */
@@ -52,6 +53,9 @@ const GeneratedContent: React.FC = () => {
   const pollCountRef = useRef<number>(0);
   const previousCountRef = useRef<number>(0);
   const intervalIdRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [filename, setFilename] = useState(
+    localStorage.getItem("filename") || "No file uploaded",
+  );
 
   useEffect(() => {
     // Call once to fetch immediately
@@ -310,6 +314,7 @@ const GeneratedContent: React.FC = () => {
       });
       return;
     }
+    localStorage.removeItem("filename"); // Clear the filename
 
     navigate(`/viewnotes/${noteId}`);
   };
@@ -421,7 +426,7 @@ const GeneratedContent: React.FC = () => {
 
               <Flex justifyContent="flex-end">
                 <AttachmentIcon mr="2" />
-                <Text fontSize="xs">week5.pdf</Text>
+                <Text fontSize="xs">{filename}</Text>
               </Flex>
             </Box>
           </Flex>
