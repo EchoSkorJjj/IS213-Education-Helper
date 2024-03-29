@@ -26,7 +26,7 @@ import { useAuth } from "~features/auth";
 import Flashcard from "./components/Flashcard";
 import MCQ from "./components/MCQ";
 
-import { getContent, saveNotes, deleteNote } from "~api";
+import { deleteNote, getContent, saveNotes } from "~api";
 
 function ViewNotes() {
   const navigate = useNavigate();
@@ -96,7 +96,9 @@ function ViewNotes() {
   };
 
   const getCards = (contents: ContentType) => {
-    const flashcards = Array.isArray(contents.flashcards) ? contents.flashcards : [];
+    const flashcards = Array.isArray(contents.flashcards)
+      ? contents.flashcards
+      : [];
     const mcqs = Array.isArray(contents.mcqs) ? contents.mcqs : [];
 
     return [
@@ -144,8 +146,8 @@ function ViewNotes() {
           <Text
             color="white"
             fontSize="sm"
-            cursor= "pointer"
-            onClick={userId === ownerId ? deleteSavedCard : saveCardsSet }
+            cursor="pointer"
+            onClick={userId === ownerId ? deleteSavedCard : saveCardsSet}
           >
             {userId === ownerId ? "Delete this saved note" : "Save this set"}
           </Text>

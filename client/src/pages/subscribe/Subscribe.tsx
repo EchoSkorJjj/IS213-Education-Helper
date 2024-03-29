@@ -3,12 +3,12 @@ import { FaCheckCircle } from "react-icons/fa";
 import {
   Box,
   Button,
+  Flex,
   Heading,
   HStack,
   List,
   ListIcon,
   ListItem,
-  Flex,
   Text,
   useToast,
   VStack,

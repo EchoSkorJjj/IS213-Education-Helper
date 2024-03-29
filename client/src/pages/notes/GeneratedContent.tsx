@@ -1,3 +1,6 @@
+/* eslint-disable max-statements */
+/* eslint-disable max-params */
+/* eslint-disable max-lines */
 import { useEffect, useRef, useState } from "react";
 import FlipMove from "react-flip-move";
 import { Helmet } from "react-helmet-async";
@@ -382,6 +385,7 @@ const GeneratedContent: React.FC = () => {
                 width="150%"
                 onChange={handleTopicChange}
                 placeholder="Select option"
+                color={"gray.500"}
               >
                 <option value="science-technology">
                   Science and Technology

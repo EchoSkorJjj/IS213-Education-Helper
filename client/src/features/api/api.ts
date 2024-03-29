@@ -6,8 +6,8 @@ import {
   DeleteTemporaryContentsResponse,
   GetContentResponse,
   GetTemporaryContentsResponse,
+  SaveNotesResponse,
   UpdateTemporaryContentsResponse,
-  SaveNotesResponse
 } from "~shared/types/data";
 import { UpdateProfileType } from "~shared/types/form";
 
@@ -33,20 +33,19 @@ export async function handleResponse<T>(
   throw new Error(`HTTP error! Status: ${response.status}`);
 }
 
-export const getCheckoutUrl = async (
-  email: string,
-  authorization: string
-) => {
+export const getCheckoutUrl = async (email: string, authorization: string) => {
   try {
-
-    const response = await api.post("/api/v1/payment/checkout",
+    const response = await api.post(
+      "/api/v1/payment/checkout",
       {
-        email: email
-      }, {
-      headers: {
-        Authorization: `Bearer ${authorization}`,
+        email: email,
       },
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+      },
+    );
 
     const data = await handleResponse(response);
     return data.url;
@@ -166,14 +165,11 @@ export const getContent = async (
   authorization: string,
 ): Promise<GetContentResponse | undefined> => {
   try {
-    const response = await api.get(
-      `/api/v1/notes/${noteId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authorization}`,
-        },
+    const response = await api.get(`/api/v1/notes/${noteId}`, {
+      headers: {
+        Authorization: `Bearer ${authorization}`,
       },
-    );
+    });
     const data = response.data as GetContentResponse;
     return data;
   } catch (error) {
@@ -209,17 +205,20 @@ export const updateTemporaryContent = async (
   authorization: string,
 ): Promise<UpdateTemporaryContentsResponse | undefined> => {
   try {
-    const response = await api.put("/api/v1/contents/temporary", {
-      note_id: noteId,
-      content_id: contentId,
-      content_type: contentType,
-      content: updatedContent,
-    },
+    const response = await api.put(
+      "/api/v1/contents/temporary",
+      {
+        note_id: noteId,
+        content_id: contentId,
+        content_type: contentType,
+        content: updatedContent,
+      },
       {
         headers: {
           Authorization: `Bearer ${authorization}`,
-        }
-      });
+        },
+      },
+    );
 
     return response.data as UpdateTemporaryContentsResponse;
   } catch (error) {
@@ -234,7 +233,6 @@ export const deleteTemporaryContent = async (
   authorization: string,
 ): Promise<DeleteTemporaryContentsResponse | undefined> => {
   try {
-
     const contentTypeAsNumber: number = contentType === "flashcard" ? 0 : 1;
     const response = await api.delete("/api/v1/contents/temporary", {
       headers: {
@@ -329,7 +327,7 @@ export const commitTemporaryContents = async (
 
 export const saveNotes = async (
   authorization: string,
-  fileId: string
+  fileId: string,
 ): Promise<SaveNotesResponse | undefined> => {
   try {
     const response = await api.post(
@@ -340,7 +338,7 @@ export const saveNotes = async (
       {
         headers: {
           Authorization: `Bearer ${authorization}`,
-        }
+        },
       },
     );
     return response.data as SaveNotesResponse;
@@ -357,16 +355,16 @@ export const deleteNote = async (
     const response = await api.post(
       "/api/v1/notes/delete",
       {
-        file_id: fileId
+        file_id: fileId,
       },
       {
         headers: {
           Authorization: `Bearer ${authorization}`,
-        }
-      }
+        },
+      },
     );
     return response.data.success;
-  } catch (error){
+  } catch (error) {
     console.log(error);
   }
-}
+};

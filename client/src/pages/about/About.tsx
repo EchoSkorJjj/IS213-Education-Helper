@@ -1,30 +1,29 @@
 import { Helmet } from "react-helmet-async";
-import sdgImage from "./sdg.jpg";
-import thadImage from "./thad.jpeg";
-import louisImage from "./louis.jpg";
-import neilImage from "./neil.jpg";
-import ztImage from "./zt.jpg";
-import jihoonImage from "./jihoon.jpg";
-
+// Here we have used react-icons package for the icon
+import { FaQuoteRight } from "react-icons/fa";
 import {
-  Box,
-  Flex,
-  Stack,
-  Text,
-  SimpleGrid,
-  useColorModeValue,
-  Container,
   Avatar,
-  Icon,
+  Box,
   chakra,
+  Container,
+  Flex,
+  Icon,
   Link,
   List,
   ListItem,
+  SimpleGrid,
+  Stack,
+  Text,
+  useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
 
-import { VStack } from "@chakra-ui/react";
-// Here we have used react-icons package for the icon
-import { FaQuoteRight } from "react-icons/fa";
+import jihoonImage from "./jihoon.jpg";
+import louisImage from "./louis.jpg";
+import neilImage from "./neil.jpg";
+import sdgImage from "./sdg.jpg";
+import thadImage from "./thad.jpeg";
+import ztImage from "./zt.jpg";
 
 const data = {
   heading: "Inspired by UN Sustainable Development Goals",
@@ -126,7 +125,7 @@ const About = () => {
         <Flex
           boxShadow={useColorModeValue(
             "0 4px 6px rgba(160, 174, 192, 0.6)",
-            "0 4px 6px rgba(9, 17, 28, 0.9)"
+            "0 4px 6px rgba(9, 17, 28, 0.9)",
           )}
           backgroundSize="cover"
           backgroundImage={`url(${sdgImage})`}
