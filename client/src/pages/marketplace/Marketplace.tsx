@@ -32,7 +32,7 @@ const MarketplacePage = () => {
   const handleGetNotes = async (
     topic: string,
     notesTitle: string,
-    currentMarketPage: number
+    currentMarketPage: number,
   ): Promise<void> => {
     const data = await getNotes(topic, notesTitle, currentMarketPage);
 
@@ -80,7 +80,7 @@ const MarketplacePage = () => {
           currentTopicPage={currentTopicPage}
         />
       </Box>
-      <Box >
+      <Box>
         <MarketList
           notes={notes}
           setNotesTitle={setNotesTitle}

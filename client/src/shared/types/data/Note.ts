@@ -84,3 +84,8 @@ export interface CreateTemporaryContentResponse {
     mcq?: MultipleChoiceQuestion;
   };
 }
+
+export interface SaveNotesResponse {
+  success: boolean;
+  saved_files_ids: string[];
+}

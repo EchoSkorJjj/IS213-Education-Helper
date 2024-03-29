@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button, Checkbox, Flex, Spacer } from "@chakra-ui/react";
 
 import { MultipleChoiceQuestionOption } from "~shared/types/data";
@@ -8,7 +8,7 @@ interface PreMCQProps {
   question: string;
   options: MultipleChoiceQuestionOption[];
   onDelete: (id: string) => void;
-  onUpdate: (
+  onUpdate?: (
     id: string,
     updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] },
   ) => void;
@@ -21,45 +21,51 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   onDelete,
   onUpdate,
 }) => {
-  // Define the localOptions state here
-  const [localOptions, setLocalOptions] =
+  const [editQuestion, setEditQuestion] = useState(question);
+  const [editOptions, setEditOptions] =
     useState<MultipleChoiceQuestionOption[]>(options);
+  const [pressState, setPressState] = useState(false);
 
-  useEffect(() => {
-    // This ensures localOptions is updated whenever the options prop changes
-    setLocalOptions(options);
-  }, [options]);
-
-  const handleQuestionUpdate = (newText: string) => {
-    // When the question is updated, call onUpdate with the new question text and current localOptions
-    onUpdate(id, { question: newText, options: localOptions });
+  const handleQuestionEdit = (content: string) => {
+    setEditQuestion(content);
   };
 
   const handleOptionTextChange = (optionIndex: number, newText: string) => {
-    const updatedOptions = localOptions.map((option, index) =>
-      index === optionIndex ? { ...option, text: newText } : option,
+    const updatedOptions = editOptions.map((option, index) =>
+      index === optionIndex ? { ...option, option: newText } : option,
     );
-
-    // Update the local state and then propagate changes up to the parent component
-    setLocalOptions(updatedOptions);
-    onUpdate(id, { question, options: updatedOptions });
+    setEditOptions(updatedOptions);
   };
 
   const handleCorrectnessToggle = (optionIndex: number, isCorrect: boolean) => {
-    const updatedOptions = localOptions.map((option, index) =>
-      index === optionIndex ? { ...option, isCorrect } : option,
+    const updatedOptions = editOptions.map((option, index) =>
+      index === optionIndex ? { ...option, is_correct: isCorrect } : option,
     );
+    setEditOptions(updatedOptions);
+  };
 
-    setLocalOptions(updatedOptions); // Update the local state.
-    onUpdate(id, { question, options: updatedOptions }); // Pass the updated state, including all options.
+  const handleOnClick = () => {
+    if (pressState == false) {
+      setPressState(true);
+    } else {
+      setPressState(false);
+      onUpdate?.(id, { question: editQuestion, options: editOptions });
+    }
   };
 
   return (
     <Box width="100%">
-      {/* Component structure */}
       <Flex py={4}>
         <Box p={4}>MCQ {id}</Box>
         <Spacer />
+        <Button
+          colorScheme="gray"
+          variant={pressState ? "solid" : "ghost"}
+          onClick={handleOnClick}
+          mr={5}
+        >
+          {pressState ? "Confirm your changes" : "Edit this MCQ"}
+        </Button>
         <Button colorScheme="gray" variant="ghost" onClick={() => onDelete(id)}>
           Delete this MCQ
         </Button>
@@ -69,22 +75,21 @@ const PreMCQ: React.FC<PreMCQProps> = ({
         <Box
           p={4}
           mb={4}
-          contentEditable
+          contentEditable={pressState}
           suppressContentEditableWarning
           rounded="lg"
           border="1px"
           borderColor="gray.200"
-          onBlur={(event: any) =>
-            handleQuestionUpdate(event.currentTarget.textContent || "")
-          }
+          onBlur={(event: any) => handleQuestionEdit(event.target.innerText)}
         >
-          {question}
+          {editQuestion}
         </Box>
 
-        {localOptions.map((opt, index) => (
+        {editOptions.map((opt, index) => (
           <Flex key={index} align="center" mb={4}>
             <Checkbox
               isChecked={opt.is_correct}
+              isReadOnly={!pressState}
               onChange={(event: any) =>
                 handleCorrectnessToggle(index, event.target.checked)
               }
@@ -99,13 +104,10 @@ const PreMCQ: React.FC<PreMCQProps> = ({
               flex="100"
               rounded="lg"
               border="1px"
-              contentEditable
+              contentEditable={pressState}
               suppressContentEditableWarning
               onBlur={(event: any) =>
-                handleOptionTextChange(
-                  index,
-                  event.currentTarget.textContent || "",
-                )
+                handleOptionTextChange(index, event.target.innerText)
               }
             >
               {opt.option}

@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { Box, Button, Heading, Icon, Text, VStack } from "@chakra-ui/react";
+
 import { getCheckoutUrl } from "~features/api";
 import { useAuth } from "~features/auth";
 
@@ -35,11 +36,7 @@ const FailedPage = () => {
           was unsuccessful. Please try again.
         </Text>
         <Box mt={8}>
-          <Button
-            size="lg"
-            colorScheme="blue"
-            onClick={handleSubscribe}
-          >
+          <Button size="lg" colorScheme="blue" onClick={handleSubscribe}>
             Retry Subscription
           </Button>
         </Box>

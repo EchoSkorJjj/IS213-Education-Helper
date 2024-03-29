@@ -27,8 +27,10 @@ function PriceWrapper(props: Props) {
 
   return (
     <Box
-      // mb={4}
-      // padding={0}
+      /*
+       * mb={4}
+       * padding={0}
+       */
       shadow="base"
       borderWidth="1px"
       // alignSelf={{ base: "center", lg: "flex-start" }}
@@ -82,8 +84,9 @@ const SubscribePage = () => {
         </Text>
       </VStack>
 
-      <Flex
-        direction={{ base: "column", md: "row" }} // Stack vertically on small screens, horizontally on medium+ screens
+      <SimpleGrid
+        columns={{ base: 1, md: 2 }}
+        // spacingX={-10}
         py={10}
         justify="center" // Center the items horizontally
         align={{ base: "center", md: "flex-start" }} // Center items on small screens, align items to the start on medium+ screens

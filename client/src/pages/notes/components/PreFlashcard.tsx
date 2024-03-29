@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button, Flex, Spacer } from "@chakra-ui/react";
 
 interface GPTContent {
@@ -24,25 +24,23 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
   // Local state to track edits
   const [editQuestion, setEditQuestion] = useState(GPTContent.question);
   const [editAnswer, setEditAnswer] = useState(GPTContent.answer);
-
-  useEffect(() => {
-    // Call onUpdate only if both question and answer are edited
-    if (
-      editQuestion !== GPTContent.question ||
-      editAnswer !== GPTContent.answer
-    ) {
-      onUpdate?.(GPTContent.id, { question: editQuestion, answer: editAnswer });
-    }
-  }, [editQuestion, editAnswer, GPTContent, onUpdate]);
+  const [pressState, setPressState] = useState(false);
 
   // Adjust handleContentEdit to immediately call onUpdate
   const handleContentEdit = (content: string, type: string) => {
     if (type === "question") {
       setEditQuestion(content); // Update local state
-      onUpdate?.(GPTContent.id, { question: content, answer: editAnswer }); // Update parent state
     } else if (type === "answer") {
       setEditAnswer(content); // Update local state
-      onUpdate?.(GPTContent.id, { question: editQuestion, answer: content }); // Update parent state
+    }
+  };
+
+  const handleOnClick = () => {
+    if (pressState == false) {
+      setPressState(true);
+    } else {
+      setPressState(false);
+      onUpdate?.(GPTContent.id, { question: editQuestion, answer: editAnswer });
     }
   };
 
@@ -53,6 +51,14 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
           <Flex>
             <Box p={4}>Flashcard {GPTContent.id}</Box>
             <Spacer />
+            <Button
+              colorScheme="gray"
+              variant={pressState ? "solid" : "ghost"}
+              onClick={handleOnClick} // Removed the arrow function
+              mr={5}
+            >
+              {pressState ? "Confirm your changes" : "Edit this flashcard"}
+            </Button>
             <Button
               colorScheme="gray"
               variant="ghost"
@@ -69,7 +75,7 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
             rounded="lg"
             border="1px"
             borderColor="gray.200"
-            contentEditable
+            contentEditable={pressState} // Only allow editing when pressState is true
             suppressContentEditableWarning
             onBlur={(event: any) =>
               handleContentEdit(event.target.innerText, "question")
@@ -84,7 +90,7 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
             rounded="lg"
             border="1px"
             borderColor="gray.200"
-            contentEditable
+            contentEditable={pressState} // Only allow editing when pressState is true
             suppressContentEditableWarning
             onBlur={(event: any) =>
               handleContentEdit(event.target.innerText, "answer")

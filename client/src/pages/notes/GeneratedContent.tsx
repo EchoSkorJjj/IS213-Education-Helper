@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import FlipMove from "react-flip-move";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { AttachmentIcon } from "@chakra-ui/icons";
@@ -17,18 +18,16 @@ import {
   FlashcardType,
   FlashcardTypeWrapper,
   MultipleChoiceQuestion,
-  MultipleChoiceQuestionOption,
   MultipleChoiceQuestionTypeWrapper,
 } from "~shared/types/data";
 import { isFlashcardType } from "~shared/util";
 
 import {
-  getTemporaryContents,
-  deleteTemporaryContent,
-  deleteAllTemporaryContents,
-  updateTemporaryContent,
+  commitTemporaryContents,
   createTemporaryContent,
-  commitTemporaryContents
+  deleteTemporaryContent,
+  getTemporaryContents,
+  updateTemporaryContent,
 } from "~features/api";
 import { useAuth } from "~features/auth";
 
@@ -46,12 +45,28 @@ const GeneratedContent: React.FC = () => {
   const [title, setTitle] = useState<string>("Type your title here"); // State for the editable title
   const [selectedTopic, setSelectedTopic] =
     useState<string>("science-technology"); // State for the selected topic
-  // const type = "flashcard"; // State whether Flashcards or MCQ
   const [type, setType] = useState<string>("flashcard");
+  const pollCountRef = useRef<number>(0);
+  const previousCountRef = useRef<number>(0);
+  const intervalIdRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    // Call once to fetch immediately
     handleGetTemporaryContents(noteId, authorization);
-  }, []);
+
+    /*
+     * ... then set up polling for every 5 seconds in case
+     * fetch was called when content was still being fed to
+     * the contents service. Stops polling after 5 consecutive
+     * polls with no change to number of contents.
+     */
+    intervalIdRef.current = setInterval(() => {
+      handleGetTemporaryContents(noteId, authorization);
+    }, 5000);
+
+    return () =>
+      clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>); // Clean up on component unmount
+  }, [noteId, authorization]);
 
   const handleGetTemporaryContents = async (
     noteId: string | undefined,
@@ -64,6 +79,22 @@ const GeneratedContent: React.FC = () => {
     const response = await getTemporaryContents(noteId, authorization);
     if (response) {
       const contents = response.contents;
+      if (
+        previousCountRef.current > 0 &&
+        contents.length === previousCountRef.current
+      ) {
+        pollCountRef.current++;
+        if (pollCountRef.current >= 5) {
+          clearInterval(
+            intervalIdRef.current as ReturnType<typeof setInterval>,
+          );
+          return;
+        }
+      } else {
+        pollCountRef.current = 0;
+        previousCountRef.current = contents.length;
+      }
+
       if (isFlashcardType(contents[0])) {
         const flashcards: FlashcardType[] = [];
         contents.forEach((content) => {
@@ -86,25 +117,21 @@ const GeneratedContent: React.FC = () => {
     }
   };
 
-  const handleTitleChange = (event: any) => {
-    setTitle(event.target.innerText);
-  };
-
-  const handleTopicChange = (event: any) => {
-    setSelectedTopic(event.target.value);
-  };
-
-  const removeById = async (
+  const handleRemoveTemporaryContent = async (
     noteId: string | undefined,
-    fileId: string | undefined,
+    contentId: string | undefined,
     type: string,
     authorization: string | null,
   ) => {
-    if (!noteId || !authorization || !fileId) {
+    if (!noteId || !authorization || !contentId) {
       return;
     }
-
-    const response = await deleteTemporaryContent(noteId, fileId, type, authorization);
+    const response = await deleteTemporaryContent(
+      noteId,
+      contentId,
+      type,
+      authorization,
+    );
     if (!response) {
       toast({
         title: "Error",
@@ -118,101 +145,178 @@ const GeneratedContent: React.FC = () => {
 
     if (type === "flashcard") {
       const updatedFlashcards = GPTContent.filter(
-        (flashcard) => flashcard.id !== fileId,
+        (flashcard) => flashcard.id !== contentId,
       );
       setFlashcards(updatedFlashcards);
     } else {
-      const updatedMCQs = MCQs.filter((mcq) => mcq.id !== fileId);
+      const updatedMCQs = MCQs.filter((mcq) => mcq.id !== contentId);
       setMCQs(updatedMCQs);
     }
   };
 
-  const removeMCQById = (id: string) => {
-    const updatedMCQs = MCQs.filter((mcq) => mcq.id !== id);
-    setMCQs(updatedMCQs);
-  };
-
-  const updateFlashcard = (
-    id: string,
-    updatedContent: { question: string; answer: string },
+  const handleUpdateTemporaryContent = async (
+    noteId: string | undefined,
+    contentId: string | undefined,
+    type: string,
+    newContent: any,
+    authorization: string | null,
   ) => {
-    const updatedFlashcards = GPTContent.map((flashcard) => {
-      if (flashcard.id === id) {
-        return { ...flashcard, ...updatedContent };
-      }
-      return flashcard;
-    });
-    setFlashcards(updatedFlashcards);
-  };
-
-  const updateMCQ = (
-    id: string,
-    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] },
-  ) => {
-    const updatedMCQs = MCQs.map((mcq) => {
-      if (mcq.id === id) {
-        return { ...mcq, ...updatedMCQ };
-      }
-      return mcq;
-    });
-    setMCQs(updatedMCQs);
-  };
-
-  const handleAddCard = () => {
-    let newId;
-    if (type === "flashcard") {
-      // Calculate new ID based on the highest ID in GPTContent
-      newId =
-        Math.max(0, ...GPTContent.map((item) => parseInt(item.id, 10))) + 1;
-      const newFlashcard: FlashcardType = {
-        id: newId.toString(),
-        note_id: noteId as string,
-        question: "",
-        answer: "",
-      };
-      setFlashcards([...GPTContent, newFlashcard]);
-    } else if (type === "mcq") {
-      // Calculate new ID based on the highest ID in MCQs
-      newId = Math.max(0, ...MCQs.map((mcq) => parseInt(mcq.id, 10))) + 1;
-      const newMCQ: MultipleChoiceQuestion = {
-        id: newId.toString(),
-        note_id: noteId as string,
-        question: "",
-        options: [
-          { option: "", is_correct: false },
-          { option: "", is_correct: false },
-          { option: "", is_correct: false },
-          { option: "", is_correct: false },
-        ],
-        multiple_answers: false,
-      };
-      setMCQs([...MCQs, newMCQ]);
+    if (!noteId || !authorization || !contentId) {
+      return;
     }
+
+    const newContentObj = {
+      id: contentId,
+      note_id: noteId,
+      ...newContent,
+    };
+
+    let wrapper: FlashcardTypeWrapper | MultipleChoiceQuestionTypeWrapper;
+    let setter;
+    let state;
+    if (type === "flashcard") {
+      wrapper = { flashcard: newContentObj };
+      setter = setFlashcards;
+      state = GPTContent;
+    } else {
+      wrapper = { mcq: newContentObj };
+      setter = setMCQs;
+      state = MCQs;
+    }
+
+    const response = await updateTemporaryContent(
+      noteId,
+      contentId,
+      type == "flashcard" ? 0 : 1,
+      wrapper,
+      authorization,
+    );
+    if (!response) {
+      toast({
+        title: "Error",
+        description: "Failed to update content",
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+
+    const updatedState = state.map((content) => {
+      if (content.id === contentId) {
+        return newContentObj;
+      }
+      return content;
+    });
+    setter(updatedState);
   };
 
-  const handleSubmit = () => {
-    console.log("Submission Details:");
-    console.log(`Title: ${title}`); // Log the title
-    console.log(`Selected Topic: ${selectedTopic}`); // Log the selected topic
+  const handleCreateTemporaryContent = async () => {
+    if (!noteId || !authorization) {
+      return;
+    }
 
     if (type === "flashcard") {
-      console.log("Final Flashcards:");
-      GPTContent.forEach((flashcard) => {
-        console.log(
-          `Question: ${flashcard.question}, Answer: ${flashcard.answer}`,
-        );
-      });
-    } else if (type === "mcq") {
-      console.log("Final MCQs:");
-      MCQs.forEach((mcq) => {
-        console.log(`Question: ${mcq.question}`);
-        mcq.options.forEach((option, index) => {
-          console.log(
-            `Option ${index + 1}: ${option.option} - Correct: ${option.is_correct ? "Yes" : "No"}`,
-          );
+      const newFlashcard = {
+        flashcard: {
+          note_id: noteId,
+          question: "Write your questions here!",
+          answer: "Write your answers here!",
+        },
+      };
+
+      const response = await createTemporaryContent(
+        noteId,
+        0,
+        newFlashcard,
+        authorization,
+      );
+      if (
+        !response ||
+        !response.success ||
+        !response.created_content.flashcard
+      ) {
+        toast({
+          title: "Error",
+          description: "Failed to create content",
+          status: "error",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
         });
-      });
+        return;
+      }
+
+      setFlashcards([...GPTContent, response.created_content.flashcard]);
+    } else {
+      const newMCQ = {
+        mcq: {
+          note_id: noteId,
+          question: "",
+          options: [
+            { option: "", is_correct: false },
+            { option: "", is_correct: false },
+            { option: "", is_correct: false },
+            { option: "", is_correct: false },
+          ],
+          multiple_answers: false,
+        },
+      };
+
+      const response = await createTemporaryContent(
+        noteId,
+        1,
+        newMCQ,
+        authorization,
+      );
+      if (!response || !response.success || !response.created_content.mcq) {
+        toast({
+          title: "Error",
+          description: "Failed to create content",
+          status: "error",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      setMCQs([...MCQs, response.created_content.mcq]);
     }
+  };
+
+  const handleCommitTemporaryContents = async () => {
+    if (!noteId || !authorization) {
+      return;
+    }
+
+    const response = await commitTemporaryContents(
+      noteId,
+      title,
+      selectedTopic,
+      authorization,
+    );
+    if (!response || !response.success) {
+      toast({
+        title: "Error",
+        description: "Failed to commit contents",
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    navigate(`/viewnotes/${noteId}`);
+  };
+
+  const handleTitleChange = (event: any) => {
+    setTitle(event.target.innerText);
+  };
+
+  const handleTopicChange = (event: any) => {
+    setSelectedTopic(event.target.value);
   };
 
   useEffect(() => {
@@ -276,7 +380,6 @@ const GeneratedContent: React.FC = () => {
                 size="lg"
                 pl={3}
                 width="150%"
-                value={selectedTopic}
                 onChange={handleTopicChange}
                 placeholder="Select option"
               >
@@ -333,25 +436,63 @@ const GeneratedContent: React.FC = () => {
         pb="4"
       >
         {/* Show Flashcard or MCQ depending on type */}
-        {type === "flashcard"
-          ? GPTContent.map((data) => (
-            <PreFlashcard
-              key={data.id}
-              GPTContent={data}
-              onDelete={() => removeById(noteId, data.id, "flashcard", authorization)}
-              onUpdate={updateFlashcard}
-            />
-          ))
-          : MCQs.map((mcq) => (
-            <PreMCQ
-              key={mcq.id}
-              id={mcq.id}
-              question={mcq.question}
-              options={mcq.options}
-              onDelete={() => removeById(noteId, mcq.id, "mcq", authorization)}
-              onUpdate={updateMCQ}
-            />
-          ))}
+        {type === "flashcard" ? (
+          <FlipMove>
+            {GPTContent.map((data) => (
+              <div key={data.id}>
+                <PreFlashcard
+                  GPTContent={data}
+                  onDelete={() => {
+                    handleRemoveTemporaryContent(
+                      noteId,
+                      data.id,
+                      "flashcard",
+                      authorization,
+                    );
+                  }}
+                  onUpdate={(id, newData) => {
+                    handleUpdateTemporaryContent(
+                      noteId,
+                      id,
+                      "flashcard",
+                      newData,
+                      authorization,
+                    );
+                  }}
+                />
+              </div>
+            ))}
+          </FlipMove>
+        ) : (
+          <FlipMove>
+            {MCQs.map((mcq) => (
+              <div key={mcq.id}>
+                <PreMCQ
+                  id={mcq.id}
+                  question={mcq.question}
+                  options={mcq.options}
+                  onDelete={() => {
+                    handleRemoveTemporaryContent(
+                      noteId,
+                      mcq.id,
+                      "mcq",
+                      authorization,
+                    );
+                  }}
+                  onUpdate={(id, newData) => {
+                    handleUpdateTemporaryContent(
+                      noteId,
+                      id,
+                      "mcq",
+                      newData,
+                      authorization,
+                    );
+                  }}
+                />
+              </div>
+            ))}
+          </FlipMove>
+        )}
 
         <Button
           m={10}
@@ -359,7 +500,7 @@ const GeneratedContent: React.FC = () => {
           color="white"
           width="100%"
           size="lg"
-          onClick={handleAddCard}
+          onClick={handleCreateTemporaryContent}
         >
           + Add Card
         </Button>
@@ -367,7 +508,11 @@ const GeneratedContent: React.FC = () => {
 
       <Container maxW="6xl" mb={10}>
         <Flex justifyContent="flex-end">
-          <Button bg="blue" color="white" onClick={handleSubmit}>
+          <Button
+            bg="blue"
+            color="white"
+            onClick={handleCommitTemporaryContents}
+          >
             Submit
           </Button>{" "}
         </Flex>

@@ -32,7 +32,7 @@ const TopicsList = ({
       alignItems="center"
       pt="5"
       px="10"
-      bg={"blue.800"} 
+      bg={"blue.800"}
     >
       <Flex maxW={"6xl"} width="100%" height="90%" direction="column">
         <Box width="100%">

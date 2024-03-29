@@ -7,6 +7,7 @@ import {
   GetContentResponse,
   GetTemporaryContentsResponse,
   UpdateTemporaryContentsResponse,
+  SaveNotesResponse
 } from "~shared/types/data";
 import { UpdateProfileType } from "~shared/types/form";
 
@@ -166,7 +167,7 @@ export const getContent = async (
 ): Promise<GetContentResponse | undefined> => {
   try {
     const response = await api.get(
-      `/api/v1/notes/${noteId}?user_id=7821c92e-2e29-4bb6-a890-edb8f7f11379`,
+      `/api/v1/notes/${noteId}`,
       {
         headers: {
           Authorization: `Bearer ${authorization}`,
@@ -203,20 +204,22 @@ export const getTemporaryContents = async (
 export const updateTemporaryContent = async (
   noteId: string,
   contentId: string,
-  authorization: string,
+  contentType: number,
   updatedContent: any,
+  authorization: string,
 ): Promise<UpdateTemporaryContentsResponse | undefined> => {
   try {
     const response = await api.put("/api/v1/contents/temporary", {
-      headers: {
-        Authorization: `Bearer ${authorization}`,
-      },
-      data: {
-        note_id: noteId,
-        content_id: contentId,
-        content: updatedContent,
-      },
-    });
+      note_id: noteId,
+      content_id: contentId,
+      content_type: contentType,
+      content: updatedContent,
+    },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        }
+      });
 
     return response.data as UpdateTemporaryContentsResponse;
   } catch (error) {
@@ -272,9 +275,9 @@ export const deleteAllTemporaryContents = async (
 
 export const createTemporaryContent = async (
   noteId: string,
-  authorization: string,
   contentType: number,
   content: any,
+  authorization: string,
 ): Promise<CreateTemporaryContentResponse | undefined> => {
   try {
     const response = await api.post(
@@ -305,7 +308,7 @@ export const commitTemporaryContents = async (
 ): Promise<{ success: boolean } | undefined> => {
   try {
     const response = await api.post(
-      "/api/v1/contents/commit",
+      "/api/v1/contents/temporary/commit",
       {
         note_id: noteId,
         title: title,
@@ -323,3 +326,47 @@ export const commitTemporaryContents = async (
     console.error(error);
   }
 };
+
+export const saveNotes = async (
+  authorization: string,
+  fileId: string
+): Promise<SaveNotesResponse | undefined> => {
+  try {
+    const response = await api.post(
+      "/api/v1/notes/save",
+      {
+        file_id: fileId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        }
+      },
+    );
+    return response.data as SaveNotesResponse;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteNote = async (
+  authorization: string,
+  fileId: string,
+): Promise<{ success: boolean } | undefined> => {
+  try {
+    const response = await api.post(
+      "/api/v1/notes/delete",
+      {
+        file_id: fileId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        }
+      }
+    );
+    return response.data.success;
+  } catch (error){
+    console.log(error);
+  }
+}
