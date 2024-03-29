@@ -91,7 +91,11 @@ const NotesList = ({
             >
               <Image
                 objectFit="cover"
-                src={note.imageURL}
+                src={
+                  note.imageURL
+                    ? note.imageURL
+                    : `https://picsum.photos/200/300`
+                }
                 alt={note.title}
                 borderRadius="lg"
                 height="50%"
@@ -99,6 +103,7 @@ const NotesList = ({
                 border={0}
                 rounded="0"
               />
+
               <CardBody pl="4" p="0">
                 <Stack
                   pt="1em"
