@@ -9,7 +9,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Searchbar } from "@opengovsg/design-system-react";
+import { Searchbar, Tag } from "@opengovsg/design-system-react";
 
 import { Pagination } from "~components/pagination";
 
@@ -19,6 +19,7 @@ interface NotesProp {
   title: string;
   imageURL: string;
   creator: string;
+  type: "MCQ" | "Flashcard";
 }
 
 interface MarketProps {
@@ -122,7 +123,7 @@ const MarketList = ({
                 rounded="0"
               />
 
-              <CardBody pl="4" p="0">
+              <CardBody pl="4" p="0" maxW={"sm"} maxH={"sm"}>
                 <Stack
                   pt="1em"
                   pr="3em"
@@ -132,12 +133,20 @@ const MarketList = ({
                 >
                   <Text>{note.topic}</Text>
                   <Text
+                    isTruncated
                     fontSize={{ base: "2xl", md: "5xl", lg: "2xl" }}
                     fontWeight="bold"
                   >
                     {note.title}
                   </Text>
                   <Text color="gray.400">{note.creator}</Text>
+                  <Tag
+                    size="md"
+                    variant="solid"
+                    colorScheme={note.type === "MCQ" ? "teal" : "purple"}
+                  >
+                    {note.type}
+                  </Tag>
                 </Stack>
               </CardBody>
             </Card>

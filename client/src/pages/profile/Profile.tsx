@@ -13,7 +13,9 @@ interface NotesProp {
   title: string;
   imageURL: string;
   creator: string;
+  type: "MCQ" | "Flashcard";
 }
+
 
 const Profile = () => {
   // For created notes
