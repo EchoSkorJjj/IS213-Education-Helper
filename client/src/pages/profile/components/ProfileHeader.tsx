@@ -43,16 +43,6 @@ const ProfileHeader = () => {
             </Text>
           </Flex>
         </Flex>
-        <Box>
-          <Button
-            colorScheme="gray"
-            border="none"
-            as="a"
-            href="/profile/update"
-          >
-            Update Profile
-          </Button>
-        </Box>
       </Flex>
       {!user?.is_paid && (
         <Flex
