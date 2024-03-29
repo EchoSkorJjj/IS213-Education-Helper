@@ -57,30 +57,27 @@ class Database:
         if len(contents) == 0:
             return
 
-        batch = BatchStatement()
         flashcard_content_type_name = flashcard_utils.get_flashcard_content_type_name()
         mcq_content_type_name = mcq_utils.get_mcq_content_type_name()
+
         if type == flashcard_content_type_name:
             for content in contents:
                 content_id = uuid.UUID(content['id'])
                 note_id = uuid.UUID(content['note_id'])
                 statement = db_utils.prepare_insert_flashcard_statement(self._session, self._keyspace)
                 association_statement = db_utils.prepare_insert_contents_to_note_statement(self._session, self._keyspace)
-                batch.add(statement, [content_id, content['answer'], content['question']])
-                batch.add(association_statement, [note_id, content_id, flashcard_content_type_name])
-        
+                self._session.execute(statement, [content_id, content['answer'], content['question']])
+                self._session.execute(association_statement, [note_id, content_id, flashcard_content_type_name])
+
         elif type == mcq_content_type_name:
             for content in contents:
                 content_id = uuid.UUID(content['id'])
                 note_id = uuid.UUID(content['note_id'])
                 options = [(option['option'], option['is_correct']) for option in content['options']]
-                logging.info(options)
                 statement = db_utils.prepare_insert_mcq_statement(self._session, self._keyspace)
                 association_statement = db_utils.prepare_insert_contents_to_note_statement(self._session, self._keyspace)
-                batch.add(statement, [content_id, content['question'], options, content['multiple_answers']])
-                batch.add(association_statement, [note_id, content_id, mcq_content_type_name])        
-
-        self._session.execute(batch)
+                self._session.execute(statement, [content_id, content['question'], options, content['multiple_answers']])
+                self._session.execute(association_statement, [note_id, content_id, mcq_content_type_name])
     
     def get_content_by_content_id(self, note_id: uuid.UUID, table: str, content_id: uuid.UUID) -> contents_pb2.Flashcard | contents_pb2.MultipleChoiceQuestion | None:
         if not self._session:
