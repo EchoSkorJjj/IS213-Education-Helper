@@ -556,18 +556,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
     }
 
     async GetSavedNotes(call: grpc.ServerUnaryCall<user_storage_pb.GetSavedNotesRequest, user_storage_pb.GetSavedNotesResponse>, callback: grpc.sendUnaryData<user_storage_pb.GetSavedNotesResponse>): Promise<void> {
-        const metadata = call.metadata.getMap();
-        const requestId = getMetaData(metadata, 'kong-request-id');
-
         const user_id = call.request.user_id;
-
-        if (!requestId) {
-            const error = {
-                code: grpc.status.INVALID_ARGUMENT,
-                message: "Invalid request: request id not found",
-            };
-            callback(error, null);
-        }
 
         try {
             const userService = UserService.getInstance();

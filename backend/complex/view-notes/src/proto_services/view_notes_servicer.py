@@ -112,7 +112,7 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
             notes_stub = notes_client.NotesClient().get_notes_stub()
 
             saved_notes_request = user_storage_pb2.GetSavedNotesRequest()
-            saved_notes_request.userId = user_id
+            saved_notes_request.user_id = user_id
 
             saved_notes_response = user_storage_stub.GetSavedNotes(saved_notes_request)
             saved_notes_ids = saved_notes_response.saved_notes_ids

@@ -29,4 +29,4 @@ class UserStorageClient:
         if self._channel is None:
             raise ValueError('Channel not set')
 
-        return user_storage_pb2_grpc.NoteServiceStub(self._channel)
+        return user_storage_pb2_grpc.UserStorageStub(self._channel)

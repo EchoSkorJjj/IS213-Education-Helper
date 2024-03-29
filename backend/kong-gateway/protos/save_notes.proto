@@ -26,14 +26,14 @@ message DeleteSavedNoteResponse {
 service SaveNotes {
   rpc SaveNotes (SaveNotesRequest) returns (SaveNotesResponse) {
     option (google.api.http) = {
-      post: "/api/v1/notes/save"
+      post: "/api/v1/save-notes/save"
       body: "*"
   };
   }
 
   rpc DeleteSavedNote (DeleteSavedNoteRequest) returns (DeleteSavedNoteResponse) {
     option (google.api.http) = {
-      post: "/api/v1/notes/delete"
+      post: "/api/v1/save-notes/delete"
       body: "*"
     }
   }

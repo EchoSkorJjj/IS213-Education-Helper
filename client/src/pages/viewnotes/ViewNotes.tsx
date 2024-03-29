@@ -26,7 +26,7 @@ import { useAuth } from "~features/auth";
 import Flashcard from "./components/Flashcard";
 import MCQ from "./components/MCQ";
 
-import { deleteNote, getContent, getSavedNotes, saveNotes } from "~api";
+import { deleteSavedNote, getContent, getSavedNotes, saveNotes } from "~api";
 
 function ViewNotes() {
   const navigate = useNavigate();
@@ -56,17 +56,17 @@ function ViewNotes() {
   };
 
   const deleteSavedCard = async () => {
-    if (!noteId || !authorization) {
+    if (!noteId || !authorization || !userId) {
       return;
     }
-    deleteNote(authorization, noteId);
+    deleteSavedNote(userId, noteId, authorization);
   };
 
   const saveCardsSet = async () => {
-    if (!noteId || !authorization) {
+    if (!noteId || !authorization || !userId) {
       return;
     }
-    saveNotes(authorization, noteId);
+    saveNotes(userId, noteId, authorization);
   };
 
   const extractFileData = (fileContent: string) => {
@@ -199,6 +199,7 @@ function ViewNotes() {
           />
         ) : (
           <Flashcard
+            key={currentCardIndex}
             question={(cards[currentCardIndex] as FlashcardType)?.question}
             answer={(cards[currentCardIndex] as FlashcardType)?.answer}
           />

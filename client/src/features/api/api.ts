@@ -326,14 +326,16 @@ export const commitTemporaryContents = async (
 };
 
 export const saveNotes = async (
-  authorization: string,
+  userId: string,
   fileId: string,
+  authorization: string,
 ): Promise<SaveNotesResponse | undefined> => {
   try {
     const response = await api.post(
-      "/api/v1/notes/save",
+      "/api/v1/save-notes/save",
       {
-        file_id: fileId,
+        user_id: userId,
+        file_ids: [fileId],
       },
       {
         headers: {
@@ -347,14 +349,16 @@ export const saveNotes = async (
   }
 };
 
-export const deleteNote = async (
-  authorization: string,
+export const deleteSavedNote = async (
+  userId: string,
   fileId: string,
+  authorization: string,
 ): Promise<{ success: boolean } | undefined> => {
   try {
     const response = await api.post(
-      "/api/v1/notes/delete",
+      "/api/v1/save-notes/delete",
       {
+        user_id: userId,
         file_id: fileId,
       },
       {
