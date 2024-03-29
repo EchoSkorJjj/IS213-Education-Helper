@@ -26,7 +26,7 @@ import { useAuth } from "~features/auth";
 import Flashcard from "./components/Flashcard";
 import MCQ from "./components/MCQ";
 
-import { getContent } from "~api";
+import { getContent, saveNotes, deleteNote } from "~api";
 
 function ViewNotes() {
   const navigate = useNavigate();
@@ -42,11 +42,19 @@ function ViewNotes() {
   const [noteTopic, setNoteTopic] = useState<string>();
   const [fileName, setFileName] = useState<string>();
 
-  /*
-   * const saveCardsSet = async () => {
-   *   add in logic to save Cards to userSavedCards
-   * }
-   */
+  const deleteSavedCard = async () => {
+    if (!noteId || !authorization) {
+      return;
+    }
+    deleteNote(authorization, noteId);
+  };
+
+  const saveCardsSet = async () => {
+    if (!noteId || !authorization) {
+      return;
+    }
+    saveNotes(authorization, noteId);
+  };
 
   const extractFileData = (fileContent: string) => {
     const byteCharacters = atob(fileContent);
@@ -136,9 +144,10 @@ function ViewNotes() {
           <Text
             color="white"
             fontSize="sm"
-            cursor={userId !== ownerId ? "pointer" : "default"}
+            cursor= "pointer"
+            onClick={userId === ownerId ? deleteSavedCard : saveCardsSet }
           >
-            {userId === ownerId ? "Already saved" : "Save this set"}
+            {userId === ownerId ? "Delete this saved note" : "Save this set"}
           </Text>
         </Flex>
 

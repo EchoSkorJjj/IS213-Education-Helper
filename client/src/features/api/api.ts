@@ -7,6 +7,7 @@ import {
   GetContentResponse,
   GetTemporaryContentsResponse,
   UpdateTemporaryContentsResponse,
+  SaveNotesResponse
 } from "~shared/types/data";
 import { UpdateProfileType } from "~shared/types/form";
 
@@ -325,3 +326,47 @@ export const commitTemporaryContents = async (
     console.error(error);
   }
 };
+
+export const saveNotes = async (
+  authorization: string,
+  fileId: string
+): Promise<SaveNotesResponse | undefined> => {
+  try {
+    const response = await api.post(
+      "/api/v1/notes/save",
+      {
+        file_id: fileId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        }
+      },
+    );
+    return response.data as SaveNotesResponse;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteNote = async (
+  authorization: string,
+  fileId: string,
+): Promise<{ success: boolean } | undefined> => {
+  try {
+    const response = await api.post(
+      "/api/v1/notes/delete",
+      {
+        file_id: fileId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        }
+      }
+    );
+    return response.data.success;
+  } catch (error){
+    console.log(error);
+  }
+}
