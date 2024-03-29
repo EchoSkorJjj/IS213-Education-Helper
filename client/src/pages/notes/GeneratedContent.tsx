@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-statements */
 /* eslint-disable max-params */
@@ -12,7 +13,9 @@ import {
   Button,
   Container,
   Flex,
+  keyframes,
   Select,
+  Skeleton,
   Spacer,
   Text,
   useToast,
@@ -56,6 +59,12 @@ const GeneratedContent: React.FC = () => {
   const [filename, setFilename] = useState(
     localStorage.getItem("filename") || "No file uploaded",
   );
+  const [isLoading, setIsLoading] = useState(true);
+  const pulseAnimation = keyframes`
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+`;
 
   useEffect(() => {
     // Call once to fetch immediately
@@ -121,6 +130,7 @@ const GeneratedContent: React.FC = () => {
         setType("mcq");
         setMCQs(multipleChoiceQuestions);
       }
+      setIsLoading(false);
     }
   };
 
@@ -444,8 +454,23 @@ const GeneratedContent: React.FC = () => {
         pt="4"
         pb="4"
       >
-        {/* Show Flashcard or MCQ depending on type */}
-        {type === "flashcard" ? (
+        {isLoading ? (
+          Array(10)
+            .fill(0)
+            .map((_, index) => (
+              <Box key={index} width="100%" p={4} my={2}>
+                {" "}
+                {/* Add padding and margin */}
+                <Skeleton
+                  height="300px"
+                  width="100%"
+                  startColor="gray.300"
+                  endColor="gray.500"
+                  animation={`${pulseAnimation} 1.5s ease-in-out infinite`}
+                />
+              </Box>
+            ))
+        ) : type === "flashcard" ? (
           <FlipMove>
             {GPTContent.map((data) => (
               <div key={data.id}>
@@ -502,7 +527,6 @@ const GeneratedContent: React.FC = () => {
             ))}
           </FlipMove>
         )}
-
         <Button
           m={10}
           bg="blue"
