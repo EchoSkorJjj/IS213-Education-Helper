@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -27,7 +28,20 @@ interface MarketProps {
   currentMarketPage: number;
   totalNotesCount: number;
 }
+// Debounce function
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 const MarketList = ({
   notes,
   setNotesTitle,
@@ -36,6 +50,14 @@ const MarketList = ({
   totalNotesCount,
 }: MarketProps) => {
   const pageSize = 8;
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 200); // 500 ms delay
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      setNotesTitle(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm, setNotesTitle]);
 
   return (
     <Flex
@@ -63,12 +85,9 @@ const MarketList = ({
           <Box w={{ base: "100%", md: "auto" }}>
             <Searchbar
               placeholder="Search notes"
-              style={{
-                bg: "black",
-              }}
-              onSearch={(value: string) => {
-                setNotesTitle(value);
-              }}
+              style={{ bg: "black" }}
+              onSearch={(value: string) => setSearchTerm(value)}
+              onChange={(e) => setSearchTerm(e.target.value)} // Assuming Searchbar supports an onChange prop
               isExpanded={true}
             />
           </Box>
