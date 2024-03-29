@@ -61,7 +61,7 @@ message ViewSavedNotesRequest {
 }
 
 message ViewSavedNotesResponse {
-    repeated string saved_notes_ids = 2;
+    repeated notes.NotePreview notes = 1;
 }
 
 service ViewNotes {

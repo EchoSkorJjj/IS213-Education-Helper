@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
+import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
 import {
   ArrowBackIcon,
   ChevronLeftIcon,
@@ -43,17 +44,17 @@ function ViewNotes() {
   const [isSaved, setIsSaved] = useState<boolean>(false);
 
   const checkIfUserSaved = async () => {
-    if (!authorization || !userId) {
+    if (!authorization || !userId || !noteId) {
       return;
     }
-    const notesList = await getSavedNotes(authorization, userId);
-
-    if (notesList && notesList.includes(noteId)) {
-      return true;
-    } else {
+    const response = await getSavedNotes(authorization, userId);
+    if (!response || response.length === 0) {
       return false;
     }
-  };
+
+    const savedNotesList = response.map((note) => note.fileId);
+    return savedNotesList.includes(noteId);
+  }
 
   const deleteSavedCard = async () => {
     if (!noteId || !authorization || !userId) {
@@ -166,10 +167,15 @@ function ViewNotes() {
           >
             {noteTitle}
           </Heading>
-          <Text
+
+
+          <IconButton
+            aria-label="Save note"
+            icon={isSaved ? <FaBookmark /> : <FaRegBookmark />}
             color="white"
-            fontSize="sm"
-            cursor="pointer"
+            variant="outline"
+            border={"none"}
+            _hover={{ bg: "transparent" }}
             onClick={async () => {
               if (isSaved) {
                 await deleteSavedCard();
@@ -179,9 +185,7 @@ function ViewNotes() {
                 setIsSaved(true);
               }
             }}
-          >
-            {isSaved ? "Delete this saved note" : "Save this set"}
-          </Text>
+          />
         </Flex>
 
         {cards[currentCardIndex]?.type === "mcq" ? (

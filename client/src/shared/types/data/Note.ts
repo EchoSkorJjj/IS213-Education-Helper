@@ -32,6 +32,17 @@ export interface Note {
   file_name: string;
 }
 
+export interface NotePreview {
+  userId: string;
+  fileId: string;
+  fileName: string;
+  title: string;
+  topic: string;
+  sizeInBytes: number;
+  numPages: number;
+  generate_type: string;
+}
+
 export interface GetContentResponse {
   note: Note;
   associated_contents: ContentType;

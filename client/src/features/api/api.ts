@@ -6,6 +6,7 @@ import {
   DeleteTemporaryContentsResponse,
   GetContentResponse,
   GetTemporaryContentsResponse,
+  NotePreview,
   SaveNotesResponse,
   UpdateTemporaryContentsResponse,
 } from "~shared/types/data";
@@ -376,20 +377,14 @@ export const deleteSavedNote = async (
 export const getSavedNotes = async (
   authorization: string,
   userId: string,
-): Promise<
-  | {
-      includes(noteId: string | undefined): unknown;
-      saved_notes_ids: string[];
-    }
-  | undefined
-> => {
+): Promise<NotePreview[] | undefined> => {
   try {
     const response = await api.get(`/api/v1/notes/saved/${userId}`, {
       headers: {
         Authorization: `Bearer ${authorization}`,
       },
     });
-    return response.data.saved_notes_ids;
+    return response.data.notes;
   } catch (error) {
     console.log(error);
   }
