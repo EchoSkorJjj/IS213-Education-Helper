@@ -55,8 +55,17 @@ class UserDatabaseService {
         if (!user) {
             throw new Error('User not found');
         }
-        // Add the new notes to the existing notes
-        user.saved_notes_ids = [...user.saved_notes_ids, ...notes.notes_ids];
+
+        // For each requested note_id, check if it first exists as a saved note
+        for (const note_id of notes.notes_ids) {
+            const alreadyExists = user.saved_notes_ids.includes(note_id);
+
+            // If it has not been saved, then add it to the user's saved notes
+            if (!alreadyExists) {
+                user.saved_notes_ids.push(note_id);
+            }
+        }
+        
         return await this.repository.save(user);
     }
 
