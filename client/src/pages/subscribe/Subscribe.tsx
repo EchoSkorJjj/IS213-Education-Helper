@@ -27,16 +27,18 @@ function PriceWrapper(props: Props) {
 
   return (
     <Box
-      /*
-       * mb={4}
-       * padding={0}
-       */
       shadow="base"
       borderWidth="1px"
-      // alignSelf={{ base: "center", lg: "flex-start" }}
       borderColor={"gray.200"}
       borderRadius={"xl"}
-      width={{ base: "80%", sm: "70%", md: "45%", lg: "40%", xl: "24%" }} // Adjust widths as necessary for responsiveness
+      width={{
+        base: "90%",
+        sm: "63%",
+        md: "47%",
+        lg: "34%",
+        xl: "25%",
+        "2xl": "23%",
+      }} // Adjust widths as necessary for responsiveness
     >
       {children}
     </Box>
@@ -70,7 +72,7 @@ const SubscribePage = () => {
   };
 
   return (
-    <Box py={12} minHeight="50vh">
+    <Box py={12} minHeight="100vh">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />
@@ -84,13 +86,12 @@ const SubscribePage = () => {
         </Text>
       </VStack>
 
-      <SimpleGrid
-        columns={{ base: 1, md: 2 }}
-        // spacingX={-10}
+      <Flex
+        direction={{ base: "column", md: "row" }} // Stack vertically on small screens, horizontally on medium+ screens
         py={10}
         justify="center" // Center the items horizontally
         align={{ base: "center", md: "flex-start" }} // Center items on small screens, align items to the start on medium+ screens
-        gap={{ base: 20, md: 4 }} // Larger gap on small screens, smaller gap on medium+ screens
+        gap={{ base: 8, md: 4 }} // Larger gap on small screens, smaller gap on medium+ screens
       >
         <PriceWrapper>
           <Box position="relative">
@@ -193,7 +194,7 @@ const SubscribePage = () => {
               <List spacing={3} textAlign="start" px={12}>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
-                  Everything from Free Tier
+                  Everything from the Free Tier
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
