@@ -534,6 +534,7 @@ const GeneratedContent: React.FC = () => {
           width="100%"
           size="lg"
           onClick={handleCreateTemporaryContent}
+          isDisabled={isLoading}
         >
           + Add Card
         </Button>
@@ -545,6 +546,7 @@ const GeneratedContent: React.FC = () => {
             bg="blue"
             color="white"
             onClick={handleCommitTemporaryContents}
+            isDisabled={isLoading}
           >
             Submit
           </Button>{" "}
