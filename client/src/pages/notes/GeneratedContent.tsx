@@ -259,12 +259,12 @@ const GeneratedContent: React.FC = () => {
       const newMCQ = {
         mcq: {
           note_id: noteId,
-          question: "",
+          question: "Write your questions here!",
           options: [
-            { option: "", is_correct: false },
-            { option: "", is_correct: false },
-            { option: "", is_correct: false },
-            { option: "", is_correct: false },
+            { option: "Your first option...", is_correct: true },
+            { option: "Your second option...", is_correct: false },
+            { option: "Your third option...", is_correct: false },
+            { option: "Your fourth option...", is_correct: false },
           ],
           multiple_answers: false,
         },
