@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Box, useToast, VStack } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 
 import MarketHeader from "./components/MarketHeader";
 import MarketList from "./components/MarketList";
