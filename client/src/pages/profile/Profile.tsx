@@ -38,13 +38,6 @@ const Profile = () => {
     }
     const data = await getCreatedNotes(authorization, userId, 4, 0, currentCreatedNotePage, createdNotesTitle);
     if (!data) {
-      toast({
-        title: "No notes found",
-        status: "error",
-        position: "top",
-        duration: 3000,
-        isClosable: true,
-      });
       setCreatedNotes([]);
       setTotalCreatedNotesCount(0);
       return;
@@ -59,13 +52,6 @@ const Profile = () => {
     }
     const data = await getSavedNotesWithFilter(authorization, userId, 4, 0, currentSavedNotePage, savedNotesTitle);
     if (!data || data.length === 0) {
-      toast({
-        title: "No notes found",
-        status: "error",
-        position: "top",
-        duration: 3000,
-        isClosable: true,
-      });
       setSavedNotes([]);
       setTotalSavedNotesCount(0);
       return;

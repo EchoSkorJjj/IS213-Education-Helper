@@ -42,13 +42,6 @@ const MarketplacePage = () => {
     if (!authorization) return;
     const data = await getNotes(topic, notesTitle, currentMarketPage, authorization);
     if (!data) {
-      toast({
-        title: "No notes found",
-        status: "error",
-        position: "top",
-        duration: 3000,
-        isClosable: true,
-      });
       setNotes([]);
       setTotalNotesCount(0);
       return;

@@ -14,6 +14,7 @@ import {
   Heading,
   IconButton,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 
 import {
@@ -31,6 +32,7 @@ import { deleteSavedNote, getContent, getSavedNotes, saveNotes } from "~api";
 
 function ViewNotes() {
   const navigate = useNavigate();
+  const toast = useToast();
   const { noteId } = useParams<{ noteId: string }>();
   const [content, setContent] = useState<ContentType>();
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -61,6 +63,14 @@ function ViewNotes() {
       return;
     }
     deleteSavedNote(userId, noteId, authorization);
+
+    toast({
+      title: "Note unsaved",
+      status: "success",
+      position: "top",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   const saveCardsSet = async () => {
@@ -68,6 +78,14 @@ function ViewNotes() {
       return;
     }
     saveNotes(userId, noteId, authorization);
+
+    toast({
+      title: "Note saved",
+      status: "success",
+      position: "top",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   const extractFileData = (fileContent: string) => {

@@ -21,6 +21,7 @@ const ProfileHeader = () => {
         width="100%"
         direction="row"
         justifyContent="space-between"
+        mb={user?.is_paid ? "10" : "0"}
       >
         <Flex>
           <Avatar

@@ -87,7 +87,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
 
         const pkceCodePair = connector.generatePKCECodePair();
 
-        const myInfoUniqueId = jwtHandler.createJWT('5m', { myinfo_auth: true });
+        const myInfoUniqueId = jwtHandler.createJWT('24h', { myinfo_auth: true });
         try {
             const redisClient = RedisService.getInstance();
 
@@ -149,7 +149,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 is_paid: userData.is_paid,
             });
 
-            const access_token = jwtHandler.createJWT('1m', {
+            const access_token = jwtHandler.createJWT('24h', {
                 user_id: userData.user_id,
                 role: userData.role
             });
@@ -251,7 +251,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 is_paid: userData.is_paid,
             });
 
-            const access_token = jwtHandler.createJWT('10m', {
+            const access_token = jwtHandler.createJWT('24h', {
                 user_id: userData.user_id,
                 role: userData.role
             });
