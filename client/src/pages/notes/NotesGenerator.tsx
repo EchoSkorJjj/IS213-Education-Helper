@@ -78,6 +78,7 @@ const NotesGeneratorPage = () => {
       <NotesHeader />
       <NotesGenerator
         selectedFile={selectedFile}
+        userIsPaid={user?.is_paid}
         handleChange={handleChange}
         generateType={generateType}
         handleGenerationChange={handleGenerationChange}

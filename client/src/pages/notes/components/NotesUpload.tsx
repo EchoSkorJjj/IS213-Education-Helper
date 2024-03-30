@@ -4,6 +4,7 @@ import { Attachment } from "@opengovsg/design-system-react";
 
 interface NotesUploadProps {
   selectedFile: File | undefined;
+  userIsPaid: boolean | undefined;
   generateType: string;
   setGenerateType: (value: string) => void;
   handleGenerate: () => void;
@@ -14,6 +15,7 @@ interface NotesUploadProps {
 
 const NotesUpload = ({
   selectedFile,
+  userIsPaid,
   handleChange,
   generateType,
   handleGenerationChange,
@@ -165,10 +167,16 @@ const NotesUpload = ({
               understanding
             </Text>
             <HStack mt={{ base: "4", md: "5" }}>
-              <LockIcon />
-              <Text color={generateFlashcard ? "midBlue.400" : "white"}>
-                This is a paid feature. Unlock it with Pro!
-              </Text>
+              {
+                !userIsPaid && (
+                  <>
+                  <LockIcon />
+                  <Text color={generateFlashcard ? "midBlue.400" : "white"}>
+                    This is a paid feature. Unlock it with Pro!
+                  </Text>
+                  </>
+                )
+              }
             </HStack>
           </Box>
         </Stack>
