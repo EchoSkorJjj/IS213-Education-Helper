@@ -169,10 +169,10 @@ const MarketList = ({
                   </Text>
                   <Tag
                     size="md"
-                    variant="solid"
-                    colorScheme={note.generateType === "MCQ" ? "teal" : "purple"}
+                    variant="subtle"
+                    colorScheme={note.generateType.toUpperCase() === "MCQ" ? "teal" : "purple"}
                   >
-                    {note.generateType}
+                    {note.generateType.toUpperCase()}
                   </Tag>
                 </Stack>
               </CardBody>

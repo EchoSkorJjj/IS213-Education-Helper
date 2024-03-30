@@ -206,8 +206,18 @@ const SubscribePage = () => {
                 </ListItem>
               </List>
               <Box w="80%" pt={7}>
-                <Button w="full" onClick={handleSubscribe}>
-                  {user?.is_paid ? "Unsubscribe" : "Go Pro"}
+                <Button
+                  w="full"
+                  variant={user?.is_paid ? "outline" : "solid"}
+                  disabled={user?.is_paid}
+                  isDisabled={user?.is_paid}
+                  onClick={user?.is_paid ? () => { } : handleSubscribe}
+                >
+                  {
+                    user?.is_paid
+                      ? "You are on Pro Plan"
+                      : "Go Pro"
+                  }
                 </Button>
               </Box>
             </VStack>
