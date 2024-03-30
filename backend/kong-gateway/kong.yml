@@ -46,14 +46,14 @@ services:
             config:
               proto: /usr/local/share/lua/5.1/kong/protos/save_notes.proto
 
-  - name: user-storage-service
-    host: user-storage-service
+  - name: verify-user-service
+    host: verify-user-service
     port: 50051
     protocol: grpc
     tags:
-      - user-storage-service
+      - verify-user-service
     routes:
-      - name: user-storage
+      - name: verify-user
         protocols:
           - http
         paths:
@@ -62,7 +62,7 @@ services:
         plugins:
           - name: grpc-gateway
             config:
-              proto: /usr/local/share/lua/5.1/kong/protos/user_storage.proto
+              proto: /usr/local/share/lua/5.1/kong/protos/verify_user.proto
 
   - name: upload-notes-service
     host: upload-notes
@@ -119,7 +119,7 @@ services:
 
 plugins:
   - name: file-log
-    service: user-storage-service
+    service: verify-user-service
     config:
       path: /usr/local/share/lua/5.1/kong/plugins/authn-kong/user-storage.log
   - name: cors

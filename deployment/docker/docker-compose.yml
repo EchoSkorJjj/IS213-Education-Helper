@@ -125,6 +125,23 @@ services:
       retries: 3
       start_period: 30s
 
+  verify-user-service:
+    build: ../../backend/complex/verify-user
+    image: verify-user-service:1.0
+    env_file:
+      - ../../backend/complex/verify-user/.env
+    depends_on:
+      payment-service:
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   subscription-service:
     build: ../../backend/simple/subscriptions
     image: subscription-service:1.0

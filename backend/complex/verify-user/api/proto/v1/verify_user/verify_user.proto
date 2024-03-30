@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package verify_user_pb;
+
+import "user_storage/user_storage.proto";
+
+option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/verify-user/pb/verify_user";
+
+service VerifyUser {
+    rpc GoogleAuth(user_storage_pb.AuthRequest) returns (user_storage_pb.ServiceResponseWrapper);
+    rpc MyInfoCode(user_storage_pb.MyInfoCodeRequest) returns (user_storage_pb.MyInfoCodeResponse);
+    rpc MyInfoAuth(user_storage_pb.AuthRequest) returns (user_storage_pb.ServiceResponseWrapper);
+    rpc SgIdAuthUrl(user_storage_pb.SgIdAuthUrlRequest) returns (user_storage_pb.SgIdAuthUrlResponse);
+    rpc SgIdAuth(user_storage_pb.AuthRequest) returns (user_storage_pb.ServiceResponseWrapper);
+    rpc Logout(user_storage_pb.LogoutRequest) returns (user_storage_pb.ServiceResponseWrapper);
+}
