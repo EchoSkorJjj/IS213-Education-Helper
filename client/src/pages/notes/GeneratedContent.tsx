@@ -13,6 +13,7 @@ import {
   Button,
   Container,
   Flex,
+  Input,
   keyframes,
   Select,
   Skeleton,
@@ -49,7 +50,7 @@ const GeneratedContent: React.FC = () => {
 
   const [GPTContent, setFlashcards] = useState<FlashcardType[]>([]);
   const [MCQs, setMCQs] = useState<MultipleChoiceQuestion[]>([]); // Initialize state for MCQs
-  const [title, setTitle] = useState<string>("Type your title here"); // State for the editable title
+  const [title, setTitle] = useState<string>(""); // State for the editable title
   const [selectedTopic, setSelectedTopic] =
     useState<string>("science-technology"); // State for the selected topic
   const [type, setType] = useState<string>("flashcard");
@@ -371,19 +372,24 @@ const GeneratedContent: React.FC = () => {
             <Text fontSize="xs" pb={3}>
               Title
             </Text>
-            <Box
+            <Input
               p={3}
-              as="b"
               fontSize="2xl"
               contentEditable
+              color="white"
               suppressContentEditableWarning
-              onBlur={handleTitleChange} // Capture the title change on blur
-              rounded="lg"
-              border="1px"
-              borderColor="gray.200"
-            >
-              {title}
-            </Box>
+              onBlur={handleTitleChange}
+              border="none"
+              borderBottom="1px solid white"
+              rounded={"none"}
+              borderColor="white"
+              placeholder="Type your title here"
+              background={"None"}
+              _focus={{ borderBottom: "none" }}
+              _active={{ borderBottom: "none" }}
+              _focusVisible={{ borderBottom: "1px solid white" }}
+              width={"100%"}
+            ></Input>
           </Box>
 
           {/* Topic */}
