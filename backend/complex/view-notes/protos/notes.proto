@@ -22,6 +22,12 @@ service NoteService {
   rpc RetrieveMultipleNotesByUserId (RetrieveMultipleNotesByUserIdRequest) returns (RetrieveMultipleNotesByUserIdResponse);
 
   rpc RetrieveNoteMetadata (RetrieveNoteMetadataRequest) returns (RetrieveNoteMetadataResponse);
+
+  // Define an RPC method to view notes by topic and name
+  rpc ViewNotesByTopicAndName (ViewNotesByTopicAndNameRequest) returns (ViewNotesByTopicAndNameResponse);
+
+  // Define an RPC method to retrieve multiple saved notes by user id
+  rpc RetrieveMultipleSavedNotes (RetrieveMultipleSavedNotesRequest) returns (RetrieveMultipleSavedNotesResponse);
 }
 
 // Note message for storing a note
@@ -101,11 +107,39 @@ message RetrieveMultipleNotesByUserIdRequest {
   int32 limit = 2;
   int32 offset = 3;
   int32 page = 4;
+  string notesTitle = 5;
 }
 
 // Response message for retrieving multiple notes by user id
 message RetrieveMultipleNotesByUserIdResponse {
   int32 count = 1;
   repeated NotePreview notes = 2;
-  int32 nextPage = 3;
+}
+
+message ViewNotesByTopicAndNameRequest {
+  string topic = 1;
+  string notesTitle = 2;
+  int32 page = 3;
+  int32 limit = 4;
+  int32 offset = 5;
+}
+
+message ViewNotesByTopicAndNameResponse {
+  int32 count = 1;
+  repeated notes.NotePreview notes = 2;
+}
+
+// Request message for retrieving multiple saved notes by user id
+message RetrieveMultipleSavedNotesRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  int32 page = 3;
+  string notesTitle = 4;
+  repeated string saved_notes_ids = 5;
+}
+
+// Response message for retrieving multiple saved notes by user id
+message RetrieveMultipleSavedNotesResponse {
+  int32 count = 1;
+  repeated NotePreview notes = 2;
 }

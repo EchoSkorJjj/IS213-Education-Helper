@@ -106,3 +106,8 @@ export interface CreatedNotesResponse {
   next_page: number;
   notes_and_contents: GetContentResponse[];
 }
+
+export interface Topic {
+  value: string;
+  label: string;
+}

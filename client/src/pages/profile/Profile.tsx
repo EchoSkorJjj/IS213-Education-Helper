@@ -1,31 +1,25 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 
 import NotesList from "./components/NotesList";
 import ProfileHeader from "./components/ProfileHeader";
 
-import { getCreatedNotes } from "~features/api";
+import { getCreatedNotes, getTopics, getSavedNotesWithFilter } from "~features/api";
 import { useAuth } from "~features/auth";
 
-interface NotesProp {
-  unique_id: string;
-  topic: string;
-  title: string;
-  imageURL: string;
-  creator: string;
-  type: "MCQ" | "Flashcard";
-}
+import { NotePreview, Topic } from "~types/data";
 
 const Profile = () => {
   // For created notes
-  const [createdNotes, setCreatedNotes] = useState<NotesProp[]>([]);
+  const [createdNotes, setCreatedNotes] = useState<NotePreview[]>([]);
   const [totalCreatedNotesCount, setTotalCreatedNotesCount] =
     useState<number>(1);
   const [createdNotesTitle, setCreatedNotesTitle] = useState<string>("");
+  const [topics, setTopics] = useState<Topic[]>([]);
 
   // For saved notes
-  const [savedNotes, setSavedNotes] = useState<NotesProp[]>([]);
+  const [savedNotes, setSavedNotes] = useState<NotePreview[]>([]);
   const [totalSavedNotesCount, setTotalSavedNotesCount] = useState<number>(1);
   const [savedNotesTitle, setSavedNotesTitle] = useState<string>("");
 
@@ -35,14 +29,76 @@ const Profile = () => {
 
   const { user, authorization } = useAuth();
   const userId = user?.user_id;
-  
+
+  const toast = useToast();
 
   const handleGetUserCreatedNotes = async () => {
     if (!authorization || !userId ){
       return ;
     }
-    getCreatedNotes(authorization, userId, 8, 0, currentCreatedNotePage);
+    const data = await getCreatedNotes(authorization, userId, 4, 0, currentCreatedNotePage, createdNotesTitle);
+    if (!data) {
+      toast({
+        title: "No notes found",
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+      setCreatedNotes([]);
+      setTotalCreatedNotesCount(0);
+      return;
+    }
+    setCreatedNotes(data.notes);
+    setTotalCreatedNotesCount(data.count);
   }
+
+  const handleGetUserSavedNotes = async () => {
+    if (!authorization || !userId ){
+      return ;
+    }
+    const data = await getSavedNotesWithFilter(authorization, userId, 4, 0, currentSavedNotePage, savedNotesTitle);
+    if (!data || data.length === 0) {
+      toast({
+        title: "No notes found",
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+      setSavedNotes([]);
+      setTotalSavedNotesCount(0);
+      return;
+    }
+    setSavedNotes(data.notes);
+    setTotalSavedNotesCount(data.count);
+  }
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const fetchedTopics = await getTopics();
+      if (!fetchedTopics || fetchedTopics.length === 0) {
+        toast({
+          title: "Failed to fetch topics",
+          status: "error", 
+          position: "top",
+          duration: 3000,
+        });
+        return;
+      }
+      setTopics(fetchedTopics);
+    };
+
+    fetchTopics();
+  }, []);
+
+  useEffect(() => {
+    handleGetUserCreatedNotes();
+  }, [currentCreatedNotePage, createdNotesTitle]);
+
+  useEffect(() => {
+    handleGetUserSavedNotes();
+  }, [currentSavedNotePage, savedNotesTitle]);
 
   return (
     <Box mb="5em">
@@ -53,6 +109,7 @@ const Profile = () => {
       <ProfileHeader />
       <NotesList
         notes={createdNotes}
+        topics={topics}
         setNotesTitle={setCreatedNotesTitle}
         setCurrentPage={setCurrentCreatedNotePage}
         currentPage={currentCreatedNotePage}
@@ -62,6 +119,7 @@ const Profile = () => {
       />
       <NotesList
         notes={savedNotes}
+        topics={topics}
         setNotesTitle={setSavedNotesTitle}
         setCurrentPage={setCurrentSavedNotePage}
         currentPage={currentSavedNotePage}
