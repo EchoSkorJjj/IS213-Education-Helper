@@ -6,8 +6,8 @@ import {
   HStack,
   IconButton,
   Stack,
+  Text,
   useDisclosure,
-  Text
 } from "@chakra-ui/react";
 
 import { Logo } from "~components/logo/Logo";
@@ -65,7 +65,8 @@ const Navbar = ({ ...rest }) => {
             <AuthMenu user={user} handleSignOutClick={signOut} />
           ) : (
             <a href="/about">
-              <Text>Our Story</Text></a>
+              <Text>Our Story</Text>
+            </a>
           )}
         </HStack>
       </Container>

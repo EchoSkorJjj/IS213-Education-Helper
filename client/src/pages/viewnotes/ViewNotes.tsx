@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import {
   ArrowBackIcon,
   ChevronLeftIcon,
@@ -73,7 +73,7 @@ function ViewNotes() {
   const extractFileData = (fileContent: string) => {
     const byteCharacters = atob(fileContent);
     const byteNumbers = Array.from(byteCharacters, (char) =>
-      char.charCodeAt(0)
+      char.charCodeAt(0),
     );
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: "application/pdf" });

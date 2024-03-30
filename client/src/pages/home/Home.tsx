@@ -38,8 +38,6 @@ const HomePage = () => {
                 pt="8em"
                 as="a"
                 href="/generator"
-                justifyContent={"center"}
-                alignContent="center"
               >
                 <Text color={"white"} lineHeight={1.2} fontSize="3xl">
                   Create notes with

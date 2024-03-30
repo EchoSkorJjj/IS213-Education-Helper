@@ -97,20 +97,20 @@ export const getTopics = async () => {
      */
 
     // const data = await handleResponse(response);
-    const data = [
-      "All",
-      "Data Science",
-      "Business & Management",
-      "Language",
-      "Information Technology",
-      "Film & Media",
-      "Math & Logic",
-      "Health & Medical",
-      "Design & Creative",
-      "Neil deGrasse Tyson",
-      "Neil sharma",
-      "Neil Gae",
+
+    const data: { value: string; label: string }[] = [
+      { value: "science-technology", label: "Science and Technology" },
+      { value: "history-culture", label: "History and Culture" },
+      { value: "business-economics", label: "Business and Economics" },
+      { value: "literature-arts", label: "Literature and Arts" },
+      { value: "health-medicine", label: "Health and Medicine" },
+      { value: "education-learning", label: "Education and Learning" },
+      { value: "law-politics", label: "Law and Politics" },
+      { value: "environment-geography", label: "Environment and Geography" },
+      { value: "psychology-sociology", label: "Psychology and Sociology" },
+      { value: "philosophy-ethics", label: "Philosophy and Ethics" },
     ];
+
     return data;
   } catch (error) {
     console.log(error);
@@ -235,11 +235,14 @@ export const deleteTemporaryContent = async (
 ): Promise<DeleteTemporaryContentsResponse | undefined> => {
   try {
     const contentTypeAsNumber: number = contentType === "flashcard" ? 0 : 1;
-    const response = await api.delete(`/api/v1/contents/temporary?note_id=${noteId}&content_type=${contentTypeAsNumber}&content_id=${contentId}`, {
-      headers: {
-        Authorization: `Bearer ${authorization}`,
+    const response = await api.delete(
+      `/api/v1/contents/temporary?note_id=${noteId}&content_type=${contentTypeAsNumber}&content_id=${contentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
       },
-    });
+    );
 
     return response.data as DeleteTemporaryContentsResponse;
   } catch (error) {
@@ -252,11 +255,14 @@ export const deleteAllTemporaryContents = async (
   authorization: string,
 ): Promise<DeleteAllTemporaryContentsResponse | undefined> => {
   try {
-    const response = await api.delete(`/api/v1/contents/temporary/all?note_id=${noteId}`, {
-      headers: {
-        Authorization: `Bearer ${authorization}`,
+    const response = await api.delete(
+      `/api/v1/contents/temporary/all?note_id=${noteId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
       },
-    });
+    );
 
     return response.data as DeleteAllTemporaryContentsResponse;
   } catch (error) {

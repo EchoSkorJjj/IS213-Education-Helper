@@ -3,14 +3,6 @@ import { Searchbar } from "@opengovsg/design-system-react";
 
 import { Pagination } from "~components/pagination";
 
-interface TopicsProps {
-  topics: string[];
-  setTopic: (topic: string) => void;
-  topic: string;
-  setCurrentTopicPage: (pageNumber: number) => void;
-  currentTopicPage: number;
-}
-
 const TopicsList = ({
   topics,
   setTopic,
@@ -57,6 +49,7 @@ const TopicsList = ({
                   bg: "black",
                 }}
                 onSearch={(value: string) => {
+                  // Update to search through objects if needed
                   setTopic(value);
                 }}
                 isExpanded={true}
@@ -70,20 +63,19 @@ const TopicsList = ({
             paddingBottom="39.5"
             mb={10}
           >
-            {currentTopics.map((currentTopic) => (
+            {currentTopics.map(({ value, label }) => (
               <Button
                 as="button"
-                bg={topic === currentTopic ? "blue.300" : "lightBlue.500"}
+                bg={topic === value ? "blue.300" : "lightBlue.500"}
                 size="lg"
-                key={currentTopic}
-                onClick={() => setTopic(currentTopic)}
+                key={value}
+                onClick={() => setTopic(value)}
                 rounded="none"
                 height="150%"
                 justifyContent="flex-start"
-                pl={8}
                 border={0}
               >
-                {currentTopic}
+                {label}
               </Button>
             ))}
           </SimpleGrid>

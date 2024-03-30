@@ -212,7 +212,7 @@ const About = () => {
                 m="0 auto"
               >
                 <Icon as={FaQuoteRight} w={8} h={8} color="midBlue.500" />
-                <Text p={5} color="gray.500">
+                <Text p={5} color="gray.500" textAlign={"center"}>
                   {testimonial.content}
                 </Text>
                 <VStack alignItems="center">

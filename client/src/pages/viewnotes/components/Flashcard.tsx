@@ -69,11 +69,11 @@ export default function Flashcard({ question, answer }: FlashcardProps) {
           backfaceVisibility: "hidden",
           opacity,
           transform: transform.to(
-            (transform: string) => `${transform} rotateY(180deg)`
+            (transform: string) => `${transform} rotateY(180deg)`,
           ),
         }}
       >
-        <Text as="b" fontSize="2xl" textAlign="center">
+        <Text fontSize="2xl" textAlign="center">
           {answer}
         </Text>
       </animated.div>
