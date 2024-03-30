@@ -6,39 +6,55 @@ import MarketHeader from "./components/MarketHeader";
 import MarketList from "./components/MarketList";
 import TopicsList from "./components/TopicsList";
 
-import { getTopics } from "~api";
-import { getNotes } from "~util";
+import { getTopics, getNotes } from "~api";
 
-interface NotesProp {
-  unique_id: string;
-  topic: string;
-  title: string;
-  imageURL: string;
-  creator: string;
-  type: "MCQ" | "Flashcard";
-}
+import { NotePreview, Topic } from "~types/data";
+
+import { useAuth } from "~features/auth";
 
 const MarketplacePage = () => {
   const toast = useToast();
+  const { authorization } = useAuth();
 
-  const [topics, setTopics] = useState<string[]>([]);
-  const [topic, setTopic] = useState<string>("All");
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [topic, setTopic] = useState<string>("");
   const [notesTitle, setNotesTitle] = useState<string>("");
-  const [notes, setNotes] = useState<NotesProp[]>([]);
+  const [notes, setNotes] = useState<NotePreview[]>([]);
   const [totalNotesCount, setTotalNotesCount] = useState<number>(1);
 
   const [currentTopicPage, setCurrentTopicPage] = useState(1);
   const [currentMarketPage, setCurrentMarketPage] = useState(1);
+
+  const handleSetTopic = (topic: string) => {
+    if (topic === "all") {
+      setTopic("");
+    } else {
+      setTopic(topic);
+    }
+    setCurrentMarketPage(1);
+  }
 
   const handleGetNotes = async (
     topic: string,
     notesTitle: string,
     currentMarketPage: number,
   ): Promise<void> => {
-    const data = await getNotes(topic, notesTitle, currentMarketPage);
-
+    if (!authorization) return;
+    const data = await getNotes(topic, notesTitle, currentMarketPage, authorization);
+    if (!data) {
+      toast({
+        title: "No notes found",
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+      setNotes([]);
+      setTotalNotesCount(0);
+      return;
+    }
     setNotes(data.notes);
-    setTotalNotesCount(data.totalNotesCount);
+    setTotalNotesCount(data.count);
   };
 
   useEffect(() => {
@@ -47,8 +63,7 @@ const MarketplacePage = () => {
       if (!fetchedTopics || fetchedTopics.length === 0) {
         toast({
           title: "Failed to fetch topics",
-          status: "error",
-          isClosable: true,
+          status: "error", 
           position: "top",
           duration: 3000,
         });
@@ -75,7 +90,7 @@ const MarketplacePage = () => {
       <Box w="100%">
         <TopicsList
           topics={topics}
-          setTopic={setTopic}
+          setTopic={handleSetTopic}
           topic={topic}
           setCurrentTopicPage={setCurrentTopicPage}
           currentTopicPage={currentTopicPage}
@@ -84,6 +99,8 @@ const MarketplacePage = () => {
       <Box>
         <MarketList
           notes={notes}
+          topics={topics}
+          notesTitle={notesTitle}
           setNotesTitle={setNotesTitle}
           setCurrentMarketPage={setCurrentMarketPage}
           currentMarketPage={currentMarketPage}

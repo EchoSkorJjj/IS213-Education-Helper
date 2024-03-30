@@ -100,6 +100,7 @@ export const getTopics = async () => {
     // const data = await handleResponse(response);
 
     const data: { value: string; label: string }[] = [
+      { value: "all", label: "All" },
       { value: "science-technology", label: "Science and Technology" },
       { value: "history-culture", label: "History and Culture" },
       { value: "business-economics", label: "Business and Economics" },
@@ -122,15 +123,17 @@ export const getNotes = async (
   topic: string,
   notesTitle: string,
   currentMarketPage: number,
+  authorization: string,
 ) => {
-  const { authorization } = useAuth();
   try {
     const response = await api.post(
       "/api/v1/notes/get",
       {
         topic: topic,
         notesTitle: notesTitle,
-        currentPage: currentMarketPage,
+        page: currentMarketPage,
+        limit: 8,
+        offset: 0,
       },
       {
         headers: {
@@ -235,7 +238,7 @@ export const deleteTemporaryContent = async (
   authorization: string,
 ): Promise<DeleteTemporaryContentsResponse | undefined> => {
   try {
-    const contentTypeAsNumber: number = contentType === "flashcard" ? 0 : 1;
+    const contentTypeAsNumber = contentType === "flashcard" ? "FLASHCARD" : "MCQ";
     const response = await api.delete(
       `/api/v1/contents/temporary?note_id=${noteId}&content_type=${contentTypeAsNumber}&content_id=${contentId}`,
       {
@@ -376,13 +379,14 @@ export const deleteSavedNote = async (
 export const getSavedNotes = async (
   authorization: string,
   userId: string,
-): Promise<NotePreview[] | undefined> => {
+) => {
   try {
     const response = await api.get(`/api/v1/notes/saved/${userId}`, {
       headers: {
         Authorization: `Bearer ${authorization}`,
       },
     });
+
     return response.data.notes;
   } catch (error) {
     console.log(error);
@@ -394,10 +398,31 @@ export const getCreatedNotes = async (
   userId: string,
   limit: number,
   offset: number,
-  page: number
-): Promise<CreatedNotesResponse | undefined> => {
+  page: number,
+  notesTitle: string,
+) => {
   try {
-    const response = await api.get(`/api/v1/notes/user/${userId}?limit=${limit}&offset=${offset}&page=${page}`, {
+    const response = await api.get(`/api/v1/notes/user/${userId}?limit=${limit}&offset=${offset}&page=${page}&notesTitle=${notesTitle}`, {
+      headers: {
+        Authorization: `Bearer ${authorization}`,
+      }
+    });
+    return response.data;
+  } catch (error){
+    console.log(error);
+  }
+}
+
+export const getSavedNotesWithFilter = async (
+  authorization: string,
+  userId: string,
+  limit: number,
+  offset: number,
+  page: number,
+  notesTitle: string,
+) => {
+  try {
+    const response = await api.get(`/api/v1/notes/user/saved/${userId}?limit=${limit}&offset=${offset}&page=${page}&notesTitle=${notesTitle}`, {
       headers: {
         Authorization: `Bearer ${authorization}`,
       }

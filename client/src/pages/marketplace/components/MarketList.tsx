@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Card,
@@ -13,17 +14,14 @@ import { Searchbar, Tag } from "@opengovsg/design-system-react";
 
 import { Pagination } from "~components/pagination";
 
-interface NotesProp {
-  unique_id: string;
-  topic: string;
-  title: string;
-  imageURL: string;
-  creator: string;
-  type: "MCQ" | "Flashcard";
-}
+import { NotePreview, Topic } from "~types/data";
+
+import { fetchImageURL } from "~util";
 
 interface MarketProps {
-  notes: NotesProp[];
+  notes: NotePreview[];
+  topics: Topic[];
+  notesTitle: string;
   setNotesTitle: (notesTitle: string) => void;
   setCurrentMarketPage: (pageNumber: number) => void;
   currentMarketPage: number;
@@ -45,20 +43,43 @@ function useDebounce(value, delay) {
 }
 const MarketList = ({
   notes,
+  topics,
+  notesTitle,
   setNotesTitle,
   setCurrentMarketPage,
   currentMarketPage,
   totalNotesCount,
 }: MarketProps) => {
   const pageSize = 8;
-  const [searchTerm, setSearchTerm] = useState("");
+  const [imageURLs, setImageURLs] = useState({});
+  const navigate = useNavigate();
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 200); // 500 ms delay
+  useEffect(() => {
+    const fetchImageURLs = async () => {
+      const newImageURLs = { ...imageURLs };
+
+      for (const note of notes) {
+        if (!newImageURLs[note.fileId]) {
+          newImageURLs[note.fileId] = await fetchImageURL(note.topic);
+        }
+      }
+
+      setImageURLs(newImageURLs);
+    };
+
+    fetchImageURLs();
+  }, [notes]);
+
+  const debouncedSearchTerm = useDebounce(notesTitle, 200); // 500 ms delay
   useEffect(() => {
     if (debouncedSearchTerm) {
       setNotesTitle(debouncedSearchTerm);
     }
   }, [debouncedSearchTerm, setNotesTitle]);
+
+  const handleCardClick = (fileId: string) => () => {
+    navigate(`/viewnotes/${fileId}`)
+  };
 
   return (
     <Flex
@@ -87,12 +108,15 @@ const MarketList = ({
             <Searchbar
               placeholder="Search notes"
               style={{ bg: "black" }}
-              onSearch={(value: string) => setSearchTerm(value)}
-              onChange={(e) => setSearchTerm(e.target.value)} // Assuming Searchbar supports an onChange prop
+              onChange={(e) => {
+                // Update to search through objects if needed
+                setNotesTitle(e.target.value)
+              }}
               isExpanded={true}
             />
           </Box>
         </Flex>
+        {notes.length !== 0 ? (
         <SimpleGrid
           columns={{ base: 1, md: 3, lg: 4 }}
           spacing={5}
@@ -103,18 +127,15 @@ const MarketList = ({
             <Card
               maxW="sm"
               maxH="sm"
-              key={note.unique_id}
+              key={note.fileId}
               as="button"
+              onClick={handleCardClick(note.fileId)}
               border={0}
               rounded="0"
             >
               <Image
                 objectFit="cover"
-                src={
-                  note.imageURL
-                    ? note.imageURL
-                    : `https://picsum.photos/200/300`
-                }
+                src={imageURLs[note.fileId] || 'https://picsum.photos/200/300'}
                 alt={note.title}
                 borderRadius="lg"
                 height="50%"
@@ -131,7 +152,11 @@ const MarketList = ({
                   direction="column"
                   textAlign="start"
                 >
-                  <Text>{note.topic}</Text>
+                  <Text>
+                    {
+                      topics.find(topic => topic.value === note.topic)?.label
+                    }
+                  </Text>
                   <Text
                     isTruncated
                     fontSize={{ base: "2xl", md: "5xl", lg: "2xl" }}
@@ -139,19 +164,24 @@ const MarketList = ({
                   >
                     {note.title}
                   </Text>
-                  <Text color="gray.400">{note.creator}</Text>
+                  <Text>
+                    {note.fileName.length > 20 ? `${note.fileName.slice(0, 22)} ...` : note.fileName}
+                  </Text>
                   <Tag
                     size="md"
                     variant="solid"
-                    colorScheme={note.type === "MCQ" ? "teal" : "purple"}
+                    colorScheme={note.generateType === "MCQ" ? "teal" : "purple"}
                   >
-                    {note.type}
+                    {note.generateType}
                   </Tag>
                 </Stack>
               </CardBody>
             </Card>
           ))}
         </SimpleGrid>
+        ) : (
+          <Text textAlign="center" paddingTop="5">No notes found</Text>
+        )}
         <Pagination
           color="black"
           isDisabled={notes.length === 0}

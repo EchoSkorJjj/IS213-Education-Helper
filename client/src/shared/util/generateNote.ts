@@ -12,7 +12,7 @@ const topics = [
   "Design & Creative",
 ];
 
-const fetchImageURL = async (query: string) => {
+export const fetchImageURL = async (query: string) => {
   const url = `https://api.unsplash.com/search/photos?client_id=${import.meta.env.VITE_UNSPLASH_CLIENT_ID}&query=${query}&page=1`;
 
   try {

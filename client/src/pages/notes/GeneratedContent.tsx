@@ -29,12 +29,15 @@ import {
 } from "~shared/types/data";
 import { isFlashcardType } from "~shared/util";
 
+import { Topic } from "~types/data";
+
 import {
   commitTemporaryContents,
   createTemporaryContent,
   deleteTemporaryContent,
   getTemporaryContents,
   updateTemporaryContent,
+  getTopics
 } from "~features/api";
 import { useAuth } from "~features/auth";
 
@@ -45,6 +48,7 @@ const GeneratedContent: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { noteId } = useParams<{ noteId: string }>();
+  const [topics, setTopics] = useState<Topic[]>([]);
   const { authorization } = useAuth();
 
   const [GPTContent, setFlashcards] = useState<FlashcardType[]>([]);
@@ -68,6 +72,21 @@ const GeneratedContent: React.FC = () => {
 
   useEffect(() => {
     // Call once to fetch immediately
+    const fetchTopics = async () => {
+      const fetchedTopics = await getTopics();
+      if (!fetchedTopics || fetchedTopics.length === 0) {
+        toast({
+          title: "Failed to fetch topics",
+          status: "error", 
+          position: "top",
+          duration: 3000,
+        });
+        return;
+      }
+      setTopics(fetchedTopics);
+    };
+
+    fetchTopics();
     handleGetTemporaryContents(noteId, authorization);
 
     /*
@@ -403,26 +422,11 @@ const GeneratedContent: React.FC = () => {
                 placeholder="Select option"
                 color={"gray.500"}
               >
-                <option value="science-technology">
-                  Science and Technology
-                </option>
-                <option value="history-culture">History and Culture</option>
-                <option value="business-economics">
-                  Business and Economics
-                </option>
-                <option value="literature-arts">Literature and Arts</option>
-                <option value="health-medicine">Health and Medicine</option>
-                <option value="education-learning">
-                  Education and Learning
-                </option>
-                <option value="law-politics">Law and Politics</option>
-                <option value="environment-geography">
-                  Environment and Geography
-                </option>
-                <option value="psychology-sociology">
-                  Psychology and Sociology
-                </option>
-                <option value="philosophy-ethics">Philosophy and Ethics</option>
+                {topics.map((topic) => (
+                  <option key={topic.value} value={topic.value}>
+                    {topic.label}
+                  </option>
+                ))}
               </Select>
             </Box>
 

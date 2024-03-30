@@ -59,19 +59,52 @@ class Database:
         if not self._session:
             raise ValueError("Session not initialized")
     
-    def get_notes(self, limit, offset, user_id=None):
+    def get_notes(self, limit, offset, notes_title, user_id=None):
         self.ready()
 
         query = self._session.query(Notes)
         if user_id:
             query = query.filter(Notes.user_id == user_id)
+        if notes_title:
+            query = query.filter(Notes.title.ilike(f"%{notes_title}%"))
         
-        return query.limit(limit).offset(offset).all()
+        total_count = query.count()
+        notes = query.limit(limit).offset(offset).all()
+        return notes, total_count
 
     def get_note(self, id):
         self.ready()
         
         return self._session.query(Notes).filter(Notes.id == uuid.UUID(id, version=4)).first()
+    
+    def get_notes_by_topic_and_name(self, topic, notes_title, limit, offset):
+        self.ready()
+
+        query = self._session.query(Notes)
+        if topic:
+            query = query.filter(Notes.topic == topic)
+        if notes_title:
+            query = query.filter(Notes.title.ilike(f"%{notes_title}%"))
+        
+        total_count = query.count()
+        notes = query.limit(limit).offset(offset).all()
+
+        return notes, total_count
+    
+    def get_saved_notes(self, limit, offset, notes_title, saved_notes_ids):
+        self.ready()
+        
+        saved_notes_uuids = [uuid.UUID(id, version=4) for id in saved_notes_ids]
+
+        query = self._session.query(Notes).filter(Notes.id.in_(saved_notes_uuids))
+        
+        if notes_title:
+            query = query.filter(Notes.title.ilike(f"%{notes_title}%"))
+
+        total_count = query.count()
+        notes = query.limit(limit).offset(offset).all()
+
+        return notes, total_count
     
     def insert_note(self, note):
         self.ready()

@@ -10,7 +10,6 @@ interface NotesUploadProps {
   handleGenerate: () => void;
   handleChange: (file: File) => void;
   handleGenerationChange: () => void;
-  handleDelete: () => void;
 }
 
 const NotesUpload = ({
@@ -21,7 +20,6 @@ const NotesUpload = ({
   handleGenerationChange,
   handleGenerate,
   setGenerateType,
-  handleDelete,
 }: NotesUploadProps) => {
   const DropZoneAccept = [".pdf"];
   const maxSize = 15 * 1024 * 1024; // 16MB in bytes
@@ -83,7 +81,6 @@ const NotesUpload = ({
             height="300px"
             border="none"
             required
-            onDelete={onDelete}
           />
         </Box>
         <Box width="100%" textAlign="center">

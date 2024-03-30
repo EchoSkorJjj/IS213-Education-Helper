@@ -78,22 +78,54 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
     def ViewNotesByUserId(self, request, context):
         response = view_notes_pb2.ViewAllNotesResponse()
         try:
-            limit, offset, page = request.limit, request.offset, request.page
+            limit, offset, page, user_id, notesTitle = request.limit, request.offset, request.page, request.user_id, request.notesTitle
             notes_stub = notes_client.NotesClient().get_notes_stub()
 
             notes_request = notes_pb2.RetrieveMultipleNotesByUserIdRequest()
             notes_request.limit = limit
             notes_request.offset = offset
             notes_request.page = page
-            notes_request.userId = request.user_id
+            notes_request.userId = user_id
+            notes_request.notesTitle = notesTitle
 
             notes_response = notes_stub.RetrieveMultipleNotesByUserId(notes_request)
-            note_previews = notes_response.notes
-            response.next_page = notes_response.nextPage
-            response.count = len(note_previews)
+            
+            response.notes.extend(notes_response.notes)
+            response.count = notes_response.count
 
-            for note_preview in note_previews:
-                response.notes.append(note_preview)
+            return response
+        except Exception as e:
+            error_utils.handle_error(
+                context,
+                'Error retrieving notes',
+                grpc.StatusCode.INVALID_ARGUMENT,
+                e
+            )
+            
+    def ViewSavedNotesByUserId(self, request, context):
+        response = view_notes_pb2.ViewAllNotesResponse()
+        try:
+            limit, offset, page, user_id, notesTitle = request.limit, request.offset, request.page, request.user_id, request.notesTitle
+            user_storage_stub = user_storage_client.UserStorageClient().get_user_storage_stub()
+            notes_stub = notes_client.NotesClient().get_notes_stub()
+            
+            saved_notes_request = user_storage_pb2.GetSavedNotesRequest()
+            saved_notes_request.user_id = user_id
+
+            saved_notes_response = user_storage_stub.GetSavedNotes(saved_notes_request)
+            saved_notes_ids = saved_notes_response.saved_notes_ids
+
+            notes_request = notes_pb2.RetrieveMultipleSavedNotesRequest()
+            notes_request.limit = limit
+            notes_request.offset = offset
+            notes_request.page = page
+            notes_request.notesTitle = notesTitle
+            notes_request.saved_notes_ids.extend(saved_notes_ids)
+            
+            notes_response = notes_stub.RetrieveMultipleSavedNotes(notes_request)
+            
+            response.notes.extend(notes_response.notes)
+            response.count = notes_response.count
 
             return response
         except Exception as e:
@@ -132,3 +164,37 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
                 grpc.StatusCode.INVALID_ARGUMENT,
                 e
             )
+
+    def ViewNotesByTopicAndName(self, request, context):
+        response = view_notes_pb2.ViewNotesByTopicAndNameResponse()
+        try:
+            topic = request.topic
+            notesTitle = request.notesTitle
+            page = request.page
+            limit = request.limit
+            offset = request.offset
+            
+            notes_stub = notes_client.NotesClient().get_notes_stub()
+            
+            notes_by_topic_and_name_request = notes_pb2.ViewNotesByTopicAndNameRequest()
+            notes_by_topic_and_name_request.topic = topic
+            notes_by_topic_and_name_request.notesTitle = notesTitle
+            notes_by_topic_and_name_request.page = page
+            notes_by_topic_and_name_request.limit = limit
+            notes_by_topic_and_name_request.offset = offset
+            
+            notes_by_topic_and_name_response = notes_stub.ViewNotesByTopicAndName(notes_by_topic_and_name_request)
+            
+            response.notes.extend(notes_by_topic_and_name_response.notes)
+            response.count = notes_by_topic_and_name_response.count
+            
+            return response
+        except Exception as e:
+            error_utils.handle_error(
+                context,
+                'Error retrieving notes by topic and name',
+                grpc.StatusCode.INVALID_ARGUMENT,
+                e
+            )
+            
+            

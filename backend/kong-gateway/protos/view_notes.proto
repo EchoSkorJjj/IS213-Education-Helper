@@ -50,12 +50,12 @@ message ViewNotesByUserIdRequest {
     int32 limit = 2;
     int32 offset = 3;
     int32 page = 4;
+    string notesTitle = 5;
 }
 
 message ViewNotesByUserIdResponse {
     int32 count = 1;
     repeated notes.NotePreview notes = 2;
-    int32 next_page = 3;
 }
 
 message ViewSavedNotesRequest {
@@ -64,6 +64,19 @@ message ViewSavedNotesRequest {
 
 message ViewSavedNotesResponse {
     repeated notes.NotePreview notes = 1;
+}
+
+message ViewNotesByTopicAndNameRequest {
+    string topic = 1;
+    string notesTitle = 2;
+    int32 page = 3;
+    int32 limit = 4;
+    int32 offset = 5;
+}
+
+message ViewNotesByTopicAndNameResponse {
+    int32 count = 1;
+    repeated notes.NotePreview notes = 2;
 }
 
 service ViewNotes {
@@ -79,16 +92,28 @@ service ViewNotes {
         };
     };
 
-
     rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse) {
         option (google.api.http) = {
             get: "/api/v1/notes/user/{user_id}"
         };
     };
 
+    rpc ViewSavedNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/notes/user/saved/{user_id}"
+        };
+    };
+
     rpc ViewSavedNotes (ViewSavedNotesRequest) returns (ViewSavedNotesResponse) {
         option (google.api.http) = {
             get: "/api/v1/notes/saved/{user_id}"
+        };
+    };
+
+    rpc ViewNotesByTopicAndName (ViewNotesByTopicAndNameRequest) returns (ViewNotesByTopicAndNameResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/notes/get"
+            body: "*"
         };
     };
 }
