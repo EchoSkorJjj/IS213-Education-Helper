@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
+import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import {
   ArrowBackIcon,
   ChevronLeftIcon,
@@ -54,7 +54,7 @@ function ViewNotes() {
 
     const savedNotesList = response.map((note) => note.fileId);
     return savedNotesList.includes(noteId);
-  }
+  };
 
   const deleteSavedCard = async () => {
     if (!noteId || !authorization || !userId) {
@@ -73,7 +73,7 @@ function ViewNotes() {
   const extractFileData = (fileContent: string) => {
     const byteCharacters = atob(fileContent);
     const byteNumbers = Array.from(byteCharacters, (char) =>
-      char.charCodeAt(0),
+      char.charCodeAt(0)
     );
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: "application/pdf" });
@@ -153,6 +153,7 @@ function ViewNotes() {
           variant="ghost"
           color="white"
           outline="none"
+          mt={10}
         />
 
         <Text color={"white"} mt={4} mb={2}>
@@ -162,12 +163,11 @@ function ViewNotes() {
           <Heading
             fontSize="2xl"
             fontWeight={750}
-            mb={2}
+            mb={5}
             style={{ color: "white" }}
           >
             {noteTitle}
           </Heading>
-
 
           <IconButton
             aria-label="Save note"
@@ -209,7 +209,13 @@ function ViewNotes() {
           />
         )}
 
-        <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          mt={10}
+          mb={50}
+        >
           <IconButton
             aria-label="Previous card"
             icon={<ChevronLeftIcon />}
@@ -219,7 +225,7 @@ function ViewNotes() {
             outline="none"
             variant="ghost"
           />
-          <Text color="white" mx={4}>
+          <Text color="white" mx={10}>
             {currentCardIndex + 1} out of {totalCards}
           </Text>
           <IconButton
@@ -234,7 +240,7 @@ function ViewNotes() {
           />
         </Box>
 
-        <Heading fontSize="2xl" fontWeight={750} color="white" mt={4}>
+        <Heading fontSize="2xl" fontWeight={750} color="white" mt={4} mb={5}>
           {fileName}
         </Heading>
 

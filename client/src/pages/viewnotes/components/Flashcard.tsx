@@ -47,7 +47,9 @@ export default function Flashcard({ question, answer }: FlashcardProps) {
         }}
       >
         <Spacer />
-        <Text mx={10}>{question}</Text>
+        <Text as="b" fontSize="2xl" mx={10} textAlign="center">
+          {question}
+        </Text>
         <Spacer />
       </animated.div>
       <animated.div
@@ -61,19 +63,19 @@ export default function Flashcard({ question, answer }: FlashcardProps) {
           backgroundColor: "#003294",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
+          justifyContent: "center",
           alignItems: "center",
-          padding: 16,
+          padding: 100,
           backfaceVisibility: "hidden",
           opacity,
           transform: transform.to(
-            (transform: string) => `${transform} rotateY(180deg)`,
+            (transform: string) => `${transform} rotateY(180deg)`
           ),
         }}
       >
-        <Spacer />
-        <Text>{answer}</Text>
-        <Spacer />
+        <Text as="b" fontSize="2xl" textAlign="center">
+          {answer}
+        </Text>
       </animated.div>
     </Box>
   );

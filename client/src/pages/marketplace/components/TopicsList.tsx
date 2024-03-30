@@ -35,7 +35,7 @@ const TopicsList = ({
       bg={"blue.800"}
     >
       <Flex maxW={"6xl"} width="100%" height="90%" direction="column">
-        <Box width="100%">
+        <Box width="100%" mb={10}>
           <Flex
             alignItems="center"
             justifyContent="space-between"
@@ -68,6 +68,7 @@ const TopicsList = ({
             spacing={10}
             paddingTop="5"
             paddingBottom="39.5"
+            mb={10}
           >
             {currentTopics.map((currentTopic) => (
               <Button
