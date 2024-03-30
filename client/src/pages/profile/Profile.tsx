@@ -5,7 +5,8 @@ import { Box } from "@chakra-ui/react";
 import NotesList from "./components/NotesList";
 import ProfileHeader from "./components/ProfileHeader";
 
-import { getUserNotes } from "~util";
+import { getCreatedNotes } from "~features/api";
+import { useAuth } from "~features/auth";
 
 interface NotesProp {
   unique_id: string;
@@ -32,29 +33,16 @@ const Profile = () => {
   const [currentCreatedNotePage, setCurrentCreatedNotePage] = useState(1);
   const [currentSavedNotePage, setCurrentSavedNotePage] = useState(1);
 
-  const handleGetUserNotes = async (
-    userNoteType: string,
-    notesTitle: string,
-    currentPage: number,
-  ): Promise<void> => {
-    const data = await getUserNotes(userNoteType, notesTitle, currentPage);
+  const { user, authorization } = useAuth();
+  const userId = user?.user_id;
+  
 
-    if (userNoteType === "created") {
-      setCreatedNotes(data.notes);
-      setTotalCreatedNotesCount(data.totalNotesCount);
-    } else if (userNoteType === "saved") {
-      setSavedNotes(data.notes);
-      setTotalSavedNotesCount(data.totalNotesCount);
+  const handleGetUserCreatedNotes = async () => {
+    if (!authorization || !userId ){
+      return ;
     }
-  };
-
-  useEffect(() => {
-    handleGetUserNotes("created", createdNotesTitle, currentCreatedNotePage);
-  }, [createdNotesTitle, currentCreatedNotePage]);
-
-  useEffect(() => {
-    handleGetUserNotes("saved", savedNotesTitle, currentSavedNotePage);
-  }, [savedNotesTitle, currentSavedNotePage]);
+    getCreatedNotes(authorization, userId, 8, 0, currentCreatedNotePage);
+  }
 
   return (
     <Box mb="5em">

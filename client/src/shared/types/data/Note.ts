@@ -100,3 +100,9 @@ export interface SaveNotesResponse {
   success: boolean;
   saved_files_ids: string[];
 }
+
+export interface CreatedNotesResponse {
+  count: number;
+  next_page: number;
+  notes_and_contents: GetContentResponse[];
+}

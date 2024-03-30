@@ -9,6 +9,7 @@ import {
   NotePreview,
   SaveNotesResponse,
   UpdateTemporaryContentsResponse,
+  CreatedNotesResponse
 } from "~shared/types/data";
 import { UpdateProfileType } from "~shared/types/form";
 
@@ -387,3 +388,22 @@ export const getSavedNotes = async (
     console.log(error);
   }
 };
+
+export const getCreatedNotes = async (
+  authorization: string,
+  userId: string,
+  limit: number,
+  offset: number,
+  page: number
+): Promise<CreatedNotesResponse | undefined> => {
+  try {
+    const response = await api.get(`/api/v1/notes/user/${userId}?limit=${limit}&offset=${offset}&page=${page}`, {
+      headers: {
+        Authorization: `Bearer ${authorization}`,
+      }
+    });
+    return response.data;
+  } catch (error){
+    console.log(error);
+  }
+}

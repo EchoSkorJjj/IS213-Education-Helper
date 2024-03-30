@@ -13,7 +13,6 @@ import {
   Button,
   Container,
   Flex,
-  Input,
   keyframes,
   Select,
   Skeleton,
@@ -331,6 +330,7 @@ const GeneratedContent: React.FC = () => {
   };
 
   const handleTitleChange = (event: any) => {
+
     setTitle(event.target.innerText);
   };
 
@@ -372,24 +372,19 @@ const GeneratedContent: React.FC = () => {
             <Text fontSize="xs" pb={3}>
               Title
             </Text>
-            <Input
+            <Box
               p={3}
+              as="b"
               fontSize="2xl"
               contentEditable
-              color="white"
               suppressContentEditableWarning
-              onBlur={handleTitleChange}
-              border="none"
-              borderBottom="1px solid white"
-              rounded={"none"}
-              borderColor="white"
-              placeholder="Type your title here"
-              background={"None"}
-              _focus={{ borderBottom: "none" }}
-              _active={{ borderBottom: "none" }}
-              _focusVisible={{ borderBottom: "1px solid white" }}
-              width={"100%"}
-            ></Input>
+              onBlur={handleTitleChange} // Capture the title change on blur
+              rounded="lg"
+              border="1px"
+              borderColor="gray.200"
+            >
+              {title}
+            </Box>
           </Box>
 
           {/* Topic */}
