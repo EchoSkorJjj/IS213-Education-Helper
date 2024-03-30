@@ -7,4 +7,5 @@ export type AuthStateType = {
   login: (userData: UserData, authorization: string) => void;
   logout: () => void;
   authFlow: (authorization: string) => void;
+  updateUserInfo: (userData: UserData) => void;
 };

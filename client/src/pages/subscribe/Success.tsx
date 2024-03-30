@@ -10,7 +10,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
+import { useAuth } from "~features/auth/AuthContext";
+import { useEffect } from "react";
+
 const SuccessPage = () => {
+  const { retrieveAndUpdateUserInfo } = useAuth();
+  useEffect(() => {
+    retrieveAndUpdateUserInfo();
+  }, []);
+
   return (
     <Box py={12} h="100vh">
       <Helmet>

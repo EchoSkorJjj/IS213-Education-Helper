@@ -13,4 +13,5 @@ service VerifyUser {
     rpc SgIdAuthUrl(user_storage_pb.SgIdAuthUrlRequest) returns (user_storage_pb.SgIdAuthUrlResponse);
     rpc SgIdAuth(user_storage_pb.AuthRequest) returns (user_storage_pb.ServiceResponseWrapper);
     rpc Logout(user_storage_pb.LogoutRequest) returns (user_storage_pb.ServiceResponseWrapper);
+    rpc GetUserInfo(user_storage_pb.GetUserRequest) returns (user_storage_pb.ServiceResponseWrapper);
 }

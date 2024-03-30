@@ -362,7 +362,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             const timestamp = dateToGoogleTimeStamp(currentDate);
 
             // Create a payload
-            const payload = getPayload('user_storage.AuthResponse', {
+            const payload = getPayload('user_storage_pb.GoogleAuthPayload', {
                 user_id: userData.user_id,
                 username: userData.username,
                 first_name: userData.first_name,

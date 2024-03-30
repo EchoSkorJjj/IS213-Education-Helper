@@ -49,4 +49,10 @@ service VerifyUser {
             body: "*"
         };
     }
+
+    rpc GetUserInfo(user_storage_pb.GetUserRequest) returns (user_storage_pb.ServiceResponseWrapper) {
+        option (google.api.http) = {
+            get: "/api/v1/user/{user_id}"
+        };
+    }
 }

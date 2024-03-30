@@ -11,4 +11,5 @@ export type AuthContextType = {
   sgIdAuth: () => void;
   signOut: () => void;
   generateNotes: (file: File, generateType: string) => void;
+  retrieveAndUpdateUserInfo: () => void;
 };

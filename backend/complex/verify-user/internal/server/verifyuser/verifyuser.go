@@ -184,3 +184,48 @@ func (s *Server) Logout(ctx context.Context, req *userstoragePb.LogoutRequest) (
 
 	return userStorageStubResp, nil
 }
+
+func (s *Server) GetUserInfo(ctx context.Context, req *userstoragePb.GetUserRequest) (*userstoragePb.ServiceResponseWrapper, error) {
+	userStorageClient := client.GetUserStorageClient()
+	subscriptionClient := client.GetSubscriptionClient()
+
+	userStorageStubReq := &userstoragePb.GetUserRequest{UserId: req.UserId}
+	userStorageStubResp, err := userStorageClient.Stub.GetUser(ctx, userStorageStubReq)
+	if err != nil {
+		log.Printf("Failed to get user info: %v", err)
+		return nil, err
+	}
+
+	payload := &userstoragePb.GoogleAuthPayload{}
+	if err := jsonpb.Unmarshal(bytes.NewReader(userStorageStubResp.Payload.Value), payload); err != nil {
+		log.Printf("Failed to unmarshal payload into GoogleAuthPayload: %v", err)
+		return nil, status.Errorf(codes.Internal, "error unmarshalling payload: %v", err)
+	}
+
+	subscriptionStubReq := &subscriptionPb.GetSubscriptionRequest{Email: payload.Email}
+	subscriptionStubResp, err := subscriptionClient.Stub.GetSubscription(ctx, subscriptionStubReq)
+	if err != nil || subscriptionStubResp == nil {
+		return userStorageStubResp, nil
+	}
+
+	subscribedUntil := subscriptionStubResp.Details.SubscribedUntil.AsTime()
+	payload.IsPaid = subscribedUntil.After(time.Now())
+	m := jsonpb.Marshaler{
+		EmitDefaults: true,
+		OrigName:     true,
+	}
+
+	jsonStr, err := m.MarshalToString(payload)
+	if err != nil {
+		log.Printf("Failed to marshal payload into JSON: %v", err)
+		return nil, status.Errorf(codes.Internal, "error marshalling payload: %v", err)
+	}
+
+	anyMsg := &any.Any{
+		TypeUrl: userStorageStubResp.Payload.TypeUrl,
+		Value:   []byte(jsonStr),
+	}
+
+	userStorageStubResp.Payload = anyMsg
+	return userStorageStubResp, nil
+}
