@@ -1,0 +1,188 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "make_payment.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "MakePaymentService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/payment/cancel": {
+      "post": {
+        "operationId": "MakePaymentService_CancelSubscription",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/make_payment_pbCancelSubscriptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/make_payment_pbCancelSubscriptionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MakePaymentService"
+        ]
+      }
+    },
+    "/api/v1/payment/checkout": {
+      "post": {
+        "operationId": "MakePaymentService_Checkout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/make_payment_pbCheckoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/make_payment_pbCheckoutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MakePaymentService"
+        ]
+      }
+    },
+    "/api/v1/payment/success": {
+      "post": {
+        "operationId": "MakePaymentService_SuccessfulPayment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/make_payment_pbSuccessfulPaymentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "raw",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "MakePaymentService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "make_payment_pbCancelSubscriptionRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "make_payment_pbCancelSubscriptionResponse": {
+      "type": "object",
+      "properties": {
+        "cancelledAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "make_payment_pbCheckoutRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "make_payment_pbCheckoutResponse": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "make_payment_pbSuccessfulPaymentResponse": {
+      "type": "object",
+      "properties": {
+        "subscribedUntil": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

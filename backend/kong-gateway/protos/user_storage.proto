@@ -6,6 +6,8 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/any.proto";
 
+option go_package = "github.com/EchoSkorJjj";
+
 // Simplified Metadata for responses
 message ResponseMetadata {
     string request_id = 1;
@@ -150,7 +152,7 @@ service UserStorage {
 
     rpc DeleteUser(DeleteUserRequest) returns (ServiceResponseWrapper) {
         option (google.api.http) = {
-            delete: "/api/v1/user/delete"
+            post: "/api/v1/user/delete"
             body: "*"
         };
     }

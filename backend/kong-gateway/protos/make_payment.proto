@@ -3,6 +3,9 @@ syntax = "proto3";
 package make_payment_pb;
 
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/EchoSkorJjj";
 
 message CheckoutRequest {
   string email = 1;

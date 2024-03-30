@@ -4,6 +4,8 @@ package content_pb;
 
 import "google/protobuf/timestamp.proto";
 
+option go_package = "github.com/EchoSkorJjj";
+
 message Flashcard {
     string id = 1;
     string note_id = 2;

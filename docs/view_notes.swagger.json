@@ -1,0 +1,397 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "view_notes.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "ViewNotes"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/notes": {
+      "get": {
+        "operationId": "ViewNotes_ViewAllNotes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/view_notes_pbViewAllNotesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "ViewNotes"
+        ]
+      }
+    },
+    "/api/v1/notes/saved/{userId}": {
+      "get": {
+        "operationId": "ViewNotes_ViewSavedNotes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/view_notes_pbViewSavedNotesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ViewNotes"
+        ]
+      }
+    },
+    "/api/v1/notes/user/{userId}": {
+      "get": {
+        "operationId": "ViewNotes_ViewNotesByUserId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/view_notes_pbViewNotesByUserIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "ViewNotes"
+        ]
+      }
+    },
+    "/api/v1/notes/{noteId}": {
+      "get": {
+        "operationId": "ViewNotes_ViewOneNote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/view_notes_pbNoteAndContent"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "noteId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ViewNotes"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "content_pbFlashcard": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "noteId": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "answer": {
+          "type": "string"
+        }
+      }
+    },
+    "content_pbMultipleChoiceQuestion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "noteId": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/content_pbMultipleChoiceQuestionOption"
+          }
+        },
+        "multipleAnswers": {
+          "type": "boolean"
+        }
+      }
+    },
+    "content_pbMultipleChoiceQuestionOption": {
+      "type": "object",
+      "properties": {
+        "option": {
+          "type": "string"
+        },
+        "isCorrect": {
+          "type": "boolean"
+        }
+      }
+    },
+    "notesNotePreview": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "fileId": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "sizeInBytes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "numPages": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "generateType": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "view_notes_pbAssociatedContents": {
+      "type": "object",
+      "properties": {
+        "flashcards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/content_pbFlashcard"
+          }
+        },
+        "mcqs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/content_pbMultipleChoiceQuestion"
+          }
+        }
+      }
+    },
+    "view_notes_pbB64Note": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "fileId": {
+          "type": "string"
+        },
+        "fileContent": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "generateType": {
+          "type": "string"
+        }
+      }
+    },
+    "view_notes_pbNoteAndContent": {
+      "type": "object",
+      "properties": {
+        "note": {
+          "$ref": "#/definitions/view_notes_pbB64Note"
+        },
+        "associatedContents": {
+          "$ref": "#/definitions/view_notes_pbAssociatedContents"
+        }
+      }
+    },
+    "view_notes_pbViewAllNotesResponse": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/notesNotePreview"
+          }
+        },
+        "nextPage": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "view_notes_pbViewNotesByUserIdResponse": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/notesNotePreview"
+          }
+        },
+        "nextPage": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "view_notes_pbViewSavedNotesResponse": {
+      "type": "object",
+      "properties": {
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/notesNotePreview"
+          }
+        }
+      }
+    }
+  }
+}

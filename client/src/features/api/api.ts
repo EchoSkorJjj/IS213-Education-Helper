@@ -235,14 +235,9 @@ export const deleteTemporaryContent = async (
 ): Promise<DeleteTemporaryContentsResponse | undefined> => {
   try {
     const contentTypeAsNumber: number = contentType === "flashcard" ? 0 : 1;
-    const response = await api.delete("/api/v1/contents/temporary", {
+    const response = await api.delete(`/api/v1/contents/temporary?note_id=${noteId}&content_type=${contentTypeAsNumber}&content_id=${contentId}`, {
       headers: {
         Authorization: `Bearer ${authorization}`,
-      },
-      data: {
-        note_id: noteId,
-        content_type: contentTypeAsNumber,
-        content_id: contentId,
       },
     });
 
@@ -257,12 +252,9 @@ export const deleteAllTemporaryContents = async (
   authorization: string,
 ): Promise<DeleteAllTemporaryContentsResponse | undefined> => {
   try {
-    const response = await api.delete("/api/v1/contents/temporary/all", {
+    const response = await api.delete(`/api/v1/contents/temporary/all?note_id=${noteId}`, {
       headers: {
         Authorization: `Bearer ${authorization}`,
-      },
-      data: {
-        note_id: noteId,
       },
     });
 

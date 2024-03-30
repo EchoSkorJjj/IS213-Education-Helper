@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package view_notes_pb;
 
+option go_package = "github.com/EchoSkorJjj";
+
 import "google/api/annotations.proto";
 
 import "notes.proto";
@@ -68,35 +70,25 @@ service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent) {
         option (google.api.http) = {
             get: "/api/v1/notes/{note_id}"
-            body: "*"
         };
     };
+
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse) {
         option (google.api.http) = {
             get: "/api/v1/notes"
-            additional_bindings {
-                get: "/api/v1/notes"
-                body: "*"
-            }
         };
     };
+
+
     rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse) {
         option (google.api.http) = {
             get: "/api/v1/notes/user/{user_id}"
-            additional_bindings {
-                get: "/api/v1/notes/user/{user_id}"
-                body: "*"
-            }
         };
     };
 
     rpc ViewSavedNotes (ViewSavedNotesRequest) returns (ViewSavedNotesResponse) {
         option (google.api.http) = {
             get: "/api/v1/notes/saved/{user_id}"
-            additional_bindings {
-                get: "/api/v1/notes/saved/{user_id}"
-                body: "*"
-            }
         };
     };
 }

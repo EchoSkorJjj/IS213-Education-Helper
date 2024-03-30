@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package notes;
 
-
+option go_package = "github.com/EchoSkorJjj";
 option java_package = "com.ESD.Notes.proto";
 option java_outer_classname = "NotesServiceProto";
 

@@ -4,6 +4,8 @@ package save_notes_service;
 
 import "google/api/annotations.proto";
 
+option go_package = "github.com/EchoSkorJjj";
+
 message SaveNotesRequest {
   string user_id = 1; 
   repeated string file_ids = 2; 
@@ -28,13 +30,13 @@ service SaveNotes {
     option (google.api.http) = {
       post: "/api/v1/save-notes/save"
       body: "*"
+    };
   };
-  }
 
   rpc DeleteSavedNote (DeleteSavedNoteRequest) returns (DeleteSavedNoteResponse) {
     option (google.api.http) = {
       post: "/api/v1/save-notes/delete"
       body: "*"
-    }
-  }
+    };
+  };
 }
