@@ -18,10 +18,6 @@ networks:
 volumes:
   kong-data: {}
   postgres-db-volume: {}
-  # user-storage-db-volume: {}
-  # notes-db-volume: {}
-  # subscriptions-db-volume: {}
-  contents-db-volume: {}
 
 services:
   # Required for Stripe webhook
@@ -76,6 +72,7 @@ services:
       - ../sql_table/create_user_storage_table.sql:/docker-entrypoint-initdb.d/user_storage.sql
       - ../sql_table/create_subscriptions_table.sql:/docker-entrypoint-initdb.d/subscriptions.sql
       - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
+      - ../sql_table/create_contents_table.sql:/docker-entrypoint-initdb.d/create_contents_table.sql
     environment:
       POSTGRES_DB: esd-db
       POSTGRES_USER: esd-user
@@ -160,18 +157,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
-
-  contents-db:
-    image: bitnami/cassandra:4.1.4
-    volumes:
-      - contents-db-volume:/bitnami
-      - ../sql_table/create_contents_table.cql:/docker-entrypoint-initdb.d/create_contents_table.cql
-    healthcheck:
-      # TODO: Not secure. Username and password are exposed in the command.
-      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   contents-redis:
     image: redis:7.2-rc2-alpine3.18
@@ -261,7 +246,7 @@ services:
     env_file:
       - ../../backend/simple/contents/.env
     depends_on:
-      contents-db:
+      postgres-db:
         condition: service_healthy
       contents-redis:
         condition: service_healthy
@@ -271,17 +256,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
-
-  # frontend-client:
-  #   build: ../../client
-  #   image: client:1.0
-  #   volumes:
-  #     - ../../client/:/app/
-  #   depends_on:
-  #     kong-gateway:
-  #       condition: service_healthy
-  #   ports:
-  #     - "3001:3001"
 
   frontend-client:
     build: ../../client
@@ -328,3 +302,10 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+
+  autohealer:
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

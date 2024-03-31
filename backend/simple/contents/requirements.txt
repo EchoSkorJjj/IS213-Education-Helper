@@ -1,5 +1,6 @@
-cassandra-driver==3.29.0
 grpcio==1.62.0
 protobuf==4.25.3
 python-dotenv==1.0.1
 redis==5.0.2
+SQLAlchemy==2.0.29
+psycopg2-binary==2.9.9

@@ -1,5 +1,5 @@
 import { LockIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, HStack, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Stack, Text, useToast } from "@chakra-ui/react";
 import { Attachment } from "@opengovsg/design-system-react";
 
 interface NotesUploadProps {
@@ -22,10 +22,18 @@ const NotesUpload = ({
   setGenerateType,
 }: NotesUploadProps) => {
   const DropZoneAccept = [".pdf"];
-  const maxSize = 15 * 1024 * 1024; // 16MB in bytes
+  const maxSize = 5 * 1024 * 1024; // 16MB in bytes
+  const toast = useToast();
 
   const handleError = (error: string) => {
-    console.error("Error uploading file:", error);
+    toast({
+      title: "Error uploading file",
+      description: error,
+      status: "error",
+      position: "top",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   const handleFileValidation = (file: File) => {

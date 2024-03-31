@@ -1,110 +1,132 @@
-from typing import Type, List, Set
-import logging
-import os
 import uuid
+import logging
+import json
 
-import pb.contents_pb2 as contents_pb2
-from cassandra.cluster import Cluster
-from cassandra.auth import PlainTextAuthProvider
-from cassandra.query import BatchStatement, dict_factory
+import utils.flashcard_utils as flashcard_utils
+import utils.mcq_utils as mcq_utils
+import utils.grpc_utils as grpc_utils
 
-import src.utils.grpc_utils as grpc_utils
-import src.utils.db_utils as db_utils
-import src.utils.flashcard_utils as flashcard_utils
-import src.utils.mcq_utils as mcq_utils
+from sqlalchemy import create_engine, String, Column, Integer, ARRAY, insert, TypeDecorator, JSON
+from sqlalchemy.types import UserDefinedType
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.dialects.postgresql import UUID
+
+base = declarative_base()
+
+class MCQ(base):
+    __tablename__ = 'mcq'
+    id = Column(UUID(as_uuid=True), primary_key=True)
+    question = Column(String)
+    options = Column(JSON)
+    multiple_answers = Column(Integer)
+
+class Flashcard(base):
+    __tablename__ = 'flashcard'
+    id = Column(UUID(as_uuid=True), primary_key=True)
+    question = Column(String)
+    answer = Column(String)
+
+class ContentsToNote(base):
+    __tablename__ = 'contents_to_note'
+    note_id = Column(UUID(as_uuid=True), primary_key=True)
+    content_id = Column(UUID(as_uuid=True), primary_key=True)
+    content_type = Column(String)
 
 class Database:
-    _host: str = None
-    _port: int = None
-    _keyspace: str = None
-    _session: 'Session' = None
+    _engine = None
+    _session = None
 
-    def __new__(cls: Type['Database']) -> 'Database':
+    def __new__(cls):
         if not hasattr(cls, 'instance'):
             logging.debug("No instance of 'Database' found, creating a new one")
             cls.instance = super(Database, cls).__new__(cls)
-
         return cls.instance
     
-    def set_host(self, host: str) -> None:
+    def set_user(self, user):
+        self._user = user
+    
+    def set_password(self, password):
+        self._password = password
+
+    def set_database(self, database):
+        self._database = database
+    
+    def set_host(self, host):
         self._host = host
     
-    def set_port(self, port: int) -> None:
+    def set_port(self, port):
         self._port = port
     
-    def set_keyspace(self, keyspace: str) -> None:
-        self._keyspace = keyspace
-
-    def connect(self) -> None:
-        if not self._host:
-            raise ValueError('Host not set')
-        if not self._port:
-            raise ValueError('Port not set')
+    def connect(self):
+        if not self._user or not self._password or not self._database or not self._host or not self._port:
+            raise ValueError("User, password, database, host, and port must be set before connecting")
         
-        auth_provider = PlainTextAuthProvider(username=os.getenv('DB_USERNAME'), password=os.getenv('DB_PASSWORD'))
-        cluster = Cluster([self._host], port=self._port, auth_provider=auth_provider)
-        session = cluster.connect(self._keyspace)
-        logging.debug(f"Database connected at {self._host}:{self._port}")
-
-        cluster.register_user_type(self._keyspace, 'mcq_option', dict)
-        session.row_factory = dict_factory
-        self._session = session
-
-    def batch_create_contents(self, contents: List[object], type: str) -> None:
+        conn_string = f"postgresql://{self._user}:{self._password}@{self._host}:{self._port}/{self._database}"
+        self._engine = create_engine(conn_string)
+        Session = sessionmaker(bind=self._engine)
+        self._session = Session()
+    
+    def ready(self):
         if not self._session:
-            raise ValueError('Not connected')
-        
+            raise ValueError("Session not initialized")
+    
+    def batch_create_contents(self, contents, content_type):
+        self.ready()
+
         if len(contents) == 0:
             return
+        
+        flashcard_content_type_name = flashcard_utils.get_flashcard_content_type_name()
+        mcq_content_type_name = mcq_utils.get_mcq_content_type_name()
+        if content_type == flashcard_content_type_name:
+            for content in contents:
+                content_id = uuid.UUID(content['id'])
+                note_id = uuid.UUID(content['note_id'])
+                self._session.execute(
+                    insert(Flashcard).values(id=content_id, answer=content['answer'], question=content['question'])
+                )
+                self._session.execute(
+                    insert(ContentsToNote).values(note_id=note_id, content_id=content_id, content_type=content_type)
+                )
+
+        elif content_type == mcq_content_type_name:
+            for content in contents:
+                content_id = uuid.UUID(content['id'])
+                note_id = uuid.UUID(content['note_id'])
+                options = [{'option': option['option'], 'is_correct': option['is_correct']} for option in content['options']]
+                options_json = json.dumps(options)
+                self._session.execute(
+                    insert(MCQ).values(id=content_id, question=content['question'], options=options_json, multiple_answers=content['multiple_answers'])
+                )
+                self._session.execute(
+                    insert(ContentsToNote).values(note_id=note_id, content_id=content_id, content_type=content_type)
+                )
+
+        self._session.commit()
+
+    def get_contents_by_note_id(self, note_id, content_types):
+        self.ready()
+
+        note_id = uuid.UUID(note_id)
+        rows = self._session.query(ContentsToNote).filter(ContentsToNote.note_id == note_id).all()
 
         flashcard_content_type_name = flashcard_utils.get_flashcard_content_type_name()
         mcq_content_type_name = mcq_utils.get_mcq_content_type_name()
-
-        if type == flashcard_content_type_name:
-            for content in contents:
-                content_id = uuid.UUID(content['id'])
-                note_id = uuid.UUID(content['note_id'])
-                statement = db_utils.prepare_insert_flashcard_statement(self._session, self._keyspace)
-                association_statement = db_utils.prepare_insert_contents_to_note_statement(self._session, self._keyspace)
-                self._session.execute(statement, [content_id, content['answer'], content['question']])
-                self._session.execute(association_statement, [note_id, content_id, flashcard_content_type_name])
-
-        elif type == mcq_content_type_name:
-            for content in contents:
-                content_id = uuid.UUID(content['id'])
-                note_id = uuid.UUID(content['note_id'])
-                options = [(option['option'], option['is_correct']) for option in content['options']]
-                statement = db_utils.prepare_insert_mcq_statement(self._session, self._keyspace)
-                association_statement = db_utils.prepare_insert_contents_to_note_statement(self._session, self._keyspace)
-                self._session.execute(statement, [content_id, content['question'], options, content['multiple_answers']])
-                self._session.execute(association_statement, [note_id, content_id, mcq_content_type_name])
-    
-    def get_content_by_content_id(self, note_id: uuid.UUID, table: str, content_id: uuid.UUID) -> contents_pb2.Flashcard | contents_pb2.MultipleChoiceQuestion | None:
-        if not self._session:
-            raise ValueError('Not connected')
-
-        statement = db_utils.prepare_select_content_by_id_statement(self._session, self._keyspace, table)
-        rows = self._session.execute(statement, [content_id])
-
-        content = rows.one()
-        if not content:
-            return None
-        
-        return grpc_utils.db_content_to_grpc_object(note_id, table, content)
-    
-    def get_contents_by_note_id(self, note_id: str, content_types: Set[contents_pb2.ContentType]):
-        if not self._session:
-            raise ValueError('Not connected')
-        
-        statement = db_utils.prepare_select_all_contents_by_note_id_statement(self._session, self._keyspace)
-        rows = self._session.execute(statement, [uuid.UUID(note_id)])
-
-        associated_contents = {key: [] for key in content_types}
+        associated_contents = {content_type: [] for content_type in content_types}
         for row in rows:
-            if row['content_type'] not in content_types:
-                continue
+            if row.content_type in content_types:
+                if row.content_type == flashcard_content_type_name:
+                    contents = self._session.query(Flashcard).filter(Flashcard.id == row.content_id).all()
 
-            content = self.get_content_by_content_id(note_id, row['content_type'], row['content_id'])
-            associated_contents[row['content_type']].append(content)
-        
+                elif row.content_type == mcq_content_type_name:
+                    contents = self._session.query(MCQ).filter(MCQ.id == row.content_id).all()
+                    for content in contents:
+                        if isinstance(content.options, str):
+                            content.options = json.loads(content.options)
+
+                for content in contents:
+                    converted_content = grpc_utils.db_content_to_grpc_object(note_id, row.content_type, content)
+                    associated_contents[row.content_type].append(converted_content)
+
         return associated_contents

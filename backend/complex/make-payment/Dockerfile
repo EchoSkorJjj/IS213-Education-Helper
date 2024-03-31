@@ -12,9 +12,8 @@ COPY cmd/ cmd/
 COPY internal/ internal/
 RUN go build -o /app/build/server cmd/main.go
 
-FROM alpine:3.19.1
+FROM gcr.io/distroless/static-debian12
 WORKDIR /app
-RUN apk --no-cache add ca-certificates
 COPY --from=proto-base /bin/grpc_health_probe /bin/grpc_health_probe
 COPY --from=builder /app/build/server .
 CMD ["./server"]

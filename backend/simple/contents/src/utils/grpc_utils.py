@@ -18,10 +18,11 @@ def db_content_to_grpc_object(note_id, content_type, content) -> contents_pb2.Fl
     if not grpc_value_in_enum(contents_pb2.ContentType, content_type):
         raise ValueError(f"Invalid content type: {content.content_type}")
     
+    obj = {key: value for key, value in content.__dict__.items()}
     if content_type == flashcard_utils.get_flashcard_content_type_name():
-        return flashcard_utils.object_to_grpc_flashcard({'note_id': note_id, **content})
+        return flashcard_utils.object_to_grpc_flashcard({'note_id': note_id, **obj})
     
-    return mcq_utils.object_to_grpc_mcq({'note_id': note_id, **content})
+    return mcq_utils.object_to_grpc_mcq({'note_id': note_id, **obj})
 
 def create_response_metadata(context):
     metadata = dict(context.invocation_metadata())
