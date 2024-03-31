@@ -7,3 +7,5 @@ pyspellchecker
 pymupdf
 pypdfium2
 protobuf
+pytest
+pytest-mock
