@@ -1,10 +1,10 @@
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Container,
   Flex,
   HStack,
-  Button,
   IconButton,
   Stack,
   useDisclosure,
@@ -64,10 +64,7 @@ const Navbar = ({ ...rest }) => {
           {isAuthenticated ? (
             <AuthMenu user={user} handleSignOutClick={signOut} />
           ) : (
-            <Button
-              as="a"
-              href="/login"
-            >
+            <Button as="a" href="/login">
               Sign In
             </Button>
           )}

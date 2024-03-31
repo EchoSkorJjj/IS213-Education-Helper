@@ -153,7 +153,7 @@ const MarketList = ({
                     direction="column"
                     textAlign="start"
                   >
-                    <Text fontSize={{ base: "sm"}}>
+                    <Text fontSize={{ base: "sm" }}>
                       {
                         topics.find((topic) => topic.value === note.topic)
                           ?.label
