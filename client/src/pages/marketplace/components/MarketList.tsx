@@ -27,7 +27,7 @@ interface MarketProps {
   totalNotesCount: number;
 }
 // Debounce function
-function useDebounce(value, delay) {
+function useDebounce(value: any, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const MarketList = ({
   totalNotesCount,
 }: MarketProps) => {
   const pageSize = 8;
-  const [imageURLs, setImageURLs] = useState({});
+  const [imageURLs, setImageURLs] = useState<{ [key: string]: string }>({});  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const MarketList = ({
             <Searchbar
               placeholder="Search notes"
               style={{ bg: "black" }}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 // Update to search through objects if needed
                 setNotesTitle(e.target.value);
               }}

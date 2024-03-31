@@ -28,6 +28,8 @@ import { useAuth } from "~features/auth";
 import Flashcard from "./components/Flashcard";
 import MCQ from "./components/MCQ";
 
+import { NotePreview } from "~types/data";
+
 import { deleteSavedNote, getContent, getSavedNotes, saveNotes } from "~api";
 
 function ViewNotes() {
@@ -54,7 +56,7 @@ function ViewNotes() {
       return false;
     }
 
-    const savedNotesList = response.map((note) => note.fileId);
+    const savedNotesList = response.map((note: NotePreview) => note.fileId);
     return savedNotesList.includes(noteId);
   };
 
@@ -262,7 +264,7 @@ function ViewNotes() {
           {fileName}
         </Heading>
 
-        <iframe src={blobUrl} width="100%" height="900px"></iframe>
+        <iframe title="pdf" src={blobUrl} width="100%" height="900px"></iframe>
       </Container>
     </Box>
   );

@@ -140,11 +140,21 @@ func (s *Server) SgIdAuthUrl(ctx context.Context, req *userstoragePb.SgIdAuthUrl
 	}
 
 	userStorageStubReq := &userstoragePb.SgIdAuthUrlRequest{}
-	userStorageStubResp, err := userStorageClient.Stub.SgIdAuthUrl(outgoingCtx, userStorageStubReq)
+	headerMD := metadata.MD{} 
+    userStorageStubResp, err := userStorageClient.Stub.SgIdAuthUrl(
+        outgoingCtx, 
+        userStorageStubReq,
+        grpc.Header(&headerMD), 
+    )
 	if err != nil {
 		log.Printf("Failed to get SGID auth URL: %v", err)
 		return nil, err
 	}
+
+	if err = grpc.SendHeader(ctx, headerMD); err != nil {
+        log.Printf("Failed to send headers: %v", err)
+        return nil, err
+    }
 
 	return userStorageStubResp, nil
 }
@@ -158,11 +168,21 @@ func (s *Server) SgIdAuth(ctx context.Context, req *userstoragePb.AuthRequest) (
 	}
 
 	userStorageStubReq := &userstoragePb.AuthRequest{Code: req.Code}
-	userStorageStubResp, err := userStorageClient.Stub.SgIdAuth(outgoingCtx, userStorageStubReq)
+	headerMD := metadata.MD{} 
+    userStorageStubResp, err := userStorageClient.Stub.SgIdAuth(
+        outgoingCtx, 
+        userStorageStubReq,
+        grpc.Header(&headerMD), 
+    )
 	if err != nil {
 		log.Printf("Failed to authenticate user: %v", err)
 		return nil, err
 	}
+
+	if err = grpc.SendHeader(ctx, headerMD); err != nil {
+        log.Printf("Failed to send headers: %v", err)
+        return nil, err
+    }
 
 	return userStorageStubResp, nil
 }

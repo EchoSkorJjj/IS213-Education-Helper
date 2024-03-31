@@ -126,6 +126,7 @@ plugins:
     config:
       origins:
         - "http://localhost:3001"
+        - "https://localhost:3001"
       methods:
         - HEAD
         - GET

@@ -18,12 +18,12 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import jihoonImage from "./jihoon.jpg";
-import louisImage from "./louis.jpg";
-import neilImage from "./neil.jpg";
-import sdgImage from "./sdg.jpg";
-import thadImage from "./thad.jpeg";
-import ztImage from "./zt.jpg";
+import jihoonImage from "~assets/img/team/jihoon.jpg";
+import louisImage from "~assets/img/team/louis.jpg";
+import neilImage from "~assets/img/team/neil.jpg";
+import sdgImage from "~assets/img/team/sdg.jpg";
+import thadImage from "~assets/img/team/thad.jpeg";
+import ztImage from "~assets/img/team/zt.jpg";
 
 const data = {
   heading: "Inspired by UN Sustainable Development Goals",

@@ -9,4 +9,5 @@ RUN luarocks install lua-resty-cookie
 FROM kong:3.1.1-alpine
 COPY --from=builder /usr/local/lib/luarocks/rocks-5.1/ /usr/local/lib/luarocks/rocks-5.1/
 COPY --from=builder /usr/local/share/lua/5.1 /usr/local/share/lua/5.1
+COPY certs /etc/kong/ssl
 USER kong

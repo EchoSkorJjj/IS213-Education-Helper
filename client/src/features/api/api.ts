@@ -1,13 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 import {
-  CreatedNotesResponse,
   CreateTemporaryContentResponse,
   DeleteAllTemporaryContentsResponse,
   DeleteTemporaryContentsResponse,
   GetContentResponse,
   GetTemporaryContentsResponse,
-  NotePreview,
   SaveNotesResponse,
   UpdateTemporaryContentsResponse,
 } from "~shared/types/data";

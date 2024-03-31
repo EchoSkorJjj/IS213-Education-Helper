@@ -136,7 +136,6 @@ const useProvideAuth = (): AuthContextType => {
       const response = await api.post("/api/v1/auth/sgId/generateAuthUrl");
       const AUTH_URL = response.data.auth_url;
       const SGID_UNIQUE_ID = response.headers["x-sgid-unique-id"];
-
       authFlow(SGID_UNIQUE_ID);
 
       window.location.href = AUTH_URL;
@@ -180,7 +179,6 @@ const useProvideAuth = (): AuthContextType => {
 
   const signOut = async (): Promise<void> => {
     try {
-      console.log(authorization);
       const response = await api.post(
         "/api/v1/auth/logout",
         {},

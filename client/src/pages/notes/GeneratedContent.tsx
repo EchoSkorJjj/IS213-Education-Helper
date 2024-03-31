@@ -60,9 +60,7 @@ const GeneratedContent: React.FC = () => {
   const pollCountRef = useRef<number>(0);
   const previousCountRef = useRef<number>(0);
   const intervalIdRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [filename, setFilename] = useState(
-    localStorage.getItem("filename") || "No file uploaded",
-  );
+  const filename = localStorage.getItem("filename") || "No file uploaded";
   const [isLoading, setIsLoading] = useState(true);
   const pulseAnimation = keyframes`
   0% { opacity: 0.5; }

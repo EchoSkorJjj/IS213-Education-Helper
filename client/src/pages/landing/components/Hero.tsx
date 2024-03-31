@@ -78,6 +78,7 @@ const Hero = () => {
                       "Medicine",
                     ]}
                     loop={true}
+                    delay={1000}
                     speed={80}
                   />
                 </Text>

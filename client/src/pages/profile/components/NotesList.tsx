@@ -39,7 +39,7 @@ const NotesList = ({
   description,
 }: NotesListProps) => {
   const pageSize = 4;
-  const [imageURLs, setImageURLs] = useState({});
+  const [imageURLs, setImageURLs] = useState<{ [key: string]: string }>({});  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -88,7 +88,8 @@ const NotesList = ({
               style={{
                 bg: "black",
               }}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                // Update to search through objects if needed
                 setNotesTitle(e.target.value);
               }}
               isExpanded={true}

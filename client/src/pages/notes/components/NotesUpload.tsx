@@ -45,14 +45,7 @@ const NotesUpload = ({
     } else if (fileOrFiles) {
       // It's a single File object
       handleChange(fileOrFiles);
-    } else {
-      // No file is provided, handle accordingly
-      handleDelete();
     }
-  };
-
-  const onDelete = () => {
-    handleDelete(); // Call the provided handleDelete method to remove the selected file
   };
 
   const generateFlashcard = generateType === "flashcard";
@@ -67,7 +60,7 @@ const NotesUpload = ({
       px="10"
     >
       <Flex maxW={"6xl"} width="100%" height="90%" direction="column">
-        <Box width="100%">
+        <Box width="100%" height="300px" border="none">
           <Attachment
             maxSize={maxSize}
             imagePreview="large"
@@ -78,8 +71,7 @@ const NotesUpload = ({
             onChange={handleAttachmentChange}
             onError={handleError}
             onFileValidation={handleFileValidation}
-            height="300px"
-            border="none"
+            
             required
           />
         </Box>
