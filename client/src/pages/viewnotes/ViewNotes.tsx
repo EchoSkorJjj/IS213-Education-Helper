@@ -34,9 +34,8 @@ import { useAuth } from "~features/auth";
 import Flashcard from "./components/Flashcard";
 import MCQ from "./components/MCQ";
 
-import { NotePreview } from "~types/data";
-
 import { deleteSavedNote, getContent, getSavedNotes, saveNotes } from "~api";
+import { NotePreview } from "~types/data";
 
 function ViewNotes() {
   const navigate = useNavigate();
@@ -298,7 +297,12 @@ function ViewNotes() {
         {isLoading ? (
           <Skeleton height="900px" />
         ) : (
-          <iframe title="pdf" src={blobUrl} width="100%" height="900px"></iframe>
+          <iframe
+            title="pdf"
+            src={blobUrl}
+            width="100%"
+            height="900px"
+          ></iframe>
         )}{" "}
       </Container>
     </Box>

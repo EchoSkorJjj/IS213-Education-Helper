@@ -39,7 +39,7 @@ const NotesList = ({
   description,
 }: NotesListProps) => {
   const pageSize = 4;
-  const [imageURLs, setImageURLs] = useState<{ [key: string]: string }>({});  
+  const [imageURLs, setImageURLs] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -1,14 +1,14 @@
 import {
   Box,
-  Heading,
   Container,
   Flex,
+  Heading,
   HStack,
   Image,
   Stack,
   Text,
-  VStack,
   useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
 
 import Screenshot from "~assets/img/Macbook_Mockup.png";
@@ -38,7 +38,7 @@ const overviewList = [
 
 const Overview = () => {
   return (
-    <Container  maxW={"5xl"} py={10}>
+    <Container maxW={"5xl"} py={10}>
       <Box
         maxW="64rem"
         marginX="auto"
@@ -54,7 +54,7 @@ const Overview = () => {
           pb={4}
           borderBottom="1px solid"
           borderColor="gray.300"
-          >
+        >
           How it works
         </Heading>
         <Stack
@@ -96,10 +96,10 @@ const Overview = () => {
           </VStack>
           <Box
             borderWidth="1px"
-            _hover={{ shadow: 'lg' }}
+            _hover={{ shadow: "lg" }}
             rounded="md"
             overflow="hidden"
-            bg={useColorModeValue('white', 'gray.800')}
+            bg={useColorModeValue("white", "gray.800")}
             mt={6}
           >
             <Image

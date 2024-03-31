@@ -50,7 +50,7 @@ const MarketList = ({
   totalNotesCount,
 }: MarketProps) => {
   const pageSize = 8;
-  const [imageURLs, setImageURLs] = useState<{ [key: string]: string }>({});  
+  const [imageURLs, setImageURLs] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
 
   useEffect(() => {

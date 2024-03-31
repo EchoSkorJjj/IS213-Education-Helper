@@ -71,7 +71,6 @@ const NotesUpload = ({
             onChange={handleAttachmentChange}
             onError={handleError}
             onFileValidation={handleFileValidation}
-            
             required
           />
         </Box>
