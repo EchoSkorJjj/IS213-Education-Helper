@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Box, useToast } from "@chakra-ui/react";
 
+import {
+  getCreatedNotes,
+  getSavedNotesWithFilter,
+  getTopics,
+} from "~features/api";
+import { useAuth } from "~features/auth";
+
 import NotesList from "./components/NotesList";
 import ProfileHeader from "./components/ProfileHeader";
-
-import { getCreatedNotes, getTopics, getSavedNotesWithFilter } from "~features/api";
-import { useAuth } from "~features/auth";
 
 import { NotePreview, Topic } from "~types/data";
 
@@ -33,10 +37,17 @@ const Profile = () => {
   const toast = useToast();
 
   const handleGetUserCreatedNotes = async () => {
-    if (!authorization || !userId ){
-      return ;
+    if (!authorization || !userId) {
+      return;
     }
-    const data = await getCreatedNotes(authorization, userId, 4, 0, currentCreatedNotePage, createdNotesTitle);
+    const data = await getCreatedNotes(
+      authorization,
+      userId,
+      4,
+      0,
+      currentCreatedNotePage,
+      createdNotesTitle,
+    );
     if (!data) {
       setCreatedNotes([]);
       setTotalCreatedNotesCount(0);
@@ -44,13 +55,20 @@ const Profile = () => {
     }
     setCreatedNotes(data.notes);
     setTotalCreatedNotesCount(data.count);
-  }
+  };
 
   const handleGetUserSavedNotes = async () => {
-    if (!authorization || !userId ){
-      return ;
+    if (!authorization || !userId) {
+      return;
     }
-    const data = await getSavedNotesWithFilter(authorization, userId, 4, 0, currentSavedNotePage, savedNotesTitle);
+    const data = await getSavedNotesWithFilter(
+      authorization,
+      userId,
+      4,
+      0,
+      currentSavedNotePage,
+      savedNotesTitle,
+    );
     if (!data || data.length === 0) {
       setSavedNotes([]);
       setTotalSavedNotesCount(0);
@@ -58,7 +76,7 @@ const Profile = () => {
     }
     setSavedNotes(data.notes);
     setTotalSavedNotesCount(data.count);
-  }
+  };
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -66,7 +84,7 @@ const Profile = () => {
       if (!fetchedTopics || fetchedTopics.length === 0) {
         toast({
           title: "Failed to fetch topics",
-          status: "error", 
+          status: "error",
           position: "top",
           duration: 3000,
         });

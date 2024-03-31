@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Box, useToast } from "@chakra-ui/react";
 
+import { useAuth } from "~features/auth";
+
 import MarketHeader from "./components/MarketHeader";
 import MarketList from "./components/MarketList";
 import TopicsList from "./components/TopicsList";
 
-import { getTopics, getNotes } from "~api";
-
+import { getNotes, getTopics } from "~api";
 import { NotePreview, Topic } from "~types/data";
-
-import { useAuth } from "~features/auth";
 
 const MarketplacePage = () => {
   const toast = useToast();
@@ -32,7 +31,7 @@ const MarketplacePage = () => {
       setTopic(topic);
     }
     setCurrentMarketPage(1);
-  }
+  };
 
   const handleGetNotes = async (
     topic: string,
@@ -40,7 +39,12 @@ const MarketplacePage = () => {
     currentMarketPage: number,
   ): Promise<void> => {
     if (!authorization) return;
-    const data = await getNotes(topic, notesTitle, currentMarketPage, authorization);
+    const data = await getNotes(
+      topic,
+      notesTitle,
+      currentMarketPage,
+      authorization,
+    );
     if (!data) {
       setNotes([]);
       setTotalNotesCount(0);
@@ -56,7 +60,7 @@ const MarketplacePage = () => {
       if (!fetchedTopics || fetchedTopics.length === 0) {
         toast({
           title: "Failed to fetch topics",
-          status: "error", 
+          status: "error",
           position: "top",
           duration: 3000,
         });

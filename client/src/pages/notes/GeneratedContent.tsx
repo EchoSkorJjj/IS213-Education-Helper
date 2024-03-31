@@ -29,20 +29,20 @@ import {
 } from "~shared/types/data";
 import { isFlashcardType } from "~shared/util";
 
-import { Topic } from "~types/data";
-
 import {
   commitTemporaryContents,
   createTemporaryContent,
   deleteTemporaryContent,
   getTemporaryContents,
+  getTopics,
   updateTemporaryContent,
-  getTopics
 } from "~features/api";
 import { useAuth } from "~features/auth";
 
 import PreFlashcard from "./components/PreFlashcard";
 import PreMCQ from "./components/PreMCQ";
+
+import { Topic } from "~types/data";
 
 const GeneratedContent: React.FC = () => {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const GeneratedContent: React.FC = () => {
       if (!fetchedTopics || fetchedTopics.length === 0) {
         toast({
           title: "Failed to fetch topics",
-          status: "error", 
+          status: "error",
           position: "top",
           duration: 3000,
         });
@@ -349,7 +349,6 @@ const GeneratedContent: React.FC = () => {
   };
 
   const handleTitleChange = (event: any) => {
-
     setTitle(event.target.innerText);
   };
 

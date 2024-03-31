@@ -1,9 +1,9 @@
 import { Box, Button, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import { Searchbar } from "@opengovsg/design-system-react";
 
-import { Pagination } from "~components/pagination";
-
 import { Topic } from "~shared/types/data";
+
+import { Pagination } from "~components/pagination";
 
 interface TopicsProps {
   topics: Topic[];

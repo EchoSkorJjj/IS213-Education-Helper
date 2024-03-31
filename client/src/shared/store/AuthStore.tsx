@@ -67,7 +67,7 @@ const useAuthStore = create<AuthStateType>()(
         set({
           user: userData,
         });
-      }
+      },
     }),
     {
       name: "auth-storage",

@@ -28,8 +28,15 @@ export const useAuth = (): AuthContextType => {
 };
 
 const useProvideAuth = (): AuthContextType => {
-  const { isAuthenticated, user, authorization, login, logout, authFlow, updateUserInfo } =
-    useAuthStore();
+  const {
+    isAuthenticated,
+    user,
+    authorization,
+    login,
+    logout,
+    authFlow,
+    updateUserInfo,
+  } = useAuthStore();
   // const toast = useToast();
   const navigate = useNavigate();
 
@@ -229,8 +236,7 @@ const useProvideAuth = (): AuthContextType => {
     const data = await handleResponse(response);
     const userData = JSON.parse(data.payload.value);
     updateUserInfo(userData);
-  }
-
+  };
 
   return {
     isAuthenticated,

@@ -15,7 +15,6 @@ import { Searchbar, Tag } from "@opengovsg/design-system-react";
 import { Pagination } from "~components/pagination";
 
 import { NotePreview, Topic } from "~types/data";
-
 import { fetchImageURL } from "~util";
 
 interface MarketProps {
@@ -78,7 +77,7 @@ const MarketList = ({
   }, [debouncedSearchTerm, setNotesTitle]);
 
   const handleCardClick = (fileId: string) => () => {
-    navigate(`/viewnotes/${fileId}`)
+    navigate(`/viewnotes/${fileId}`);
   };
 
   return (
@@ -110,77 +109,88 @@ const MarketList = ({
               style={{ bg: "black" }}
               onChange={(e) => {
                 // Update to search through objects if needed
-                setNotesTitle(e.target.value)
+                setNotesTitle(e.target.value);
               }}
               isExpanded={true}
             />
           </Box>
         </Flex>
         {notes.length !== 0 ? (
-        <SimpleGrid
-          columns={{ base: 1, md: 3, lg: 4 }}
-          spacing={5}
-          paddingTop="5"
-          paddingBottom="5"
-        >
-          {notes.map((note) => (
-            <Card
-              maxW="sm"
-              maxH="sm"
-              key={note.fileId}
-              as="button"
-              onClick={handleCardClick(note.fileId)}
-              border={0}
-              rounded="0"
-            >
-              <Image
-                objectFit="cover"
-                src={imageURLs[note.fileId] || 'https://picsum.photos/200/300'}
-                alt={note.title}
-                borderRadius="lg"
-                height="50%"
-                width="100%"
+          <SimpleGrid
+            columns={{ base: 1, md: 3, lg: 4 }}
+            spacing={5}
+            paddingTop="5"
+            paddingBottom="5"
+          >
+            {notes.map((note) => (
+              <Card
+                maxW="sm"
+                maxH="sm"
+                key={note.fileId}
+                as="button"
+                onClick={handleCardClick(note.fileId)}
                 border={0}
                 rounded="0"
-              />
+              >
+                <Image
+                  objectFit="cover"
+                  src={
+                    imageURLs[note.fileId] || "https://picsum.photos/200/300"
+                  }
+                  alt={note.title}
+                  borderRadius="lg"
+                  height="50%"
+                  width="100%"
+                  border={0}
+                  rounded="0"
+                />
 
-              <CardBody pl="4" p="0" maxW={"sm"} maxH={"sm"}>
-                <Stack
-                  pt="1em"
-                  pr="3em"
-                  spacing="2"
-                  direction="column"
-                  textAlign="start"
-                >
-                  <Text>
-                    {
-                      topics.find(topic => topic.value === note.topic)?.label
-                    }
-                  </Text>
-                  <Text
-                    isTruncated
-                    fontSize={{ base: "2xl", md: "5xl", lg: "2xl" }}
-                    fontWeight="bold"
+                <CardBody pl="4" p="0" maxW={"sm"} maxH={"sm"}>
+                  <Stack
+                    pt="1em"
+                    pr="3em"
+                    spacing="2"
+                    direction="column"
+                    textAlign="start"
                   >
-                    {note.title}
-                  </Text>
-                  <Text>
-                    {note.fileName.length > 20 ? `${note.fileName.slice(0, 22)} ...` : note.fileName}
-                  </Text>
-                  <Tag
-                    size="md"
-                    variant="subtle"
-                    colorScheme={note.generateType.toUpperCase() === "MCQ" ? "teal" : "purple"}
-                  >
-                    {note.generateType.toUpperCase()}
-                  </Tag>
-                </Stack>
-              </CardBody>
-            </Card>
-          ))}
-        </SimpleGrid>
+                    <Text>
+                      {
+                        topics.find((topic) => topic.value === note.topic)
+                          ?.label
+                      }
+                    </Text>
+                    <Text
+                      isTruncated
+                      fontSize={{ base: "2xl", md: "5xl", lg: "2xl" }}
+                      fontWeight="bold"
+                    >
+                      {note.title}
+                    </Text>
+                    <Text>
+                      {note.fileName.length > 20
+                        ? `${note.fileName.slice(0, 22)} ...`
+                        : note.fileName}
+                    </Text>
+                    <Tag
+                      size="md"
+                      variant="subtle"
+                      colorScheme={
+                        note.generateType.toUpperCase() === "MCQ"
+                          ? "teal"
+                          : "purple"
+                      }
+                    >
+                      {note.generateType.toUpperCase()}
+                    </Tag>
+                  </Stack>
+                </CardBody>
+              </Card>
+            ))}
+          </SimpleGrid>
         ) : (
-          <Text textAlign="center" paddingTop="5">No notes found</Text>
+          <Text textAlign="center" paddingTop="5">
+            No notes found
+          </Text>
         )}
         <Pagination
           color="black"

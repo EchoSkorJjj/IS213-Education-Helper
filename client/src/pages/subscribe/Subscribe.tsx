@@ -211,13 +211,9 @@ const SubscribePage = () => {
                   variant={user?.is_paid ? "outline" : "solid"}
                   disabled={user?.is_paid}
                   isDisabled={user?.is_paid}
-                  onClick={user?.is_paid ? () => { } : handleSubscribe}
+                  onClick={user?.is_paid ? () => {} : handleSubscribe}
                 >
-                  {
-                    user?.is_paid
-                      ? "You are on Pro Plan"
-                      : "Go Pro"
-                  }
+                  {user?.is_paid ? "You are on Pro Plan" : "Go Pro"}
                 </Button>
               </Box>
             </VStack>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { FaCheckCircle } from "react-icons/fa";
 import {
@@ -11,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 
 import { useAuth } from "~features/auth/AuthContext";
-import { useEffect } from "react";
 
 const SuccessPage = () => {
   const { retrieveAndUpdateUserInfo } = useAuth();

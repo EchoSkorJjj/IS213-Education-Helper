@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 import {
+  CreatedNotesResponse,
   CreateTemporaryContentResponse,
   DeleteAllTemporaryContentsResponse,
   DeleteTemporaryContentsResponse,
@@ -9,7 +10,6 @@ import {
   NotePreview,
   SaveNotesResponse,
   UpdateTemporaryContentsResponse,
-  CreatedNotesResponse
 } from "~shared/types/data";
 import { UpdateProfileType } from "~shared/types/form";
 
@@ -238,7 +238,8 @@ export const deleteTemporaryContent = async (
   authorization: string,
 ): Promise<DeleteTemporaryContentsResponse | undefined> => {
   try {
-    const contentTypeAsNumber = contentType === "flashcard" ? "FLASHCARD" : "MCQ";
+    const contentTypeAsNumber =
+      contentType === "flashcard" ? "FLASHCARD" : "MCQ";
     const response = await api.delete(
       `/api/v1/contents/temporary?note_id=${noteId}&content_type=${contentTypeAsNumber}&content_id=${contentId}`,
       {
@@ -376,10 +377,7 @@ export const deleteSavedNote = async (
   }
 };
 
-export const getSavedNotes = async (
-  authorization: string,
-  userId: string,
-) => {
+export const getSavedNotes = async (authorization: string, userId: string) => {
   try {
     const response = await api.get(`/api/v1/notes/saved/${userId}`, {
       headers: {
@@ -402,16 +400,19 @@ export const getCreatedNotes = async (
   notesTitle: string,
 ) => {
   try {
-    const response = await api.get(`/api/v1/notes/user/${userId}?limit=${limit}&offset=${offset}&page=${page}&notesTitle=${notesTitle}`, {
-      headers: {
-        Authorization: `Bearer ${authorization}`,
-      }
-    });
+    const response = await api.get(
+      `/api/v1/notes/user/${userId}?limit=${limit}&offset=${offset}&page=${page}&notesTitle=${notesTitle}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+      },
+    );
     return response.data;
-  } catch (error){
+  } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const getSavedNotesWithFilter = async (
   authorization: string,
@@ -422,13 +423,16 @@ export const getSavedNotesWithFilter = async (
   notesTitle: string,
 ) => {
   try {
-    const response = await api.get(`/api/v1/notes/user/saved/${userId}?limit=${limit}&offset=${offset}&page=${page}&notesTitle=${notesTitle}`, {
-      headers: {
-        Authorization: `Bearer ${authorization}`,
-      }
-    });
+    const response = await api.get(
+      `/api/v1/notes/user/saved/${userId}?limit=${limit}&offset=${offset}&page=${page}&notesTitle=${notesTitle}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+      },
+    );
     return response.data;
-  } catch (error){
+  } catch (error) {
     console.log(error);
   }
-}
+};

@@ -164,16 +164,14 @@ const NotesUpload = ({
               understanding
             </Text>
             <HStack mt={{ base: "4", md: "5" }}>
-              {
-                !userIsPaid && (
-                  <>
+              {!userIsPaid && (
+                <>
                   <LockIcon />
                   <Text color={generateFlashcard ? "midBlue.400" : "white"}>
                     This is a paid feature. Unlock it with Pro!
                   </Text>
-                  </>
-                )
-              }
+                </>
+              )}
             </HStack>
           </Box>
         </Stack>
