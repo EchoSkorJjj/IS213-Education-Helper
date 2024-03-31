@@ -22,20 +22,17 @@ const overviewList = [
   {
     id: 2,
     label: "Navigate to Generator Page",
-    subLabel:
-      "Upload PDF file and choose your generation type.",
+    subLabel: "Upload PDF file and choose your generation type.",
   },
   {
     id: 3,
     label: "Customize Your Notes",
-    subLabel:
-      "Add a title, topic, and edit your notes.",
+    subLabel: "Add a title, topic, and edit your notes.",
   },
   {
     id: 4,
     label: "Submit and Save",
-    subLabel:
-      "Press submit to generate and save your notes.",
+    subLabel: "Press submit to generate and save your notes.",
   },
 ];
 

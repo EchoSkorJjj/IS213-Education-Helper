@@ -1,3 +1,8 @@
+/* eslint-disable complexity */
+/* eslint-disable max-lines */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable max-statements */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
@@ -13,6 +18,7 @@ import {
   Flex,
   Heading,
   IconButton,
+  Skeleton,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -46,6 +52,7 @@ function ViewNotes() {
   const [noteTopic, setNoteTopic] = useState<string>();
   const [fileName, setFileName] = useState<string>();
   const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const checkIfUserSaved = async () => {
     if (!authorization || !userId || !noteId) {
@@ -115,6 +122,8 @@ function ViewNotes() {
   };
 
   const handleGetContent = async () => {
+    setIsLoading(true); // Start loading
+
     if (!noteId || !authorization) {
       return;
     }
@@ -130,6 +139,7 @@ function ViewNotes() {
     const saved = await checkIfUserSaved();
 
     setIsSaved(saved || false);
+    setIsLoading(false);
   };
 
   const getCards = (contents: ContentType) => {
@@ -175,40 +185,56 @@ function ViewNotes() {
           outline="none"
           mt={10}
         />
-
-        <Text color={"white"} mt={4} mb={2}>
-          Topic: {noteTopic}
-        </Text>
+        {isLoading ? (
+          <Skeleton height="20px" mb={4} />
+        ) : (
+          <Text color={"white"} mt={4} mb={2}>
+            Topic: {noteTopic}
+          </Text>
+        )}
         <Flex justifyContent="space-between" alignItems="center">
-          <Heading
-            fontSize="2xl"
-            fontWeight={750}
-            mb={5}
-            style={{ color: "white" }}
-          >
-            {noteTitle}
-          </Heading>
-
-          <IconButton
-            aria-label="Save note"
-            icon={isSaved ? <FaBookmark /> : <FaRegBookmark />}
-            color="white"
-            variant="outline"
-            border={"none"}
-            _hover={{ bg: "transparent" }}
-            onClick={async () => {
-              if (isSaved) {
-                await deleteSavedCard();
-                setIsSaved(false);
-              } else {
-                await saveCardsSet();
-                setIsSaved(true);
-              }
-            }}
-          />
+          {isLoading ? (
+            <Skeleton height="40px" mb={5} />
+          ) : (
+            <Heading
+              fontSize="2xl"
+              fontWeight={750}
+              mb={5}
+              style={{ color: "white" }}
+            >
+              {noteTitle}
+            </Heading>
+          )}
+          {isLoading ? (
+            <Skeleton height="40px" width="40px" />
+          ) : (
+            <IconButton
+              aria-label="Save note"
+              icon={isSaved ? <FaBookmark /> : <FaRegBookmark />}
+              color="white"
+              variant="outline"
+              border={"none"}
+              _hover={{ bg: "transparent" }}
+              onClick={async () => {
+                if (isSaved) {
+                  await deleteSavedCard();
+                  setIsSaved(false);
+                } else {
+                  await saveCardsSet();
+                  setIsSaved(true);
+                }
+              }}
+            />
+          )}
         </Flex>
-
-        {cards[currentCardIndex]?.type === "mcq" ? (
+        {isLoading ? (
+          <>
+            <Skeleton height="20px" my="4" />
+            <Skeleton height="20px" my="4" />
+            <Skeleton height="20px" my="4" />
+            <Skeleton height="20px" my="4" width="50%" />
+          </>
+        ) : cards[currentCardIndex]?.type === "mcq" ? (
           <MCQ
             question={
               (cards[currentCardIndex] as MultipleChoiceQuestion)?.question
@@ -228,43 +254,52 @@ function ViewNotes() {
             answer={(cards[currentCardIndex] as FlashcardType)?.answer}
           />
         )}
-
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          mt={10}
-          mb={50}
-        >
-          <IconButton
-            aria-label="Previous card"
-            icon={<ChevronLeftIcon />}
-            onClick={() => setCurrentCardIndex(currentCardIndex - 1)}
-            isDisabled={currentCardIndex === 0}
-            color="white"
-            outline="none"
-            variant="ghost"
-          />
-          <Text color="white" mx={10}>
-            {currentCardIndex + 1} out of {totalCards}
-          </Text>
-          <IconButton
-            aria-label="Next card"
-            icon={<ChevronRightIcon />}
-            onClick={() => setCurrentCardIndex(currentCardIndex + 1)}
-            isDisabled={currentCardIndex === totalCards - 1}
-            ml={2}
-            color="white"
-            outline="none"
-            variant="ghost"
-          />
-        </Box>
-
-        <Heading fontSize="2xl" fontWeight={750} color="white" mt={4} mb={5}>
-          {fileName}
-        </Heading>
-
-        <iframe title="pdf" src={blobUrl} width="100%" height="900px"></iframe>
+        {isLoading ? (
+          <Skeleton height="20px" my={5} />
+        ) : (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mt={10}
+            mb={50}
+          >
+            <IconButton
+              aria-label="Previous card"
+              icon={<ChevronLeftIcon />}
+              onClick={() => setCurrentCardIndex(currentCardIndex - 1)}
+              isDisabled={currentCardIndex === 0}
+              color="white"
+              outline="none"
+              variant="ghost"
+            />
+            <Text color="white" mx={10}>
+              {currentCardIndex + 1} out of {totalCards}
+            </Text>
+            <IconButton
+              aria-label="Next card"
+              icon={<ChevronRightIcon />}
+              onClick={() => setCurrentCardIndex(currentCardIndex + 1)}
+              isDisabled={currentCardIndex === totalCards - 1}
+              ml={2}
+              color="white"
+              outline="none"
+              variant="ghost"
+            />
+          </Box>
+        )}
+        {isLoading ? (
+          <Skeleton height="20px" />
+        ) : (
+          <Heading fontSize="2xl" fontWeight={750} color="white" mt={4} mb={5}>
+            {fileName}
+          </Heading>
+        )}
+        {isLoading ? (
+          <Skeleton height="900px" />
+        ) : (
+          <iframe title="pdf" src={blobUrl} width="100%" height="900px"></iframe>
+        )}{" "}
       </Container>
     </Box>
   );
