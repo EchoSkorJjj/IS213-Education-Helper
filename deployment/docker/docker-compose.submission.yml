@@ -32,8 +32,7 @@ services:
       - /run/secrets/ngrok_config
 
   kong-gateway:
-    image: kong-gateway:1.0
-    build: ../../backend/kong-gateway
+    image: paolorafael/kong-gateway:1.0
     environment:
       <<: *common-env
       KONG_DATABASE: off
@@ -103,8 +102,7 @@ services:
       retries: 5
     
   handle-temporary-contents-service:
-    build: ../../backend/complex/handle-temporary-contents
-    image: handle-temporary-contents-service:1.0
+    image: paolorafael/handle-temporary-contents:1.0
     env_file:
       - ../../backend/complex/handle-temporary-contents/.env
     depends_on:
@@ -120,8 +118,7 @@ services:
       start_period: 30s
 
   make-payment-service:
-    build: ../../backend/complex/make-payment
-    image: make-payment-service:1.0
+    image: paolorafael/make-payment:1.0
     env_file:
       - ../../backend/complex/make-payment/.env
     depends_on:
@@ -137,8 +134,7 @@ services:
       start_period: 30s
 
   verify-user-service:
-    build: ../../backend/complex/verify-user
-    image: verify-user-service:1.0
+    image: paolorafael/verify-user:1.0
     env_file:
       - ../../backend/complex/verify-user/.env
     depends_on:
@@ -154,8 +150,7 @@ services:
       start_period: 30s
 
   subscription-service:
-    build: ../../backend/simple/subscriptions
-    image: subscription-service:1.0
+    image: paolorafael/subscriptions:1.0
     env_file:
       - ../../backend/simple/subscriptions/.env
     depends_on:
@@ -178,7 +173,7 @@ services:
       retries: 5
 
   notes-service:
-    build: ../../backend/simple/notes
+    image: paolorafael/notes:1.0
     env_file:
       - ../../backend/simple/notes/.env
     depends_on:
@@ -192,8 +187,7 @@ services:
       start_period: 30s
 
   user-storage-service:
-    build: ../../backend/simple/user-storage
-    image: user-storage-service:1.0
+    image: paolorafael/user-storage:1.0
     env_file:
       - ../../backend/simple/user-storage/.env
     depends_on:
@@ -209,8 +203,7 @@ services:
       start_period: 30s
 
   payment-service:
-    build: ../../backend/simple/payment
-    image: payment-service:1.0
+    image: paolorafael/payment:1.0
     env_file:
       - ../../backend/simple/payment/.env
     healthcheck:
@@ -221,8 +214,7 @@ services:
       start_period: 30s
 
   view-notes-service:
-    build: ../../backend/complex/view-notes
-    image: view-notes-service:1.0
+    image: paolorafael/view-notes:1.0
     env_file:
       - ../../backend/complex/view-notes/.env
     depends_on:
@@ -238,8 +230,7 @@ services:
       start_period: 30s
 
   save-notes-service:
-    build: ../../backend/complex/save-notes
-    image: save-notes-service:1.0
+    image: paolorafael/save-notes:1.0
     env_file:
       - ../../backend/complex/save-notes/.env
     depends_on:
@@ -255,8 +246,7 @@ services:
       start_period: 30s
     
   contents-service:
-    build: ../../backend/simple/contents
-    image: content-service:1.0
+    image: paolorafael/contents:1.0
     env_file:
       - ../../backend/simple/contents/.env
     depends_on:
@@ -272,8 +262,7 @@ services:
       start_period: 30s
 
   frontend-client:
-    build: ../../client
-    image: client:1.0
+    image: paolorafael/client:1.0
     depends_on:
       kong-gateway:
         condition: service_healthy
@@ -281,8 +270,7 @@ services:
       - "3001:443"
 
   upload-notes:
-    build: ../../backend/complex/upload-notes
-    image: upload-notes:1.0
+    image: paolorafael/upload-notes:1.0
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -290,7 +278,7 @@ services:
         condition: service_healthy
 
   rabbitmq:
-    image: "rabbitmq:3-management"
+    image: rabbitmq:3-management
     environment:
       RABBITMQ_DEFAULT_USER: "user"
       RABBITMQ_DEFAULT_PASS: "password"
@@ -301,8 +289,7 @@ services:
       retries: 5
 
   pdf-reader:
-    build:
-      context: ../../backend/simple/fileprocessor
+    image: paolorafael/fileprocessor:1.0
     healthcheck:
       test: ["CMD", "/bin/grpc_health_probe", "-addr=:50053"]
       interval: 10s
@@ -311,8 +298,7 @@ services:
       start_period: 30s
   
   process-chunks:
-    build:
-      context: ../../backend/complex/process-chunks
+    image: paolorafael/process-chunks:1.0
     env_file:
       - ../../backend/complex/process-chunks/.env
     depends_on:

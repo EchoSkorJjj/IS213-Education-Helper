@@ -3,10 +3,12 @@ from concurrent import futures
 import grpc
 from dotenv import load_dotenv
 
+import notes_pb2_grpc
+import health_pb2_grpc
 from connection.database import Database
 from services.note_service import NoteServiceServicer
+from services.health_service import HealthServicer
 from utils.logger import get_logger
-import notes_pb2_grpc
 from config.settings import get_config
 import asyncio
 
@@ -31,6 +33,7 @@ async def serve():
     ])
   
     notes_pb2_grpc.add_NoteServiceServicer_to_server(NoteServiceServicer(), server)
+    health_pb2_grpc.add_HealthServicer_to_server(HealthServicer(), server)
     
     port = config.PORT
     server.add_insecure_port(f'[::]:{port}')
