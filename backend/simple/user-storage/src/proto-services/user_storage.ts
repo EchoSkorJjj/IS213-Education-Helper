@@ -45,7 +45,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             const timestamp = dateToGoogleTimeStamp(currentDate);
 
             // Create a payload
-            const payload = getPayload('user_storage.AuthResponse', {
+            const payload = getPayload('user_storage_pb.GoogleAuthPayload', {
                 user_id: userData.user_id,
                 username: userData.username,
                 first_name: userData.first_name,
@@ -56,7 +56,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 is_paid: userData.is_paid,
             });
 
-            const access_token = jwtHandler.createJWT('10m', {
+            const access_token = jwtHandler.createJWT('24h', {
                 user_id: userData.user_id,
                 role: userData.role
             });
@@ -87,7 +87,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
 
         const pkceCodePair = connector.generatePKCECodePair();
 
-        const myInfoUniqueId = jwtHandler.createJWT('5m', { myinfo_auth: true });
+        const myInfoUniqueId = jwtHandler.createJWT('24h', { myinfo_auth: true });
         try {
             const redisClient = RedisService.getInstance();
 
@@ -149,7 +149,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 is_paid: userData.is_paid,
             });
 
-            const access_token = jwtHandler.createJWT('1m', {
+            const access_token = jwtHandler.createJWT('24h', {
                 user_id: userData.user_id,
                 role: userData.role
             });
@@ -251,7 +251,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
                 is_paid: userData.is_paid,
             });
 
-            const access_token = jwtHandler.createJWT('10m', {
+            const access_token = jwtHandler.createJWT('24h', {
                 user_id: userData.user_id,
                 role: userData.role
             });
@@ -362,7 +362,7 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             const timestamp = dateToGoogleTimeStamp(currentDate);
 
             // Create a payload
-            const payload = getPayload('user_storage.AuthResponse', {
+            const payload = getPayload('user_storage_pb.GoogleAuthPayload', {
                 user_id: userData.user_id,
                 username: userData.username,
                 first_name: userData.first_name,
@@ -543,6 +543,29 @@ class UserStorage extends user_storage_pb.UnimplementedUserStorageService {
             const response = new user_storage_pb.DeleteSavedNoteResponse({
                 success: true,
             });
+
+            callback(null, response);
+        } catch (err: any) {
+            logger.error(err);
+            const error = {
+                code: grpc.status.INVALID_ARGUMENT,
+                message: err.message,
+            };
+            callback(error, null);
+        }
+    }
+
+    async GetSavedNotes(call: grpc.ServerUnaryCall<user_storage_pb.GetSavedNotesRequest, user_storage_pb.GetSavedNotesResponse>, callback: grpc.sendUnaryData<user_storage_pb.GetSavedNotesResponse>): Promise<void> {
+        const user_id = call.request.user_id;
+
+        try {
+            const userService = UserService.getInstance();
+
+            const notes_id = await userService.getNotes(user_id);
+
+            const response = new user_storage_pb.GetSavedNotesResponse({
+                saved_notes_ids: notes_id
+            })
 
             callback(null, response);
         } catch (err: any) {

@@ -12,6 +12,7 @@ import (
 
 	contentsPb "github.com/EchoSkorJjj/IS213-Education-Helper/handle-temporary-contents/pb/contents"
 	htcPb "github.com/EchoSkorJjj/IS213-Education-Helper/handle-temporary-contents/pb/handle_temporary_contents"
+	notesPb "github.com/EchoSkorJjj/IS213-Education-Helper/handle-temporary-contents/pb/notes"
 )
 
 type Server struct {
@@ -241,5 +242,41 @@ func (s *Server) UpdateTemporaryContent(ctx context.Context, req *htcPb.UpdateTe
 	}
 
 	response.Success = true
+	return response, nil
+}
+
+func (s *Server) CommitTemporaryContents(ctx context.Context, req *htcPb.CommitTemporaryContentsRequest) (*htcPb.CommitTemporaryContentsResponse, error) {
+	contentsClient := client.GetContentClient()
+	notesClient := client.GetNoteClient()
+
+	notesStubGetReq := &notesPb.RetrieveNoteMetadataRequest{FileId: req.NoteId}
+	_, err := notesClient.Stub.RetrieveNoteMetadata(ctx, notesStubGetReq)
+	if err != nil {
+		log.Printf("Failed to get note: %v", err)
+		return nil, status.Errorf(codes.Internal, "error getting note: %v", err)
+	}
+
+	contentsStubReq := &contentsPb.CommitTemporaryContentsRequest{NoteId: req.NoteId}
+	_, err = contentsClient.Stub.CommitTemporaryContents(ctx, contentsStubReq)
+	if err != nil {
+		log.Printf("Failed to commit temporary contents: %v", err)
+		return nil, status.Errorf(codes.Internal, "error committing temporary contents: %v", err)
+	}
+
+	notesStubPutReq := &notesPb.UpdateNoteRequest{
+		NotePreview: &notesPb.NotePreview{
+			FileId: req.NoteId,
+			Title: req.Title,
+			Topic: req.Topic,
+		},
+	}
+
+	_, err = notesClient.Stub.UpdateNote(ctx, notesStubPutReq)
+	if err != nil {
+		log.Printf("Failed to update note: %v", err)
+		return nil, status.Errorf(codes.Internal, "error updating note: %v", err)
+	}
+
+	response := &htcPb.CommitTemporaryContentsResponse{Success: true}
 	return response, nil
 }

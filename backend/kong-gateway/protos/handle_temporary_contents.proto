@@ -5,6 +5,7 @@ package handle_temporary_contents_pb;
 option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/handle-temporary-contents/pb/handle-temporary-contents";
 
 import "contents.proto";
+import "google/api/annotations.proto";
 
 // Feels really verbose... but protobuf doesn't currently support
 // repeated oneofs. This was recommended by a collaborator on the project.
@@ -66,14 +67,20 @@ message UpdateTemporaryContentResponse {
     OneOfContent updated_content = 2;
 }
 
+message CommitTemporaryContentsRequest {
+    string note_id = 1;
+    string title = 2;
+    string topic = 3;
+}
+
+message CommitTemporaryContentsResponse {
+    bool success = 1;
+}
+
 service HandleTemporaryContents {
     rpc PollTemporaryContents(PollTemporaryContentsRequest) returns (PollTemporaryContentsResponse) {
         option (google.api.http) = {
             get: "/api/v1/contents/temporary"
-            additional_bindings {
-                get: "/api/v1/contents/temporary"
-                body: "*"
-            }
         };
     }
 
@@ -87,20 +94,25 @@ service HandleTemporaryContents {
     rpc DeleteTemporaryContent(DeleteTemporaryContentRequest) returns (DeleteTemporaryContentResponse) {
         option (google.api.http) = {
             delete: "/api/v1/contents/temporary"
-            body: "*"
         };
     }
 
     rpc DeleteAllTemporaryContents(DeleteAllTemporaryContentsRequest) returns (DeleteAllTemporaryContentsResponse) {
         option (google.api.http) = {
             delete: "/api/v1/contents/temporary/all"
-            body: "*"
         };
     }
 
     rpc UpdateTemporaryContent(UpdateTemporaryContentRequest) returns (UpdateTemporaryContentResponse) {
         option (google.api.http) = {
             put: "/api/v1/contents/temporary"
+            body: "*"
+        };
+    }
+
+    rpc CommitTemporaryContents(CommitTemporaryContentsRequest) returns (CommitTemporaryContentsResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/contents/temporary/commit"
             body: "*"
         };
     }

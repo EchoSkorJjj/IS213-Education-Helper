@@ -1,0 +1,49 @@
+name: Build & Push Docker Images
+on:
+  push:
+    branches:
+      - main
+      - chore/cicd
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dockerfile: [
+          'backend/simple/contents/Dockerfile',
+          'backend/simple/fileprocessor/Dockerfile',
+          'backend/simple/notes/Dockerfile',
+          'backend/simple/payment/Dockerfile',
+          'backend/simple/subscriptions/Dockerfile',
+          'backend/simple/user-storage/Dockerfile',
+          'backend/complex/handle-temporary-contents/Dockerfile',
+          'backend/complex/make-payment/Dockerfile',
+          'backend/complex/process-chunks/Dockerfile',
+          'backend/complex/upload-notes/Dockerfile',
+          'backend/complex/view-notes/Dockerfile',
+          'backend/complex/save-notes/Dockerfile',
+          'backend/complex/verify-user/Dockerfile',
+          'backend/kong-gateway/Dockerfile',
+          'client/Dockerfile',
+        ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Login to Dockerhub
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and push docker images
+        run: |
+          DOCKERFILE_PATH=${{ matrix.dockerfile }}
+          IMAGE_NAME=$DOCKER_USERNAME/$(basename $(dirname $DOCKERFILE_PATH))
+          docker buildx build --platform linux/amd64,linux/arm64 -t $IMAGE_NAME:1.0 -f $DOCKERFILE_PATH $(dirname $DOCKERFILE_PATH) --push      

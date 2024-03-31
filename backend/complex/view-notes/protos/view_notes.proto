@@ -17,6 +17,7 @@ message B64Note {
     string file_name = 4;
     string title = 5;
     string topic = 6;
+    string generate_type = 7;
 }
 
 message AssociatedContents {
@@ -45,16 +46,40 @@ message ViewNotesByUserIdRequest {
     int32 limit = 2;
     int32 offset = 3;
     int32 page = 4;
+    string notesTitle = 5;
 }
 
 message ViewNotesByUserIdResponse {
     int32 count = 1;
     repeated notes.NotePreview notes = 2;
-    int32 next_page = 3;
+}
+
+message ViewSavedNotesRequest {
+    string user_id = 1;
+}
+
+message ViewSavedNotesResponse {
+    repeated notes.NotePreview notes = 1;
+}
+
+message ViewNotesByTopicAndNameRequest {
+    string topic = 1;
+    string notesTitle = 2;
+    int32 page = 3;
+    int32 limit = 4;
+    int32 offset = 5;
+}
+
+message ViewNotesByTopicAndNameResponse {
+    int32 count = 1;
+    repeated notes.NotePreview notes = 2;
 }
 
 service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent);
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse);
     rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse);
+    rpc ViewSavedNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse);
+    rpc ViewSavedNotes (ViewSavedNotesRequest) returns (ViewSavedNotesResponse);
+    rpc ViewNotesByTopicAndName (ViewNotesByTopicAndNameRequest) returns (ViewNotesByTopicAndNameResponse);
 }

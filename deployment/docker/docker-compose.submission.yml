@@ -1,0 +1,315 @@
+version: "3.8"
+
+secrets:
+  kong_db_password:
+    file: ./kong_db_password.txt
+  ngrok_config:
+    file: ../../backend/ngrok/ngrok.yml
+
+x-common-env:
+  &common-env
+  KONG_PG_HOST: kong-database
+  KONG_PG_USER: kong
+  KONG_PG_PASSWORD_FILE: /run/secrets/kong_db_password
+
+networks:
+  default:
+
+volumes:
+  kong-data: {}
+  postgres-db-volume-1: {}
+
+services:
+  # Required for Stripe webhook
+  ngrok:
+    image: ngrok/ngrok:alpine
+    secrets:
+      - ngrok_config
+    command:
+      - start
+      - --all
+      - --config
+      - /run/secrets/ngrok_config
+
+  kong-gateway:
+    image: paolorafael/kong-gateway:1.0
+    environment:
+      <<: *common-env
+      KONG_DATABASE: off
+      KONG_PLUGINS: bundled,authn-kong,rawstring-adapter
+      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml 
+      KONG_SSL_CERT: /etc/kong/ssl/kong.crt
+      KONG_SSL_CERT_KEY: /etc/kong/ssl/kong.key
+      # KONG_PROXY_LISTEN: '0.0.0.0:8000, 0.0.0.0:8443 ssl'
+      # KONG_ADMIN_LISTEN: '0.0.0.0:8001, 0.0.0.0:8444 ssl'
+    ports:
+      - "8000:8000" # Proxy
+      # - "8001:8001" # Admin API
+      - "8443:8443" # Proxy SSL
+      - "8444:8444" # Admin API SSL # hide
+    depends_on:
+      verify-user-service:
+        condition: service_healthy
+      view-notes-service:
+        condition: service_healthy
+      save-notes-service:
+        condition: service_healthy
+      upload-notes:
+        condition: service_started
+      make-payment-service:
+        condition: service_healthy
+      handle-temporary-contents-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    secrets:
+      - kong_db_password
+    restart: on-failure
+    volumes:
+      - ../../backend/kong-gateway/kong.yml:/etc/kong/kong.yml 
+      - ../../backend/kong-gateway/authn-kong:/usr/local/share/lua/5.1/kong/plugins/authn-kong 
+      - ../../backend/kong-gateway/rawstring-adapter:/usr/local/share/lua/5.1/kong/plugins/rawstring-adapter 
+      - ../../backend/kong-gateway/protos:/usr/local/share/lua/5.1/kong/protos
+
+  postgres-db:
+    image: postgres:alpine3.18
+    volumes:
+      - postgres-db-volume-1:/var/lib/postgresql/data
+      - ../sql_table/create_user_storage_table.sql:/docker-entrypoint-initdb.d/user_storage.sql
+      - ../sql_table/create_subscriptions_table.sql:/docker-entrypoint-initdb.d/subscriptions.sql
+      - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
+      - ../sql_table/create_contents_table.sql:/docker-entrypoint-initdb.d/create_contents_table.sql
+    environment:
+      POSTGRES_DB: esd-db
+      POSTGRES_USER: esd-user
+      POSTGRES_PASSWORD: esd-password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U esd-user -d esd-db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    
+  handle-temporary-contents-service:
+    image: paolorafael/handle-temporary-contents:1.0
+    env_file:
+      - ../../backend/complex/handle-temporary-contents/.env
+    depends_on:
+      payment-service:
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  make-payment-service:
+    image: paolorafael/make-payment:1.0
+    env_file:
+      - ../../backend/complex/make-payment/.env
+    depends_on:
+      payment-service:
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  verify-user-service:
+    image: paolorafael/verify-user:1.0
+    env_file:
+      - ../../backend/complex/verify-user/.env
+    depends_on:
+      payment-service:
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  subscription-service:
+    image: paolorafael/subscriptions:1.0
+    env_file:
+      - ../../backend/simple/subscriptions/.env
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  contents-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  notes-service:
+    image: paolorafael/notes:1.0
+    env_file:
+      - ../../backend/simple/notes/.env
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50052"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  user-storage-service:
+    image: paolorafael/user-storage:1.0
+    env_file:
+      - ../../backend/simple/user-storage/.env
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      user-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  payment-service:
+    image: paolorafael/payment:1.0
+    env_file:
+      - ../../backend/simple/payment/.env
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  view-notes-service:
+    image: paolorafael/view-notes:1.0
+    env_file:
+      - ../../backend/complex/view-notes/.env
+    depends_on:
+      notes-service:
+        condition: service_healthy
+      contents-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  save-notes-service:
+    image: paolorafael/save-notes:1.0
+    env_file:
+      - ../../backend/complex/save-notes/.env
+    depends_on:
+      notes-service:
+        condition: service_healthy
+      contents-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    
+  contents-service:
+    image: paolorafael/contents:1.0
+    env_file:
+      - ../../backend/simple/contents/.env
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      contents-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  frontend-client:
+    image: paolorafael/client:1.0
+    depends_on:
+      kong-gateway:
+        condition: service_healthy
+    ports:
+      - "3001:443"
+
+  upload-notes:
+    image: paolorafael/upload-notes:1.0
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      pdf-reader:
+        condition: service_healthy
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: "user"
+      RABBITMQ_DEFAULT_PASS: "password"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  pdf-reader:
+    image: paolorafael/fileprocessor:1.0
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50053"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+  
+  process-chunks:
+    image: paolorafael/process-chunks:1.0
+    env_file:
+      - ../../backend/complex/process-chunks/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      contents-service:
+        condition: service_healthy
+
+  autohealer:
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

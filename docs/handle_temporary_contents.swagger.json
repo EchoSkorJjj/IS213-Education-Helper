@@ -1,0 +1,432 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "handle_temporary_contents.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "HandleTemporaryContents"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/contents/temporary": {
+      "get": {
+        "operationId": "HandleTemporaryContents_PollTemporaryContents",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbPollTemporaryContentsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "noteId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "HandleTemporaryContents"
+        ]
+      },
+      "delete": {
+        "operationId": "HandleTemporaryContents_DeleteTemporaryContent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbDeleteTemporaryContentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "noteId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "contentType",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "FLASHCARD",
+              "MCQ"
+            ],
+            "default": "FLASHCARD"
+          },
+          {
+            "name": "contentId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "HandleTemporaryContents"
+        ]
+      },
+      "post": {
+        "operationId": "HandleTemporaryContents_CreateTemporaryContent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbCreateTemporaryContentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbCreateTemporaryContentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HandleTemporaryContents"
+        ]
+      },
+      "put": {
+        "operationId": "HandleTemporaryContents_UpdateTemporaryContent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbUpdateTemporaryContentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbUpdateTemporaryContentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HandleTemporaryContents"
+        ]
+      }
+    },
+    "/api/v1/contents/temporary/all": {
+      "delete": {
+        "operationId": "HandleTemporaryContents_DeleteAllTemporaryContents",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbDeleteAllTemporaryContentsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "noteId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "HandleTemporaryContents"
+        ]
+      }
+    },
+    "/api/v1/contents/temporary/commit": {
+      "post": {
+        "operationId": "HandleTemporaryContents_CommitTemporaryContents",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbCommitTemporaryContentsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/handle_temporary_contents_pbCommitTemporaryContentsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HandleTemporaryContents"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "content_pbContentType": {
+      "type": "string",
+      "enum": [
+        "FLASHCARD",
+        "MCQ"
+      ],
+      "default": "FLASHCARD"
+    },
+    "content_pbFlashcard": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "noteId": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "answer": {
+          "type": "string"
+        }
+      }
+    },
+    "content_pbMultipleChoiceQuestion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "noteId": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/content_pbMultipleChoiceQuestionOption"
+          }
+        },
+        "multipleAnswers": {
+          "type": "boolean"
+        }
+      }
+    },
+    "content_pbMultipleChoiceQuestionOption": {
+      "type": "object",
+      "properties": {
+        "option": {
+          "type": "string"
+        },
+        "isCorrect": {
+          "type": "boolean"
+        }
+      }
+    },
+    "handle_temporary_contents_pbCommitTemporaryContentsRequest": {
+      "type": "object",
+      "properties": {
+        "noteId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        }
+      }
+    },
+    "handle_temporary_contents_pbCommitTemporaryContentsResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "handle_temporary_contents_pbCreateTemporaryContentRequest": {
+      "type": "object",
+      "properties": {
+        "noteId": {
+          "type": "string"
+        },
+        "contentType": {
+          "$ref": "#/definitions/content_pbContentType"
+        },
+        "content": {
+          "$ref": "#/definitions/handle_temporary_contents_pbOneOfContent"
+        }
+      }
+    },
+    "handle_temporary_contents_pbCreateTemporaryContentResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "createdContent": {
+          "$ref": "#/definitions/handle_temporary_contents_pbOneOfContent"
+        }
+      }
+    },
+    "handle_temporary_contents_pbDeleteAllTemporaryContentsResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "deletedContents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/handle_temporary_contents_pbOneOfContent"
+          }
+        }
+      }
+    },
+    "handle_temporary_contents_pbDeleteTemporaryContentResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "deletedContent": {
+          "$ref": "#/definitions/handle_temporary_contents_pbOneOfContent"
+        }
+      }
+    },
+    "handle_temporary_contents_pbOneOfContent": {
+      "type": "object",
+      "properties": {
+        "flashcard": {
+          "$ref": "#/definitions/content_pbFlashcard"
+        },
+        "mcq": {
+          "$ref": "#/definitions/content_pbMultipleChoiceQuestion"
+        }
+      },
+      "description": "Feels really verbose... but protobuf doesn't currently support\nrepeated oneofs. This was recommended by a collaborator on the project."
+    },
+    "handle_temporary_contents_pbPollTemporaryContentsResponse": {
+      "type": "object",
+      "properties": {
+        "contents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/handle_temporary_contents_pbOneOfContent"
+          }
+        }
+      }
+    },
+    "handle_temporary_contents_pbUpdateTemporaryContentRequest": {
+      "type": "object",
+      "properties": {
+        "noteId": {
+          "type": "string"
+        },
+        "contentType": {
+          "$ref": "#/definitions/content_pbContentType"
+        },
+        "contentId": {
+          "type": "string"
+        },
+        "content": {
+          "$ref": "#/definitions/handle_temporary_contents_pbOneOfContent"
+        }
+      }
+    },
+    "handle_temporary_contents_pbUpdateTemporaryContentResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "updatedContent": {
+          "$ref": "#/definitions/handle_temporary_contents_pbOneOfContent"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

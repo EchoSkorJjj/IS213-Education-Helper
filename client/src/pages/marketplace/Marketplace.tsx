@@ -2,42 +2,56 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Box, useToast } from "@chakra-ui/react";
 
+import { useAuth } from "~features/auth";
+
 import MarketHeader from "./components/MarketHeader";
 import MarketList from "./components/MarketList";
 import TopicsList from "./components/TopicsList";
 
-import { getTopics } from "~api";
-import { getNotes } from "~util";
-
-interface NotesProp {
-  unique_id: string;
-  topic: string;
-  title: string;
-  imageURL: string;
-  creator: string;
-}
+import { getNotes, getTopics } from "~api";
+import { NotePreview, Topic } from "~types/data";
 
 const MarketplacePage = () => {
   const toast = useToast();
+  const { authorization } = useAuth();
 
-  const [topics, setTopics] = useState<string[]>([]);
-  const [topic, setTopic] = useState<string>("All");
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [topic, setTopic] = useState<string>("");
   const [notesTitle, setNotesTitle] = useState<string>("");
-  const [notes, setNotes] = useState<NotesProp[]>([]);
+  const [notes, setNotes] = useState<NotePreview[]>([]);
   const [totalNotesCount, setTotalNotesCount] = useState<number>(1);
 
   const [currentTopicPage, setCurrentTopicPage] = useState(1);
   const [currentMarketPage, setCurrentMarketPage] = useState(1);
+
+  const handleSetTopic = (topic: string) => {
+    if (topic === "all") {
+      setTopic("");
+    } else {
+      setTopic(topic);
+    }
+    setCurrentMarketPage(1);
+  };
 
   const handleGetNotes = async (
     topic: string,
     notesTitle: string,
     currentMarketPage: number,
   ): Promise<void> => {
-    const data = await getNotes(topic, notesTitle, currentMarketPage);
-
+    if (!authorization) return;
+    const data = await getNotes(
+      topic,
+      notesTitle,
+      currentMarketPage,
+      authorization,
+    );
+    if (!data) {
+      setNotes([]);
+      setTotalNotesCount(0);
+      return;
+    }
     setNotes(data.notes);
-    setTotalNotesCount(data.totalNotesCount);
+    setTotalNotesCount(data.count);
   };
 
   useEffect(() => {
@@ -47,7 +61,6 @@ const MarketplacePage = () => {
         toast({
           title: "Failed to fetch topics",
           status: "error",
-          isClosable: true,
           position: "top",
           duration: 3000,
         });
@@ -64,28 +77,34 @@ const MarketplacePage = () => {
   }, [topic, notesTitle, currentMarketPage]);
 
   return (
-    <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)">
+    <Box>
       <Helmet>
         <title>Marketplace</title>
         <meta name="description" content="Marketplace" />
       </Helmet>
       <MarketHeader />
-      <TopicsList
-        topics={topics}
-        setTopic={setTopic}
-        topic={topic}
-        setCurrentTopicPage={setCurrentTopicPage}
-        currentTopicPage={currentTopicPage}
-      />
-      <MarketList
-        notes={notes}
-        setNotesTitle={setNotesTitle}
-        setCurrentMarketPage={setCurrentMarketPage}
-        currentMarketPage={currentMarketPage}
-        totalNotesCount={totalNotesCount}
-      />
+
+      <Box w="100%">
+        <TopicsList
+          topics={topics}
+          setTopic={handleSetTopic}
+          topic={topic}
+          setCurrentTopicPage={setCurrentTopicPage}
+          currentTopicPage={currentTopicPage}
+        />
+      </Box>
+      <Box>
+        <MarketList
+          notes={notes}
+          topics={topics}
+          notesTitle={notesTitle}
+          setNotesTitle={setNotesTitle}
+          setCurrentMarketPage={setCurrentMarketPage}
+          currentMarketPage={currentMarketPage}
+          totalNotesCount={totalNotesCount}
+        />
+      </Box>
     </Box>
   );
 };
-
 export default MarketplacePage;

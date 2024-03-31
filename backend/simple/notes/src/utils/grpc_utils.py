@@ -7,4 +7,5 @@ def note_model_to_message(note_as_model):
         fileName=note_as_model.file_name,
         title=note_as_model.title,
         topic=note_as_model.topic,
+        generateType=note_as_model.generate_type,
     )

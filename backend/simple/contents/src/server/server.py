@@ -26,9 +26,11 @@ class Server:
     
     def _initialise_dependencies(self) -> None:
         database: Database = Database()
+        database.set_database(os.getenv('DB_NAME', 'simple'))
+        database.set_user(os.getenv('DB_USERNAME', 'root'))
+        database.set_password(os.getenv('DB_PASSWORD', 'password'))
         database.set_host(os.getenv('DB_HOST', 'localhost'))
         database.set_port(int(os.getenv('DB_PORT', '9042')))
-        database.set_keyspace(os.getenv('DB_KEYSPACE', 'contents'))
         database.connect()
 
         cache: Cache = Cache()

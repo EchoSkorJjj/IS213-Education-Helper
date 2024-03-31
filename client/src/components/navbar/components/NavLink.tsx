@@ -12,7 +12,10 @@ export const AuthLinks = [
   { name: "Marketplace", href: "/marketplace" },
   { name: "Profile", href: "/profile" },
   { name: "Pricing", href: "/subscribe" },
+  { name: "Our Story", href: "/about" },
 ];
+
+export const NonAuthLinks = [{ name: "Our Story", href: "/about" }];
 
 export const Links = [{ name: "Login", href: "/login" }];
 
@@ -44,14 +47,20 @@ export const NavItem = ({ children, href }: Props) => {
   );
 };
 
-export const NavLink = () => {
+export const NavLink = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   return (
     <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
-      {AuthLinks.map((link) => (
-        <NavItem key={link.name} href={link.href}>
-          {link.name}
-        </NavItem>
-      ))}
+      {isAuthenticated
+        ? AuthLinks.map((link) => (
+            <NavItem key={link.name} href={link.href}>
+              {link.name}
+            </NavItem>
+          ))
+        : NonAuthLinks.map((link) => (
+            <NavItem key={link.name} href={link.href}>
+              {link.name}
+            </NavItem>
+          ))}
     </HStack>
   );
 };

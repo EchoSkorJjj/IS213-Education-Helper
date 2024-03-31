@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Avatar, Flex, Text } from "@chakra-ui/react";
 
 import { useAuth } from "~features/auth";
 
@@ -14,12 +14,14 @@ const ProfileHeader = () => {
       pt="10"
       px="10"
       mb="3em"
+      bg="darkBlue.500"
     >
       <Flex
         maxW={"6xl"}
         width="100%"
         direction="row"
         justifyContent="space-between"
+        mb={user?.is_paid ? "10" : "0"}
       >
         <Flex>
           <Avatar
@@ -33,22 +35,15 @@ const ProfileHeader = () => {
               color="white"
               fontWeight="bold"
               fontSize={{ base: "1xl", sm: "2xl", lg: "3xl" }}
+              mb="5"
             >
               {user?.username}
             </Text>
-            <Text color="gray.500">{user?.email}</Text>
+            <Text mt="-19" color="gray.500">
+              {user?.email}
+            </Text>
           </Flex>
         </Flex>
-        <Box>
-          <Button
-            colorScheme="gray"
-            border="none"
-            as="a"
-            href="/profile/update"
-          >
-            Update Profile
-          </Button>
-        </Box>
       </Flex>
       {!user?.is_paid && (
         <Flex
@@ -56,7 +51,7 @@ const ProfileHeader = () => {
           w={"full"}
           justifyContent="end"
         >
-          <Text color="gray.500" as="a" href="/subscribe">
+          <Text color="gray" as="a" href="/subscribe" mb="10">
             This is a free account. Go{" "}
             <Text color="white" fontWeight="bold" as="span">
               pro{" "}

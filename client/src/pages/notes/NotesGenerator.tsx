@@ -55,6 +55,8 @@ const NotesGeneratorPage = () => {
       });
       return;
     }
+    localStorage.setItem("filename", selectedFile.name);
+
     toast({
       title: `Generating ${generateType}`,
       status: "info",
@@ -68,7 +70,7 @@ const NotesGeneratorPage = () => {
     // console.log(data);
   };
   return (
-    <Box bgGradient="linear(to-t, white 10%, darkBlue.500 90%)">
+    <Box>
       <Helmet>
         <title>Notes</title>
         <meta name="description" content="Notes" />
@@ -76,6 +78,7 @@ const NotesGeneratorPage = () => {
       <NotesHeader />
       <NotesGenerator
         selectedFile={selectedFile}
+        userIsPaid={user?.is_paid}
         handleChange={handleChange}
         generateType={generateType}
         handleGenerationChange={handleGenerationChange}

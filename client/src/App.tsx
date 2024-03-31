@@ -16,6 +16,7 @@ const PrivateRoute = lazy(() => import("~shared/routes/PrivateRoute"));
 
 // Public Page
 const LandingPage = lazy(() => import("~pages/landing/Landing"));
+const About = lazy(() => import("~pages/about/About"));
 const LoginPage = lazy(() => import("~pages/auth/Login"));
 const MyInfoCallbackPage = lazy(() => import("~pages/auth/MyInfoCallback"));
 const SgIDCallbackPage = lazy(() => import("~pages/auth/SgIDCallback"));
@@ -27,6 +28,13 @@ const MarketplacePage = lazy(() => import("~pages/marketplace/Marketplace"));
 const SubscribePage = lazy(() => import("~pages/subscribe/Subscribe"));
 const ProfilePage = lazy(() => import("~pages/profile/Profile"));
 const UpdateProfilePage = lazy(() => import("~pages/profile/UpdateProfile"));
+const ViewNotesPage = lazy(() => import("~pages/viewnotes/ViewNotes"));
+const SuccessPage = lazy(() => import("~pages/subscribe/Success"));
+const FailedPage = lazy(() => import("~pages/subscribe/Failed"));
+
+const GeneratedContentPage = lazy(
+  () => import("~pages/notes/GeneratedContent"),
+);
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -34,17 +42,8 @@ const App = () => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === "auth-storage" && !event.newValue) {
         useAuthStore.setState({
-          isAuthenticated: true,
-          user: {
-            user_id: "sadad",
-            username: "Hello World",
-            first_name: "Hello",
-            last_name: "World",
-            email: "sadad@gmail.com",
-            role: "User",
-            profile_pic: "",
-            is_paid: false,
-          },
+          isAuthenticated: false,
+          user: null,
         });
       }
     };
@@ -87,7 +86,15 @@ const App = () => {
                 <Route path="/subscribe" element={<SubscribePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/update" element={<UpdateProfilePage />} />
+                <Route path="/viewnotes/:noteId" element={<ViewNotesPage />} />
+                <Route path="/subscribe/success" element={<SuccessPage />} />
+                <Route path="/subscribe/failed" element={<FailedPage />} />
+                <Route
+                  path="/generated/:noteId"
+                  element={<GeneratedContentPage />}
+                />
               </Route>
+              <Route path="/about" element={<About />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

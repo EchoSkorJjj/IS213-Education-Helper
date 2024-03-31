@@ -22,7 +22,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                 'size_in_bytes': content_length_in_bytes,
                 'num_pages': num_pages,
                 'title': note.title,
-                'topic': note.topic
+                'topic': note.topic,
+                'generate_type': note.generateType
             }
 
             db.insert_note(note_to_create)
@@ -78,7 +79,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                     title=note.title,
                     topic=note.topic,
                     sizeInBytes=note.size_in_bytes,
-                    numPages=note.num_pages
+                    numPages=note.num_pages,
+                    generateType=note.generate_type
                 )
 
                 response.notes.append(note_preview)
@@ -93,16 +95,16 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
     def RetrieveMultipleNotesByUserId(self, request, context):
         try:
             db = Database()
-            limit, offset, page, user_id = request.limit, request.offset, request.page, request.userId
+            limit, offset, page, user_id, notesTitle = request.limit, request.offset, request.page, request.userId, request.notesTitle
             if offset == 0 and page == 0:
                 raise ValueError('Offset and page cannot be 0 at the same time')
             if offset == 0:
                 offset = (page - 1) * limit
             
-            notes = db.get_notes(limit, offset, user_id)
+            notes, total_count = db.get_notes(limit, offset, notesTitle, user_id)
             response = notes_pb2.RetrieveMultipleNotesByUserIdResponse()
-            response.count = len(notes)
-            response.nextPage = page + 1
+            
+            response.count = total_count
 
             for note in notes:
                 note_preview = notes_pb2.NotePreview(
@@ -112,7 +114,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                     title=note.title,
                     topic=note.topic,
                     sizeInBytes=note.size_in_bytes,
-                    numPages=note.num_pages
+                    numPages=note.num_pages,
+                    generateType=note.generate_type
                 )
 
                 response.notes.append(note_preview)
@@ -143,7 +146,8 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
                 title=note_metadata['title'],
                 topic=note_metadata['topic'],
                 sizeInBytes=note_metadata['size_in_bytes'],
-                numPages=note_metadata['num_pages']
+                numPages=note_metadata['num_pages'],
+                generateType=note_metadata['generate_type']
             )
             
             # Returning a single note's metadata as a response
@@ -155,3 +159,103 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             # Return an empty response indicating failure
             return notes_pb2.RetrieveNoteResponse()
+    
+    def UpdateNote(self, request, context):
+        try:
+            db = Database()
+            note_preview = request.notePreview
+            note = db.get_note(note_preview.fileId)
+            if not note:
+                raise ValueError(f'Note with ID {note_preview.fileId} not found')
+            
+            note_to_update = {
+                'id': note_preview.fileId, # Assume file itself cannot change
+                'user_id': note.user_id,
+                'file_name': note_preview.fileName if note_preview.fileName else note.file_name,
+                'size_in_bytes': note.size_in_bytes, # Assume file itself cannot change
+                'num_pages': note.num_pages, # Assume file itself cannot change
+                'title': note_preview.title if note_preview.title else note.title,
+                'topic': note_preview.topic if note_preview.topic else note.topic,
+                'generate_type': note.generate_type
+            }
+
+            db.update_note(note_to_update)
+            return notes_pb2.UpdateNoteResponse(success=True)
+
+        except Exception as e:
+            logger.error(f'Error updating note: {e}', exc_info=True)
+            context.set_details(f'Error updating note: {e}')
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return notes_pb2.UpdateNoteResponse()
+        
+    def ViewNotesByTopicAndName(self, request, context):
+        response = notes_pb2.ViewNotesByTopicAndNameResponse()
+        try:
+            topic, notesTitle, page, limit, offset = request.topic, request.notesTitle, request.page, request.limit, request.offset
+                        
+            db = Database()
+            if offset == 0 and page == 0:
+                raise ValueError('Offset and page cannot be 0 at the same time')
+            if offset == 0:
+                offset = (page - 1) * limit
+            
+            notes, total_count = db.get_notes_by_topic_and_name(topic, notesTitle, limit, offset)
+            response = notes_pb2.ViewNotesByTopicAndNameResponse()
+            
+            response.count = total_count
+
+            for note in notes:
+                note_preview = notes_pb2.NotePreview(
+                    userId=note.user_id,
+                    fileId=str(note.id),
+                    fileName=note.file_name,
+                    title=note.title,
+                    topic=note.topic,
+                    sizeInBytes=note.size_in_bytes,
+                    numPages=note.num_pages,
+                    generateType=note.generate_type
+                )
+
+                response.notes.append(note_preview)
+            
+            return response
+        except Exception as e:
+            logger.error(f'Error viewing notes by topic and name: {e}', exc_info=True)
+            context.set_details(f'Error viewing notes by topic and name: {e}')
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return response
+        
+    def RetrieveMultipleSavedNotes(self, request, context):
+        try:
+            db = Database()
+            limit, offset, page, notesTitle, saved_notes_ids = request.limit, request.offset, request.page, request.notesTitle, request.saved_notes_ids
+            if offset == 0 and page == 0:
+                raise ValueError('Offset and page cannot be 0 at the same time')
+            if offset == 0:
+                offset = (page - 1) * limit
+
+            notes, count = db.get_saved_notes(limit, offset, notesTitle, saved_notes_ids)
+
+            response = notes_pb2.RetrieveMultipleSavedNotesResponse()
+            response.count = count
+
+            for note in notes:
+                note_preview = notes_pb2.NotePreview(
+                    userId=note.user_id,
+                    fileId=str(note.id),
+                    fileName=note.file_name,
+                    title=note.title,
+                    topic=note.topic,
+                    sizeInBytes=note.size_in_bytes,
+                    numPages=note.num_pages,
+                    generateType=note.generate_type
+                )
+
+                response.notes.append(note_preview)
+
+            return response
+        except Exception as e:
+            logger.error(f'Error retrieving multiple saved notes: {e}', exc_info=True)
+            context.set_details(f'Error retrieving multiple saved notes: {e}')
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return notes_pb2.RetrieveMultipleSavedNotesResponse()

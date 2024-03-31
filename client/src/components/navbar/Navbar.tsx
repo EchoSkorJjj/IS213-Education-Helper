@@ -41,7 +41,7 @@ const Navbar = ({ ...rest }) => {
         justifyContent={"space-between"}
         {...rest}
         h="20"
-        maxW={"6xl"}
+        maxW={"100%"}
         direction={"row"}
       >
         <IconButton
@@ -58,23 +58,13 @@ const Navbar = ({ ...rest }) => {
         />
         <HStack spacing={8} alignItems={"center"}>
           <Logo destination="/" />
-          {isAuthenticated ? <NavLink /> : <></>}
+          <NavLink isAuthenticated={isAuthenticated} />
         </HStack>
         <HStack alignItems="center">
           {isAuthenticated ? (
             <AuthMenu user={user} handleSignOutClick={signOut} />
           ) : (
-            <Button
-              as={"a"}
-              fontSize={"sm"}
-              fontWeight={600}
-              color={"white"}
-              bg={"blue.400"}
-              href={"/login"}
-              _hover={{
-                bg: "blue.300",
-              }}
-            >
+            <Button as="a" href="/login">
               Sign In
             </Button>
           )}

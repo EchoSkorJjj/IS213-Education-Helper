@@ -3,6 +3,9 @@ syntax = "proto3";
 package make_payment_pb;
 
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/EchoSkorJjj";
 
 message CheckoutRequest {
   string email = 1;
@@ -31,7 +34,7 @@ message CancelSubscriptionResponse {
 service MakePaymentService {
     rpc Checkout (CheckoutRequest) returns (CheckoutResponse) {
         option (google.api.http) = {
-            get: "/api/v1/payment/checkout"
+            post: "/api/v1/payment/checkout"
             body: "*"
         };
     }

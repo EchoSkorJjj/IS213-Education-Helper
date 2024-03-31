@@ -1,6 +1,7 @@
 import grpc
 import pika
 import os
+import re
 import json
 import logging
 from itertools import cycle
@@ -13,6 +14,7 @@ from content_pb2_grpc import ContentStub
 from factories.prompt_strategy_factory import PromptStrategyFactory
 from strategies.ContentSendingStrategy import FlashcardStrategy, MCQStrategy
 from proxies.ContentServiceProxy import ContentServiceProxy
+import utils
 
 class ContentFetcher:
     def __init__(self):
@@ -31,6 +33,7 @@ class ContentFetcher:
         self.channel = None
         self.grpc_channel = None
         self.grpc_stub = None
+        self.max_tokens = 16384
 
     def initialize_api_key_cycle(self):
         if not self.OPENAI_API_KEYS:
@@ -79,18 +82,33 @@ class ContentFetcher:
         prompt,generate_type,note_id = self.construct_prompt(message_from_queue1, messages_from_queue2)
         token_count = self.count_tokens_with_tiktoken(prompt)
         logging.info(f"Estimated token count for prompt: {token_count}")
+        if token_count > self.max_tokens:
+            # Calculate 2% of the max token limit
+            reduction_amount = int(self.max_tokens * 0.02)
+            # Calculate new max length taking 2% reduction into account
+            new_max_length = self.max_tokens - reduction_amount
+            # Adjust the prompt to the new max length
+            # Assuming prompt is a string, this will cut off the end to fit. Adjust as necessary for your data structure.
+            prompt = prompt[:new_max_length]
+            logging.info(f"Prompt adjusted to within token limit. New length: {len(prompt)}")
+
+
+
 
         client = OpenAI(api_key=next(self.api_key_cycle))
         logging.info(f"Key used: {client.api_key}")
         response = None
         try:
-            response = client.chat.completions.create(model=self.model, messages=[{"role": "system", "content": prompt}])
-            logging.info(f"OpenAI Response: {response.choices[0].message.content}")
+            response = client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "system", "content": prompt}]
+            )
         except Exception as e:
             logging.error(f"Error during OpenAI API call or response handling: {str(e)}")
 
         try:
-            formatted_response = "[" + response.choices[0].message.content.replace("}\n{", "},\n{") + "]"
+            formatted_response = utils.extract_and_validate_json_objects(response.choices[0].message.content)
+            logging.info(f"Formatted response: {formatted_response}")
             self.send_content(formatted_response, generate_type,note_id)
         except Exception as e:
             logging.error(f"Error during content sending: {str(e)}")
@@ -103,11 +121,7 @@ class ContentFetcher:
         self.channel.start_consuming()
     def send_content(self, message, generate_type,note_id):
         # Parse the JSON array string into a Python list
-        try:
-            message_data = json.loads(message)
-        except json.JSONDecodeError as e:
-            logging.error(f"Failed to decode JSON: {str(e)}")
-            return
+        message_data = message
         
         if generate_type == "flashcard":
             strategy = FlashcardStrategy()

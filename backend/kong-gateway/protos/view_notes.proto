@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package view_notes_pb;
 
+option go_package = "github.com/EchoSkorJjj";
+
 import "google/api/annotations.proto";
 
 import "notes.proto";
@@ -19,6 +21,7 @@ message B64Note {
     string file_name = 4;
     string title = 5;
     string topic = 6;
+    string generate_type = 7;
 }
 
 message AssociatedContents {
@@ -47,37 +50,70 @@ message ViewNotesByUserIdRequest {
     int32 limit = 2;
     int32 offset = 3;
     int32 page = 4;
+    string notesTitle = 5;
 }
 
 message ViewNotesByUserIdResponse {
     int32 count = 1;
     repeated notes.NotePreview notes = 2;
-    int32 next_page = 3;
+}
+
+message ViewSavedNotesRequest {
+    string user_id = 1;
+}
+
+message ViewSavedNotesResponse {
+    repeated notes.NotePreview notes = 1;
+}
+
+message ViewNotesByTopicAndNameRequest {
+    string topic = 1;
+    string notesTitle = 2;
+    int32 page = 3;
+    int32 limit = 4;
+    int32 offset = 5;
+}
+
+message ViewNotesByTopicAndNameResponse {
+    int32 count = 1;
+    repeated notes.NotePreview notes = 2;
 }
 
 service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent) {
         option (google.api.http) = {
             get: "/api/v1/notes/{note_id}"
-            body: "*"
         };
     };
+
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse) {
         option (google.api.http) = {
             get: "/api/v1/notes"
-            additional_bindings {
-                get: "/api/v1/notes"
-                body: "*"
-            }
         };
     };
+
     rpc ViewNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse) {
         option (google.api.http) = {
             get: "/api/v1/notes/user/{user_id}"
-            additional_bindings {
-                get: "/api/v1/notes/user/{user_id}"
-                body: "*"
-            }
+        };
+    };
+
+    rpc ViewSavedNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/notes/user/saved/{user_id}"
+        };
+    };
+
+    rpc ViewSavedNotes (ViewSavedNotesRequest) returns (ViewSavedNotesResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/notes/saved/{user_id}"
+        };
+    };
+
+    rpc ViewNotesByTopicAndName (ViewNotesByTopicAndNameRequest) returns (ViewNotesByTopicAndNameResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/notes/get"
+            body: "*"
         };
     };
 }

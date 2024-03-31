@@ -66,10 +66,21 @@ message UpdateTemporaryContentResponse {
     OneOfContent updated_content = 2;
 }
 
+message CommitTemporaryContentsRequest {
+    string note_id = 1;
+    string title = 2;
+    string topic = 3;
+}
+
+message CommitTemporaryContentsResponse {
+    bool success = 1;
+}
+
 service HandleTemporaryContents {
     rpc PollTemporaryContents(PollTemporaryContentsRequest) returns (PollTemporaryContentsResponse) {}
     rpc CreateTemporaryContent(CreateTemporaryContentRequest) returns (CreateTemporaryContentResponse) {}
     rpc DeleteTemporaryContent(DeleteTemporaryContentRequest) returns (DeleteTemporaryContentResponse) {}
     rpc DeleteAllTemporaryContents(DeleteAllTemporaryContentsRequest) returns (DeleteAllTemporaryContentsResponse) {}
     rpc UpdateTemporaryContent(UpdateTemporaryContentRequest) returns (UpdateTemporaryContentResponse) {}
+    rpc CommitTemporaryContents(CommitTemporaryContentsRequest) returns (CommitTemporaryContentsResponse) {}
 }

@@ -34,26 +34,24 @@ function MyAuthHandler:access(conf)
     local token = kong.request.get_header("Authorization")
     -- Exit if the Authorization header is missing
     if token == nil then
-        kong.response.exit(401, { message = "Unauthorized" })
-        return 
+        return kong.response.exit(401, { message = "Unauthorized" })
     end
 
     -- Remove "Bearer " from the start of the token
     token = string.gsub(token, "Bearer%s+", "")
     if token == "" then 
-        kong.response.exit(401, { message = "Unauthorized" })
-        return 
+        return kong.response.exit(401, { message = "Unauthorized" })
     end
 
     kong.log.notice("The token is ", token)
     -- Verify the token
     local decoded_token, err = jwt:verify(conf.jwt_secret, token, claim_spec)
 
-    if not decoded_token or err then
-        kong.log.err("Error decoding token: ", err)
-        kong.response.exit(401, { message = "Unauthorized: " .. tostring(err) })
-        return
-    end
+    if not decoded_token or err or not decoded_token.verified then
+        local message = err or "Token is expired or invalid"
+        kong.log.err("Error decoding token: ", message)
+        return kong.response.exit(401, { message = "Unauthorized: " .. tostring(message) })
+    end    
 
     kong.log.notice("The decoded token is ", cjson.encode(decoded_token))
     local userId = decoded_token.payload.user_id

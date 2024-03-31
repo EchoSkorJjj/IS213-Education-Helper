@@ -23,6 +23,22 @@ service NoteService {
 
   rpc RetrieveNoteMetadata (RetrieveNoteMetadataRequest) returns (RetrieveNoteMetadataResponse);
 
+  // Define an RPC method to update notes by note id
+  rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse);
+
+  // Define an RPC method to view notes by topic and name
+  rpc ViewNotesByTopicAndName (ViewNotesByTopicAndNameRequest) returns (ViewNotesByTopicAndNameResponse);
+
+  // Define an RPC method to retrieve multiple saved notes by user id
+  rpc RetrieveMultipleSavedNotes (RetrieveMultipleSavedNotesRequest) returns (RetrieveMultipleSavedNotesResponse);
+}
+
+message UpdateNoteRequest {
+  NotePreview notePreview = 1;
+}
+
+message UpdateNoteResponse {
+  bool success = 1;
 }
 
 // Note message for storing a note
@@ -33,6 +49,7 @@ message Note {
   string fileName = 4;
   string title = 5;
   string topic = 6;
+  string generateType = 7;
 }
 
 message NotePreview {
@@ -43,6 +60,7 @@ message NotePreview {
   string topic = 5;
   int32 sizeInBytes = 6;
   int32 numPages = 7;
+  string generateType = 8;
 }
 
 // Request message for uploading a note
@@ -100,11 +118,39 @@ message RetrieveMultipleNotesByUserIdRequest {
   int32 limit = 2;
   int32 offset = 3;
   int32 page = 4;
+  string notesTitle = 5;
 }
 
 // Response message for retrieving multiple notes by user id
 message RetrieveMultipleNotesByUserIdResponse {
   int32 count = 1;
   repeated NotePreview notes = 2;
-  int32 nextPage = 3;
+}
+
+message ViewNotesByTopicAndNameRequest {
+  string topic = 1;
+  string notesTitle = 2;
+  int32 page = 3;
+  int32 limit = 4;
+  int32 offset = 5;
+}
+
+message ViewNotesByTopicAndNameResponse {
+  int32 count = 1;
+  repeated notes.NotePreview notes = 2;
+}
+
+// Request message for retrieving multiple saved notes by user id
+message RetrieveMultipleSavedNotesRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  int32 page = 3;
+  string notesTitle = 4;
+  repeated string saved_notes_ids = 5;
+}
+
+// Response message for retrieving multiple saved notes by user id
+message RetrieveMultipleSavedNotesResponse {
+  int32 count = 1;
+  repeated NotePreview notes = 2;
 }

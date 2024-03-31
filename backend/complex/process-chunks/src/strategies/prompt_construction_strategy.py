@@ -15,7 +15,7 @@ class FlashcardPromptStrategy(PromptConstructionStrategy):
 Provides a detailed answer, aiming for undergraduate-level depth where applicable.
 Exclude any obfuscated or nonsensical text, and select content from various sections to cover the topic comprehensively. Aim for minimal token use in your response without sacrificing content quality unless the topic is straightforward.
 
-Format your responses as json:
+Format your responses strictly as json:
 
 {{
     "question": "What is the significance of [specific concept] in [subject]?",
@@ -36,7 +36,7 @@ class MCQPromptStrategy(PromptConstructionStrategy):
 Provides a detailed answer, aiming for undergraduate-level depth where applicable.
 Exclude any obfuscated or nonsensical text, and select content from various sections to cover the topic comprehensively. Aim for minimal token use in your response without sacrificing content quality unless the topic is straightforward.
 
-Format your responses as json:
+Format your responses strictly as json:
 
 {{
 "question": "What is the capital of France?",

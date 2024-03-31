@@ -28,8 +28,15 @@ export const useAuth = (): AuthContextType => {
 };
 
 const useProvideAuth = (): AuthContextType => {
-  const { isAuthenticated, user, authorization, login, logout, authFlow } =
-    useAuthStore();
+  const {
+    isAuthenticated,
+    user,
+    authorization,
+    login,
+    logout,
+    authFlow,
+    updateUserInfo,
+  } = useAuthStore();
   // const toast = useToast();
   const navigate = useNavigate();
 
@@ -129,7 +136,6 @@ const useProvideAuth = (): AuthContextType => {
       const response = await api.post("/api/v1/auth/sgId/generateAuthUrl");
       const AUTH_URL = response.data.auth_url;
       const SGID_UNIQUE_ID = response.headers["x-sgid-unique-id"];
-
       authFlow(SGID_UNIQUE_ID);
 
       window.location.href = AUTH_URL;
@@ -173,7 +179,6 @@ const useProvideAuth = (): AuthContextType => {
 
   const signOut = async (): Promise<void> => {
     try {
-      console.log(authorization);
       const response = await api.post(
         "/api/v1/auth/logout",
         {},
@@ -212,9 +217,23 @@ const useProvideAuth = (): AuthContextType => {
       const data = await handleResponse(response);
       console.log(data);
       console.log(data.fileId);
+      navigate(`/generated/${data.fileId}`);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const retrieveAndUpdateUserInfo = async (): Promise<void> => {
+    if (!user) return;
+    const response = await api.get(`/api/v1/user/${user.user_id}`, {
+      headers: {
+        Authorization: `Bearer ${authorization}`,
+      },
+    });
+
+    const data = await handleResponse(response);
+    const userData = JSON.parse(data.payload.value);
+    updateUserInfo(userData);
   };
 
   return {
@@ -228,5 +247,6 @@ const useProvideAuth = (): AuthContextType => {
     sgIdAuth,
     signOut,
     generateNotes,
+    retrieveAndUpdateUserInfo,
   };
 };

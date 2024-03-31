@@ -1,10 +1,11 @@
 import { Box, Button, Flex, SimpleGrid, Text } from "@chakra-ui/react";
-import { Searchbar } from "@opengovsg/design-system-react";
+
+import { Topic } from "~shared/types/data";
 
 import { Pagination } from "~components/pagination";
 
 interface TopicsProps {
-  topics: string[];
+  topics: Topic[];
   setTopic: (topic: string) => void;
   topic: string;
   setCurrentTopicPage: (pageNumber: number) => void;
@@ -32,13 +33,14 @@ const TopicsList = ({
       alignItems="center"
       pt="5"
       px="10"
+      bg={"blue.800"}
     >
       <Flex maxW={"6xl"} width="100%" height="90%" direction="column">
-        <Box width="100%">
+        <Box width="100%" mb={10}>
           <Flex
-            direction="row"
             alignItems="center"
             justifyContent="space-between"
+            direction={{ base: "column", md: "row" }}
           >
             <Box>
               <Text
@@ -49,34 +51,28 @@ const TopicsList = ({
                 Topics
               </Text>
             </Box>
-            <Box>
-              <Searchbar
-                placeholder="Search topics"
-                style={{
-                  bg: "black",
-                }}
-                onSearch={(value: string) => {
-                  setTopic(value);
-                }}
-                isExpanded={true}
-              />
-            </Box>
           </Flex>
           <SimpleGrid
             columns={{ base: 2, md: 3, lg: 4 }}
-            spacing={5}
+            spacing={10}
             paddingTop="5"
-            paddingBottom="5"
+            paddingBottom="39.5"
+            mb={10}
           >
-            {currentTopics.map((currentTopic) => (
+            {currentTopics.map(({ value, label }) => (
               <Button
                 as="button"
-                bg={topic === currentTopic ? "blue.300" : "lightBlue.500"}
+                p="2"
+                bg={topic === value ? "blue.300" : "lightBlue.500"}
                 size="lg"
-                key={currentTopic}
-                onClick={() => setTopic(currentTopic)}
+                key={value}
+                onClick={() => setTopic(value)}
+                rounded="none"
+                height="150%"
+                justifyContent="flex-start"
+                border={0}
               >
-                {currentTopic}
+                {label}
               </Button>
             ))}
           </SimpleGrid>

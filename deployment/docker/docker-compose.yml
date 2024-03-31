@@ -17,11 +17,7 @@ networks:
 
 volumes:
   kong-data: {}
-  postgres-db-volume: {}
-  # user-storage-db-volume: {}
-  # notes-db-volume: {}
-  # subscriptions-db-volume: {}
-  contents-db-volume: {}
+  postgres-db-volume-1: {}
 
 services:
   # Required for Stripe webhook
@@ -43,13 +39,27 @@ services:
       KONG_DATABASE: off
       KONG_PLUGINS: bundled,authn-kong,rawstring-adapter
       KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml 
+      KONG_SSL_CERT: /etc/kong/ssl/kong.crt
+      KONG_SSL_CERT_KEY: /etc/kong/ssl/kong.key
+      # KONG_PROXY_LISTEN: '0.0.0.0:8000, 0.0.0.0:8443 ssl'
+      # KONG_ADMIN_LISTEN: '0.0.0.0:8001, 0.0.0.0:8444 ssl'
     ports:
       - "8000:8000" # Proxy
       # - "8001:8001" # Admin API
       - "8443:8443" # Proxy SSL
       - "8444:8444" # Admin API SSL # hide
     depends_on:
-      user-storage-service:
+      verify-user-service:
+        condition: service_healthy
+      view-notes-service:
+        condition: service_healthy
+      save-notes-service:
+        condition: service_healthy
+      upload-notes:
+        condition: service_started
+      make-payment-service:
+        condition: service_healthy
+      handle-temporary-contents-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "kong", "health"]
@@ -68,10 +78,11 @@ services:
   postgres-db:
     image: postgres:alpine3.18
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
+      - postgres-db-volume-1:/var/lib/postgresql/data
       - ../sql_table/create_user_storage_table.sql:/docker-entrypoint-initdb.d/user_storage.sql
       - ../sql_table/create_subscriptions_table.sql:/docker-entrypoint-initdb.d/subscriptions.sql
       - ../sql_table/create_notes_table.sql:/docker-entrypoint-initdb.d/create_notes_table.sql
+      - ../sql_table/create_contents_table.sql:/docker-entrypoint-initdb.d/create_contents_table.sql
     environment:
       POSTGRES_DB: esd-db
       POSTGRES_USER: esd-user
@@ -125,6 +136,23 @@ services:
       retries: 3
       start_period: 30s
 
+  verify-user-service:
+    build: ../../backend/complex/verify-user
+    image: verify-user-service:1.0
+    env_file:
+      - ../../backend/complex/verify-user/.env
+    depends_on:
+      payment-service:
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   subscription-service:
     build: ../../backend/simple/subscriptions
     image: subscription-service:1.0
@@ -140,6 +168,15 @@ services:
       retries: 3
       start_period: 30s
 
+  contents-redis:
+    image: redis:7.2-rc2-alpine3.18
+    command: redis-server --requirepass password
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   notes-service:
     build: ../../backend/simple/notes
     env_file:
@@ -147,6 +184,12 @@ services:
     depends_on:
       postgres-db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50052"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   user-storage-service:
     build: ../../backend/simple/user-storage
@@ -177,27 +220,6 @@ services:
       retries: 3
       start_period: 30s
 
-  contents-db:
-    image: bitnami/cassandra:4.1.4
-    volumes:
-      - contents-db-volume:/bitnami
-      - ../sql_table/create_contents_table.cql:/docker-entrypoint-initdb.d/create_contents_table.cql
-    healthcheck:
-      # TODO: Not secure. Username and password are exposed in the command.
-      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  contents-redis:
-    image: redis:7.2-rc2-alpine3.18
-    command: redis-server --requirepass password
-    healthcheck:
-      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   view-notes-service:
     build: ../../backend/complex/view-notes
     image: view-notes-service:1.0
@@ -205,8 +227,7 @@ services:
       - ../../backend/complex/view-notes/.env
     depends_on:
       notes-service:
-        # TODO: Set up healthcheck for notes service
-        condition: service_started
+        condition: service_healthy
       contents-service:
         condition: service_healthy
     healthcheck:
@@ -223,8 +244,7 @@ services:
       - ../../backend/complex/save-notes/.env
     depends_on:
       notes-service:
-        # TODO: Set up healthcheck for notes service
-        condition: service_started
+        condition: service_healthy
       contents-service:
         condition: service_healthy
     healthcheck:
@@ -240,7 +260,7 @@ services:
     env_file:
       - ../../backend/simple/contents/.env
     depends_on:
-      contents-db:
+      postgres-db:
         condition: service_healthy
       contents-redis:
         condition: service_healthy
@@ -258,13 +278,15 @@ services:
       kong-gateway:
         condition: service_healthy
     ports:
-      - "3001:3001"
+      - "3001:443"
 
   upload-notes:
     build: ../../backend/complex/upload-notes
     image: upload-notes:1.0
     depends_on:
       rabbitmq:
+        condition: service_healthy
+      pdf-reader:
         condition: service_healthy
 
   rabbitmq:
@@ -281,12 +303,12 @@ services:
   pdf-reader:
     build:
       context: ../../backend/simple/fileprocessor
-    # logging:
-    #   driver: fluentd
-    #   options:
-    #     fluentd-address: localhost:24224
-    #     tag: docker.container.pdf-reader
-      
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50053"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
   
   process-chunks:
     build:
@@ -296,3 +318,12 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      contents-service:
+        condition: service_healthy
+
+  autohealer:
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

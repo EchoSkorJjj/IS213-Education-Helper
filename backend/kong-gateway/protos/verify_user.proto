@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package verify_user_pb;
+
+import "google/api/annotations.proto";
+import "user_storage.proto";
+
+option go_package = "github.com/EchoSkorJjj/IS213-Education-Helper/verify-user/pb/verify_user";
+
+service VerifyUser {
+    rpc GoogleAuth(user_storage_pb.AuthRequest) returns (user_storage_pb.ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/google/callback"
+            body: "*"
+        };
+    }
+
+    rpc MyInfoCode(user_storage_pb.MyInfoCodeRequest) returns (user_storage_pb.MyInfoCodeResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/myInfo/generateCodeChallenge"
+            body: "*"
+        };
+    }
+
+    rpc MyInfoAuth(user_storage_pb.AuthRequest) returns (user_storage_pb.ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/myInfo/callback"
+            body: "*"
+        };
+    }
+
+    rpc SgIdAuthUrl(user_storage_pb.SgIdAuthUrlRequest) returns (user_storage_pb.SgIdAuthUrlResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/sgId/generateAuthUrl"
+            body: "*"
+        };
+    }
+
+    rpc SgIdAuth(user_storage_pb.AuthRequest) returns (user_storage_pb.ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/sgId/callback"
+            body: "*"
+        };
+    }
+
+    rpc Logout(user_storage_pb.LogoutRequest) returns (user_storage_pb.ServiceResponseWrapper) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/logout"
+            body: "*"
+        };
+    }
+
+    rpc GetUserInfo(user_storage_pb.GetUserRequest) returns (user_storage_pb.ServiceResponseWrapper) {
+        option (google.api.http) = {
+            get: "/api/v1/user/{user_id}"
+        };
+    }
+}

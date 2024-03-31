@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "question": "What is the capital of France?",
+    "answer": "Paris"
+  },
+  {
+    "id": "2",
+    "question": "Who wrote '1984'?",
+    "answer": "George Orwell"
+  }
+]

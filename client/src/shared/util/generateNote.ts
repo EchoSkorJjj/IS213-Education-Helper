@@ -12,7 +12,7 @@ const topics = [
   "Design & Creative",
 ];
 
-const fetchImageURL = async (query: string) => {
+export const fetchImageURL = async (query: string) => {
   const url = `https://api.unsplash.com/search/photos?client_id=${import.meta.env.VITE_UNSPLASH_CLIENT_ID}&query=${query}&page=1`;
 
   try {
@@ -73,7 +73,7 @@ export const getUserNotes = async (
   currentPage: number,
 ) => {
   const totalNotesCount = 100 - currentPage + currentPage;
-  let selectedTopics: any[] = [];
+  let selectedTopics: string[] = [];
 
   if (userNoteType === "created") {
     // Take the first 4 topics
@@ -88,4 +88,8 @@ export const getUserNotes = async (
   );
 
   return { notes: notes, totalNotesCount: totalNotesCount };
+};
+
+export const isFlashcardType = (obj: any): boolean => {
+  return obj.hasOwnProperty("flashcard");
 };

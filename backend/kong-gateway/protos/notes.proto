@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package notes;
 
-
+option go_package = "github.com/EchoSkorJjj";
 option java_package = "com.ESD.Notes.proto";
 option java_outer_classname = "NotesServiceProto";
 
@@ -30,6 +30,7 @@ message Note {
   string fileName = 4;
   string title = 5;
   string topic = 6;
+  string generate_type = 7;
 }
 
 message NotePreview {
@@ -40,6 +41,7 @@ message NotePreview {
   string topic = 5;
   int32 sizeInBytes = 6;
   int32 numPages = 7;
+  string generateType = 8;
 }
 
 // Request message for uploading a note

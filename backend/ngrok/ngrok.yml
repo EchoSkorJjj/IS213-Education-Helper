@@ -3,5 +3,7 @@ authtoken: 2e4o2e0fE55QFjJYsClRatFRplq_3MeMzDB4GCTaHuFbte1M6 # Served temporaril
 tunnels:
   api:
     proto: http
-    addr: kong-gateway:8000
+    # schemes:
+    #   - https
+    addr: https://kong-gateway:8443
     domain: antelope-integral-likely.ngrok-free.app # Served temporarily for purpose of IS213. Domain will be revoked upon completion of semester.
