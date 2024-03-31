@@ -117,7 +117,7 @@ const MarketList = ({
         </Flex>
         {notes.length !== 0 ? (
           <SimpleGrid
-            columns={{ base: 1, md: 3, lg: 4 }}
+            columns={{ base: 1, sm: 2, lg: 4 }}
             spacing={5}
             paddingTop="5"
             paddingBottom="5"
@@ -153,7 +153,7 @@ const MarketList = ({
                     direction="column"
                     textAlign="start"
                   >
-                    <Text>
+                    <Text fontSize={{ base: "sm"}}>
                       {
                         topics.find((topic) => topic.value === note.topic)
                           ?.label
@@ -161,7 +161,7 @@ const MarketList = ({
                     </Text>
                     <Text
                       isTruncated
-                      fontSize={{ base: "2xl", md: "5xl", lg: "2xl" }}
+                      fontSize={{ base: "lg", md: "md" }}
                       fontWeight="bold"
                     >
                       {note.title}

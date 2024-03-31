@@ -63,6 +63,7 @@ const TopicsList = ({
             {currentTopics.map(({ value, label }) => (
               <Button
                 as="button"
+                p="2"
                 bg={topic === value ? "blue.300" : "lightBlue.500"}
                 size="lg"
                 key={value}
