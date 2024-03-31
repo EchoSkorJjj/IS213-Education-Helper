@@ -4,9 +4,9 @@ import {
   Container,
   Flex,
   HStack,
+  Button,
   IconButton,
   Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 
@@ -58,15 +58,18 @@ const Navbar = ({ ...rest }) => {
         />
         <HStack spacing={8} alignItems={"center"}>
           <Logo destination="/" />
-          {isAuthenticated ? <NavLink /> : <></>}
+          <NavLink isAuthenticated={isAuthenticated} />
         </HStack>
         <HStack alignItems="center">
           {isAuthenticated ? (
             <AuthMenu user={user} handleSignOutClick={signOut} />
           ) : (
-            <a href="/about">
-              <Text>Our Story</Text>
-            </a>
+            <Button
+              as="a"
+              href="/login"
+            >
+              Sign In
+            </Button>
           )}
         </HStack>
       </Container>

@@ -42,17 +42,8 @@ const App = () => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === "auth-storage" && !event.newValue) {
         useAuthStore.setState({
-          isAuthenticated: true,
-          user: {
-            user_id: "sadad",
-            username: "Hello World",
-            first_name: "Hello",
-            last_name: "World",
-            email: "sadad@gmail.com",
-            role: "User",
-            profile_pic: "",
-            is_paid: false,
-          },
+          isAuthenticated: false,
+          user: null,
         });
       }
     };
@@ -81,7 +72,6 @@ const App = () => {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/callback" element={<MyInfoCallbackPage />} />
-                <Route path="/about" element={<About />} />
                 <Route
                   path="/auth/sgid/callback"
                   element={<SgIDCallbackPage />}
@@ -104,6 +94,7 @@ const App = () => {
                   element={<GeneratedContentPage />}
                 />
               </Route>
+              <Route path="/about" element={<About />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
