@@ -12,14 +12,49 @@ Democratising Education For All, One Student at a Time
 We're immensely grateful to Professor Alan Megargel and Professor Swetha Gottipati for their guidance and expertise during the development of EduHelper. Their strategic insights and focus on user-centric design have been pivotal in shaping the project. 😊
 
 ## Quick Start
+### Prerequisites
+1. Docker ([Windows](https://docs.docker.com/desktop/install/windows-install/) | [MacOS](https://docs.docker.com/desktop/install/mac-install/))
+2. GNU Make ([Windows](https://gnuwin32.sourceforge.net/packages/make.htm) | [MacOS](https://formulae.brew.sh/formula/make)) - Optional but recommended
 
-To get started:
+### Instructions (Make)
+1. To start the docker deployment, run the following command:
+```bash
+$ make up
+```
 
-1. Populate all the environment variables.
-2. Run the following make commands for local development using Docker. This will also install dependencies for Husky.
-    ```bash
-    make up
-    ```
+That's it! All images are hosted on Docker Hub for ease of access.
+
+2. Once you are done, you can tear down the deployment:
+```bash
+$ make down
+```
+
+Alternatively, to tear down cleanly:
+```bash
+$ make down-clean
+```
+
+Do note that this will remove all containers associated with the project, orphaned containers, and Docker volumes. Do not run this command if you would like to keep your volumes.
+
+### Instructions (Docker Compose)
+These instructions are if you do not have `Make` on your system, and do not want to install it.
+
+1. To start the docker deployment, run the following command:
+```bash
+$ docker compose -f deployment/docker/docker-compose.submission/yml -p esd up
+```
+
+To deploy in detached mode, add the `-d` flag:
+```bash
+$ docker compose -f deployment/docker/docker-compose.submission/yml -p esd up -d
+```
+
+All images are hosted on Docker Hub for ease of access.
+
+2. Once you are done, you can tear down the deployment:
+```bash
+$ docker compose -f deployment/docker/docker-compose.submission/yml -p esd down
+```
 
 ## Project Overview Diagram
 ![Picture 1](https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/141646738/b115e1d8-60a8-460f-86d0-66db4404ad8b)
