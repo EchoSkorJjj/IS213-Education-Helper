@@ -1,8 +1,5 @@
 .vscode
-**/*_password.txt
 .DS_Store
 node_modules
-.env
 **/log.txt
 **/user-storage.log
-**/certs/*
