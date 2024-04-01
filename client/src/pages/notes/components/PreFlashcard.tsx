@@ -60,7 +60,7 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
               {pressState ? "Confirm your changes" : "Edit this flashcard"}
             </Button>
             <Button
-              colorScheme="gray"
+              colorScheme="red"
               variant="ghost"
               onClick={() => onDelete(GPTContent.id)}
             >
@@ -69,7 +69,7 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
           </Flex>
         </Box>
 
-        <Box bg="blue" width="100%" p={20} color="white" rounded="lg">
+        <Box bg="midBlue.500" width="100%" p={20} color="white" rounded="lg">
           <Box
             p={4}
             rounded="lg"
