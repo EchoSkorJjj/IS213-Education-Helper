@@ -177,7 +177,7 @@ function ViewNotes() {
         <IconButton
           aria-label="Go back"
           icon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/marketplace")}
           style={{ marginBottom: 30 }}
           variant="ghost"
           color="white"

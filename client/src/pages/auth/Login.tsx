@@ -6,20 +6,19 @@ import {
   Center,
   Flex,
   Heading,
-  IconButton,
   Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
 
-import MyInfoLogo from "~assets/img/singpass/Primary@2x.png";
+// import MyInfoLogo from "~assets/img/singpass/Primary@2x.png";
 import SgIDLogo from "~assets/img/singpass/sgid_logo.png";
 import SingPassLogo from "~assets/img/singpass/singpass_logo_fullcolours-1.png";
 
 import { useAuth } from "~features/auth";
 
 const LoginPage = () => {
-  const { sgIdGetAuthUrl, myInfoGetCode, googleAuth } = useAuth();
+  const { sgIdGetAuthUrl, googleAuth } = useAuth();
 
   return (
     <Flex minH="100vh" align="center" justify="center" bg={"darkBlue.500"}>
@@ -65,14 +64,14 @@ const LoginPage = () => {
               rightIcon={<Image src={SgIDLogo} boxSize="60px" height="30px" />}
               onClick={sgIdGetAuthUrl}
             />
-            <IconButton
+            {/* <IconButton
               aria-label="myinfo"
               border="none"
               size="lg"
               icon={<Image src={MyInfoLogo} boxSize="100%" objectFit="cover" />}
               onClick={myInfoGetCode}
               w={{ base: "full", sm: "80%" }}
-            />
+            /> */}
           </Stack>
         </Box>
       </Stack>
