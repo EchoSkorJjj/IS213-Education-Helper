@@ -78,7 +78,7 @@ const NotesUpload = ({
       px="10"
     >
       <Flex maxW={"6xl"} width="100%" height="90%" direction="column">
-        <Box width="100%" height="300px" border="none">
+        <Box width="100%" height="500px" border="none">
           <Attachment
             maxSize={maxSize}
             imagePreview="large"
@@ -90,7 +90,6 @@ const NotesUpload = ({
             onError={handleError}
             onFileValidation={handleFileValidation}
             required
-
           />
         </Box>
         <Box width="100%" textAlign="center">

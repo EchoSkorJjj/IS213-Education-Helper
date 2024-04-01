@@ -198,11 +198,11 @@ const SubscribePage = () => {
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
-                  Quiz Generation
+                  MCQ Generation
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="blue.500" />
-                  Unlock Quiz in Marketplace
+                  Share MCQ with Friends
                 </ListItem>
               </List>
               <Box w="80%" pt={7}>

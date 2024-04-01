@@ -6,8 +6,7 @@ secrets:
   ngrok_config:
     file: ../../backend/ngrok/ngrok.yml
 
-x-common-env:
-  &common-env
+x-common-env: &common-env
   KONG_PG_HOST: kong-database
   KONG_PG_USER: kong
   KONG_PG_PASSWORD_FILE: /run/secrets/kong_db_password
@@ -21,15 +20,15 @@ volumes:
 
 services:
   # Required for Stripe webhook
-  ngrok:
-    image: ngrok/ngrok:alpine
-    secrets:
-      - ngrok_config
-    command:
-      - start
-      - --all
-      - --config
-      - /run/secrets/ngrok_config
+  # ngrok:
+  #   image: ngrok/ngrok:alpine
+  #   secrets:
+  #     - ngrok_config
+  #   command:
+  #     - start
+  #     - --all
+  #     - --config
+  #     - /run/secrets/ngrok_config
 
   kong-gateway:
     image: kong-gateway:1.0
@@ -38,7 +37,7 @@ services:
       <<: *common-env
       KONG_DATABASE: off
       KONG_PLUGINS: bundled,authn-kong,rawstring-adapter
-      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml 
+      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
       KONG_SSL_CERT: /etc/kong/ssl/kong.crt
       KONG_SSL_CERT_KEY: /etc/kong/ssl/kong.key
       # KONG_PROXY_LISTEN: '0.0.0.0:8000, 0.0.0.0:8443 ssl'
@@ -70,9 +69,9 @@ services:
       - kong_db_password
     restart: on-failure
     volumes:
-      - ../../backend/kong-gateway/kong.yml:/etc/kong/kong.yml 
-      - ../../backend/kong-gateway/authn-kong:/usr/local/share/lua/5.1/kong/plugins/authn-kong 
-      - ../../backend/kong-gateway/rawstring-adapter:/usr/local/share/lua/5.1/kong/plugins/rawstring-adapter 
+      - ../../backend/kong-gateway/kong.yml:/etc/kong/kong.yml
+      - ../../backend/kong-gateway/authn-kong:/usr/local/share/lua/5.1/kong/plugins/authn-kong
+      - ../../backend/kong-gateway/rawstring-adapter:/usr/local/share/lua/5.1/kong/plugins/rawstring-adapter
       - ../../backend/kong-gateway/protos:/usr/local/share/lua/5.1/kong/protos
 
   postgres-db:
@@ -97,11 +96,11 @@ services:
     image: redis:7.2-rc2-alpine3.18
     command: redis-server --requirepass password
     healthcheck:
-      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      test: ["CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5
-    
+
   handle-temporary-contents-service:
     build: ../../backend/complex/handle-temporary-contents
     image: handle-temporary-contents-service:1.0
@@ -172,7 +171,7 @@ services:
     image: redis:7.2-rc2-alpine3.18
     command: redis-server --requirepass password
     healthcheck:
-      test: [ "CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping" ]
+      test: ["CMD", "redis-cli", "-a", "password", "--raw", "incr", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -253,7 +252,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
-    
+
   contents-service:
     build: ../../backend/simple/contents
     image: content-service:1.0
@@ -309,7 +308,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
-  
+
   process-chunks:
     build:
       context: ../../backend/complex/process-chunks
