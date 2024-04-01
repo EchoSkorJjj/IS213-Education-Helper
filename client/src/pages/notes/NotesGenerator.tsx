@@ -84,6 +84,7 @@ const NotesGeneratorPage = () => {
         handleGenerationChange={handleGenerationChange}
         handleGenerate={handleGenerate}
         setGenerateType={setGenerateType}
+        handleDelete={() => setSelectedFile(undefined)}
       />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ModalOverlay />
