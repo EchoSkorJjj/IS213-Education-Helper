@@ -66,12 +66,12 @@ const PreMCQ: React.FC<PreMCQProps> = ({
         >
           {pressState ? "Confirm your changes" : "Edit this MCQ"}
         </Button>
-        <Button colorScheme="gray" variant="ghost" onClick={() => onDelete(id)}>
+        <Button colorScheme="red" variant="ghost" onClick={() => onDelete(id)}>
           Delete this MCQ
         </Button>
       </Flex>
 
-      <Box bg="blue" w="100%" p={20} color="white" rounded="lg">
+      <Box bg="midBlue.500" w="100%" p={20} color="white" rounded="lg">
         <Box
           p={4}
           mb={4}

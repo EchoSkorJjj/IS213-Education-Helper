@@ -38,6 +38,18 @@ const NotesUpload = ({
     });
   };
 
+  const handleDeleteFile = () => {
+    handleDelete();
+
+    toast({
+      title: "File successfully deleted",
+      status: "info",
+      position: "top",
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+
   const handleFileValidation = (file: File) => {
     console.log("Validating file:", file.name);
 
@@ -57,9 +69,8 @@ const NotesUpload = ({
       handleChange(fileOrFiles);
     } else {
       // No file is provided, handle accordingly
-      handleDelete();
+      handleDeleteFile();
     }
-    
   };
 
   // const onDelete = () => {
@@ -78,7 +89,7 @@ const NotesUpload = ({
       px="10"
     >
       <Flex maxW={"6xl"} width="100%" height="90%" direction="column">
-        <Box width="100%" height="500px" border="none">
+        <Box width="100%" height="100%" border="none">
           <Attachment
             maxSize={maxSize}
             imagePreview="large"
@@ -92,7 +103,7 @@ const NotesUpload = ({
             required
           />
         </Box>
-        <Box width="100%" textAlign="center">
+        <Box width="100%" textAlign="center" marginTop={"24px"}>
           <Text
             color="black"
             fontWeight="bold"

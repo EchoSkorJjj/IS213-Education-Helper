@@ -168,7 +168,7 @@ const MarketList = ({
                     </Text>
                     <Text>
                       {note.fileName.length > 20
-                        ? `${note.fileName.slice(0, 22)} ...`
+                        ? `${note.fileName.slice(0, 20)} ...`
                         : note.fileName}
                     </Text>
                     <Tag
