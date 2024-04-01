@@ -20,15 +20,15 @@ volumes:
 
 services:
   # Required for Stripe webhook
-  # ngrok:
-  #   image: ngrok/ngrok:alpine
-  #   secrets:
-  #     - ngrok_config
-  #   command:
-  #     - start
-  #     - --all
-  #     - --config
-  #     - /run/secrets/ngrok_config
+  ngrok:
+    image: ngrok/ngrok:alpine
+    secrets:
+      - ngrok_config
+    command:
+      - start
+      - --all
+      - --config
+      - /run/secrets/ngrok_config
 
   kong-gateway:
     image: kong-gateway:1.0
