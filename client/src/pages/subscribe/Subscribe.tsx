@@ -26,6 +26,11 @@ function PriceWrapper(props: Props) {
   const { children } = props;
 
   return (
+    <>
+    <Helmet>
+        <title>Subscribe</title>
+        <meta name="description" content="Subscribe to eduhelper" />
+      </Helmet>
     <Box
       shadow="base"
       borderWidth="1px"
@@ -42,6 +47,7 @@ function PriceWrapper(props: Props) {
     >
       {children}
     </Box>
+    </>
   );
 }
 

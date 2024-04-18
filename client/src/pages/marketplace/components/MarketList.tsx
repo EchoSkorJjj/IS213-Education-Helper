@@ -116,90 +116,93 @@ const MarketList = ({
           </Box>
         </Flex>
         {notes.length !== 0 ? (
-          <SimpleGrid
-            columns={{ base: 1, sm: 2, lg: 4 }}
-            spacing={5}
-            paddingTop="5"
-            paddingBottom="5"
-          >
-            {notes.map((note) => (
-              <Card
-                maxW="sm"
-                maxH="sm"
-                key={note.fileId}
-                as="button"
-                onClick={handleCardClick(note.fileId)}
-                border={0}
-                rounded="0"
-              >
-                <Image
-                  objectFit="cover"
-                  src={
-                    imageURLs[note.fileId] || "https://picsum.photos/200/300"
-                  }
-                  alt={note.title}
-                  borderRadius="lg"
-                  height="50%"
-                  width="100%"
+          <>
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, lg: 4 }}
+              spacing={5}
+              paddingTop="5"
+              paddingBottom="5"
+            >
+              {notes.map((note) => (
+                <Card
+                  maxW="sm"
+                  maxH="sm"
+                  key={note.fileId}
+                  as="button"
+                  onClick={handleCardClick(note.fileId)}
                   border={0}
                   rounded="0"
-                />
+                >
+                  <Image
+                    objectFit="cover"
+                    src={
+                      imageURLs[note.fileId] || "https://picsum.photos/200/300"
+                    }
+                    alt={note.title}
+                    borderRadius="lg"
+                    height="50%"
+                    width="100%"
+                    border={0}
+                    rounded="0"
+                  />
 
-                <CardBody pl="4" p="0" maxW={"sm"} maxH={"sm"}>
-                  <Stack
-                    pt="1em"
-                    pr="3em"
-                    spacing="2"
-                    direction="column"
-                    textAlign="start"
-                  >
-                    <Text fontSize={{ base: "sm" }}>
-                      {
-                        topics.find((topic) => topic.value === note.topic)
-                          ?.label
-                      }
-                    </Text>
-                    <Text
-                      isTruncated
-                      fontSize={{ base: "lg", md: "md" }}
-                      fontWeight="bold"
+                  <CardBody pl="4" p="0" maxW={"sm"} maxH={"sm"}>
+                    <Stack
+                      pt="1em"
+                      spacing="2"
+                      direction="column"
+                      textAlign="start"
                     >
-                      {note.title}
-                    </Text>
-                    <Text>
-                      {note.fileName.length > 20
-                        ? `${note.fileName.slice(0, 20)} ...`
-                        : note.fileName}
-                    </Text>
-                    <Tag
-                      size="md"
-                      variant="subtle"
-                      colorScheme={
-                        note.generateType.toUpperCase() === "MCQ"
-                          ? "teal"
-                          : "purple"
-                      }
-                    >
-                      {note.generateType.toUpperCase()}
-                    </Tag>
-                  </Stack>
-                </CardBody>
-              </Card>
-            ))}
-          </SimpleGrid>
+                      <Text fontSize={{ base: "sm" }}>
+                        {
+                          topics.find((topic) => topic.value === note.topic)
+                            ?.label
+                        }
+                      </Text>
+                      <Text
+                        isTruncated
+                        fontSize={{ base: "lg", md: "md" }}
+                        fontWeight="bold"
+                      >
+                        {note.title.length > 19
+                          ? `${note.title.slice(0, 19)} ...`
+                          : note.title}{" "}
+                      </Text>
+                      <Text>
+                        {note.fileName.length > 19
+                          ? `${note.fileName.slice(0, 19)} ...`
+                          : note.fileName}
+                      </Text>
+                      <Tag
+                        size="md"
+                        variant="subtle"
+                        colorScheme={
+                          note.generateType.toUpperCase() === "MCQ"
+                            ? "teal"
+                            : "purple"
+                        }
+                      >
+                        {note.generateType.toUpperCase()}
+                      </Tag>
+                    </Stack>
+                  </CardBody>
+                </Card>
+              ))}
+            </SimpleGrid>
+            <Pagination
+              color="black"
+              isDisabled={notes.length === 0}
+              totalCount={totalNotesCount}
+              pageSize={pageSize}
+              currentPage={currentMarketPage}
+              onPageChange={setCurrentMarketPage}
+            />
+          </>
         ) : (
           <Text textAlign="center" paddingTop="5">
             No notes found
           </Text>
         )}
-        <Pagination
-          color="black"
-          isDisabled={notes.length === 0}
-          totalCount={totalNotesCount}
-          pageSize={pageSize}
-          currentPage={currentMarketPage}
-          onPageChange={setCurrentMarketPage}
-        />
       </Flex>
     </Flex>
   );

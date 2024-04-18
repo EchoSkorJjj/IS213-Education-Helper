@@ -14,7 +14,6 @@ const SgIDCallback = () => {
 
   return (
     <>
-    
       <Helmet>
         <title>SgID Auth</title>
         <meta name="description" content="SgID Auth" />

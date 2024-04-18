@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Box, Button, Checkbox, Flex, Spacer } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Flex, Spacer, useToast } from "@chakra-ui/react";
 
-import { MultipleChoiceQuestionOption } from "~shared/types/data";
+interface MultipleChoiceQuestionOption {
+  option: string;
+  is_correct: boolean;
+}
 
 interface PreMCQProps {
   id: string;
@@ -22,13 +25,9 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   onUpdate,
 }) => {
   const [editQuestion, setEditQuestion] = useState(question);
-  const [editOptions, setEditOptions] =
-    useState<MultipleChoiceQuestionOption[]>(options);
+  const [editOptions, setEditOptions] = useState<MultipleChoiceQuestionOption[]>(options);
   const [pressState, setPressState] = useState(false);
-
-  const handleQuestionEdit = (content: string) => {
-    setEditQuestion(content);
-  };
+  const toast = useToast();
 
   const handleOptionTextChange = (optionIndex: number, newText: string) => {
     const updatedOptions = editOptions.map((option, index) =>
@@ -44,12 +43,53 @@ const PreMCQ: React.FC<PreMCQProps> = ({
     setEditOptions(updatedOptions);
   };
 
+  const validateMCQ = () => {
+    if (!editQuestion.trim()) {
+      toast({
+        title: 'Error',
+        description: 'The question cannot be empty or just spaces.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    }
+
+    const hasValidOptions = editOptions.every(opt => opt.option.trim());
+    if (!hasValidOptions) {
+      toast({
+        title: 'Error',
+        description: 'All options must contain text.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    }
+
+    const hasCorrectAnswer = editOptions.some(opt => opt.is_correct);
+    if (!hasCorrectAnswer) {
+      toast({
+        title: 'Error',
+        description: 'There must be at least one correct answer.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleOnClick = () => {
     if (!pressState) {
       setPressState(true);
     } else {
-      setPressState(false);
-      onUpdate?.(id, { question: editQuestion, options: editOptions });
+      if (validateMCQ()) {
+        onUpdate?.(id, { question: editQuestion, options: editOptions });
+        setPressState(false);
+      }
     }
   };
 
@@ -71,7 +111,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
         </Button>
       </Flex>
 
-      <Box bg="Blue.500" w="100%" p={20} color="white" rounded="lg">
+      <Box bg="darkBlue.500" w="100%" p={20} color="white" rounded="lg">
         <Box
           p={4}
           mb={4}
@@ -80,7 +120,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
           rounded="lg"
           border="1px"
           borderColor="gray.200"
-          onBlur={(event: any) => handleQuestionEdit(event.target.innerText)}
+          onBlur={(event: any) => setEditQuestion(event.target.innerText)}
           style={{ pointerEvents: pressState ? 'auto' : 'none' }}
         >
           {editQuestion}
@@ -91,9 +131,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
             <Checkbox
               isChecked={opt.is_correct}
               isReadOnly={!pressState}
-              onChange={(event: any) =>
-                handleCorrectnessToggle(index, event.target.checked)
-              }
+              onChange={(e) => handleCorrectnessToggle(index, e.target.checked)}
               p={4}
               rounded="lg"
               flex="1"

@@ -97,6 +97,7 @@ const NotesList = ({
           </Box>
         </Flex>
         {notes.length !== 0 ? (
+          <>
           <SimpleGrid
             columns={{ base: 1, md: 3, lg: 4 }}
             spacing={5}
@@ -129,7 +130,6 @@ const NotesList = ({
                 <CardBody pl="4" p="0" maxW={"sm"} maxH={"sm"}>
                   <Stack
                     pt="1em"
-                    pr="3em"
                     spacing="2"
                     direction="column"
                     textAlign="start"
@@ -145,11 +145,13 @@ const NotesList = ({
                       fontSize={{ base: "2xl", md: "5xl", lg: "2xl" }}
                       fontWeight="bold"
                     >
-                      {note.title}
+                      {note.fileName.length > 19
+                        ? `${note.fileName.slice(0, 19)} ...`
+                        : note.fileName}{" "}
                     </Text>
                     <Text>
-                      {note.fileName.length > 20
-                        ? `${note.fileName.slice(0, 22)} ...`
+                      {note.fileName.length > 19
+                        ? `${note.fileName.slice(0, 19)} ...`
                         : note.fileName}
                     </Text>
                     <Tag
@@ -168,19 +170,20 @@ const NotesList = ({
               </Card>
             ))}
           </SimpleGrid>
+             <Pagination
+             color="black"
+             isDisabled={notes.length === 0}
+             totalCount={totalNotesCount}
+             pageSize={pageSize}
+             currentPage={currentPage}
+             onPageChange={setCurrentPage}
+           /></>
         ) : (
           <Text textAlign="center" paddingTop="5">
             No notes found
           </Text>
         )}
-        <Pagination
-          color="black"
-          isDisabled={notes.length === 0}
-          totalCount={totalNotesCount}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
+     
       </Flex>
     </Flex>
   );

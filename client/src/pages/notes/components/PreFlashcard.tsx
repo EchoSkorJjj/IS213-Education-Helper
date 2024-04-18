@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Button, Flex, Spacer, useToast } from '@chakra-ui/react';
+import React, { useState } from "react";
+import { Box, Button, Flex, Spacer, useToast } from "@chakra-ui/react";
 
 interface GPTContent {
   id: string;
@@ -12,7 +12,7 @@ interface PreFlashcardProps {
   onDelete: (id: string) => void;
   onUpdate?: (
     id: string,
-    updatedContent: { question: string; answer: string }
+    updatedContent: { question: string; answer: string },
   ) => void;
 }
 
@@ -37,9 +37,9 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
   const validateAndEditContent = () => {
     if (!editQuestion.trim() || !editAnswer.trim()) {
       toast({
-        title: 'Error',
-        description: 'Question and answer cannot be empty or just spaces.',
-        status: 'error',
+        title: "Error",
+        description: "Question and answer cannot be empty or just spaces.",
+        status: "error",
         duration: 5000,
         isClosable: true,
       });
@@ -48,9 +48,9 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
 
     if (editQuestion.trim().split(/\s+/).length > 300) {
       toast({
-        title: 'Error',
-        description: 'Question cannot exceed 300 words.',
-        status: 'error',
+        title: "Error",
+        description: "Question cannot exceed 300 words.",
+        status: "error",
         duration: 5000,
         isClosable: true,
       });
@@ -59,16 +59,19 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
 
     if (editAnswer.trim().split(/\s+/).length > 600) {
       toast({
-        title: 'Error',
-        description: 'Answer cannot exceed 600 words.',
-        status: 'error',
+        title: "Error",
+        description: "Answer cannot exceed 600 words.",
+        status: "error",
         duration: 5000,
         isClosable: true,
       });
       return;
     }
 
-    onUpdate?.(GPTContent.id, { question: editQuestion.trim(), answer: editAnswer.trim() });
+    onUpdate?.(GPTContent.id, {
+      question: editQuestion.trim(),
+      answer: editAnswer.trim(),
+    });
     setPressState(false);
   };
 

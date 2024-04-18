@@ -160,6 +160,34 @@ const GeneratedContent: React.FC = () => {
     if (!noteId || !authorization || !contentId) {
       return;
     }
+    if(type === "flashcard") {
+      // if gtpcontent.length is 1 do not let it delete anymore
+      if (GPTContent.length === 1) {
+      // create toast
+      toast({
+        title: "Cannot delete last flashcard",
+        status: "error",
+        position: "top",
+        duration: 3000,
+      });
+        return;
+      }
+
+    }
+    if(type === "mcq") {
+      // if gtpcontent.length is 1 do not let it delete anymore
+      if (GPTContent.length === 1) {
+      // create toast
+      toast({
+        title: "Cannot delete last MCQ",
+        status: "error",
+        position: "top",
+        duration: 3000,
+      });
+        return;
+      }
+
+    }
     const response = await deleteTemporaryContent(
       noteId,
       contentId,
@@ -247,6 +275,38 @@ const GeneratedContent: React.FC = () => {
 
   const handleCreateTemporaryContent = async () => {
     if (!noteId || !authorization) {
+      return;
+    }
+    if (title.trim() === "") {
+      toast({
+        title: "Error",
+        description: "You must enter a title before adding new content.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    // if there is no flash card or no mcq throw error
+    if (GPTContent.length === 0 && MCQs.length === 0) {
+      toast({
+        title: "Error",
+        description: "You must have at least one content.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!selectedTopic) {
+      toast({
+        title: "Error",
+        description: "You must select a topic before adding new content.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
 
@@ -399,7 +459,8 @@ const GeneratedContent: React.FC = () => {
               border="1px"
               borderColor="gray.200"
             >
-              {title}
+              {/* title if its not empty string other wise "placeholder" */}
+              {title? title : "Enter a title"}
             </Box>
           </Box>
 
@@ -521,8 +582,8 @@ const GeneratedContent: React.FC = () => {
                       id,
                       "mcq",
                       newData,
-                    authorization,
-                  );
+                      authorization,
+                    );
                   }}
                 />
               </div>
