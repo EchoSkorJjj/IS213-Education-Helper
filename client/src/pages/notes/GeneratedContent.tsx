@@ -521,8 +521,8 @@ const GeneratedContent: React.FC = () => {
                       id,
                       "mcq",
                       newData,
-                      authorization,
-                    );
+                    authorization,
+                  );
                   }}
                 />
               </div>
@@ -531,7 +531,7 @@ const GeneratedContent: React.FC = () => {
         )}
         <Button
           m={10}
-          bg="blue"
+          bg="darkBlue.500"
           color="white"
           width="100%"
           size="lg"
@@ -545,7 +545,7 @@ const GeneratedContent: React.FC = () => {
       <Container maxW="6xl" mb={10}>
         <Flex justifyContent="flex-end">
           <Button
-            bg="blue"
+            bg="darkBlue.500"
             color="white"
             onClick={handleCommitTemporaryContents}
             isDisabled={isLoading}

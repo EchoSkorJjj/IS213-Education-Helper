@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Button, Flex, Spacer } from "@chakra-ui/react";
+import React, { useState } from 'react';
+import { Box, Button, Flex, Spacer, useToast } from '@chakra-ui/react';
 
 interface GPTContent {
   id: string;
@@ -12,7 +12,7 @@ interface PreFlashcardProps {
   onDelete: (id: string) => void;
   onUpdate?: (
     id: string,
-    updatedContent: { question: string; answer: string },
+    updatedContent: { question: string; answer: string }
   ) => void;
 }
 
@@ -21,26 +21,62 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
   onDelete,
   onUpdate,
 }) => {
-  // Local state to track edits
   const [editQuestion, setEditQuestion] = useState(GPTContent.question);
   const [editAnswer, setEditAnswer] = useState(GPTContent.answer);
   const [pressState, setPressState] = useState(false);
+  const toast = useToast();
 
-  // Adjust handleContentEdit to immediately call onUpdate
   const handleContentEdit = (content: string, type: string) => {
     if (type === "question") {
-      setEditQuestion(content); // Update local state
+      setEditQuestion(content);
     } else if (type === "answer") {
-      setEditAnswer(content); // Update local state
+      setEditAnswer(content);
     }
   };
 
+  const validateAndEditContent = () => {
+    if (!editQuestion.trim() || !editAnswer.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Question and answer cannot be empty or just spaces.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (editQuestion.trim().split(/\s+/).length > 300) {
+      toast({
+        title: 'Error',
+        description: 'Question cannot exceed 300 words.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (editAnswer.trim().split(/\s+/).length > 600) {
+      toast({
+        title: 'Error',
+        description: 'Answer cannot exceed 600 words.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    onUpdate?.(GPTContent.id, { question: editQuestion.trim(), answer: editAnswer.trim() });
+    setPressState(false);
+  };
+
   const handleOnClick = () => {
-    if (pressState == false) {
+    if (!pressState) {
       setPressState(true);
     } else {
-      setPressState(false);
-      onUpdate?.(GPTContent.id, { question: editQuestion, answer: editAnswer });
+      validateAndEditContent();
     }
   };
 
@@ -54,7 +90,7 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
             <Button
               colorScheme="gray"
               variant={pressState ? "solid" : "ghost"}
-              onClick={handleOnClick} // Removed the arrow function
+              onClick={handleOnClick}
               mr={5}
             >
               {pressState ? "Confirm your changes" : "Edit this flashcard"}
@@ -75,14 +111,14 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
             rounded="lg"
             border="1px"
             borderColor="gray.200"
-            contentEditable={pressState} // Only allow editing when pressState is true
+            contentEditable={pressState}
             suppressContentEditableWarning
             onBlur={(event: any) =>
               handleContentEdit(event.target.innerText, "question")
             }
+            style={{ pointerEvents: pressState ? "auto" : "none" }}
           >
-            {/* Display edited question if available, otherwise display original question */}
-            {editQuestion !== undefined ? editQuestion : GPTContent.question}
+            {editQuestion}
           </Box>
           <Box height="4"></Box>
           <Box
@@ -90,11 +126,12 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
             rounded="lg"
             border="1px"
             borderColor="gray.200"
-            contentEditable={pressState} // Only allow editing when pressState is true
+            contentEditable={pressState}
             suppressContentEditableWarning
             onBlur={(event: any) =>
               handleContentEdit(event.target.innerText, "answer")
             }
+            style={{ pointerEvents: pressState ? "auto" : "none" }}
           >
             {editAnswer}
           </Box>

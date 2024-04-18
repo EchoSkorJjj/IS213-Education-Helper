@@ -45,7 +45,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   };
 
   const handleOnClick = () => {
-    if (pressState == false) {
+    if (!pressState) {
       setPressState(true);
     } else {
       setPressState(false);
@@ -71,7 +71,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
         </Button>
       </Flex>
 
-      <Box bg="midBlue.500" w="100%" p={20} color="white" rounded="lg">
+      <Box bg="Blue.500" w="100%" p={20} color="white" rounded="lg">
         <Box
           p={4}
           mb={4}
@@ -81,6 +81,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
           border="1px"
           borderColor="gray.200"
           onBlur={(event: any) => handleQuestionEdit(event.target.innerText)}
+          style={{ pointerEvents: pressState ? 'auto' : 'none' }}
         >
           {editQuestion}
         </Box>
@@ -109,6 +110,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
               onBlur={(event: any) =>
                 handleOptionTextChange(index, event.target.innerText)
               }
+              style={{ pointerEvents: pressState ? 'auto' : 'none' }}
             >
               {opt.option}
             </Box>
