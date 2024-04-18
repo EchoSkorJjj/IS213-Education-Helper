@@ -37,7 +37,7 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
 
   origin {
     # TODO: Need to change domain name
-    domain_name = "alb.itsag2t2.com"
+    domain_name = "alb.eduhelper.info"
     origin_id   = "eks-alb"
 
     custom_origin_config {

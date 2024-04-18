@@ -20,8 +20,7 @@ data "aws_secretsmanager_secret_version" "current_elasticache_credentials" {
 
 resource "aws_elasticache_subnet_group" "redis_subnet_group" {
   name       = "${var.project_name}-redis-subnet-group-${var.environment}"
-  # subnet_ids = [var.database_private_subnet_1_id, var.database_private_subnet_2_id]
-  subnet_ids = [var.database_private_subnet_1_id]
+  subnet_ids = [var.database_private_subnet_1_id, var.database_private_subnet_2_id]
 
   tags = {
     Name        = "${var.project_name}-redis-subnet-group-${var.environment}"
@@ -69,7 +68,7 @@ resource "aws_security_group" "redis_sg" {
     from_port = 6379
     to_port   = 6379
     protocol  = "tcp"
-    security_groups = [ "sg-0287d0f475a97bc39" ]
+    security_groups = [ "sg-0c5678e4b9c677010" ]
   }
 
   egress {

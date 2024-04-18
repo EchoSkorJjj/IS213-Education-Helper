@@ -3,15 +3,12 @@ variable "environment" {}
 
 variable "aws_vpc_id" {}
 
-# variable "eks_cluster_security_group_id" {}
+variable "eks_cluster_security_group_id" {}
 
 variable "database_private_subnet_1_id" {}
-# variable "database_private_subnet_2_id" {}
+variable "database_private_subnet_2_id" {}
 
-# variable "availability_zone_1" {}
-# variable "availability_zone_2" {}
-
-# variable "app_domain_zone_id" {}
+variable "app_domain_zone_id" {}
 
 data "aws_secretsmanager_secret" "postgres_credentials" {
   name = "rds_postgres_credentials"
@@ -23,10 +20,7 @@ data "aws_secretsmanager_secret_version" "current_postgres_credentials" {
 
 resource "aws_db_subnet_group" "private_db_subnet_group" {
   name       = "${var.project_name}-private-db-subnet-group-${var.environment}"
-#   subnet_ids = [var.database_private_subnet_1_id, var.database_private_subnet_2_id]
-  subnet_ids = [var.database_private_subnet_1_id]
-
-
+  subnet_ids = [var.database_private_subnet_1_id, var.database_private_subnet_2_id]
 
   tags = {
     Name        = "${var.project_name}-private-db-subnet-group-${var.environment}"
@@ -58,19 +52,20 @@ resource "aws_security_group" "postgres_sg" {
   description = "Security group for PostgreSQL"
   vpc_id      = var.aws_vpc_id
 
-#   ingress {
-#     from_port = 5432
-#     to_port   = 5432
-#     protocol  = "tcp"
-#     security_groups = [ var.eks_cluster_security_group_id ]
-#   }
+  ingress {
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "tcp"
+    security_groups = [ var.eks_cluster_security_group_id ]
+  }
 
-#   ingress {
-#     from_port = 5432
-#     to_port   = 5432
-#     protocol  = "tcp"
-#     security_groups = [ "sg-0287d0f475a97bc39" ]
-#   }
+  ingress {
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "tcp"
+    security_groups = [ "sg-0c5678e4b9c677010" ]
+  }
+
   ingress  {
     from_port = 5432
     to_port = 5432
@@ -86,10 +81,10 @@ resource "aws_security_group" "postgres_sg" {
   }
 }
 
-# resource "aws_route53_record" "postgres_endpoint_cname" {
-#   zone_id = var.app_domain_zone_id
-#   name    = "postgres-primary.eduhelper.info"
-#   type    = "CNAME"
-#   ttl     = "300"
-#   records = [aws_db_instance.postgresql_master.address]
-# }
+resource "aws_route53_record" "postgres_endpoint_cname" {
+  zone_id = var.app_domain_zone_id
+  name    = "postgres-primary.eduhelper.info"
+  type    = "CNAME"
+  ttl     = "300"
+  records = [aws_db_instance.postgresql_master.address]
+}
