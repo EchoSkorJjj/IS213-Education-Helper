@@ -167,6 +167,20 @@ module "alb" {
   depends_on = [ module.eks, module.acm.alb_certificate_validation ]
 }
 
+module "mq" {
+  source = "./mq"
+
+  project_name = var.project_name
+  environment = var.environment
+
+  aws_vpc_id  = module.vpc.aws_vpc_id
+
+  eks_cluster_security_group_id = module.eks.eks_cluster_security_group_id
+
+  eks_private_subnet_1_id = module.vpc.eks_private_subnet_1_id
+  eks_private_subnet_2_id = module.vpc.eks_private_subnet_2_id
+}
+
 module "elasticache-redis" {
   source = "./elasticache-redis"
 
@@ -183,8 +197,8 @@ module "elasticache-redis" {
   app_domain_zone_id = module.route53.aws_route53_zone_id
 }
 
-module "aurora-postgresql" {
-  source = "./aurora-postgresql"
+module "rds-postgresql" {
+  source = "./rds-postgresql"
 
   project_name = var.project_name
   environment = var.environment
@@ -196,8 +210,5 @@ module "aurora-postgresql" {
   database_private_subnet_1_id = module.vpc.database_private_subnet_1_id
   database_private_subnet_2_id = module.vpc.database_private_subnet_2_id
 
-  availability_zone_1 = data.aws_availability_zones.available.names[0]
-  availability_zone_2 = data.aws_availability_zones.available.names[1]
-
   app_domain_zone_id = module.route53.aws_route53_zone_id
-}
+} 

@@ -204,6 +204,24 @@ resource "aws_route_table_association" "private_rta_2" {
   route_table_id = aws_route_table.private_rt_2.id
 }
 
+
+# VPC Endpoint for Amazon S3
+resource "aws_vpc_endpoint" "s3_endpoint" {
+  vpc_id       = aws_vpc.main_vpc.id
+  service_name = "com.amazonaws.${var.aws_region}.s3"
+  vpc_endpoint_type = "Gateway"
+
+  route_table_ids = [
+    aws_route_table.private_rt_1.id,
+    aws_route_table.private_rt_2.id
+  ]
+
+  tags = {
+    Name        = "${var.project_name}-s3-vpc-endpoint-${var.environment}"
+    Environment = var.environment
+  }
+}
+
 # NACL for EKS Subnet
 resource "aws_network_acl" "eks_nacl" {
   vpc_id = aws_vpc.main_vpc.id

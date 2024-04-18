@@ -138,38 +138,24 @@ output "oidc_url" {
   value = module.oidc.oidc_url
 }
 
-# output "alb_sg_id" {
-#   value = module.alb.alb_sg_id
-# }
-
-# output "alb_sg_arn" {
-#   value = module.alb.alb_sg_arn
-# }
-
-output "redis_cluster_replication_group_arn" {
-  value = module.elasticache-redis.redis_cluster_replication_group_arn
+output "mq_instances" {
+  value = module.mq.mq_instances
 }
 
-output "redis_cluster_replication_group_configuration_endpoint_address" {
-  value = module.elasticache-redis.redis_cluster_replication_group_configuration_endpoint_address
+output "redis_cluster_replication_group_primary_endpoint_address" {
+  value = module.elasticache-redis.redis_cluster_replication_group_primary_endpoint_address
 }
 
-output "aurora_cluster_arn" {
-  value = module.aurora-postgresql.aurora_cluster_arn
+output "redis_cluster_replication_group_reader_endpoint_address" {
+  value = module.elasticache-redis.redis_cluster_replication_group_reader_endpoint_address
 }
 
-output "aurora_cluster_primary_endpoint_address" {
-  value = module.aurora-postgresql.aurora_cluster_primary_endpoint_address
+output "postgres_instance_arn" {
+  value = module.rds-postgresql.postgres_instance_arn
+  description = "The Amazon Resource Name (ARN) of the PostgreSQL instance."
 }
 
-output "aurora_cluster_reader_endpoint_address" {
-  value = module.aurora-postgresql.aurora_cluster_reader_endpoint_address
-}
-
-output "aurora_cluster_instance_arn_1" {
-  value = module.aurora-postgresql.aurora_cluster_instance_arn_1
-}
-
-output "aurora_cluster_instance_arn_2" {
-  value = module.aurora-postgresql.aurora_cluster_instance_arn_2
+output "postgres_instance_endpoint_address" {
+  value = module.rds-postgresql.postgres_instance_endpoint_address
+  description = "The connection endpoint for the PostgreSQL database instance."
 }

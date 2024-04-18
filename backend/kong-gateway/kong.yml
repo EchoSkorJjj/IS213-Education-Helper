@@ -127,6 +127,7 @@ plugins:
       origins:
         - "http://localhost:3001"
         - "https://localhost:3001"
+        - "https://eduhelper.info"
       methods:
         - HEAD
         - GET
