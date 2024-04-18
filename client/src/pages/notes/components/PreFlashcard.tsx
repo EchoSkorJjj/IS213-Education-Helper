@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Button, Flex, Spacer, useToast } from "@chakra-ui/react";
+import { Box,  Flex, Spacer, useToast, Text, useColorModeValue, Tooltip, IconButton } from "@chakra-ui/react";
+import { EditIcon, DeleteIcon, CheckIcon } from '@chakra-ui/icons';
 
 interface GPTContent {
   id: string;
@@ -25,6 +26,8 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
   const [editAnswer, setEditAnswer] = useState(GPTContent.answer);
   const [pressState, setPressState] = useState(false);
   const toast = useToast();
+
+  const bg = useColorModeValue("gray.50", "gray.700");
 
   const handleContentEdit = (content: string, type: string) => {
     if (type === "question") {
@@ -84,60 +87,62 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
   };
 
   return (
-    <Box width="100%">
-      <Box>
-        <Box py={4}>
-          <Flex>
-            <Box p={4}>Flashcard {GPTContent.id}</Box>
-            <Spacer />
-            <Button
-              colorScheme="gray"
-              variant={pressState ? "solid" : "ghost"}
-              onClick={handleOnClick}
-              mr={5}
-            >
-              {pressState ? "Confirm your changes" : "Edit this flashcard"}
-            </Button>
-            <Button
-              colorScheme="red"
-              variant="ghost"
-              onClick={() => onDelete(GPTContent.id)}
-            >
-              Delete this flashcard
-            </Button>
-          </Flex>
+    <Box width="100%" p={4} bg={bg} boxShadow="md" rounded="lg" mb={3}>
+      <Flex align="center">
+        <Text fontSize="md" fontWeight="bold" flex="1">Flashcard {GPTContent.id}</Text>
+        <Spacer />
+        <Tooltip label={pressState ? "Confirm Changes" : "Edit Flashcard"}>
+          <IconButton
+            aria-label="Edit Flashcard"
+            icon={pressState ? <CheckIcon /> : <EditIcon />}
+            onClick={handleOnClick}
+            colorScheme={pressState ? "green" : "blue"}
+            mr={2}
+          />
+        </Tooltip>
+        <Tooltip label="Delete Flashcard">
+          <IconButton
+            aria-label="Delete Flashcard"
+            icon={<DeleteIcon />}
+            onClick={() => onDelete(GPTContent.id)}
+            colorScheme="red"
+          />
+        </Tooltip>
+      </Flex>
+      <Box mt={4} p={4} bg="white" rounded="lg">
+        <Text mb={2} fontSize="md" fontWeight="semibold" color="blue.600">Question:</Text>
+        <Box
+          p={3}
+          bg="gray.100"
+          rounded="md"
+          border="1px"
+          borderColor="gray.200"
+          contentEditable={pressState}
+          suppressContentEditableWarning
+          onBlur={(event: any) =>
+            handleContentEdit(event.target.innerText, "question")
+          }
+          style={{ minHeight: '60px', cursor: pressState ? 'text' : 'default' }}
+        >
+          {editQuestion}
         </Box>
-
-        <Box bg="midBlue.500" width="100%" p={20} color="white" rounded="lg">
-          <Box
-            p={4}
-            rounded="lg"
-            border="1px"
-            borderColor="gray.200"
-            contentEditable={pressState}
-            suppressContentEditableWarning
-            onBlur={(event: any) =>
-              handleContentEdit(event.target.innerText, "question")
-            }
-            style={{ pointerEvents: pressState ? "auto" : "none" }}
-          >
-            {editQuestion}
-          </Box>
-          <Box height="4"></Box>
-          <Box
-            p={4}
-            rounded="lg"
-            border="1px"
-            borderColor="gray.200"
-            contentEditable={pressState}
-            suppressContentEditableWarning
-            onBlur={(event: any) =>
-              handleContentEdit(event.target.innerText, "answer")
-            }
-            style={{ pointerEvents: pressState ? "auto" : "none" }}
-          >
-            {editAnswer}
-          </Box>
+      </Box>
+      <Box mt={4} p={4} bg="white" rounded="lg">
+        <Text mb={2} fontSize="md" fontWeight="semibold" color="green.600">Answer:</Text>
+        <Box
+          p={3}
+          bg="gray.100"
+          rounded="md"
+          border="1px"
+          borderColor="gray.200"
+          contentEditable={pressState}
+          suppressContentEditableWarning
+          onBlur={(event: any) =>
+            handleContentEdit(event.target.innerText, "answer")
+          }
+          style={{ minHeight: '60px', cursor: pressState ? 'text' : 'default' }}
+        >
+          {editAnswer}
         </Box>
       </Box>
     </Box>

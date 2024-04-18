@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import { Box, Button, Checkbox, Flex, Spacer, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Checkbox,
+  Flex,
+  Spacer,
+  Text,
+  useColorModeValue,
+  useToast,
+  Tooltip,
+  IconButton,
+} from "@chakra-ui/react";
+import { EditIcon, DeleteIcon, CheckIcon } from '@chakra-ui/icons';
 
 interface MultipleChoiceQuestionOption {
   option: string;
@@ -28,6 +39,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   const [editOptions, setEditOptions] = useState<MultipleChoiceQuestionOption[]>(options);
   const [pressState, setPressState] = useState(false);
   const toast = useToast();
+  const bg = useColorModeValue("gray.50", "gray.700");
 
   const handleOptionTextChange = (optionIndex: number, newText: string) => {
     const updatedOptions = editOptions.map((option, index) =>
@@ -46,33 +58,33 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   const validateMCQ = () => {
     if (!editQuestion.trim()) {
       toast({
-        title: 'Error',
-        description: 'The question cannot be empty or just spaces.',
-        status: 'error',
+        title: "Error",
+        description: "The question cannot be empty or just spaces.",
+        status: "error",
         duration: 5000,
         isClosable: true,
       });
       return false;
     }
 
-    const hasValidOptions = editOptions.every(opt => opt.option.trim());
+    const hasValidOptions = editOptions.every((opt) => opt.option.trim());
     if (!hasValidOptions) {
       toast({
-        title: 'Error',
-        description: 'All options must contain text.',
-        status: 'error',
+        title: "Error",
+        description: "All options must contain text.",
+        status: "error",
         duration: 5000,
         isClosable: true,
       });
       return false;
     }
 
-    const hasCorrectAnswer = editOptions.some(opt => opt.is_correct);
+    const hasCorrectAnswer = editOptions.some((opt) => opt.is_correct);
     if (!hasCorrectAnswer) {
       toast({
-        title: 'Error',
-        description: 'There must be at least one correct answer.',
-        status: 'error',
+        title: "Error",
+        description: "There must be at least one correct answer.",
+        status: "error",
         duration: 5000,
         isClosable: true,
       });
@@ -94,61 +106,66 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   };
 
   return (
-    <Box width="100%">
-      <Flex py={4}>
-        <Box p={4}>MCQ {id}</Box>
+    <Box width="60vw" p={4} bg={bg} mb={4} boxShadow="md" rounded="lg">
+      <Flex align="center">
+        <Text fontSize="lg" fontWeight="bold" flex="1">MCQ {id}</Text>
         <Spacer />
-        <Button
-          colorScheme="gray"
-          variant={pressState ? "solid" : "ghost"}
-          onClick={handleOnClick}
-          mr={5}
-        >
-          {pressState ? "Confirm your changes" : "Edit this MCQ"}
-        </Button>
-        <Button colorScheme="red" variant="ghost" onClick={() => onDelete(id)}>
-          Delete this MCQ
-        </Button>
+        <Tooltip label={pressState ? "Confirm Changes" : "Edit MCQ"}>
+          <IconButton
+          aria-label="Edit MCQ"
+            icon={pressState ? <CheckIcon /> : <EditIcon />}
+            onClick={handleOnClick}
+            colorScheme={pressState ? "green" : "blue"}
+            mr={2}
+          />
+        </Tooltip>
+        <Tooltip label="Delete MCQ">
+          <IconButton
+          aria-label="Delete MCQ"
+            icon={<DeleteIcon />}
+            onClick={() => onDelete(id)}
+            colorScheme="red"
+          />
+        </Tooltip>
       </Flex>
-
-      <Box bg="darkBlue.500" w="100%" p={20} color="white" rounded="lg">
+      <Box mt={4}>
+        <Text mb={2} fontSize="md" fontWeight="semibold" color="blue.600">Question:</Text>
         <Box
-          p={4}
-          mb={4}
-          contentEditable={pressState}
-          suppressContentEditableWarning
-          rounded="lg"
+          p={3}
+          bg="white"
+          rounded="md"
           border="1px"
           borderColor="gray.200"
+          contentEditable={pressState}
+          suppressContentEditableWarning
           onBlur={(event: any) => setEditQuestion(event.target.innerText)}
-          style={{ pointerEvents: pressState ? 'auto' : 'none' }}
+          style={{ minHeight: '60px', cursor: pressState ? 'text' : 'default' }}
         >
           {editQuestion}
         </Box>
-
         {editOptions.map((opt, index) => (
-          <Flex key={index} align="center" mb={4}>
+          <Flex key={index} align="center" mt={4}>
             <Checkbox
               isChecked={opt.is_correct}
-              isReadOnly={!pressState}
               onChange={(e) => handleCorrectnessToggle(index, e.target.checked)}
-              p={4}
-              rounded="lg"
-              flex="1"
-              border="1px"
+              isDisabled={!pressState}
+              size="lg"
+              colorScheme="green"
+              w="0%"
+              pr={5}
             />
             <Box
-              p={4}
+              p={3}
               ml={3}
-              flex="100"
-              rounded="lg"
+              bg="white"
+              flex="1"
+              rounded="md"
               border="1px"
+              borderColor="gray.300"
               contentEditable={pressState}
               suppressContentEditableWarning
-              onBlur={(event: any) =>
-                handleOptionTextChange(index, event.target.innerText)
-              }
-              style={{ pointerEvents: pressState ? 'auto' : 'none' }}
+              onBlur={(event: any) => handleOptionTextChange(index, event.target.innerText)}
+              style={{ minHeight: '40px', cursor: pressState ? 'text' : 'default' }}
             >
               {opt.option}
             </Box>

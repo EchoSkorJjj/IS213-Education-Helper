@@ -27,26 +27,26 @@ function PriceWrapper(props: Props) {
 
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>Subscribe</title>
         <meta name="description" content="Subscribe to eduhelper" />
       </Helmet>
-    <Box
-      shadow="base"
-      borderWidth="1px"
-      borderColor={"gray.200"}
-      borderRadius={"xl"}
-      width={{
-        base: "90%",
-        sm: "63%",
-        md: "47%",
-        lg: "34%",
-        xl: "25%",
-        "2xl": "23%",
-      }} // Adjust widths as necessary for responsiveness
-    >
-      {children}
-    </Box>
+      <Box
+        shadow="base"
+        borderWidth="1px"
+        borderColor={"gray.200"}
+        borderRadius={"xl"}
+        width={{
+          base: "90%",
+          sm: "63%",
+          md: "47%",
+          lg: "34%",
+          xl: "25%",
+          "2xl": "23%",
+        }} // Adjust widths as necessary for responsiveness
+      >
+        {children}
+      </Box>
     </>
   );
 }
