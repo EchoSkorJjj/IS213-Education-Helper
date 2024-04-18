@@ -75,3 +75,38 @@ prune-esd-images:
 	else \
 		echo "Aborting."; \
 	fi
+
+# ---------------------------------
+# For deploying modules to AWS
+# ---------------------------------
+deploy:
+	$(MAKE) -C terraform/modules deploy-all
+
+deploy-%:
+	$(call run_deploy_or_destroy,deploy,$*)
+
+destroy:
+	$(MAKE) -C terraform/modules destroy-all
+
+destroy-%:
+	$(call run_deploy_or_destroy,destroy,$*)
+
+plan:
+	$(MAKE) -C terraform/modules plan-all
+
+plan-%:
+	$(call run_deploy_or_destroy,plan,$*)
+
+# ---------------------------------
+# For deploying shared/backend to AWS
+# This should only be run once
+# Please do not run the below commands because they are initialised in AWS already
+# ---------------------------------
+deploy-shared:
+	$(MAKE) -C terraform/shared deploy-shared
+
+destroy-shared:
+	$(MAKE) -C terraform/shared destroy-shared
+
+plan-shared:
+	$(MAKE) -C terraform/shared plan-shared

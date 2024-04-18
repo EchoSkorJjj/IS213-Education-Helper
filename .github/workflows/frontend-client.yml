@@ -1,0 +1,43 @@
+name: Build and Push Client Production Build to s3
+
+on:
+  push:
+    branches:
+      - main
+      - feat/deployment
+    paths:
+      - 'client/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+  
+    - name: Build the client
+      env:
+        VITE_STORAGE_KEY: ${{ secrets.VITE_STORAGE_KEY }}
+        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        VITE_API_PROD_BASE_URL: ${{ secrets.VITE_API_PROD_BASE_URL }}
+        VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+        VITE_NODE_ENV: production
+      run: |
+        cd client
+        npm install
+        npm run build
+  
+    - name: Sync dist folder to S3
+      run: aws s3 sync ./client/dist/ s3://${{ secrets.AWS_FRONTEND_S3_BUCKET }}/

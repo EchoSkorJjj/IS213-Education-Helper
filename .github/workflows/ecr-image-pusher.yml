@@ -1,0 +1,57 @@
+name: Build and Push image to ECR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          dockerfile: [
+            'backend/simple/contents/Dockerfile',
+            'backend/simple/fileprocessor/Dockerfile',
+            'backend/simple/notes/Dockerfile',
+            'backend/simple/payment/Dockerfile',
+            'backend/simple/subscriptions/Dockerfile',
+            'backend/simple/user-storage/Dockerfile',
+            'backend/complex/handle-temporary-contents/Dockerfile',
+            'backend/complex/make-payment/Dockerfile',
+            'backend/complex/process-chunks/Dockerfile',
+            'backend/complex/upload-notes/Dockerfile',
+            'backend/complex/view-notes/Dockerfile',
+            'backend/complex/save-notes/Dockerfile',
+            'backend/complex/verify-user/Dockerfile',
+            'backend/kong-gateway/Dockerfile',
+          ]
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      run: |
+        aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Extract Service Name
+      id: servicename
+      run: echo "::set-output name=service::$(echo ${{ matrix.dockerfile }} | sed 's|.*/\([^/]*\)/Dockerfile|\1|')"
+
+    - name: Build and push Docker image to ECR
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        file: ${{ matrix.dockerfile }}
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ steps.servicename.outputs.service }}
+        platforms: linux/amd64,linux/arm64

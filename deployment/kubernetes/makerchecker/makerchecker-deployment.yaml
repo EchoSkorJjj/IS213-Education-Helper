@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: makerchecker
+  namespace: itsag2t2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: makerchecker
+  template:
+    metadata:
+      labels:
+        app: makerchecker
+    spec:
+      containers:
+      - name: makerchecker
+        image: 163683790602.dkr.ecr.ap-southeast-1.amazonaws.com/itsag2t2-eks-ecr-production:makerchecker
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50055
+        env:
+          - name: DB
+            valueFrom:
+              secretKeyRef:
+                key: DB
+                name: eks-secrets
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: DB_USER
+                name: eks-secrets
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: DB_PASSWORD
+                name: eks-secrets
+          - name: DB_WRITE_HOST
+            valueFrom:
+              secretKeyRef:
+                key: DB_WRITE_HOST
+                name: eks-secrets
+          - name: DB_READ_HOST
+            valueFrom:
+              secretKeyRef:
+                key: DB_READ_HOST
+                name: eks-secrets
+          - name: DB_PORT
+            value: "5432"
+          - name: SOURCE_EMAIL
+            valueFrom:
+              secretKeyRef:
+                key: SOURCE_EMAIL
+                name: eks-secrets
+          - name: AWS_REGION
+            value: ap-southeast-1
+        livenessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50055"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50055"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+      restartPolicy: Always
+status: {}

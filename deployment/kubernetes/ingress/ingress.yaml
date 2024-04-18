@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-alb
+  namespace: itsag2t2
+  labels:
+    name: k8s-alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /api/v1/healthz
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:163683790602:certificate/dd41e359-4f70-434b-a8ed-b468fa124285
+spec:
+  ingressClassName: alb
+  rules:
+  - host: itsag2t2.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/api/v1"
+        backend:
+          service:
+            name: proxy-app
+            port:
+              number: 8080

@@ -13,7 +13,10 @@ import { UpdateProfileType } from "~shared/types/form";
 
 import { useAuth } from "~features/auth";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL =
+  import.meta.env.VITE_NODE_ENV === "production"
+    ? import.meta.env.VITE_API_PROD_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL;
 
 export const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
