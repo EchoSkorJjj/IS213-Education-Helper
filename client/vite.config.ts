@@ -67,7 +67,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "~pages": path.resolve(__dirname, "src/pages"),
-      "~config": path.resolve(__dirname, "src/config"),
       "~components": path.resolve(__dirname, "src/components"),
       "~shared": path.resolve(__dirname, "src/shared"),
       "~util": path.resolve(__dirname, "src/shared/util"),

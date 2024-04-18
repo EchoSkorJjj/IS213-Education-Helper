@@ -5,8 +5,6 @@ export type AuthContextType = {
   user: UserData | null;
   authorization: string | null;
   googleAuth: () => void;
-  myInfoGetCode: () => void;
-  myInfoAuth: () => void;
   sgIdGetAuthUrl: () => void;
   sgIdAuth: () => void;
   signOut: () => void;

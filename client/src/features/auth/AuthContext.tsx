@@ -6,7 +6,6 @@ import { useGoogleLogin } from "@react-oauth/google";
 import useAuthStore from "~shared/store/AuthStore";
 
 import { api, handleResponse } from "~api";
-import { MYINFO_CONFIG } from "~config";
 import { AuthContextType } from "~types/auth";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -66,70 +65,6 @@ const useProvideAuth = (): AuthContextType => {
     },
     flow: "auth-code",
   });
-
-  const myInfoGetCode = async (): Promise<void> => {
-    try {
-      const response = await api.post(
-        "/api/v1/auth/myInfo/generateCodeChallenge",
-      );
-      const result = response.data.code_challenge;
-      const MYINFO_UNIQUE_ID = response.headers["x-myinfo-unique-id"];
-
-      authFlow(MYINFO_UNIQUE_ID);
-
-      const authorizeUrl =
-        MYINFO_CONFIG.MYINFO_AUTH_API_URL +
-        "?client_id=" +
-        MYINFO_CONFIG.MYINFO_CLIENT_ID +
-        "&scope=" +
-        MYINFO_CONFIG.MYINFO_SCOPES +
-        "&purpose_id=" +
-        MYINFO_CONFIG.MYINFO_PURPOSE_ID +
-        "&code_challenge=" +
-        result +
-        "&code_challenge_method=" +
-        MYINFO_CONFIG.MYINFO_METHOD +
-        "&redirect_uri=" +
-        MYINFO_CONFIG.MYINFO_CALLBACK_URL;
-
-      window.location.href = authorizeUrl;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const myInfoAuth = async (): Promise<void> => {
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get("code");
-
-      if (!code) {
-        console.error("Auth code is required");
-        return;
-      }
-
-      const response = await api.post(
-        "/api/v1/auth/myInfo/callback",
-        {
-          code: code,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authorization}`,
-          },
-        },
-      );
-      const AUTHORIZATION_TOKEN = response.headers["x-access-token"];
-
-      const data = await handleResponse(response);
-      const userData = JSON.parse(data.payload.value);
-
-      login(userData, AUTHORIZATION_TOKEN);
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const sgIdGetAuthUrl = async (): Promise<void> => {
     try {
@@ -241,8 +176,6 @@ const useProvideAuth = (): AuthContextType => {
     user,
     authorization,
     googleAuth,
-    myInfoGetCode,
-    myInfoAuth,
     sgIdGetAuthUrl,
     sgIdAuth,
     signOut,
