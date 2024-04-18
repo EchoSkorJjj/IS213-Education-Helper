@@ -20,7 +20,8 @@ data "aws_secretsmanager_secret_version" "current_elasticache_credentials" {
 
 resource "aws_elasticache_subnet_group" "redis_subnet_group" {
   name       = "${var.project_name}-redis-subnet-group-${var.environment}"
-  subnet_ids = [var.database_private_subnet_1_id, var.database_private_subnet_2_id]
+  # subnet_ids = [var.database_private_subnet_1_id, var.database_private_subnet_2_id]
+  subnet_ids = [var.database_private_subnet_1_id]
 
   tags = {
     Name        = "${var.project_name}-redis-subnet-group-${var.environment}"
@@ -33,9 +34,9 @@ resource "aws_elasticache_replication_group" "redis_cluster_replication_group" {
   description                = "ElastiCache Redis replication group for ${var.project_name} in ${var.environment}"
   node_type                  = "cache.t4g.medium"
   port                       = 6379
-  parameter_group_name       = "default.redis7.cluster.on"
-  automatic_failover_enabled = true
-  multi_az_enabled           = true
+  parameter_group_name       = "default.redis7"
+  automatic_failover_enabled = false
+  multi_az_enabled           = false
   engine_version             = "7.1"
   transit_encryption_enabled = true
   auth_token = jsondecode(data.aws_secretsmanager_secret_version.current_elasticache_credentials.secret_string)["elasticache_auth_token"]
@@ -43,8 +44,8 @@ resource "aws_elasticache_replication_group" "redis_cluster_replication_group" {
   subnet_group_name    = aws_elasticache_subnet_group.redis_subnet_group.name
   security_group_ids   = [aws_security_group.redis_sg.id]
 
-  # Primary + 1 replica
-  num_cache_clusters = 2
+  # Primary
+  num_cache_clusters = 1
 
   tags = {
     Name        = "${var.project_name}-redis-replication-group-${var.environment}"
@@ -81,8 +82,8 @@ resource "aws_security_group" "redis_sg" {
 
 resource "aws_route53_record" "redis_cluster_endpoint_cname" {
   zone_id = var.app_domain_zone_id
-  name    = "redis-cluster.itsag2t2.com"
+  name    = "redis-cluster.eduhelper.info"
   type    = "CNAME"
   ttl     = "300"
-  records = [aws_elasticache_replication_group.redis_cluster_replication_group.configuration_endpoint_address]
+  records = [aws_elasticache_replication_group.redis_cluster_replication_group.primary_endpoint_address]
 }

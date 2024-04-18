@@ -129,7 +129,7 @@ module "eks-node-group" {
 
   aws_vpc_id = module.vpc.aws_vpc_id
 
-  logs_s3_bucket_arn = module.s3.logs_s3_bucket_arn
+  notes_s3_bucket_arn = module.s3.notes_s3_bucket_arn
 
   eks_private_subnet_1_id = module.vpc.eks_private_subnet_1_id
   eks_private_subnet_2_id = module.vpc.eks_private_subnet_2_id

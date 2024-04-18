@@ -45,7 +45,7 @@ resource "aws_acm_certificate_validation" "cert" {
 
 resource "aws_acm_certificate" "alb_cert" {
   provider          = aws.us_east_1
-  domain_name       = "alb.itsag2t2.com"
+  domain_name       = "alb.eduhelper.info"
   validation_method = "DNS"
 
   lifecycle {

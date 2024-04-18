@@ -4,7 +4,7 @@ variable "environment" {}
 
 variable "aws_vpc_id" {}
 
-variable "logs_s3_bucket_arn" {}
+variable "notes_s3_bucket_arn" {}
 
 variable "eks_private_subnet_1_id" {}
 variable "eks_private_subnet_2_id" {}
@@ -96,7 +96,7 @@ resource "aws_iam_policy" "s3_read_write_policy" {
                 "s3:PutObject",
                 "s3:DeleteObject"
             ],
-            "Resource": "${var.logs_s3_bucket_arn}/*"
+            "Resource": "${var.notes_s3_bucket_arn}/*"
         }
     ]
 }
@@ -126,7 +126,7 @@ resource "aws_iam_role_policy_attachment" "Node_Group_AmazonSESEmailToCheckers" 
   role       = aws_iam_role.node_group_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "Node_Group_AmazonS3ReadWriteAccessToLogsBucket" {
+resource "aws_iam_role_policy_attachment" "Node_Group_AmazonS3ReadWriteAccessToNotesBucket" {
   policy_arn = aws_iam_policy.s3_read_write_policy.arn
   role       = aws_iam_role.node_group_role.name
 }
@@ -165,7 +165,7 @@ resource "aws_eks_node_group" "eks_node_group" {
     aws_iam_role_policy_attachment.Node_Group_AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.Node_Group_AmazonEC2ContainerRegistryReadOnly,
     aws_iam_role_policy_attachment.Node_Group_AmazonSESEmailToCheckers,
-    aws_iam_role_policy_attachment.Node_Group_AmazonS3ReadWriteAccessToLogsBucket,
+    aws_iam_role_policy_attachment.Node_Group_AmazonS3ReadWriteAccessToNotesBucket,
     aws_iam_role_policy_attachment.Node_Group_Elasticsearch_Policy,
     aws_iam_role_policy_attachment.Node_Group_MSK_Policy
   ]
