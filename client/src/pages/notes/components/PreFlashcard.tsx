@@ -1,6 +1,15 @@
 import React, { useState } from "react";
-import { Box,  Flex, Spacer, useToast, Text, useColorModeValue, Tooltip, IconButton } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon, CheckIcon } from '@chakra-ui/icons';
+import { CheckIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Flex,
+  IconButton,
+  Spacer,
+  Text,
+  Tooltip,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 
 interface GPTContent {
   id: string;
@@ -89,7 +98,9 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
   return (
     <Box width="100%" p={4} bg={bg} boxShadow="md" rounded="lg" mb={3}>
       <Flex align="center">
-        <Text fontSize="md" fontWeight="bold" flex="1">Flashcard {GPTContent.id}</Text>
+        <Text fontSize="md" fontWeight="bold" flex="1">
+          Flashcard {GPTContent.id}
+        </Text>
         <Spacer />
         <Tooltip label={pressState ? "Confirm Changes" : "Edit Flashcard"}>
           <IconButton
@@ -110,7 +121,9 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
         </Tooltip>
       </Flex>
       <Box mt={4} p={4} bg="white" rounded="lg">
-        <Text mb={2} fontSize="md" fontWeight="semibold" color="blue.600">Question:</Text>
+        <Text mb={2} fontSize="md" fontWeight="semibold" color="blue.600">
+          Question:
+        </Text>
         <Box
           p={3}
           bg="gray.100"
@@ -122,13 +135,15 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
           onBlur={(event: any) =>
             handleContentEdit(event.target.innerText, "question")
           }
-          style={{ minHeight: '60px', cursor: pressState ? 'text' : 'default' }}
+          style={{ minHeight: "60px", cursor: pressState ? "text" : "default" }}
         >
           {editQuestion}
         </Box>
       </Box>
       <Box mt={4} p={4} bg="white" rounded="lg">
-        <Text mb={2} fontSize="md" fontWeight="semibold" color="green.600">Answer:</Text>
+        <Text mb={2} fontSize="md" fontWeight="semibold" color="green.600">
+          Answer:
+        </Text>
         <Box
           p={3}
           bg="gray.100"
@@ -140,7 +155,7 @@ const PreFlashcard: React.FC<PreFlashcardProps> = ({
           onBlur={(event: any) =>
             handleContentEdit(event.target.innerText, "answer")
           }
-          style={{ minHeight: '60px', cursor: pressState ? 'text' : 'default' }}
+          style={{ minHeight: "60px", cursor: pressState ? "text" : "default" }}
         >
           {editAnswer}
         </Box>

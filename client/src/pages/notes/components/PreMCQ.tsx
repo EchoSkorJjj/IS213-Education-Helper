@@ -1,16 +1,16 @@
 import React, { useState } from "react";
+import { CheckIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Checkbox,
   Flex,
+  IconButton,
   Spacer,
   Text,
+  Tooltip,
   useColorModeValue,
   useToast,
-  Tooltip,
-  IconButton,
 } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon, CheckIcon } from '@chakra-ui/icons';
 
 interface MultipleChoiceQuestionOption {
   option: string;
@@ -36,7 +36,8 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   onUpdate,
 }) => {
   const [editQuestion, setEditQuestion] = useState(question);
-  const [editOptions, setEditOptions] = useState<MultipleChoiceQuestionOption[]>(options);
+  const [editOptions, setEditOptions] =
+    useState<MultipleChoiceQuestionOption[]>(options);
   const [pressState, setPressState] = useState(false);
   const toast = useToast();
   const bg = useColorModeValue("gray.50", "gray.700");
@@ -108,11 +109,13 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   return (
     <Box width="60vw" p={4} bg={bg} mb={4} boxShadow="md" rounded="lg">
       <Flex align="center">
-        <Text fontSize="lg" fontWeight="bold" flex="1">MCQ {id}</Text>
+        <Text fontSize="lg" fontWeight="bold" flex="1">
+          MCQ {id}
+        </Text>
         <Spacer />
         <Tooltip label={pressState ? "Confirm Changes" : "Edit MCQ"}>
           <IconButton
-          aria-label="Edit MCQ"
+            aria-label="Edit MCQ"
             icon={pressState ? <CheckIcon /> : <EditIcon />}
             onClick={handleOnClick}
             colorScheme={pressState ? "green" : "blue"}
@@ -121,7 +124,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
         </Tooltip>
         <Tooltip label="Delete MCQ">
           <IconButton
-          aria-label="Delete MCQ"
+            aria-label="Delete MCQ"
             icon={<DeleteIcon />}
             onClick={() => onDelete(id)}
             colorScheme="red"
@@ -129,7 +132,9 @@ const PreMCQ: React.FC<PreMCQProps> = ({
         </Tooltip>
       </Flex>
       <Box mt={4}>
-        <Text mb={2} fontSize="md" fontWeight="semibold" color="blue.600">Question:</Text>
+        <Text mb={2} fontSize="md" fontWeight="semibold" color="blue.600">
+          Question:
+        </Text>
         <Box
           p={3}
           bg="white"
@@ -139,7 +144,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
           contentEditable={pressState}
           suppressContentEditableWarning
           onBlur={(event: any) => setEditQuestion(event.target.innerText)}
-          style={{ minHeight: '60px', cursor: pressState ? 'text' : 'default' }}
+          style={{ minHeight: "60px", cursor: pressState ? "text" : "default" }}
         >
           {editQuestion}
         </Box>
@@ -164,8 +169,13 @@ const PreMCQ: React.FC<PreMCQProps> = ({
               borderColor="gray.300"
               contentEditable={pressState}
               suppressContentEditableWarning
-              onBlur={(event: any) => handleOptionTextChange(index, event.target.innerText)}
-              style={{ minHeight: '40px', cursor: pressState ? 'text' : 'default' }}
+              onBlur={(event: any) =>
+                handleOptionTextChange(index, event.target.innerText)
+              }
+              style={{
+                minHeight: "40px",
+                cursor: pressState ? "text" : "default",
+              }}
             >
               {opt.option}
             </Box>
