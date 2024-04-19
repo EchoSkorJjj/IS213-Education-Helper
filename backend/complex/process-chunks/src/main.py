@@ -66,8 +66,11 @@ class ContentFetcher:
         logging.info(f"Message data: {message_data}")
         generate_type = message_data.get("metadata", {}).get("generateType", "")
         note_id = message_data.get("fileId", "")
+        # get all "content" key from various jsons in messages_from_queue2 which is a list of json objects
+        additional_context = ", ".join([json.loads(message)["content"] for message in messages_from_queue2])
+        logging.info(f"Additional context: {additional_context}")
         strategy = PromptStrategyFactory.get_strategy(generate_type)
-        return strategy.construct_prompt(message_from_queue1, messages_from_queue2),generate_type,note_id
+        return strategy.construct_prompt(message_from_queue1, additional_context),generate_type,note_id
 
     def match_messages_and_call_api(self, ch, method, properties, body):
         """Processes messages from queue1, matches them with messages from queue2, and calls the OpenAI API."""
@@ -147,6 +150,6 @@ if __name__ == "__main__":
     content_fetcher_builder = ContentFetcherBuilder()
     content_fetcher = (content_fetcher_builder
                        .setup_logging()
-                       .with_model("gpt-3.5-turbo-16k")
+                       .with_model("gpt-3.5-turbo")
                        .build())
     content_fetcher.start_consuming()
