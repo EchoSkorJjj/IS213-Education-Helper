@@ -78,23 +78,37 @@ const SubscribePage = () => {
   };
 
   return (
-    <Box py={12} minHeight="100vh">
+    <Box minHeight="100vh">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />
       </Helmet>
-      <VStack spacing={2} textAlign="center">
-        <Heading as="h1" fontSize={{ base: "3xl", md: "4xl" }}>
-          Plans that fit your need
-        </Heading>
-        <Text fontSize="lg" color={"gray.500"}>
-          You may cancel the subscription at anytime.
-        </Text>
-      </VStack>
+      <Flex
+        w="100%"
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        pt="65"
+        pb="5"
+        px="10"
+        mb="3em"
+        bg="darkBlue.500"
+      >
+        <Flex>
+          <VStack spacing={2} textAlign="center">
+            <Heading as="h1" color={"white"} fontSize={{ base: "3xl", md: "4xl" }}>
+              Plans that fit your need
+            </Heading>
+            <Text fontSize="lg" color={"gray.500"}>
+              You may cancel the subscription at anytime.
+            </Text>
+          </VStack>
+        </Flex>
+      </Flex>
 
       <Flex
         direction={{ base: "column", md: "row" }} // Stack vertically on small screens, horizontally on medium+ screens
-        py={10}
+        pb={10}
         justify="center" // Center the items horizontally
         align={{ base: "center", md: "flex-start" }} // Center items on small screens, align items to the start on medium+ screens
         gap={{ base: 8, md: 4 }} // Larger gap on small screens, smaller gap on medium+ screens
@@ -217,7 +231,7 @@ const SubscribePage = () => {
                   variant={user?.is_paid ? "outline" : "solid"}
                   disabled={user?.is_paid}
                   isDisabled={user?.is_paid}
-                  onClick={user?.is_paid ? () => {} : handleSubscribe}
+                  onClick={user?.is_paid ? () => { } : handleSubscribe}
                 >
                   {user?.is_paid ? "You are on Pro Plan" : "Go Pro"}
                 </Button>
