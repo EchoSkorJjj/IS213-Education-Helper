@@ -70,7 +70,8 @@ class ContentFetcher:
         additional_context = ", ".join([json.loads(message)["content"] for message in messages_from_queue2])
         logging.info(f"Additional context: {additional_context}")
         strategy = PromptStrategyFactory.get_strategy(generate_type)
-        return strategy.construct_prompt(message_from_queue1, additional_context),generate_type,note_id
+        prompt,content = strategy.construct_prompt(message_from_queue1, additional_context)
+        return prompt,content,generate_type,note_id
 
     def match_messages_and_call_api(self, ch, method, properties, body):
         """Processes messages from queue1, matches them with messages from queue2, and calls the OpenAI API."""
@@ -82,8 +83,8 @@ class ContentFetcher:
             else:
                 break
 
-        prompt,generate_type,note_id = self.construct_prompt(message_from_queue1, messages_from_queue2)
-        token_count = self.count_tokens_with_tiktoken(prompt)
+        prompt,content,generate_type,note_id = self.construct_prompt(message_from_queue1, messages_from_queue2)
+        token_count = self.count_tokens_with_tiktoken(prompt+content)
         logging.info(f"Estimated token count for prompt: {token_count}")
         if token_count > self.max_tokens:
             # Calculate 2% of the max token limit
@@ -92,8 +93,8 @@ class ContentFetcher:
             new_max_length = self.max_tokens - reduction_amount
             # Adjust the prompt to the new max length
             # Assuming prompt is a string, this will cut off the end to fit. Adjust as necessary for your data structure.
-            prompt = prompt[:new_max_length]
-            logging.info(f"Prompt adjusted to within token limit. New length: {len(prompt)}")
+            content = content[:new_max_length]
+            logging.info(f"Prompt adjusted to within token limit. New length: {len(content)+len(prompt)}")
 
 
 
@@ -104,7 +105,10 @@ class ContentFetcher:
         try:
             response = client.chat.completions.create(
                 model=self.model,
-                messages=[{"role": "system", "content": prompt}]
+                messages=[{"role": "system", "content": prompt},
+                          {"role": "user", "content": content}],
+                temperature=0.3,
+                top_p=0.8,
             )
         except Exception as e:
             logging.error(f"Error during OpenAI API call or response handling: {str(e)}")
