@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Tooltip
 } from "@chakra-ui/react";
 import { Searchbar, Tag } from "@opengovsg/design-system-react";
 
@@ -159,20 +160,24 @@ const MarketList = ({
                             ?.label
                         }
                       </Text>
-                      <Text
-                        isTruncated
-                        fontSize={{ base: "lg", md: "md" }}
-                        fontWeight="bold"
-                      >
-                        {note.title.length > 19
-                          ? `${note.title.slice(0, 19)} ...`
-                          : note.title}{" "}
-                      </Text>
+                      <Tooltip label={note.title} aria-label="Note title">
+                        <Text
+                          isTruncated
+                          fontSize={{ base: "lg", md: "md" }}
+                          fontWeight="bold"
+                        >
+                          {note.title.length > 19
+                            ? `${note.title.slice(0, 19)} ...`
+                            : note.title}{" "}
+                        </Text>
+                      </Tooltip>
+                      <Tooltip label={note.fileName} aria-label="File name">
                       <Text>
                         {note.fileName.length > 19
                           ? `${note.fileName.slice(0, 19)} ...`
                           : note.fileName}
                       </Text>
+                      </Tooltip>
                       <Tag
                         size="md"
                         variant="subtle"
