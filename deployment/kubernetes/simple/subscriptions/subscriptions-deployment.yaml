@@ -1,61 +1,59 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: logging
-  namespace: itsag2t2
+  name: subscriptions
+  namespace: eduhelper
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: logging
+      app: subscriptions
   template:
     metadata:
       labels:
-        app: logging
+        app: subscriptions
     spec:
       containers:
-      - name: logging
-        image: 163683790602.dkr.ecr.ap-southeast-1.amazonaws.com/itsag2t2-eks-ecr-production:logging
+      - name: subscriptions
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:subscriptions
         imagePullPolicy: Always
         ports:
-        - containerPort: 8082
+        - containerPort: 50051
         env:
-          - name: ENVIRONMENT
-            value: production
-          - name: ELASTICSEARCH_URL
+          - name: GRPC_SERVER_ADDRESS
+            value: "0.0.0.0:50051"
+          - name: DB_NAME
             valueFrom:
               secretKeyRef:
-                key: ELASTICSEARCH_URL
+                key: DB_NAME
                 name: eks-secrets
-          - name: ELASTICSEARCH_USERNAME
+          - name: DB_HOSTADDR
             valueFrom:
               secretKeyRef:
-                key: ELASTICSEARCH_USERNAME
+                key: DB_HOST
                 name: eks-secrets
-          - name: ELASTICSEARCH_PASSWORD
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
             valueFrom:
               secretKeyRef:
-                key: ELASTICSEARCH_PASSWORD
+                key: DB_USERNAME
                 name: eks-secrets
-          - name: KAFKA_BROKERS
+          - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: KAFKA_BROKERS
+                key: DB_PASSWORD
                 name: eks-secrets
-          - name: HTTP_SERVER_ADDR
-            value: ":8082"  
         livenessProbe:
-          httpGet:
-            path: /health
-            port: 8082
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
           initialDelaySeconds: 30
-          periodSeconds: 10
+          periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
-          httpGet:
-            path: /health
-            port: 8082
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5

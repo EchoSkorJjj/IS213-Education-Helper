@@ -35,6 +35,7 @@ resource "aws_db_instance" "postgresql_master" {
   max_allocated_storage = 1000  
   engine               = "postgres"
   engine_version       = "16.1"
+  db_name              = "eduhelperdb" 
   username             = jsondecode(data.aws_secretsmanager_secret_version.current_postgres_credentials.secret_string)["postgresql_username"]
   password             = jsondecode(data.aws_secretsmanager_secret_version.current_postgres_credentials.secret_string)["postgresql_password"]
   db_subnet_group_name = aws_db_subnet_group.private_db_subnet_group.name

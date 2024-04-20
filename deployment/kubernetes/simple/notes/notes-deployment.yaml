@@ -1,64 +1,57 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-storage
-  namespace: itsag2t2
+  name: notes
+  namespace: eduhelper
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: user-storage
+      app: notes
   template:
     metadata:
       labels:
-        app: user-storage
+        app: notes
     spec:
       containers:
-      - name: user-storage
-        image: 163683790602.dkr.ecr.ap-southeast-1.amazonaws.com/itsag2t2-eks-ecr-production:user-storage
+      - name: notes
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:notes
         imagePullPolicy: Always
         ports:
-        - containerPort: 50051
+        - containerPort: 50052
         env:
-          - name: GRPC_USER_STORAGE_SERVICE_ADDRESS
-            value: "0.0.0.0:50051"
-          - name: DB
+          - name: DB_NAME
             valueFrom:
               secretKeyRef:
-                key: DB
+                key: DB_NAME
                 name: eks-secrets
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                key: DB_HOST
+                name: eks-secrets
+          - name: DB_PORT
+            value: "5432"
           - name: DB_USER
             valueFrom:
               secretKeyRef:
-                key: DB_USER
+                key: DB_USERNAME
                 name: eks-secrets
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: DB_PASSWORD
                 name: eks-secrets
-          - name: DB_WRITE_HOST
-            valueFrom:
-              secretKeyRef:
-                key: DB_WRITE_HOST
-                name: eks-secrets
-          - name: DB_READ_HOST
-            valueFrom:
-              secretKeyRef:
-                key: DB_READ_HOST
-                name: eks-secrets
-          - name: DB_PORT
-            value: "5432"
         livenessProbe:
           exec:
-            command: ["/bin/grpc_health_probe", "-addr=:50051"]
+            command: ["/bin/grpc_health_probe", "-addr=:50052"]
           initialDelaySeconds: 30
           periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           exec:
-            command: ["/bin/grpc_health_probe", "-addr=:50051"]
+            command: ["/bin/grpc_health_probe", "-addr=:50052"]
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5

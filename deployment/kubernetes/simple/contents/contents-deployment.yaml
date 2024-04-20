@@ -1,69 +1,80 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: makerchecker
-  namespace: itsag2t2
+  name: contents
+  namespace: eduhelper
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: makerchecker
+      app: contents
   template:
     metadata:
       labels:
-        app: makerchecker
+        app: contents
     spec:
       containers:
-      - name: makerchecker
-        image: 163683790602.dkr.ecr.ap-southeast-1.amazonaws.com/itsag2t2-eks-ecr-production:makerchecker
+      - name: contents
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:contents
         imagePullPolicy: Always
         ports:
-        - containerPort: 50055
+        - containerPort: 50051
         env:
-          - name: DB
+          - name: GRPC_PORT
+            value: "50051"
+          - name: GRPC_MAX_WORKERS
+            value: "2"
+          - name: ENVIRONMENT_MODE
+            value: "production"
+          - name: DB_NAME
             valueFrom:
               secretKeyRef:
-                key: DB
+                key: DB_NAME
                 name: eks-secrets
-          - name: DB_USER
+          - name: DB_HOST
             valueFrom:
               secretKeyRef:
-                key: DB_USER
+                key: DB_HOST
+                name: eks-secrets
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: DB_USERNAME
                 name: eks-secrets
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: DB_PASSWORD
                 name: eks-secrets
-          - name: DB_WRITE_HOST
+          - name: CACHE_HOST
             valueFrom:
               secretKeyRef:
-                key: DB_WRITE_HOST
+                key: CACHE_HOST
                 name: eks-secrets
-          - name: DB_READ_HOST
+          - name: CACHE_PORT
+            value: "6379"
+          - name: CACHE_USERNAME
             valueFrom:
               secretKeyRef:
-                key: DB_READ_HOST
+                key: CACHE_USERNAME
                 name: eks-secrets
-          - name: DB_PORT
-            value: "5432"
-          - name: SOURCE_EMAIL
+          - name: CACHE_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: SOURCE_EMAIL
+                key: CACHE_PASSWORD
                 name: eks-secrets
-          - name: AWS_REGION
-            value: ap-southeast-1
         livenessProbe:
           exec:
-            command: ["/bin/grpc_health_probe", "-addr=:50055"]
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
           initialDelaySeconds: 30
-          periodSeconds: 10
+          periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           exec:
-            command: ["/bin/grpc_health_probe", "-addr=:50055"]
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5

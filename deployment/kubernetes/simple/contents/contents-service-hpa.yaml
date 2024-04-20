@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: permissions
-  namespace: itsag2t2
+  name: contents
+  namespace: eduhelper
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: permissions
+    name: contents
   minReplicas: 1
   maxReplicas: 6
   behavior:

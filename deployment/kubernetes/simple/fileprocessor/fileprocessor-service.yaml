@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: permissions
-  namespace: itsag2t2
+  name: fileprocessor
+  namespace: eduhelper
 spec:
   selector:
-    app: permissions
+    app: fileprocessor
   ports:
   - protocol: TCP
     port: 50053  
