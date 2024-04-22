@@ -33,7 +33,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend/simple/user-storage/
-        file: ./backend/simple/user-storage/Dockerfile
+        file: ./backend/simple/user-storage/UserStorage.Dockerfile
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:user-storage
         platforms: linux/arm64
