@@ -33,7 +33,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend/simple/subscriptions/
-        file: ./backend/simple/subscriptions/Dockerfile
+        file: ./backend/simple/subscriptions/Subscriptions.Dockerfile
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:subscriptions
         platforms: linux/arm64
