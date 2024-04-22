@@ -1,24 +1,26 @@
 import { useState } from "react";
+import { CheckIcon } from "@chakra-ui/icons";
 // import { CheckCircleIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Flex,
-  // Icon,
-  // Link,
-  // Modal,
-  // ModalBody,
-  // ModalCloseButton,
-  // ModalContent,
-  // ModalFooter,
-  // ModalHeader,
-  // ModalOverlay,
+  /*
+   * Icon,
+   * Link,
+   * Modal,
+   * ModalBody,
+   * ModalCloseButton,
+   * ModalContent,
+   * ModalFooter,
+   * ModalHeader,
+   * ModalOverlay,
+   */
   Stack,
   Text,
   // useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { CheckIcon } from '@chakra-ui/icons';
 
 import { MultipleChoiceQuestionOption } from "~shared/types/data";
 
@@ -33,10 +35,12 @@ export default function MCQ({ question, options, multiple_answers }: MCQProps) {
   const toast = useToast();
 
   const checkAnswer = () => {
-    const correctOptions = options.filter(option => option.is_correct).map(option => option.option);
-    const isCorrect = multiple_answers ?
-      selectedOptions.sort().join(',') === correctOptions.sort().join(',') :
-      selectedOptions[0] === correctOptions[0];
+    const correctOptions = options
+      .filter((option) => option.is_correct)
+      .map((option) => option.option);
+    const isCorrect = multiple_answers
+      ? selectedOptions.sort().join(",") === correctOptions.sort().join(",")
+      : selectedOptions[0] === correctOptions[0];
 
     if (isCorrect) {
       toast({
@@ -60,14 +64,16 @@ export default function MCQ({ question, options, multiple_answers }: MCQProps) {
 
   const toggleOption = (option: string) => {
     if (multiple_answers) {
-      setSelectedOptions(prev => prev.includes(option) ?
-        prev.filter(prevOption => prevOption !== option) :
-        [...prev, option]);
+      setSelectedOptions((prev) =>
+        prev.includes(option)
+          ? prev.filter((prevOption) => prevOption !== option)
+          : [...prev, option],
+      );
     } else {
       setSelectedOptions([option]);
     }
   };
-  const optionPrefixes = ['A', 'B', 'C', 'D','E','F','G']; // Add more prefixes if you have more than four options
+  const optionPrefixes = ["A", "B", "C", "D", "E", "F", "G"]; // Add more prefixes if you have more than four options
 
   return (
     <Box
@@ -98,21 +104,29 @@ export default function MCQ({ question, options, multiple_answers }: MCQProps) {
             onClick={() => toggleOption(option.option)}
             variant="outline"
             colorScheme="blue"
-            bg={selectedOptions.includes(option.option) ? "blue.500" : "transparent"}
-            color={selectedOptions.includes(option.option) ? "white" : "blue.800"}
+            bg={
+              selectedOptions.includes(option.option)
+                ? "blue.800"
+                : "transparent"
+            }
+            color={
+              selectedOptions.includes(option.option) ? "white" : "blue.800"
+            }
             justifyContent="flex-start" // Align text to the left
             textAlign="left" // Align button text to the left
             paddingLeft={4} // Give some padding to the left
-            height="100%" 
+            height="100%"
             _hover={{
-              bg: selectedOptions.includes(option.option) ? "blue.600" : "blue.50",
+              bg: selectedOptions.includes(option.option)
+                ? "blue.800"
+                : "blue.50",
             }}
             _focus={{
               boxShadow: "outline",
             }}
             w={{ base: "full", sm: "auto" }} // Full width on base, auto on sm and up
           >
-            {`${optionPrefixes[index]}. ${option.option}`} 
+            {`${optionPrefixes[index]}. ${option.option}`}
           </Button>
         ))}
       </Stack>
