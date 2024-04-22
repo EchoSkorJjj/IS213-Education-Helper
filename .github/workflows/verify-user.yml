@@ -33,7 +33,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend/complex/verify-user/
-        file: ./backend/complex/verify-user/Dockerfile
+        file: ./backend/complex/verify-user/VerifyUser.Dockerfile
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:verify-user
         platforms: linux/arm64
