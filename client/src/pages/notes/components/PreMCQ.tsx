@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  AddIcon,
+  CheckIcon,
+  DeleteIcon,
+  EditIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -12,8 +19,6 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { CheckIcon, DeleteIcon, EditIcon, AddIcon } from "@chakra-ui/icons";
-import { HamburgerIcon } from "@chakra-ui/icons";
 
 interface MultipleChoiceQuestionOption {
   option: string;
@@ -27,7 +32,7 @@ interface PreMCQProps {
   onDelete: (id: string) => void;
   onUpdate?: (
     id: string,
-    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] }
+    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] },
   ) => void;
 }
 
@@ -62,14 +67,14 @@ const PreMCQ: React.FC<PreMCQProps> = ({
 
   const handleOptionTextChange = (optionIndex: number, newText: string) => {
     const updatedOptions = editOptions.map((option, index) =>
-      index === optionIndex ? { ...option, option: newText } : option
+      index === optionIndex ? { ...option, option: newText } : option,
     );
     setEditOptions(updatedOptions);
   };
 
   const handleCorrectnessToggle = (optionIndex: number, isCorrect: boolean) => {
     const updatedOptions = editOptions.map((option, index) =>
-      index === optionIndex ? { ...option, is_correct: isCorrect } : option
+      index === optionIndex ? { ...option, is_correct: isCorrect } : option,
     );
     setEditOptions(updatedOptions);
   };
@@ -80,7 +85,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
 
   const deleteOption = (optionIndex: number) => {
     const updatedOptions = editOptions.filter(
-      (_, index) => index !== optionIndex
+      (_, index) => index !== optionIndex,
     );
     setEditOptions(updatedOptions);
   };
@@ -227,9 +232,15 @@ const PreMCQ: React.FC<PreMCQProps> = ({
                           contentEditable={pressState}
                           suppressContentEditableWarning
                           onBlur={(event: any) =>
-                            handleOptionTextChange(index, event.target.innerText)
+                            handleOptionTextChange(
+                              index,
+                              event.target.innerText,
+                            )
                           }
-                          style={{ minHeight: "40px", cursor: pressState ? "text" : "default" }}
+                          style={{
+                            minHeight: "40px",
+                            cursor: pressState ? "text" : "default",
+                          }}
                         >
                           {opt.option}
                         </Box>
@@ -267,7 +278,6 @@ const PreMCQ: React.FC<PreMCQProps> = ({
       </Box>
     </DragDropContext>
   );
-  
 };
 
 export default PreMCQ;

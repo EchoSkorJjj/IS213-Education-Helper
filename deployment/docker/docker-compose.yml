@@ -283,6 +283,8 @@ services:
   upload-notes:
     build: ../../backend/complex/upload-notes
     image: upload-notes:1.0
+    env_file:
+      - ../../backend/complex/upload-notes/.env
     depends_on:
       rabbitmq:
         condition: service_healthy
