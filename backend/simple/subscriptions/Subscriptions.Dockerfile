@@ -18,7 +18,8 @@ FROM ubuntu:22.04
 WORKDIR /app
 RUN apt-get update && apt-get install -y \
     libpqxx-6.4 \
-    libpq5
+    libpq5 \
+    curl
 
 # Download and install the gRPC health probe, used for checking the health of gRPC applications
 RUN GRPC_HEALTH_PROBE_VERSION=v0.4.13 && \
