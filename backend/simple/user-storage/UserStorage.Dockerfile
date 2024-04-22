@@ -54,6 +54,7 @@ WORKDIR /app
 
 # Set the environment to production to optimize for production
 ENV NODE_ENV production
+ENV ENVIRONMENT production
 
 # Copy compiled protobuf definitions to the container
 COPY protos /app/dist/protos

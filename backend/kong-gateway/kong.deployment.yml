@@ -118,10 +118,6 @@ services:
               proto: /usr/local/share/lua/5.1/kong/protos/handle_temporary_contents.proto
 
 plugins:
-  - name: file-log
-    service: verify-user-service
-    config:
-      path: /usr/local/share/lua/5.1/kong/plugins/authn-kong/user-storage.log
   - name: cors
     config:
       origins:
