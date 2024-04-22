@@ -49,32 +49,73 @@ class PaymentServicer < Payment::Payment::Service
         raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, e.message)
     end
     
+    # def webhook(webhook_request, _call)
+    #     payload = webhook_request.raw
+    #     stripe_signature = _call.metadata["stripe-signature"]
+    #     event = nil
+
+    #     begin
+    #       event = configured_stripe::Webhook.construct_event(
+    #           payload, stripe_signature, ENV['STRIPE_WEBHOOK_SECRET']
+    #       )
+    #     rescue JSON::ParserError => e
+    #       raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, e.message)
+    #     rescue configured_stripe::SignatureVerificationError => e
+    #       raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, e.message)
+    #     end
+
+    #     if event.type != 'checkout.session.completed'
+    #       raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, "Received unsupported event of type: #{event.type}")
+    #     end
+
+    #     session = event.data.object
+    #     customer_id = session.customer
+    #     subscription_id = session.subscription
+      
+    #     customer = configured_stripe::Customer.retrieve(customer_id)
+    #     customer_email = customer.email
+      
+    #     Payment::WebhookResponse.new(email: customer_email, subscription_id: subscription_id)
+    # end
     def webhook(webhook_request, _call)
-        payload = webhook_request.raw
-        stripe_signature = _call.metadata["stripe-signature"]
-        event = nil
+      # Setup logger
+      logger = Logger.new($stdout)
+      logger.level = Logger::DEBUG
 
-        begin
-          event = configured_stripe::Webhook.construct_event(
-              payload, stripe_signature, ENV['STRIPE_WEBHOOK_SECRET']
-          )
-        rescue JSON::ParserError => e
-          raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, e.message)
-        rescue configured_stripe::SignatureVerificationError => e
-          raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, e.message)
-        end
+      payload = webhook_request.raw
+      stripe_signature = _call.metadata["stripe-signature"]
 
-        if event.type != 'checkout.session.completed'
-          raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, "Received unsupported event of type: #{event.type}")
-        end
+      # Log the raw payload and its data type
+      logger.debug("Received payload: #{payload}")
+      logger.debug("Payload data type: #{payload.class}")
 
-        session = event.data.object
-        customer_id = session.customer
-        subscription_id = session.subscription
-      
-        customer = configured_stripe::Customer.retrieve(customer_id)
-        customer_email = customer.email
-      
-        Payment::WebhookResponse.new(email: customer_email, subscription_id: subscription_id)
+      # Log the Stripe signature
+      logger.debug("Received Stripe signature: #{stripe_signature}")
+
+      begin
+        event = configured_stripe::Webhook.construct_event(
+            payload, stripe_signature, ENV['STRIPE_WEBHOOK_SECRET']
+        )
+      rescue JSON::ParserError => e
+        logger.error("JSON parsing error: #{e.message}")
+        raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, e.message)
+      rescue configured_stripe::SignatureVerificationError => e
+        logger.error("Signature verification error: #{e.message}")
+        raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, e.message)
+      end
+
+      if event.type != 'checkout.session.completed'
+        logger.error("Unsupported event type: #{event.type}")
+        raise GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::INVALID_ARGUMENT, "Received unsupported event of type: #{event.type}")
+      end
+
+      session = event.data.object
+      customer_id = session.customer
+      subscription_id = session.subscription
+    
+      customer = configured_stripe::Customer.retrieve(customer_id)
+      customer_email = customer.email
+    
+      Payment::WebhookResponse.new(email: customer_email, subscription_id: subscription_id)
     end
 end

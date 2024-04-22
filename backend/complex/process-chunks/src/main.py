@@ -44,23 +44,19 @@ class ContentFetcher:
     def initialize_rabbitmq(self):
         """Initializes the RabbitMQ connection and channels."""
 
-        environment = os.getenv('ENVIRONMENT', 'development') 
-
-        if environment == 'production':
+        ssl_context = None
+        if os.getenv("ENVIRONMENT") == "production":
             ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
             ssl_context.set_ciphers('ECDHE+AESGCM:!ECDSA')
-            url = f"amqps://{self.RABBITMQ_USERNAME}:{self.RABBITMQ_PASSWORD}@{self.RABBITMQ_SERVER}:5671"
-            parameters = pika.URLParameters(url)
-            parameters.ssl_options = pika.SSLOptions(context=ssl_context)
-            self.connection = pika.BlockingConnection(parameters)
-        else:
-            credentials = pika.PlainCredentials(self.RABBITMQ_USERNAME, self.RABBITMQ_PASSWORD)
-            connection_parameters = pika.ConnectionParameters(
-                host=self.RABBITMQ_SERVER, 
-                credentials=credentials,
-            )
-            self.connection = pika.BlockingConnection(connection_parameters)
+            
+        credentials = pika.PlainCredentials(self.RABBITMQ_USERNAME, self.RABBITMQ_PASSWORD)
+        connection_parameters = pika.ConnectionParameters(
+            host=self.RABBITMQ_SERVER, 
+            credentials=credentials,
+            ssl_options=pika.SSLOptions(context=ssl_context) if ssl_context else None
+        )
 
+        self.connection = pika.BlockingConnection(connection_parameters)
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=self.QUEUE_NAME_1, durable=True)
         self.channel.queue_declare(queue=self.QUEUE_NAME_2, durable=True)
