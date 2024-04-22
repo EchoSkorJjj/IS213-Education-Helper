@@ -33,7 +33,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend/simple/fileprocessor/
-        file: ./backend/simple/fileprocessor/Dockerfile
+        file: ./backend/simple/fileprocessor/Fileprocessor.Dockerfile
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:fileprocessor
         platforms: linux/arm64
