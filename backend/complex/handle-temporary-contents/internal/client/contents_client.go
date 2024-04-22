@@ -11,6 +11,7 @@ import (
 	"github.com/EchoSkorJjj/IS213-Education-Helper/handle-temporary-contents/pb/contents"
 )
 
+
 type ContentClient struct {
 	Conn *grpc.ClientConn
 	Stub contents.ContentClient
