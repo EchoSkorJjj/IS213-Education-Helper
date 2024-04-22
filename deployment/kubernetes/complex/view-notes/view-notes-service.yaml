@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: view-notes
+  namespace: eduhelper
+spec:
+  selector:
+    app: view-notes
+  ports:
+  - protocol: TCP
+    port: 50051  
+    targetPort: 50051

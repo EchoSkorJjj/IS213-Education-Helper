@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: view-notes
+  namespace: eduhelper
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: view-notes
+  template:
+    metadata:
+      labels:
+        app: view-notes
+    spec:
+      containers:
+      - name: view-notes
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:view-notes
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50051
+        env:
+          - name: GRPC_PORT
+            value: "50051"
+          - name: GRPC_MAX_WORKERS
+            value: "2"
+          - name: ENVIRONMENT_MODE
+            value: "production"
+          - name: CONTENTS_SERVICE_HOST
+            value: "contents"
+          - name: CONTENTS_SERVICE_PORT
+            value: "50051"
+          - name: NOTES_SERVICE_HOST
+            value: "notes"
+          - name: NOTES_SERVICE_PORT
+            value: "50052"
+          - name: USER_STORAGE_SERVICE_HOST
+            value: "user-storage"
+          - name: USER_STORAGE_SERVICE_PORT
+            value: "50051"
+        livenessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+      restartPolicy: Always
+status: {}
