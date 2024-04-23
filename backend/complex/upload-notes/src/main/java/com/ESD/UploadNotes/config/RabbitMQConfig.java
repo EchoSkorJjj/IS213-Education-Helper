@@ -50,7 +50,6 @@ public class RabbitMQConfig {
         factory.setUsername(env.getProperty("spring.rabbitmq.username"));
         factory.setPassword(env.getProperty("spring.rabbitmq.password"));
         boolean sslEnabled = Boolean.parseBoolean(env.getProperty("spring.rabbitmq.ssl.enabled"));
-        // System.out.println("SSL enabled: " + sslEnabled);
         if (sslEnabled) {
             try {
                 // SSLContext sslContext = SSLContext.getInstance(env.getProperty("spring.rabbitmq.ssl.algorithm"));
