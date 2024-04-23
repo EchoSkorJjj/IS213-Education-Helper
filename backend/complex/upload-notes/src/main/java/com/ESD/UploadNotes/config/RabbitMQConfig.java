@@ -10,6 +10,12 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.core.env.Environment;
+import javax.net.ssl.SSLContext;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import org.springframework.amqp.rabbit.connection.RabbitConnectionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +26,9 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(RabbitMQConfig.class);
+
+    @Autowired
+    private Environment env;
 
     @Value("${app.rabbitmq.exchange}")
     private String exchangeName;
@@ -36,8 +45,28 @@ public class RabbitMQConfig {
     @Value("${app.rabbitmq.routingkey2}")
     private String routingKey2;
 
-    @Autowired
-    private ConnectionFactory connectionFactory;
+    @Bean
+    public CachingConnectionFactory rabbitConnectionFactory() {
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        // connectionFactory.setAddresses(env.getProperty("spring.rabbitmq.addresses"));
+        connectionFactory.setUsername(env.getProperty("spring.rabbitmq.username"));
+        connectionFactory.setPassword(env.getProperty("spring.rabbitmq.password"));
+        connectionFactory.setHost(env.getProperty("spring.rabbitmq.host"));
+        connectionFactory.setPublisherReturns(true);
+
+        if (Boolean.parseBoolean(env.getProperty("spring.rabbitmq.ssl.enabled"))) {
+            try {
+                SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+                sslContext.init(null, null, null); // Initialize SSLContext; specify key managers and trust managers if needed
+                connectionFactory.getRabbitConnectionFactory().useSslProtocol(sslContext);
+            } catch (NoSuchAlgorithmException | KeyManagementException e) {
+                logger.error("Failed to set up SSL context", e);
+                throw new RuntimeException("Failed to set up SSL context", e);
+            }
+        }
+
+        return connectionFactory;
+    }
 
     @Bean
     DirectExchange exchange() {
@@ -66,7 +95,7 @@ public class RabbitMQConfig {
 
     @Bean
     public RabbitAdmin rabbitAdmin() {
-        RabbitAdmin admin = new RabbitAdmin(connectionFactory);
+        RabbitAdmin admin = new RabbitAdmin(rabbitConnectionFactory());
         admin.setAutoStartup(true);
         admin.declareExchange(exchange());
         admin.declareQueue(queue1());
