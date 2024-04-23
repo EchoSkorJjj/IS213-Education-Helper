@@ -32,7 +32,7 @@ interface PreMCQProps {
   onDelete: (id: string) => void;
   onUpdate?: (
     id: string,
-    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] },
+    updatedMCQ: { question: string; options: MultipleChoiceQuestionOption[] }
   ) => void;
 }
 
@@ -67,14 +67,25 @@ const PreMCQ: React.FC<PreMCQProps> = ({
 
   const handleOptionTextChange = (optionIndex: number, newText: string) => {
     const updatedOptions = editOptions.map((option, index) =>
-      index === optionIndex ? { ...option, option: newText } : option,
+      index === optionIndex ? { ...option, option: newText } : option
     );
     setEditOptions(updatedOptions);
   };
 
   const handleCorrectnessToggle = (optionIndex: number, isCorrect: boolean) => {
     const updatedOptions = editOptions.map((option, index) =>
-      index === optionIndex ? { ...option, is_correct: isCorrect } : option,
+      index === optionIndex ? { ...option, is_correct: isCorrect } : option
+    );
+    setEditOptions(updatedOptions);
+  };
+
+  const addOption = () => {
+    setEditOptions([...editOptions, { option: "", is_correct: false }]);
+  };
+
+  const deleteOption = (optionIndex: number) => {
+    const updatedOptions = editOptions.filter(
+      (_, index) => index !== optionIndex
     );
     setEditOptions(updatedOptions);
   };
@@ -278,6 +289,7 @@ const PreMCQ: React.FC<PreMCQProps> = ({
       </Box>
     </DragDropContext>
   );
+  
 };
 
 export default PreMCQ;
