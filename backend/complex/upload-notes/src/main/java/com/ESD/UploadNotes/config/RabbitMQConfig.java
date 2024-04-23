@@ -15,10 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import javax.net.ssl.SSLContext;
-import java.security.SecureRandom;
-import java.security.KeyStore;
-import javax.net.ssl.TrustManagerFactory;
 
 @Configuration
 @EnableRabbit
@@ -55,11 +51,7 @@ public class RabbitMQConfig {
         System.out.println("SSL enabled: " + sslEnabled);
         if (sslEnabled) {
             try {
-                SSLContext sslContext = SSLContext.getInstance(env.getProperty("spring.rabbitmq.ssl.algorithm"));
-                TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-                tmf.init((KeyStore) null);
-                sslContext.init(null, tmf.getTrustManagers(), new SecureRandom());
-                factory.getRabbitConnectionFactory().useSslProtocol(sslContext);
+                factory.getRabbitConnectionFactory().useSslProtocol();
             } catch (Exception e) {
                 logger.error("Failed to set up SSL context", e);
                 throw new RuntimeException("Failed to set up SSL context", e);
