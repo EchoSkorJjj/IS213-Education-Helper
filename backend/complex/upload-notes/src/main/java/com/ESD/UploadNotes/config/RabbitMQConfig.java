@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import javax.net.ssl.SSLContext;
 import java.security.SecureRandom;
+import java.security.KeyStore;
+import javax.net.ssl.TrustManagerFactory;
 
 @Configuration
 @EnableRabbit
@@ -49,17 +51,20 @@ public class RabbitMQConfig {
         factory.setPort(Integer.parseInt(env.getProperty("spring.rabbitmq.port")));
         factory.setUsername(env.getProperty("spring.rabbitmq.username"));
         factory.setPassword(env.getProperty("spring.rabbitmq.password"));
-        // boolean sslEnabled = Boolean.parseBoolean(env.getProperty("spring.rabbitmq.ssl.enabled"));
-        // if (sslEnabled) {
-        //     try {
-        //         // SSLContext sslContext = SSLContext.getInstance(env.getProperty("spring.rabbitmq.ssl.algorithm"));
-        //         // sslContext.init(null, null, new SecureRandom());
-        //         factory.getRabbitConnectionFactory().useSslProtocol((String) null);
-        //     } catch (Exception e) {
-        //         logger.error("Failed to set up SSL context", e);
-        //         throw new RuntimeException("Failed to set up SSL context", e);
-        //     }
-        // }
+        boolean sslEnabled = Boolean.parseBoolean(env.getProperty("spring.rabbitmq.ssl.enabled"));
+        System.out.println("SSL enabled: " + sslEnabled);
+        if (sslEnabled) {
+            try {
+                SSLContext sslContext = SSLContext.getInstance(env.getProperty("spring.rabbitmq.ssl.algorithm"));
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                tmf.init((KeyStore) null);
+                sslContext.init(null, tmf.getTrustManagers(), new SecureRandom());
+                factory.getRabbitConnectionFactory().useSslProtocol(sslContext);
+            } catch (Exception e) {
+                logger.error("Failed to set up SSL context", e);
+                throw new RuntimeException("Failed to set up SSL context", e);
+            }
+        }
         return factory;
     }
 

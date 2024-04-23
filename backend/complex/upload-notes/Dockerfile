@@ -25,4 +25,4 @@ FROM debian:stretch-slim
 COPY --from=jlink /spring-boot-runtime /usr/lib/jvm/spring-boot-runtime
 WORKDIR /app
 COPY --from=build /app/target/UploadNotes-0.0.1-SNAPSHOT.jar app.jar
-CMD ["/usr/lib/jvm/spring-boot-runtime/bin/java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
+CMD ["/usr/lib/jvm/spring-boot-runtime/bin/java", "-Djava.security.egd=file:/dev/./urandom", "-Djavax.net.debug=all", "-jar", "app.jar"]
