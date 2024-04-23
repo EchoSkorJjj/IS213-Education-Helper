@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: verify-user
+  namespace: eduhelper
+spec:
+  selector:
+    app: verify-user
+  ports:
+  - protocol: TCP
+    port: 50051  
+    targetPort: 50051

@@ -9,7 +9,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  Tooltip
+  Tooltip,
 } from "@chakra-ui/react";
 import { Searchbar, Tag } from "@opengovsg/design-system-react";
 

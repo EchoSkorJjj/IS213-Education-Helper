@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat/build-push
     paths:
       - 'backend/simple/notes/**'
 
@@ -32,7 +33,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend/simple/notes/
-        file: ./backend/simple/notes/Dockerfile
+        file: ./backend/simple/notes/Notes.Dockerfile
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:notes
         platforms: linux/arm64

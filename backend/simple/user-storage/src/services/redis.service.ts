@@ -13,6 +13,7 @@ class RedisService {
       socket: {
         host: REDIS_CONFIG.REDIS_HOST,
         port: REDIS_CONFIG.REDIS_PORT,
+        tls: process.env.ENVIRONMENT === 'production',
       },
     });
 

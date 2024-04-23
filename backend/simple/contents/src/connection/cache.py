@@ -32,6 +32,7 @@ class Cache:
             port=self._port,
             username=os.getenv("CACHE_USERNAME"),
             password=os.getenv("CACHE_PASSWORD"),
+            ssl=os.getenv("CACHE_SSL") == "true"
         )
         logging.debug(f"Cache connected at {self._host}:{self._port}")
 

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat/build-push
     paths:
       - 'backend/simple/payment/**'
 
@@ -32,7 +33,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend/simple/payment/
-        file: ./backend/simple/payment/Dockerfile
+        file: ./backend/simple/payment/Payment.Dockerfile
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:payment
         platforms: linux/arm64

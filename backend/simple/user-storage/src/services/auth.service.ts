@@ -172,7 +172,7 @@ class AuthService {
                     name: userinfo.data["myinfo.name"],
                     // uncomment once email is available
                     // email: userinfo.data.email,
-                    email: 'dummyemail@gmail.com',
+                    email: `singpass${nameArray[0]}_${nameArray.slice(1).join(" ")}@example.com`,
                     given_name: nameArray[0],
                     family_name: nameArray.slice(1).join(" "),
                     profile_pic: "",

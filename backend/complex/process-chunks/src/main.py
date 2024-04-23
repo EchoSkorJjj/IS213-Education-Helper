@@ -1,5 +1,6 @@
 import grpc
 import pika
+import ssl
 import os
 import re
 import json
@@ -42,8 +43,19 @@ class ContentFetcher:
 
     def initialize_rabbitmq(self):
         """Initializes the RabbitMQ connection and channels."""
+
+        ssl_context = None
+        if os.getenv("ENVIRONMENT") == "production":
+            ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+            ssl_context.set_ciphers('ECDHE+AESGCM:!ECDSA')
+            
         credentials = pika.PlainCredentials(self.RABBITMQ_USERNAME, self.RABBITMQ_PASSWORD)
-        connection_parameters = pika.ConnectionParameters(host=self.RABBITMQ_SERVER, credentials=credentials)
+        connection_parameters = pika.ConnectionParameters(
+            host=self.RABBITMQ_SERVER, 
+            credentials=credentials,
+            ssl_options=pika.SSLOptions(context=ssl_context) if ssl_context else None
+        )
+
         self.connection = pika.BlockingConnection(connection_parameters)
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=self.QUEUE_NAME_1, durable=True)

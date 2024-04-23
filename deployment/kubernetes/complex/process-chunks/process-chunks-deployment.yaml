@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: process-chunks
+  namespace: eduhelper
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: process-chunks
+  template:
+    metadata:
+      labels:
+        app: process-chunks
+    spec:
+      containers:
+      - name: process-chunks
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:process-chunks
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50051
+        env:
+          - name: CONTENT_SERVICE_ADDRESS
+            value: "contents:50051"
+          - name: ENVIRONMENT
+            value: "production"
+          - name: RABBITMQ_SERVER
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_HOST
+                name: eks-secrets
+          - name: RABBITMQ_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_USERNAME
+                name: eks-secrets
+          - name: RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_PASSWORD
+                name: eks-secrets
+          - name: OPENAI_API_KEYS
+            valueFrom:
+              secretKeyRef:
+                key: OPENAI_API_KEYS
+                name: eks-secrets
+      restartPolicy: Always
+status: {}

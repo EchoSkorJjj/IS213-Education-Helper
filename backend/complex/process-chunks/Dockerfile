@@ -12,6 +12,7 @@ RUN pyinstaller \
     --hidden-import=tiktoken_ext \
     --onefile main.py
 
+
 FROM debian:stable-slim
 WORKDIR /app
 COPY --from=builder /app/dist/main server

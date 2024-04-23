@@ -21,8 +21,8 @@ resource "aws_security_group" "sg" {
 
   ingress {
     description = "Allow MQ traffic"
-    from_port   = 5672
-    to_port     = 5672
+    from_port   = 5671
+    to_port     = 5671
     protocol    = "tcp"
     security_groups = [ var.eks_cluster_security_group_id ]
   }

@@ -79,10 +79,10 @@ resource "aws_security_group" "redis_sg" {
   }
 }
 
-resource "aws_route53_record" "redis_cluster_endpoint_cname" {
-  zone_id = var.app_domain_zone_id
-  name    = "redis-cluster.eduhelper.info"
-  type    = "CNAME"
-  ttl     = "300"
-  records = [aws_elasticache_replication_group.redis_cluster_replication_group.primary_endpoint_address]
-}
+# resource "aws_route53_record" "redis_cluster_endpoint_cname" {
+#   zone_id = var.app_domain_zone_id
+#   name    = "redis-cluster.eduhelper.info"
+#   type    = "CNAME"
+#   ttl     = "300"
+#   records = [aws_elasticache_replication_group.redis_cluster_replication_group.primary_endpoint_address]
+# }

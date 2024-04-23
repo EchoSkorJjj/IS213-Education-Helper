@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-storage
+  namespace: eduhelper
+spec:
+  selector:
+    app: user-storage
+  ports:
+  - protocol: TCP
+    port: 50051  
+    targetPort: 50051

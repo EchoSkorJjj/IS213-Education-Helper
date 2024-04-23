@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upload-notes
+  namespace: eduhelper
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: upload-notes
+  template:
+    metadata:
+      labels:
+        app: upload-notes
+    spec:
+      containers:
+      - name: upload-notes
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:upload-notes
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+          - name: RABBITMQ_HOST
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_HOST
+                name: eks-secrets
+          - name: RABBITMQ_PORT
+            value: "5671"
+          - name: RABBITMQ_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_USERNAME
+                name: eks-secrets
+          - name: RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_PASSWORD
+                name: eks-secrets
+          - name: RABBITMQ_SSL_ENABLED
+            value: "true"
+          - name: FILE_PROCESSOR_ADDR
+            value: "fileprocessor:50053"
+          - name: NOTE_SERVER_ADDR
+            value: "notes:50052"
+      restartPolicy: Always
+status: {}

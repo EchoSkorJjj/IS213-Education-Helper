@@ -37,8 +37,8 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
 
   origin {
     # TODO: Need to change domain name
-    domain_name = "alb.eduhelper.info"
-    origin_id   = "eks-alb"
+    domain_name = "elb.eduhelper.info"
+    origin_id   = "eks-elb"
 
     custom_origin_config {
       http_port              = 80
@@ -57,7 +57,7 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
     path_pattern     = "/api/v1/*"
     allowed_methods  = ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "eks-alb"
+    target_origin_id = "eks-elb"
 
     forwarded_values {
       query_string = true

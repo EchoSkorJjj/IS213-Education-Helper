@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat/build-push
     paths:
       - 'backend/complex/view-notes/**'
 
@@ -32,7 +33,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend/complex/view-notes/
-        file: ./backend/complex/view-notes/Dockerfile
+        file: ./backend/complex/view-notes/ViewNotes.Dockerfile
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:view-notes
         platforms: linux/arm64

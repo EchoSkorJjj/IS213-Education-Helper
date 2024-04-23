@@ -197,8 +197,8 @@ module "elasticache-redis" {
   app_domain_zone_id = module.route53.aws_route53_zone_id
 }
 
-module "rds-postgresql" {
-  source = "./rds-postgresql"
+module "aurora-postgresql" {
+  source = "./aurora-postgresql"
 
   project_name = var.project_name
   environment = var.environment
@@ -210,5 +210,7 @@ module "rds-postgresql" {
   database_private_subnet_1_id = module.vpc.database_private_subnet_1_id
   database_private_subnet_2_id = module.vpc.database_private_subnet_2_id
 
+  availability_zone_1 = data.aws_availability_zones.available.names[0]
+
   app_domain_zone_id = module.route53.aws_route53_zone_id
-} 
+}

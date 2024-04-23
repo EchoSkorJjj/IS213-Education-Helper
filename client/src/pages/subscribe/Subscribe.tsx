@@ -96,7 +96,11 @@ const SubscribePage = () => {
       >
         <Flex>
           <VStack spacing={2} textAlign="center">
-            <Heading as="h1" color={"white"} fontSize={{ base: "3xl", md: "4xl" }}>
+            <Heading
+              as="h1"
+              color={"white"}
+              fontSize={{ base: "3xl", md: "4xl" }}
+            >
               Plans that fit your need
             </Heading>
             <Text fontSize="lg" color={"gray.500"}>

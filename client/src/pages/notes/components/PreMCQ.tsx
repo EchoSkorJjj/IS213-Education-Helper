@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  AddIcon,
+  CheckIcon,
+  DeleteIcon,
+  EditIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -12,8 +19,6 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { CheckIcon, DeleteIcon, EditIcon, AddIcon } from "@chakra-ui/icons";
-import { HamburgerIcon } from "@chakra-ui/icons";
 
 interface MultipleChoiceQuestionOption {
   option: string;
@@ -81,6 +86,17 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   const deleteOption = (optionIndex: number) => {
     const updatedOptions = editOptions.filter(
       (_, index) => index !== optionIndex
+    );
+    setEditOptions(updatedOptions);
+  };
+
+  const addOption = () => {
+    setEditOptions([...editOptions, { option: "", is_correct: false }]);
+  };
+
+  const deleteOption = (optionIndex: number) => {
+    const updatedOptions = editOptions.filter(
+      (_, index) => index !== optionIndex,
     );
     setEditOptions(updatedOptions);
   };
@@ -227,9 +243,15 @@ const PreMCQ: React.FC<PreMCQProps> = ({
                           contentEditable={pressState}
                           suppressContentEditableWarning
                           onBlur={(event: any) =>
-                            handleOptionTextChange(index, event.target.innerText)
+                            handleOptionTextChange(
+                              index,
+                              event.target.innerText,
+                            )
                           }
-                          style={{ minHeight: "40px", cursor: pressState ? "text" : "default" }}
+                          style={{
+                            minHeight: "40px",
+                            cursor: pressState ? "text" : "default",
+                          }}
                         >
                           {opt.option}
                         </Box>
