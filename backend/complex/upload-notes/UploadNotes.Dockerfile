@@ -21,7 +21,7 @@ RUN jlink --no-header-files \
     --add-modules java.base,java.desktop,java.naming,java.management,java.security.jgss,java.instrument \
     --output /spring-boot-runtime
 
-FROM debian:stretch-slim
+FROM maven:3.9.6-amazoncorretto-17
 COPY --from=jlink /spring-boot-runtime /usr/lib/jvm/spring-boot-runtime
 WORKDIR /app
 COPY --from=build /app/target/UploadNotes-0.0.1-SNAPSHOT.jar app.jar
