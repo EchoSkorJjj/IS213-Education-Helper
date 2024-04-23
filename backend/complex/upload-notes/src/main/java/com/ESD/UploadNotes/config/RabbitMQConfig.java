@@ -49,17 +49,17 @@ public class RabbitMQConfig {
         factory.setPort(Integer.parseInt(env.getProperty("spring.rabbitmq.port")));
         factory.setUsername(env.getProperty("spring.rabbitmq.username"));
         factory.setPassword(env.getProperty("spring.rabbitmq.password"));
-        boolean sslEnabled = Boolean.parseBoolean(env.getProperty("spring.rabbitmq.ssl.enabled"));
-        if (sslEnabled) {
-            try {
-                // SSLContext sslContext = SSLContext.getInstance(env.getProperty("spring.rabbitmq.ssl.algorithm"));
-                // sslContext.init(null, null, new SecureRandom());
-                factory.getRabbitConnectionFactory().useSslProtocol((String) null);
-            } catch (Exception e) {
-                logger.error("Failed to set up SSL context", e);
-                throw new RuntimeException("Failed to set up SSL context", e);
-            }
-        }
+        // boolean sslEnabled = Boolean.parseBoolean(env.getProperty("spring.rabbitmq.ssl.enabled"));
+        // if (sslEnabled) {
+        //     try {
+        //         // SSLContext sslContext = SSLContext.getInstance(env.getProperty("spring.rabbitmq.ssl.algorithm"));
+        //         // sslContext.init(null, null, new SecureRandom());
+        //         factory.getRabbitConnectionFactory().useSslProtocol((String) null);
+        //     } catch (Exception e) {
+        //         logger.error("Failed to set up SSL context", e);
+        //         throw new RuntimeException("Failed to set up SSL context", e);
+        //     }
+        // }
         return factory;
     }
 
