@@ -149,13 +149,3 @@ output "redis_cluster_replication_group_primary_endpoint_address" {
 output "redis_cluster_replication_group_reader_endpoint_address" {
   value = module.elasticache-redis.redis_cluster_replication_group_reader_endpoint_address
 }
-
-output "postgres_instance_arn" {
-  value = module.rds-postgresql.postgres_instance_arn
-  description = "The Amazon Resource Name (ARN) of the PostgreSQL instance."
-}
-
-output "postgres_instance_endpoint_address" {
-  value = module.rds-postgresql.postgres_instance_endpoint_address
-  description = "The connection endpoint for the PostgreSQL database instance."
-}
