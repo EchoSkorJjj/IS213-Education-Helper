@@ -26,7 +26,7 @@ spec:
                 key: RABBITMQ_HOST
                 name: eks-secrets
           - name: RABBITMQ_PORT
-            value: "5672"
+            value: "5671"
           - name: RABBITMQ_USERNAME
             valueFrom:
               secretKeyRef:
@@ -37,6 +37,8 @@ spec:
               secretKeyRef:
                 key: RABBITMQ_PASSWORD
                 name: eks-secrets
+          - name: RABBITMQ_SSL_ENABLED
+            value: "true"
           - name: FILE_PROCESSOR_ADDR
             value: "fileprocessor:50053"
           - name: NOTE_SERVER_ADDR

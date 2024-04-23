@@ -42,6 +42,8 @@ spec:
               secretKeyRef:
                 key: DB_PASSWORD
                 name: eks-secrets
+          - name: S3_BUCKET_NAME
+            value: esd-eduhelper-notes-bucket
         livenessProbe:
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:50052"]

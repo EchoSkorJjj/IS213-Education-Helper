@@ -25,7 +25,7 @@ spec:
           - name: GRPC_MAX_WORKERS
             value: "2"
           - name: ENVIRONMENT_MODE
-            value: "production"
+            value: "development"
           - name: DB_NAME
             valueFrom:
               secretKeyRef:
@@ -48,6 +48,8 @@ spec:
               secretKeyRef:
                 key: DB_PASSWORD
                 name: eks-secrets
+          - name: CACHE_SSL
+            value: "true"
           - name: CACHE_HOST
             valueFrom:
               secretKeyRef:

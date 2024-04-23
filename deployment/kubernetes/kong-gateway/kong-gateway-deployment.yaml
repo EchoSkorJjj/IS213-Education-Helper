@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong-gateway
+  labels:
+    app: kong-gateway
+  namespace: eduhelper
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kong-gateway
+  template:
+    metadata:
+      labels:
+        app: kong-gateway
+    spec:
+      containers:
+      - name: kong
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:kong-gateway
+        env:
+          - name: KONG_DATABASE
+            value: "off"
+          - name: KONG_PLUGINS
+            value: "bundled,authn-kong,rawstring-adapter"
+          - name: KONG_DECLARATIVE_CONFIG
+            value: "/etc/kong/kong.yml"
+        ports:
+          - containerPort: 8000
+          - containerPort: 8443
+          - containerPort: 8444
