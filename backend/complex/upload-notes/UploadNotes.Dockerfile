@@ -18,7 +18,7 @@ RUN jlink --no-header-files \
     --no-man-pages \
     --compress=2 \
     --strip-debug \
-    --add-modules java.base,java.desktop,java.naming,java.management,java.security.jgss,java.instrument,java.crypto \
+    --add-modules java.base,java.desktop,java.naming,java.management,java.security.jgss,java.instrument,jdk.crypto.ec,jdk.crypto.cryptoki \
     --output /spring-boot-runtime
 
 FROM maven:3.9.6-amazoncorretto-17
