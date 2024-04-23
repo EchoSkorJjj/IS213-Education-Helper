@@ -5,7 +5,6 @@ import GoogleAPIService from './googleapi.service';
 import UserService from './user.service';
 import RedisService from './redis.service';
 import OAuthClientService from './oauth.service';
-import { generateRandomEmail } from '../utils';
 
 import JWTHandler from '../middleware/jwtMiddleware';
 
@@ -173,7 +172,7 @@ class AuthService {
                     name: userinfo.data["myinfo.name"],
                     // uncomment once email is available
                     // email: userinfo.data.email,
-                    email: generateRandomEmail(),
+                    email: `singpass${nameArray[0]}_${nameArray.slice(1).join(" ")}@example.com`,
                     given_name: nameArray[0],
                     family_name: nameArray.slice(1).join(" "),
                     profile_pic: "",
