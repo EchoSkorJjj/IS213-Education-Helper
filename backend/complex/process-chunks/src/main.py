@@ -59,7 +59,7 @@ class ContentFetcher:
         self.connection = pika.BlockingConnection(connection_parameters)
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=self.QUEUE_NAME_1, durable=True)
-        self.channel.queue_declare(queue=self.QUEUE_NAME_2, durable=True)
+        # self.channel.queue_declare(queue=self.QUEUE_NAME_2, durable=True)
 
     def initialize_grpc(self):
         """Initializes the gRPC channel and stub for content service communication."""
@@ -88,12 +88,24 @@ class ContentFetcher:
     def match_messages_and_call_api(self, ch, method, properties, body):
         """Processes messages from queue1, matches them with messages from queue2, and calls the OpenAI API."""
         message_from_queue1 = body.decode()
+        message_data = json.loads(message_from_queue1)
+        if "fileId" not in message_data:
+            logging.error("No fileId found in message data. Skipping message.")
+            return
+        
+        temporary_channel = self.connection.channel()
         messages_from_queue2 = []
-        for method_frame, properties, body in self.channel.consume(queue=self.QUEUE_NAME_2, auto_ack=True, inactivity_timeout=1):
+        consumer_tag = None
+        for method_frame, properties, body in temporary_channel.consume(queue=message_data["fileId"], auto_ack=True, inactivity_timeout=1):
             if method_frame:
+                consumer_tag = method_frame.consumer_tag
                 messages_from_queue2.append(body.decode())
             else:
                 break
+        
+        if consumer_tag:
+            self.channel.basic_cancel(consumer_tag)
+        temporary_channel.close()
 
         prompt,content,generate_type,note_id = self.construct_prompt(message_from_queue1, messages_from_queue2)
         token_count = self.count_tokens_with_tiktoken(prompt+content)

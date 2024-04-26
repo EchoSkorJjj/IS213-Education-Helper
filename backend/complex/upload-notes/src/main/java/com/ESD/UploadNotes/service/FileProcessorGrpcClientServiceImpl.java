@@ -5,13 +5,12 @@ import com.ESD.UploadNotes.proto.FileProcessorGrpc;
 import com.ESD.UploadNotes.proto.UploadNotesProto;
 import com.ESD.UploadNotes.utility.PageContent;
 import com.ESD.UploadNotes.utility.ProcessedContent;
+import com.ESD.UploadNotes.utility.QueueInitialiser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.InvalidProtocolBufferException;
 import io.grpc.ManagedChannel;
 import io.grpc.StatusRuntimeException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,8 @@ public class FileProcessorGrpcClientServiceImpl
   );
   private final FileProcessorGrpc.FileProcessorBlockingStub fileProcessorStub;
   private final RabbitTemplate rabbitTemplate;
+  @Autowired
+  private QueueInitialiser queueInitialiser;
 
   @Value("${app.rabbitmq.exchange}")
   private String exchange;
@@ -112,13 +113,15 @@ public class FileProcessorGrpcClientServiceImpl
 
         publishToRabbitMQ(processedContent, routingKey1);
 
+        String concatenatedRoutingKey = initialiseExclusiveQueue(routingKey2, fileId);
         for (UploadNotesProto.Page page : response.getPagesList()) {
           PageContent pageContent = new PageContent(
             page.getPageId(),
             page.getContent(),
             processedContent.getFileId()
           );
-          publishToRabbitMQ(pageContent, routingKey2);
+
+          publishToRabbitMQ(pageContent, concatenatedRoutingKey);
         }
 
         return fileId;
@@ -151,26 +154,10 @@ public class FileProcessorGrpcClientServiceImpl
     }
   }
 
-  private String generateFileSignature(byte[] fileBytes) {
-    try {
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] encodedhash = digest.digest(fileBytes);
-      return bytesToHex(encodedhash);
-    } catch (NoSuchAlgorithmException e) {
-      logger.error("SHA-256 algorithm not found", e);
-      throw new RuntimeException("SHA-256 algorithm not found", e);
-    }
-  }
-
-  private static String bytesToHex(byte[] hash) {
-    StringBuilder hexString = new StringBuilder(2 * hash.length);
-    for (byte b : hash) {
-      String hex = Integer.toHexString(0xff & b);
-      if (hex.length() == 1) {
-        hexString.append('0');
-      }
-      hexString.append(hex);
-    }
-    return hexString.toString();
+  private <T> String initialiseExclusiveQueue(String routingKey, String fileId) {
+    queueInitialiser.createQueue(fileId, true);
+    String concatenatedRoutingKey = queueInitialiser.constructRoutingKey(routingKey, fileId);
+    queueInitialiser.createBinding(fileId, exchange, concatenatedRoutingKey);
+    return concatenatedRoutingKey;
   }
 }
