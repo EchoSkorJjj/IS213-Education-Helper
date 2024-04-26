@@ -85,17 +85,6 @@ const PreMCQ: React.FC<PreMCQProps> = ({
 
   const deleteOption = (optionIndex: number) => {
     const updatedOptions = editOptions.filter(
-      (_, index) => index !== optionIndex
-    );
-    setEditOptions(updatedOptions);
-  };
-
-  const addOption = () => {
-    setEditOptions([...editOptions, { option: "", is_correct: false }]);
-  };
-
-  const deleteOption = (optionIndex: number) => {
-    const updatedOptions = editOptions.filter(
       (_, index) => index !== optionIndex,
     );
     setEditOptions(updatedOptions);

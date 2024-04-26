@@ -77,24 +77,22 @@ export default function MCQ({ question, options, multiple_answers }: MCQProps) {
 
   return (
     <Box
-      bg="white"
+      bg="midBlue.500"
       p={{ base: 4, sm: 6 }} // Responsive padding
       rounded="lg"
       shadow="xl"
-      border="1px"
-      borderColor="gray.200"
       width="full"
       mx="auto" // Center the box
     >
       <Text
         fontSize={{ base: "lg", sm: "xl" }} // Responsive font size
         fontWeight="bold"
-        color="blue.800"
+        color="white"
         mb={4}
       >
         {question}
       </Text>
-      <Text fontSize="md" color="gray.500" mb={4}>
+      <Text fontSize="md" color="white" mb={4}>
         {multiple_answers ? "Select all that apply:" : "Select one:"}
       </Text>
       <Stack spacing={3}>
@@ -102,15 +100,15 @@ export default function MCQ({ question, options, multiple_answers }: MCQProps) {
           <Button
             key={index}
             onClick={() => toggleOption(option.option)}
-            variant="outline"
-            colorScheme="blue"
+            variant="solid"
+            colorScheme="white"
             bg={
               selectedOptions.includes(option.option)
-                ? "blue.800"
-                : "transparent"
+                ? "white"
+                : "blue.800"
             }
             color={
-              selectedOptions.includes(option.option) ? "white" : "blue.800"
+              selectedOptions.includes(option.option) ? "blue.800" : "white"
             }
             justifyContent="flex-start" // Align text to the left
             textAlign="left" // Align button text to the left
@@ -118,8 +116,8 @@ export default function MCQ({ question, options, multiple_answers }: MCQProps) {
             height="100%"
             _hover={{
               bg: selectedOptions.includes(option.option)
-                ? "blue.800"
-                : "blue.50",
+                ? "gray.100"
+                : "blue.600",
             }}
             _focus={{
               boxShadow: "outline",
