@@ -78,15 +78,12 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
     def ViewNotesByUserId(self, request, context):
         response = view_notes_pb2.ViewAllNotesResponse()
         try:
-            limit, offset, page, user_id, notesTitle = request.limit, request.offset, request.page, request.user_id, request.notesTitle
+            user_id = request.user_id  # user_id is mandatory
             notes_stub = notes_client.NotesClient().get_notes_stub()
 
             notes_request = notes_pb2.RetrieveMultipleNotesByUserIdRequest()
-            notes_request.limit = limit
-            notes_request.offset = offset
-            notes_request.page = page
             notes_request.userId = user_id
-            notes_request.notesTitle = notesTitle
+            notes_request.limit = request.limit if request.limit else 999
 
             notes_response = notes_stub.RetrieveMultipleNotesByUserId(notes_request)
             
@@ -101,7 +98,7 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
                 grpc.StatusCode.INVALID_ARGUMENT,
                 e
             )
-            
+        
     def ViewSavedNotesByUserId(self, request, context):
         response = view_notes_pb2.ViewAllNotesResponse()
         try:
