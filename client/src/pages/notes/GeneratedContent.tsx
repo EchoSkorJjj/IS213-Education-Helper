@@ -50,7 +50,7 @@ const GeneratedContent: React.FC = () => {
   const toast = useToast();
   const { noteId } = useParams<{ noteId: string }>();
   const [topics, setTopics] = useState<Topic[]>([]);
-  const { authorization ,user} = useAuth();
+  const { authorization, user } = useAuth();
 
   const [GPTContent, setFlashcards] = useState<FlashcardType[]>([]);
   const [MCQs, setMCQs] = useState<MultipleChoiceQuestion[]>([]); // Initialize state for MCQs
@@ -64,7 +64,6 @@ const GeneratedContent: React.FC = () => {
   const filename = localStorage.getItem("filename") || "No file uploaded";
   const [isLoading, setIsLoading] = useState(true);
 
-
   const [userNotes, setUserNotes] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const pulseAnimation = keyframes`
@@ -73,44 +72,46 @@ const GeneratedContent: React.FC = () => {
   100% { opacity: 0.5; }
 `;
 
-useEffect(() => {
-  const checkAuthorization = async () => {
-    try {
-      const notes = await fetchUserNotes(user?.user_id);
-      setUserNotes(notes.notes);
-      userNotes;
-      isAuthorized;
-      const noteExists = notes.notes.some((note: any ) => note.fileId === noteId);
-      if (!noteExists) {
+  useEffect(() => {
+    const checkAuthorization = async () => {
+      try {
+        const notes = await fetchUserNotes(user?.user_id);
+        setUserNotes(notes.notes);
+        userNotes;
+        isAuthorized;
+        const noteExists = notes.notes.some(
+          (note: any) => note.fileId === noteId,
+        );
+        if (!noteExists) {
+          toast({
+            title: "Unauthorized",
+            description: "You do not have access to this note.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          navigate("/generator"); // Redirect to an unauthorized page or any other route
+        } else {
+          setIsAuthorized(true);
+        }
+      } catch (error) {
         toast({
-          title: "Unauthorized",
-          description: "You do not have access to this note.",
+          title: "Error",
+          description: "Failed to fetch user notes.",
           status: "error",
           duration: 3000,
-          isClosable: true
+          isClosable: true,
         });
-        navigate('/generator'); // Redirect to an unauthorized page or any other route
-      } else {
-        setIsAuthorized(true);
+        navigate("/generator"); // Redirect or handle errors
       }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch user notes.",
-        status: "error",
-        duration: 3000,
-        isClosable: true
-      });
-      navigate('/generator'); // Redirect or handle errors
-    }
-  };
+    };
 
-  checkAuthorization();
-}, [user?.user_id, noteId, navigate, toast]);
+    checkAuthorization();
+  }, [user?.user_id, noteId, navigate, toast]);
 
   useEffect(() => {
     // Call once to fetch immediately
-   
+
     const fetchTopics = async () => {
       const fetchedTopics = await getTopics();
       if (!fetchedTopics || fetchedTopics.length === 0) {
@@ -143,18 +144,15 @@ useEffect(() => {
   }, [noteId, authorization, isAuthorized]);
 
   const fetchUserNotes = async (userId: any) => {
-    const response = await api.get(
-      `/api/v1/notes/user/${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authorization}`,
-        },
+    const response = await api.get(`/api/v1/notes/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${authorization}`,
       },
-    );
+    });
     if (!response.data) {
-      throw new Error('Failed to fetch notes');
+      throw new Error("Failed to fetch notes");
     }
-    console.log(response)
+    console.log(response);
     return await response.data;
   };
 
