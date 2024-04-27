@@ -102,11 +102,7 @@ export default function MCQ({ question, options, multiple_answers }: MCQProps) {
             onClick={() => toggleOption(option.option)}
             variant="solid"
             colorScheme="white"
-            bg={
-              selectedOptions.includes(option.option)
-                ? "white"
-                : "blue.800"
-            }
+            bg={selectedOptions.includes(option.option) ? "white" : "blue.800"}
             color={
               selectedOptions.includes(option.option) ? "blue.800" : "white"
             }

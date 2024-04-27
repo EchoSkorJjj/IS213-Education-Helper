@@ -30,6 +30,7 @@ import {
 import { isFlashcardType } from "~shared/util";
 
 import {
+  api,
   commitTemporaryContents,
   createTemporaryContent,
   deleteTemporaryContent,
@@ -49,7 +50,7 @@ const GeneratedContent: React.FC = () => {
   const toast = useToast();
   const { noteId } = useParams<{ noteId: string }>();
   const [topics, setTopics] = useState<Topic[]>([]);
-  const { authorization } = useAuth();
+  const { authorization, user } = useAuth();
 
   const [GPTContent, setFlashcards] = useState<FlashcardType[]>([]);
   const [MCQs, setMCQs] = useState<MultipleChoiceQuestion[]>([]); // Initialize state for MCQs
@@ -62,6 +63,9 @@ const GeneratedContent: React.FC = () => {
   const intervalIdRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const filename = localStorage.getItem("filename") || "No file uploaded";
   const [isLoading, setIsLoading] = useState(true);
+
+  const [userNotes, setUserNotes] = useState([]);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const pulseAnimation = keyframes`
   0% { opacity: 0.5; }
   50% { opacity: 1; }
@@ -69,7 +73,45 @@ const GeneratedContent: React.FC = () => {
 `;
 
   useEffect(() => {
+    const checkAuthorization = async () => {
+      try {
+        const notes = await fetchUserNotes(user?.user_id);
+        setUserNotes(notes.notes);
+        userNotes;
+        isAuthorized;
+        const noteExists = notes.notes.some(
+          (note: any) => note.fileId === noteId,
+        );
+        if (!noteExists) {
+          toast({
+            title: "Unauthorized",
+            description: "You do not have access to this note.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          navigate("/generator"); // Redirect to an unauthorized page or any other route
+        } else {
+          setIsAuthorized(true);
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch user notes.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        navigate("/generator"); // Redirect or handle errors
+      }
+    };
+
+    checkAuthorization();
+  }, [user?.user_id, noteId, navigate, toast]);
+
+  useEffect(() => {
     // Call once to fetch immediately
+
     const fetchTopics = async () => {
       const fetchedTopics = await getTopics();
       if (!fetchedTopics || fetchedTopics.length === 0) {
@@ -99,7 +141,20 @@ const GeneratedContent: React.FC = () => {
 
     return () =>
       clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>); // Clean up on component unmount
-  }, [noteId, authorization]);
+  }, [noteId, authorization, isAuthorized]);
+
+  const fetchUserNotes = async (userId: any) => {
+    const response = await api.get(`/api/v1/notes/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${authorization}`,
+      },
+    });
+    if (!response.data) {
+      throw new Error("Failed to fetch notes");
+    }
+    console.log(response);
+    return await response.data;
+  };
 
   const handleGetTemporaryContents = async (
     noteId: string | undefined,

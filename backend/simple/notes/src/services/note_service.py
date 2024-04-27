@@ -97,7 +97,10 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
             db = Database()
             limit, offset, page, user_id, notesTitle = request.limit, request.offset, request.page, request.userId, request.notesTitle
             if offset == 0 and page == 0:
-                raise ValueError('Offset and page cannot be 0 at the same time')
+                logger.error('Offset and Page are 0 at the same time. Reverting to default offset = 0 and page = 1')
+                offset = 0
+                page = 1
+                # raise ValueError('Offset and page cannot be 0 at the same time')
             if offset == 0:
                 offset = (page - 1) * limit
             
