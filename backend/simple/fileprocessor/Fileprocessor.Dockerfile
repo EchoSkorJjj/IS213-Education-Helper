@@ -13,19 +13,26 @@ ENV PYTHONPATH /app/:/app/pb/:$PYTHONPATH
 COPY src/ /app/
 RUN pyinstaller --onefile server.py
 
-FROM debian:stable-slim
+FROM debian:stable-slim as final-stage
 WORKDIR /app
+
+# Install Python and create a virtual environment
 RUN apt-get update && \
-    apt-get install -y \
-    ocrmypdf \
-    curl \
-    && apt-get clean && \
+    apt-get install -y python3-pip python3-venv && \
+    python3 -m venv /opt/venv && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Download and install the gRPC health probe, used for checking the health of gRPC applications
-RUN GRPC_HEALTH_PROBE_VERSION=v0.4.13 && \
-    curl -sLo /bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-arm64 && \
-    chmod +x /bin/grpc_health_probe
+# Activate virtual environment
+ENV PATH="/opt/venv/bin:$PATH"
 
+
+# Continue with your other setup steps
+RUN apt-get update && \
+    apt-get install -y ocrmypdf && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=proto-base /bin/grpc_health_probe /bin/grpc_health_probe
 COPY --from=builder /app/dist/server server
 CMD ["./server"]

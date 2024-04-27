@@ -9,3 +9,5 @@ pypdfium2
 protobuf
 pytest
 pytest-mock
+nltk
+spacy
