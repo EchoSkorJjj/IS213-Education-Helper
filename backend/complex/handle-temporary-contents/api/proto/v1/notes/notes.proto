@@ -116,6 +116,7 @@ message RetrieveMultipleNotesByUserIdResponse {
 
 message UpdateNoteRequest {
   NotePreview notePreview = 1;
+  bool readyToView = 2;
 }
 
 message UpdateNoteResponse {

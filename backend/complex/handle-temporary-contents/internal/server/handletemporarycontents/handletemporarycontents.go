@@ -269,6 +269,7 @@ func (s *Server) CommitTemporaryContents(ctx context.Context, req *htcPb.CommitT
 			Title: req.Title,
 			Topic: req.Topic,
 		},
+		ReadyToView: true,
 	}
 
 	_, err = notesClient.Stub.UpdateNote(ctx, notesStubPutReq)

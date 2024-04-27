@@ -167,19 +167,20 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
         try:
             db = Database()
             note_preview = request.notePreview
-            note = db.get_note(note_preview.fileId)
+            note = db.get_note_metadata(note_preview.fileId)
             if not note:
                 raise ValueError(f'Note with ID {note_preview.fileId} not found')
             
             note_to_update = {
                 'id': note_preview.fileId, # Assume file itself cannot change
-                'user_id': note.user_id,
-                'file_name': note_preview.fileName if note_preview.fileName else note.file_name,
-                'size_in_bytes': note.size_in_bytes, # Assume file itself cannot change
-                'num_pages': note.num_pages, # Assume file itself cannot change
-                'title': note_preview.title if note_preview.title else note.title,
-                'topic': note_preview.topic if note_preview.topic else note.topic,
-                'generate_type': note.generate_type
+                'user_id': note["user_id"],
+                'file_name': note_preview.fileName if note_preview.fileName else note["file_name"],
+                'size_in_bytes': note["size_in_bytes"], # Assume file itself cannot change
+                'num_pages': note["num_pages"], # Assume file itself cannot change
+                'title': note_preview.title if note_preview.title else note["title"],
+                'topic': note_preview.topic if note_preview.topic else note["topic"],
+                'generate_type': note["generate_type"],
+                'ready_to_view': request.readyToView
             }
 
             db.update_note(note_to_update)

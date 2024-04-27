@@ -78,12 +78,15 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
     def ViewNotesByUserId(self, request, context):
         response = view_notes_pb2.ViewAllNotesResponse()
         try:
-            user_id = request.user_id  # user_id is mandatory
+            limit, offset, page, user_id, notesTitle = request.limit, request.offset, request.page, request.user_id, request.notesTitle
             notes_stub = notes_client.NotesClient().get_notes_stub()
-
             notes_request = notes_pb2.RetrieveMultipleNotesByUserIdRequest()
             notes_request.userId = user_id
-            notes_request.limit = request.limit if request.limit else 999
+            notes_request.limit = limit
+            notes_request.offset = offset
+            notes_request.page = page
+            notes_request.userId = user_id
+            notes_request.notesTitle = notesTitle
 
             notes_response = notes_stub.RetrieveMultipleNotesByUserId(notes_request)
             
@@ -199,8 +202,6 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
         try:
             note_id = request.note_id
             user_id = request.user_id
-
-            logging.info(f'Checking if user {user_id} can view note {note_id}')
             
             notes_stub = notes_client.NotesClient().get_notes_stub()
             note_metadata_request = notes_pb2.RetrieveNoteMetadataRequest()

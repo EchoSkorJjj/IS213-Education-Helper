@@ -2,7 +2,7 @@ import uuid
 
 from utils.logger import get_logger
 
-from sqlalchemy import create_engine, String, Column, Integer
+from sqlalchemy import create_engine, String, Column, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.dialects.postgresql import UUID
@@ -20,6 +20,7 @@ class Notes(base):
     title = Column(String)
     topic = Column(String)
     generate_type = Column(String)
+    ready_to_view = Column(Boolean, default=False)
 
 class Database:
     _engine = None
@@ -62,7 +63,7 @@ class Database:
     def get_notes(self, limit, offset, notes_title, user_id=None):
         self.ready()
 
-        query = self._session.query(Notes)
+        query = self._session.query(Notes).filter(Notes.ready_to_view == True)
         if user_id:
             query = query.filter(Notes.user_id == user_id)
         if notes_title:
@@ -75,12 +76,12 @@ class Database:
     def get_note(self, id):
         self.ready()
         
-        return self._session.query(Notes).filter(Notes.id == uuid.UUID(id, version=4)).first()
+        return self._session.query(Notes).filter(Notes.id == uuid.UUID(id, version=4), Notes.ready_to_view == True).first()
     
     def get_notes_by_topic_and_name(self, topic, notes_title, limit, offset):
         self.ready()
 
-        query = self._session.query(Notes)
+        query = self._session.query(Notes).filter(Notes.ready_to_view == True)
         if topic:
             query = query.filter(Notes.topic == topic)
         if notes_title:
@@ -96,7 +97,7 @@ class Database:
         
         saved_notes_uuids = [uuid.UUID(id, version=4) for id in saved_notes_ids]
 
-        query = self._session.query(Notes).filter(Notes.id.in_(saved_notes_uuids))
+        query = self._session.query(Notes).filter(Notes.id.in_(saved_notes_uuids), Notes.ready_to_view == True)
         
         if notes_title:
             query = query.filter(Notes.title.ilike(f"%{notes_title}%"))
