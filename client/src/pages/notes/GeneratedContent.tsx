@@ -30,13 +30,13 @@ import {
 import { isFlashcardType } from "~shared/util";
 
 import {
-  api,
   commitTemporaryContents,
   createTemporaryContent,
   deleteTemporaryContent,
   getTemporaryContents,
   getTopics,
   updateTemporaryContent,
+  canViewNote,
 } from "~features/api";
 import { useAuth } from "~features/auth";
 
@@ -64,7 +64,6 @@ const GeneratedContent: React.FC = () => {
   const filename = localStorage.getItem("filename") || "No file uploaded";
   const [isLoading, setIsLoading] = useState(true);
 
-  const [userNotes, setUserNotes] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const pulseAnimation = keyframes`
   0% { opacity: 0.5; }
@@ -75,14 +74,8 @@ const GeneratedContent: React.FC = () => {
   useEffect(() => {
     const checkAuthorization = async () => {
       try {
-        const notes = await fetchUserNotes(user?.user_id);
-        setUserNotes(notes.notes);
-        userNotes;
-        isAuthorized;
-        const noteExists = notes.notes.some(
-          (note: any) => note.fileId === noteId,
-        );
-        if (!noteExists) {
+        const userCanView = await userCanViewNote(noteId, authorization);
+        if (!userCanView) {
           toast({
             title: "Unauthorized",
             description: "You do not have access to this note.",
@@ -143,17 +136,16 @@ const GeneratedContent: React.FC = () => {
       clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>); // Clean up on component unmount
   }, [noteId, authorization, isAuthorized]);
 
-  const fetchUserNotes = async (userId: any) => {
-    const response = await api.get(`/api/v1/notes/user/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${authorization}`,
-      },
-    });
-    if (!response.data) {
-      throw new Error("Failed to fetch notes");
+  const userCanViewNote = async (
+    noteId: string | undefined,
+    authorization: string | null,
+  ) => {
+    if (!noteId || !authorization || !user) {
+      return;
     }
-    console.log(response);
-    return await response.data;
+
+    const response = await canViewNote(authorization, user.user_id, noteId);
+    return response.can_view;
   };
 
   const handleGetTemporaryContents = async (

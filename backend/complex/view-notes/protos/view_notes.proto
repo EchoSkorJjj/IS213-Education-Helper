@@ -75,6 +75,15 @@ message ViewNotesByTopicAndNameResponse {
     repeated notes.NotePreview notes = 2;
 }
 
+message CanViewNoteRequest {
+    string user_id = 1;
+    string note_id = 2;
+}
+
+message CanViewNoteResponse {
+    bool can_view = 1;
+}
+
 service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent);
     rpc ViewAllNotes (ViewAllNotesRequest) returns (ViewAllNotesResponse);
@@ -82,4 +91,5 @@ service ViewNotes {
     rpc ViewSavedNotesByUserId (ViewNotesByUserIdRequest) returns (ViewNotesByUserIdResponse);
     rpc ViewSavedNotes (ViewSavedNotesRequest) returns (ViewSavedNotesResponse);
     rpc ViewNotesByTopicAndName (ViewNotesByTopicAndNameRequest) returns (ViewNotesByTopicAndNameResponse);
+    rpc CanViewNote (CanViewNoteRequest) returns (CanViewNoteResponse);
 }

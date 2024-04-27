@@ -8,5 +8,6 @@ CREATE TABLE IF NOT EXISTS notes (
     num_pages INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     topic VARCHAR(255) NOT NULL,
-    generate_type VARCHAR(255) NOT NULL
+    generate_type VARCHAR(255) NOT NULL,
+    ready_to_view BOOLEAN NOT NULL DEFAULT false
 );
