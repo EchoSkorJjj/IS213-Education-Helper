@@ -9,6 +9,8 @@ from itertools import cycle
 from dotenv import load_dotenv
 from openai import OpenAI
 import tiktoken
+import time
+
 # Ensure these imports point to the correct location in your project structure
 from content_pb2 import CreateTemporaryFlashcardRequest, CreateTemporaryMultipleChoiceQuestionRequest, MultipleChoiceQuestionOption
 from content_pb2_grpc import ContentStub
@@ -93,19 +95,34 @@ class ContentFetcher:
             logging.error("No fileId found in message data. Skipping message.")
             return
         
-        temporary_channel = self.connection.channel()
         messages_from_queue2 = []
         consumer_tag = None
-        for method_frame, properties, body in temporary_channel.consume(queue=message_data["fileId"], auto_ack=True, inactivity_timeout=1):
-            if method_frame:
-                consumer_tag = method_frame.consumer_tag
-                messages_from_queue2.append(body.decode())
-            else:
+
+        retries = 5
+        while retries > 0:
+            try:
+                temporary_channel = self.connection.channel()
+                for method_frame, properties, body in temporary_channel.consume(queue=message_data["fileId"], auto_ack=True, inactivity_timeout=1):
+                    if method_frame:
+                        consumer_tag = method_frame.consumer_tag
+                        messages_from_queue2.append(body.decode())
+                    else:
+                        break
+                
+                if consumer_tag:
+                    temporary_channel.basic_cancel(consumer_tag)
+                
+                temporary_channel.close()
                 break
+            except Exception as e:
+                logging.error(f"Error consuming messages from temporary channel: {str(e)}")
+                retries -= 1
+                time.sleep(1)
+                continue
         
-        if consumer_tag:
-            self.channel.basic_cancel(consumer_tag)
-        temporary_channel.close()
+        if not messages_from_queue2:
+            logging.error(f"Unable to retrieve chunks from temporary queue {message_data['fileId']}: queue does not exist or does not have associated chunks")
+            return
 
         prompt,content,generate_type,note_id = self.construct_prompt(message_from_queue1, messages_from_queue2)
         token_count = self.count_tokens_with_tiktoken(prompt+content)
