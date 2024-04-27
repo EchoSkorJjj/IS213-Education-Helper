@@ -73,8 +73,9 @@ function ViewNotes() {
     deleteSavedNote(userId, noteId, authorization);
 
     toast({
-      title: "Note unsaved",
-      status: "success",
+      title: "Removed from Saved Notes",
+      description: "You can always save it again!",
+      status: "info",
       position: "top",
       duration: 3000,
       isClosable: true,
@@ -88,8 +89,9 @@ function ViewNotes() {
     saveNotes(userId, noteId, authorization);
 
     toast({
-      title: "Note saved",
-      status: "success",
+      title: "Note Saved Successfully",
+      description: "View it in Your Notes!",
+      status: "info",
       position: "top",
       duration: 3000,
       isClosable: true,

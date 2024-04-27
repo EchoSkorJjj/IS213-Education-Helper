@@ -40,7 +40,7 @@ const NotesGeneratorPage = () => {
       openModal();
       return;
     }
-    setGenerateType("mcq");
+    setGenerateType("MCQ");
   };
 
   const handleGenerate = async () => {
@@ -58,14 +58,14 @@ const NotesGeneratorPage = () => {
     localStorage.setItem("filename", selectedFile.name);
 
     toast({
-      title: `Generating ${generateType}`,
+      title: `Generating ${generateType}s`,
       status: "info",
       position: "top",
       duration: 6000,
       isClosable: true,
     });
 
-    await generateNotes(selectedFile, generateType);
+    await generateNotes(selectedFile, generateType.toLowerCase()); // backend expects lowercase. Ideally should do enums though.
 
     // console.log(data);
   };
