@@ -2,12 +2,12 @@ _format_version: "3.0"
 _transform: true
 
 services:
-  # - name: health-check-service
-  #   host: localhost
-  #   routes:
-  #     - name: health-check-route
-  #       paths:
-  #         - /api/v1/healthz
+  - name: health-check-service
+    host: localhost
+    routes:
+      - name: health-check-route
+        paths:
+          - /api/v1/healthz
 
   - name: make-payment-service
     host: make-payment
