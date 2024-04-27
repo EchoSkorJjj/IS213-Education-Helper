@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-alb-ingress
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/EchoSkorJjj/IS213-Education-Helper-Kube.git'
+    path: kubernetes/ingress/
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: eduhelper
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
