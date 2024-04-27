@@ -5,6 +5,7 @@ services:
   - name: health-check-service
     routes:
       - name: health-check-route
+        host: localhost
         paths:
           - /api/v1/healthz
 
