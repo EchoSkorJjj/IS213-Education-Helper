@@ -79,6 +79,15 @@ message ViewNotesByTopicAndNameResponse {
     repeated notes.NotePreview notes = 2;
 }
 
+message CanViewNoteRequest {
+    string user_id = 1;
+    string note_id = 2;
+}
+
+message CanViewNoteResponse {
+    bool can_view = 1;
+}
+
 service ViewNotes {
     rpc ViewOneNote (ViewOneNoteRequest) returns (NoteAndContent) {
         option (google.api.http) = {
@@ -113,6 +122,13 @@ service ViewNotes {
     rpc ViewNotesByTopicAndName (ViewNotesByTopicAndNameRequest) returns (ViewNotesByTopicAndNameResponse) {
         option (google.api.http) = {
             post: "/api/v1/notes/get"
+            body: "*"
+        };
+    };
+
+    rpc CanViewNote (CanViewNoteRequest) returns (CanViewNoteResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/notes/allowed"
             body: "*"
         };
     };
