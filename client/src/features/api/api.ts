@@ -441,7 +441,7 @@ export const getSavedNotesWithFilter = async (
 export const canViewNote = async (
   authorization: string,
   userId: string,
-  noteId: string
+  noteId: string,
 ) => {
   try {
     const response = await api.post(
@@ -452,10 +452,10 @@ export const canViewNote = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${authorization}`
-        }
-      }
-    )
+          Authorization: `Bearer ${authorization}`,
+        },
+      },
+    );
 
     return response.data;
   } catch (error) {

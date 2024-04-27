@@ -30,13 +30,13 @@ import {
 import { isFlashcardType } from "~shared/util";
 
 import {
+  canViewNote,
   commitTemporaryContents,
   createTemporaryContent,
   deleteTemporaryContent,
   getTemporaryContents,
   getTopics,
   updateTemporaryContent,
-  canViewNote,
 } from "~features/api";
 import { useAuth } from "~features/auth";
 

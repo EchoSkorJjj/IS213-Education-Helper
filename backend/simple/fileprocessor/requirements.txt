@@ -10,4 +10,3 @@ protobuf
 pytest
 pytest-mock
 nltk
-spacy

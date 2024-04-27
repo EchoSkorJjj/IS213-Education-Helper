@@ -13,26 +13,13 @@ ENV PYTHONPATH /app/:/app/pb/:$PYTHONPATH
 COPY src/ /app/
 RUN pyinstaller --onefile server.py
 
-FROM debian:stable-slim as final-stage
+FROM debian:stable-slim
 WORKDIR /app
-
-# Install Python and create a virtual environment
 RUN apt-get update && \
-    apt-get install -y python3-pip python3-venv && \
-    python3 -m venv /opt/venv && \
-    apt-get clean && \
+    apt-get install -y \
+    ocrmypdf \
+    && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-# Activate virtual environment
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Continue with your other setup steps
-RUN apt-get update && \
-    apt-get install -y ocrmypdf && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 COPY --from=proto-base /bin/grpc_health_probe /bin/grpc_health_probe
 COPY --from=builder /app/dist/server server
 CMD ["./server"]
-# CMD ["tail", "-f", "/dev/null"]
