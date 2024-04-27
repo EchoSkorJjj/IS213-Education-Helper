@@ -193,5 +193,27 @@ class ViewNotesServicer(view_notes_pb2_grpc.ViewNotesServicer):
                 grpc.StatusCode.INVALID_ARGUMENT,
                 e
             )
+
+    def CanViewNote(self, request, context):
+        response = view_notes_pb2.CanViewNoteResponse()
+        try:
+            note_id = request.note_id
+            user_id = request.user_id
+
+            logging.info(f'Checking if user {user_id} can view note {note_id}')
             
-            
+            notes_stub = notes_client.NotesClient().get_notes_stub()
+            note_metadata_request = notes_pb2.RetrieveNoteMetadataRequest()
+            note_metadata_request.fileId = note_id
+            note_metadata_response = notes_stub.RetrieveNoteMetadata(note_metadata_request)
+            response.can_view = note_metadata_response.noteMetadata.userId == user_id
+
+            return response
+
+        except Exception as e:
+            error_utils.handle_error(
+                context,
+                'Error checking if user can view note',
+                grpc.StatusCode.INVALID_ARGUMENT,
+                e
+            )
