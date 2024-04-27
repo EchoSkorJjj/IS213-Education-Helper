@@ -181,3 +181,4 @@ if __name__ == "__main__":
                        .with_model("gpt-3.5-turbo")
                        .build())
     content_fetcher.start_consuming()
+    
