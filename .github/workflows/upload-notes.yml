@@ -35,5 +35,21 @@ jobs:
         context: ./backend/complex/upload-notes/
         file: ./backend/complex/upload-notes/UploadNotes.Dockerfile
         push: true
-        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:upload-notes
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:upload-notes-${{ github.sha }}
         platforms: linux/arm64
+
+    - name: Clone deployment repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ secrets.DEPLOYMENT_REPO }}
+        token: ${{ secrets.DEPLOYMENT_REPO_TOKEN }}
+        path: 'deployment-repo'
+      
+    - name: Update Kubernetes deployment image
+      run: |
+        cd deployment-repo
+        sed -i 's|image: .*|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:upload-notes-${{ github.sha }}|' ./kubernetes/complex/upload-notes/upload-notes-deployment.yaml
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Update image tag to ${{ github.sha }}"
+        git push

@@ -35,5 +35,21 @@ jobs:
         context: ./backend/complex/handle-temporary-contents/
         file: ./backend/complex/handle-temporary-contents/HTC.Dockerfile
         push: true
-        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:handle-temporary-contents
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:handle-temporary-contents-${{ github.sha }}
         platforms: linux/arm64
+
+    - name: Clone deployment repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ secrets.DEPLOYMENT_REPO }}
+        token: ${{ secrets.DEPLOYMENT_REPO_TOKEN }}
+        path: 'deployment-repo'
+      
+    - name: Update Kubernetes deployment image
+      run: |
+        cd deployment-repo
+        sed -i 's|image: .*|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:handle-temporary-contents-${{ github.sha }}|' ./kubernetes/complex/handle-temporary-contents/handle-temporary-contents-deployment.yaml
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Update image tag to ${{ github.sha }}"
+        git push
