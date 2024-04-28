@@ -107,8 +107,8 @@ const Profile = () => {
   return (
     <Box mb="5em">
       <Helmet>
-        <title>Profile</title>
-        <meta name="description" content="Profile" />
+        <title>Your Notes</title>
+        <meta name="description" content="Your Notes" />
       </Helmet>
       <ProfileHeader />
       <NotesList

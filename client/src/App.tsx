@@ -82,7 +82,7 @@ const App = () => {
                 <Route path="/generator" element={<NotesGeneratorPage />} />
                 <Route path="/marketplace" element={<MarketplacePage />} />
                 <Route path="/subscribe" element={<SubscribePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/inventory" element={<ProfilePage />} />
                 <Route path="/profile/update" element={<UpdateProfilePage />} />
                 <Route path="/viewnotes/:noteId" element={<ViewNotesPage />} />
                 <Route path="/subscribe/success" element={<SuccessPage />} />
