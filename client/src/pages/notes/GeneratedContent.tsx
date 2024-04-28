@@ -30,7 +30,6 @@ import {
 import { isFlashcardType } from "~shared/util";
 
 import {
-  canViewNote,
   commitTemporaryContents,
   createTemporaryContent,
   deleteTemporaryContent,
