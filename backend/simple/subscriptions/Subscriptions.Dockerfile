@@ -28,4 +28,3 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.13 && \
     
 COPY --from=builder /app/build/SUBSCRIPTIONS_SERVICE /app/server
 CMD ["./server"]
-
