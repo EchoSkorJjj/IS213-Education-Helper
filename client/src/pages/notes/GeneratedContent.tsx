@@ -37,6 +37,7 @@ import {
   getTemporaryContents,
   getTopics,
   updateTemporaryContent,
+  canViewNote,
 } from "~features/api";
 import { useAuth } from "~features/auth";
 

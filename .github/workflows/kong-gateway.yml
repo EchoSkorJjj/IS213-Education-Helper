@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feat/build-push
+      - chore/build-push
     paths:
       - 'backend/kong-gateway/**'
 

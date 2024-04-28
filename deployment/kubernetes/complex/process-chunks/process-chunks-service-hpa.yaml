@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: save-notes
+  name: process-chunks
   namespace: eduhelper
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: save-notes
+    name: process-chunks
   minReplicas: 1
   maxReplicas: 6
   behavior:

@@ -44,6 +44,9 @@ resource "aws_mq_broker" "mq" {
   security_groups    = [aws_security_group.sg.id]
   deployment_mode    = "CLUSTER_MULTI_AZ"
   subnet_ids         = [ var.eks_private_subnet_1_id, var.eks_private_subnet_2_id ]
+  logs {
+    general = true
+  }
 
   user {
     username             = jsondecode(data.aws_secretsmanager_secret_version.current_mq_credentials.secret_string)["mq_username"]
