@@ -207,7 +207,7 @@ const SubscribePage = () => {
                   $
                 </Text>
                 <Text fontSize="5xl" color="black" fontWeight="900">
-                  1
+                  5
                 </Text>
                 <Text fontSize="3xl" color="gray.500">
                   /month
