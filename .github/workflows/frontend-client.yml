@@ -34,6 +34,7 @@ jobs:
         VITE_API_PROD_BASE_URL: ${{ secrets.VITE_API_PROD_BASE_URL }}
         VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
         VITE_NODE_ENV: ${{ secrets.VITE_NODE_ENV }}
+        VITE_UNSPLASH_CLIENT_ID: ${{ secrets.VITE_UNSPLASH_CLIENT_ID }}
       run: |
         cd client
         npm install
