@@ -64,6 +64,10 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 ## Technical Overview Diagram
 <img width="1508" alt="Architecture" src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/69960711/5711ba9a-715a-4e6d-9e44-c746c30a6552">
 
+## Solution View
+
+## Development View
+
 ## Frameworks and Databases Utilised
 
 <p align="center"><strong>Services and UI</strong></p>
@@ -75,6 +79,8 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 <a href="https://www.lua.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Lua-Logo.svg/1200px-Lua-Logo.svg.png" alt="Lua" height="40"/></a>&nbsp;&nbsp;
 <a href="https://www.ruby-lang.org/en/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Ruby_logo.svg/1200px-Ruby_logo.svg.png" alt="Ruby" height="40"/></a>&nbsp;&nbsp;
 <a href="https://www.python.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1024px-Python-logo-notext.svg.png" alt="Python" height="40"/></a>&nbsp;&nbsp;
+<br>
+<i>Golang · C++ · Spring Boot · Typescript · Lua · Ruby · Python</i>
 </p>
 <br>
 <p align="center"><strong>API Gateway</strong></p>
@@ -90,12 +96,16 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 <a href="https://www.postgresql.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PostgreSQL" height="50"/></a>&nbsp;&nbsp;
 <a href="https://redis.com/"><img src="https://redis.com/wp-content/themes/wpx/assets/images/logo-redis.svg?auto=webp&quality=85,75&width=120" alt="Redis" width="88"/></a>&nbsp;&nbsp;
 <a href="https://aws.amazon.com/s3/"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/AmazonWebservices_Logo.svg" alt="S3" height="40"/></a>&nbsp;&nbsp;
-<a href="https://www.mysql.com/"><img src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="MySQL" height="50"/></a>
+<br>
+<i>postgreSQL · Redis · S3</i>
 </p>
+<br> 
 
 <p align="center"><strong>AMQP</strong></p>
 <p align="center">
 <a href="https://www.rabbitmq.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/RabbitMQ_logo.svg/2560px-RabbitMQ_logo.svg.png" alt="RabbitMQ" width="100"/></a>
+<br>
+<i>rabbitMQ</i>
 </p>
 <br> 
 
@@ -108,10 +118,13 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 <p align="center"><strong>Other Technologies</strong></p>
 <p align="center">
 <a href="https://stripe.com/en-gb-sg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/1280px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe Payment API" height="40"/></a>&nbsp;&nbsp;
-<a href="https://www.docker.com/"><img src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" alt="Docker" height="30"/></a>
+<a href="https://www.docker.com/"><img src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" alt="Docker" height="30"/></a>&nbsp;&nbsp;
+<a href="https://kubernetes.io/"><img src="https://gcloud.devoteam.com/wp-content/uploads/sites/32/2021/10/kubernetes-logo-1-1.svg" alt="Kubernetes" height="44"/></a>&nbsp;&nbsp;
+<a href="https://argoproj.github.io/cd/"><img src="https://www.opsmx.com/wp-content/uploads/2022/07/Argo-1-e1630327305635-1.png" alt="ArgoCD" height="50"/></a>&nbsp;&nbsp;
+<a href="https://www.terraform.io/"><img src="https://logodix.com/logo/1686023.png" alt="Terraform" height="50"/></a>&nbsp;&nbsp;
 </p>
 <p align="center">
-<i>Docker Compose · Docker Hub Image Registry</i>
+<i>Docker Compose · Docker Hub · Kubernetes · argoCD · Terraform</i>
 </p>
 <br>  
 
@@ -121,7 +134,8 @@ For instructions on installing `Make` on Windows and Ubuntu, refer to [`/Makefil
 
 ## Contributors
 
-G9 Team 8
+**G9 Team 8**
+
 <div align="center">
     <table>
         <tr>
