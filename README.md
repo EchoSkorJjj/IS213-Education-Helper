@@ -65,8 +65,11 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 <img width="1508" alt="Architecture" src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/69960711/5711ba9a-715a-4e6d-9e44-c746c30a6552">
 
 ## Solution View
+![image](https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/69960711/2262c2e1-5161-4448-8b00-a742176bd1bd)
+![image](https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/69960711/f620391a-410f-4389-a3ac-7f8535dd4168)
 
 ## Development View
+![image](https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/69960711/c24906ee-3f1f-4455-acdb-562b9fd90c41)
 
 ## Frameworks and Databases Utilised
 
