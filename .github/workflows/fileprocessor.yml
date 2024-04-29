@@ -35,7 +35,7 @@ jobs:
         context: ./backend/simple/fileprocessor/
         file: ./backend/simple/fileprocessor/Fileprocessor.Dockerfile
         push: true
-        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:fileprocessor-${{ github.sha }}
         platforms: linux/arm64
 
     - name: Clone deployment repository
@@ -48,7 +48,7 @@ jobs:
     - name: Update Kubernetes deployment image
       run: |
         cd deployment-repo
-        sed -i 's|image: .*|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}|' ./kubernetes/simple/fileprocessor/fileprocessor-deployment.yaml
+        sed -i 's|image: .*|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:fileprocessor-${{ github.sha }}|' ./kubernetes/simple/fileprocessor/fileprocessor-deployment.yaml
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git commit -am "Update image tag to ${{ github.sha }}"
