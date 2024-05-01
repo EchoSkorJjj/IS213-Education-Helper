@@ -11,7 +11,7 @@ Democratising education for all, one student at a time.
 5. [Makefile](#makefile)
 6. [Contributors](#contributors)
 
-We're grateful to Professor Alan Megargel and Professor Swetha Gottipati for their guidance and expertise during the development of EduHelper. Their strategic insights and focus on user-centric design have been pivotal in shaping the project. 😊
+We are immensely grateful to Professor Rafael J. Barros for his guidance and support throughout the semester, especially during the periods where we pushed our projects for the Tanzu award. His strategic insights were pivotal in allowing us to showcase EduHelper in the best way possible.
 
 ## Quick Start
 ### Prerequisites
