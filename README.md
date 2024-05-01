@@ -2,6 +2,9 @@
 Democratising education for all, one student at a time.
 
 ## 🏆 2024 VMWare Tanzu Award Winner 🏆 
+We're immensely grateful to Professor Alan Megargel and Instructor Swetha Gottipati for their guidance and expertise during the development of EduHelper. Their strategic insights and focus on user-centric design have been pivotal in shaping the project.
+
+We are also extremely grateful to Professor Rafael J. Barros for his guidance and support throughout the semester, especially during the periods where we pushed our projects for the Tanzu award. His advice and insights played a critical role in allowing us to showcase EduHelper in the best way possible.
 
 ## 📚 Table of Contents
 1. [Quick Start](#quick-start)
@@ -10,8 +13,6 @@ Democratising education for all, one student at a time.
 4. [Frameworks and Databases Utilised](#frameworks-and-databases-utilised)
 5. [Makefile](#makefile)
 6. [Contributors](#contributors)
-
-We're immensely grateful to Professor Alan Megargel and Instructor Swetha Gottipati for their guidance and expertise during the development of EduHelper. Their strategic insights and focus on user-centric design have been pivotal in shaping the project. We are also very grateful to Professor Rafael J. Barros for his guidance and support throughout the semester, especially during the periods where we pushed our projects for the Tanzu award. His advice and insights played a critical role in allowing us to showcase EduHelper in the best way possible.
 
 ## Quick Start
 ### Prerequisites
