@@ -1,9 +1,9 @@
 version: 2
-authtoken: 2e4o2e0fE55QFjJYsClRatFRplq_3MeMzDB4GCTaHuFbte1M6 # Served temporarily for purpose of IS213. Domain will be revoked upon completion of semester.
+authtoken: your_ngrok_auth_token
 tunnels:
   api:
     proto: http
     # schemes:
     #   - https
     addr: https://kong-gateway:8443
-    domain: antelope-integral-likely.ngrok-free.app # Served temporarily for purpose of IS213. Domain will be revoked upon completion of semester.
+    domain: yourfreengrokdomain.app

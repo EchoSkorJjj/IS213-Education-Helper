@@ -26,22 +26,28 @@ function PriceWrapper(props: Props) {
   const { children } = props;
 
   return (
-    <Box
-      shadow="base"
-      borderWidth="1px"
-      borderColor={"gray.200"}
-      borderRadius={"xl"}
-      width={{
-        base: "90%",
-        sm: "63%",
-        md: "47%",
-        lg: "34%",
-        xl: "25%",
-        "2xl": "23%",
-      }} // Adjust widths as necessary for responsiveness
-    >
-      {children}
-    </Box>
+    <>
+      <Helmet>
+        <title>Subscribe</title>
+        <meta name="description" content="Subscribe to eduhelper" />
+      </Helmet>
+      <Box
+        shadow="base"
+        borderWidth="1px"
+        borderColor={"gray.200"}
+        borderRadius={"xl"}
+        width={{
+          base: "90%",
+          sm: "63%",
+          md: "47%",
+          lg: "34%",
+          xl: "25%",
+          "2xl": "23%",
+        }} // Adjust widths as necessary for responsiveness
+      >
+        {children}
+      </Box>
+    </>
   );
 }
 
@@ -72,23 +78,41 @@ const SubscribePage = () => {
   };
 
   return (
-    <Box py={12} minHeight="100vh">
+    <Box minHeight="100vh">
       <Helmet>
         <title>Profile</title>
         <meta name="description" content="Profile" />
       </Helmet>
-      <VStack spacing={2} textAlign="center">
-        <Heading as="h1" fontSize={{ base: "3xl", md: "4xl" }}>
-          Plans that fit your need
-        </Heading>
-        <Text fontSize="lg" color={"gray.500"}>
-          You may cancel the subscription at anytime.
-        </Text>
-      </VStack>
+      <Flex
+        w="100%"
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        pt="65"
+        pb="5"
+        px="10"
+        mb="3em"
+        bg="darkBlue.500"
+      >
+        <Flex>
+          <VStack spacing={2} textAlign="center">
+            <Heading
+              as="h1"
+              color={"white"}
+              fontSize={{ base: "3xl", md: "4xl" }}
+            >
+              Plans that fit your need
+            </Heading>
+            <Text fontSize="lg" color={"gray.500"}>
+              You may cancel the subscription at anytime.
+            </Text>
+          </VStack>
+        </Flex>
+      </Flex>
 
       <Flex
         direction={{ base: "column", md: "row" }} // Stack vertically on small screens, horizontally on medium+ screens
-        py={10}
+        pb={10}
         justify="center" // Center the items horizontally
         align={{ base: "center", md: "flex-start" }} // Center items on small screens, align items to the start on medium+ screens
         gap={{ base: 8, md: 4 }} // Larger gap on small screens, smaller gap on medium+ screens
@@ -183,7 +207,7 @@ const SubscribePage = () => {
                   $
                 </Text>
                 <Text fontSize="5xl" color="black" fontWeight="900">
-                  1
+                  5
                 </Text>
                 <Text fontSize="3xl" color="gray.500">
                   /month

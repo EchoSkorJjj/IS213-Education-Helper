@@ -9,5 +9,4 @@ public class UploadNotesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UploadNotesApplication.class, args);
 	}
-
 }

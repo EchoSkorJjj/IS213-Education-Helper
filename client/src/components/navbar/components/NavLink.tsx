@@ -7,10 +7,9 @@ interface Props {
 }
 
 export const AuthLinks = [
-  { name: "Home", href: "/home" },
   { name: "Generator", href: "/generator" },
   { name: "Marketplace", href: "/marketplace" },
-  { name: "Profile", href: "/profile" },
+  { name: "Your Notes", href: "/inventory" },
   { name: "Pricing", href: "/subscribe" },
   { name: "Our Story", href: "/about" },
 ];

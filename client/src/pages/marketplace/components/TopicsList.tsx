@@ -33,7 +33,7 @@ const TopicsList = ({
       alignItems="center"
       pt="5"
       px="10"
-      bg={"blue.800"}
+      bg={"blue.900"}
     >
       <Flex maxW={"6xl"} width="100%" height="90%" direction="column">
         <Box width="100%" mb={10}>
@@ -63,7 +63,8 @@ const TopicsList = ({
               <Button
                 as="button"
                 p="2"
-                bg={topic === value ? "blue.300" : "lightBlue.500"}
+                bg={topic === value ? "blue.700" : "blue.600"}
+                _hover={{ bg: topic === value ? "blue.500" : "blue.400" }}
                 size="lg"
                 key={value}
                 onClick={() => setTopic(value)}

@@ -1,21 +1,25 @@
 import { useState } from "react";
-import { CheckCircleIcon, CloseIcon } from "@chakra-ui/icons";
+import { CheckIcon } from "@chakra-ui/icons";
+// import { CheckCircleIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Flex,
-  Icon,
-  Link,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
+  /*
+   * Icon,
+   * Link,
+   * Modal,
+   * ModalBody,
+   * ModalCloseButton,
+   * ModalContent,
+   * ModalFooter,
+   * ModalHeader,
+   * ModalOverlay,
+   */
   Stack,
   Text,
-  useDisclosure,
+  // useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 
 import { MultipleChoiceQuestionOption } from "~shared/types/data";
@@ -27,130 +31,110 @@ interface MCQProps {
 }
 
 export default function MCQ({ question, options, multiple_answers }: MCQProps) {
-  const [modalMessage, setModalMessage] = useState("");
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const checkAnswer = () => {
     const correctOptions = options
       .filter((option) => option.is_correct)
       .map((option) => option.option);
-    if (multiple_answers) {
-      const isCorrect =
-        selectedOptions.every((option) => correctOptions.includes(option)) &&
-        correctOptions.every((option) => selectedOptions.includes(option));
-      setModalMessage(
-        isCorrect
-          ? "Congratulations! You answered correctly!"
-          : "Wrong, try again",
-      );
+    const isCorrect = multiple_answers
+      ? selectedOptions.sort().join(",") === correctOptions.sort().join(",")
+      : selectedOptions[0] === correctOptions[0];
+
+    if (isCorrect) {
+      toast({
+        title: "Correct answer!",
+        description: "You answered correctly!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     } else {
-      setModalMessage(
-        selectedOptions[0] === correctOptions[0]
-          ? "Congratulations! You answered correctly!"
-          : "Wrong, try again",
-      );
+      toast({
+        title: "Incorrect answer!",
+        description: "Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
-    onOpen();
+    setSelectedOptions([]); // Reset selections after showing the toast
   };
 
   const toggleOption = (option: string) => {
     if (multiple_answers) {
-      setSelectedOptions((prevOptions) => {
-        if (prevOptions.includes(option)) {
-          return prevOptions.filter((prevOption) => prevOption !== option);
-        } else {
-          return [...prevOptions, option];
-        }
-      });
+      setSelectedOptions((prev) =>
+        prev.includes(option)
+          ? prev.filter((prevOption) => prevOption !== option)
+          : [...prev, option],
+      );
     } else {
-      setSelectedOptions((prevOptions) => {
-        if (prevOptions.includes(option)) {
-          return [];
-        } else {
-          return [option];
-        }
-      });
+      setSelectedOptions([option]);
     }
   };
+  const optionPrefixes = ["A", "B", "C", "D", "E", "F", "G"]; // Add more prefixes if you have more than four options
 
   return (
     <Box
-      borderRadius={10}
-      bgColor="#003294"
-      w="100%"
-      p={4}
-      color="white"
-      overflow="auto"
-      height="50vh"
-      position="relative"
+      bg="midBlue.500"
+      p={{ base: 4, sm: 6 }} // Responsive padding
+      rounded="lg"
+      shadow="xl"
+      width="full"
+      mx="auto" // Center the box
     >
-      <Stack alignItems="center" m={5}>
-        <Text textAlign={"center"} fontWeight="bold">
-          {question}
-        </Text>
-      </Stack>
-      <Stack spacing={4}>
+      <Text
+        fontSize={{ base: "lg", sm: "xl" }} // Responsive font size
+        fontWeight="bold"
+        color="white"
+        mb={4}
+      >
+        {question}
+      </Text>
+      <Text fontSize="md" color="white" mb={4}>
+        {multiple_answers ? "Select all that apply:" : "Select one:"}
+      </Text>
+      <Stack spacing={3}>
         {options.map((option, index) => (
           <Button
             key={index}
             onClick={() => toggleOption(option.option)}
-            variant={
-              selectedOptions.includes(option.option) ? "solid" : "outline"
+            variant="solid"
+            colorScheme="white"
+            bg={selectedOptions.includes(option.option) ? "white" : "blue.800"}
+            color={
+              selectedOptions.includes(option.option) ? "blue.800" : "white"
             }
-            colorScheme={
-              selectedOptions.includes(option.option) ? "blue" : "blue"
-            }
-            size="sm"
-            color="white"
+            justifyContent="flex-start" // Align text to the left
+            textAlign="left" // Align button text to the left
+            paddingLeft={4} // Give some padding to the left
+            height="100%"
+            _hover={{
+              bg: selectedOptions.includes(option.option)
+                ? "gray.100"
+                : "blue.600",
+            }}
+            _focus={{
+              boxShadow: "outline",
+            }}
+            w={{ base: "full", sm: "auto" }} // Full width on base, auto on sm and up
           >
-            {option.option}
+            {`${optionPrefixes[index]}. ${option.option}`}
           </Button>
         ))}
       </Stack>
-
-      <Flex justifyContent="center">
-        <Link onClick={checkAnswer} textDecoration="none" color="white" m={4}>
-          Click to reveal answer
-        </Link>
+      <Flex justifyContent="flex-end" mt={6}>
+        <Button
+          colorScheme="green"
+          onClick={checkAnswer}
+          rightIcon={<CheckIcon />}
+          width={{ base: "full", sm: "auto" }} // Full width on base, auto on sm and up
+          mt={{ base: 4, sm: 0 }} // Margin top on base, none on sm and up
+        >
+          Submit Answer
+        </Button>
       </Flex>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Answer Result</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {modalMessage === "Congratulations! You answered correctly!" ? (
-              <Box textAlign="center">
-                <Icon
-                  as={CheckCircleIcon}
-                  color="green.500"
-                  boxSize={20}
-                  mb={4}
-                />
-                <Text fontSize="xl" fontWeight="bold" mb={2}>
-                  Congratulations!
-                </Text>
-                <Text>You answered correctly!</Text>
-              </Box>
-            ) : (
-              <Box textAlign="center">
-                <Icon as={CloseIcon} color="red.500" boxSize={20} mb={4} />
-                <Text fontSize="xl" fontWeight="bold" mb={2}>
-                  Oops!
-                </Text>
-                <Text>Your answer is incorrect. Please try again.</Text>
-              </Box>
-            )}
-          </ModalBody>
-          <ModalFooter justifyContent={"center"}>
-            <Button colorScheme="blue" onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Box>
   );
 }

@@ -13,7 +13,10 @@ import { UpdateProfileType } from "~shared/types/form";
 
 import { useAuth } from "~features/auth";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL =
+  import.meta.env.VITE_NODE_ENV === "production"
+    ? import.meta.env.VITE_API_PROD_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL;
 
 export const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -429,6 +432,31 @@ export const getSavedNotesWithFilter = async (
         },
       },
     );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const canViewNote = async (
+  authorization: string,
+  userId: string,
+  noteId: string,
+) => {
+  try {
+    const response = await api.post(
+      "/api/v1/notes/allowed",
+      {
+        user_id: userId,
+        note_id: noteId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+      },
+    );
+
     return response.data;
   } catch (error) {
     console.log(error);

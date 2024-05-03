@@ -18,7 +18,6 @@ const PrivateRoute = lazy(() => import("~shared/routes/PrivateRoute"));
 const LandingPage = lazy(() => import("~pages/landing/Landing"));
 const About = lazy(() => import("~pages/about/About"));
 const LoginPage = lazy(() => import("~pages/auth/Login"));
-const MyInfoCallbackPage = lazy(() => import("~pages/auth/MyInfoCallback"));
 const SgIDCallbackPage = lazy(() => import("~pages/auth/SgIDCallback"));
 
 // Private Page
@@ -71,7 +70,6 @@ const App = () => {
               >
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/callback" element={<MyInfoCallbackPage />} />
                 <Route
                   path="/auth/sgid/callback"
                   element={<SgIDCallbackPage />}
@@ -84,7 +82,7 @@ const App = () => {
                 <Route path="/generator" element={<NotesGeneratorPage />} />
                 <Route path="/marketplace" element={<MarketplacePage />} />
                 <Route path="/subscribe" element={<SubscribePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/inventory" element={<ProfilePage />} />
                 <Route path="/profile/update" element={<UpdateProfilePage />} />
                 <Route path="/viewnotes/:noteId" element={<ViewNotesPage />} />
                 <Route path="/subscribe/success" element={<SuccessPage />} />

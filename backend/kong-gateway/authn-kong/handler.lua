@@ -16,7 +16,7 @@ local claim_spec = {
     exp = validators.is_not_expired()
 }
 
-
+local health_check_path = "/api/v1/healthz"
 
 -- Access phase handler
 function MyAuthHandler:access(conf)
@@ -24,6 +24,11 @@ function MyAuthHandler:access(conf)
     local publicPaths = conf.public_paths;
 
     kong.log.notice("The path is ", path)
+
+    -- Exit if the path is the health check path
+    if path == health_check_path then
+        return kong.response.exit(200, { message = "OK" })
+    end
 
     for i, pub_path in ipairs(publicPaths) do
         if pub_path == path then

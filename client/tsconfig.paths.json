@@ -3,7 +3,6 @@
     "baseUrl": "./",
     "paths": {
       "~components/*": ["./src/components/*"],
-      "~config": ["./src/config"],
       "~pages/*": ["./src/pages/*"],
       "~shared/*": ["./src/shared/*"],
       "~util": ["./src/shared/util"],

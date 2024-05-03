@@ -271,6 +271,8 @@ services:
 
   upload-notes:
     image: paolorafael/upload-notes:1.0
+    env_file:
+      - ../../backend/complex/upload-notes/.env
     depends_on:
       rabbitmq:
         condition: service_healthy

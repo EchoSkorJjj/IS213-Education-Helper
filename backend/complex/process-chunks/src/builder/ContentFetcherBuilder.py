@@ -14,7 +14,7 @@ class ContentFetcherBuilder:
         self._content_fetcher.RABBITMQ_USERNAME = os.getenv("RABBITMQ_USERNAME", "user")
         self._content_fetcher.RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD", "password")
         self._content_fetcher.QUEUE_NAME_1 = "my_queue_1"
-        self._content_fetcher.QUEUE_NAME_2 = "my_queue_2"
+        # self._content_fetcher.QUEUE_NAME_2 = "my_queue_2"
         self._content_fetcher.OPENAI_API_KEYS = os.getenv("OPENAI_API_KEYS").split(",")
         self._content_fetcher.CONTENT_SERVICE_ADDRESS = os.getenv('CONTENT_SERVICE_ADDRESS', 'localhost:50051')
         return self

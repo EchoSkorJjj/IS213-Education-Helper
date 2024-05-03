@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment
+  namespace: eduhelper
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+      - name: payment
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:payment
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50051
+        env:
+          - name: STRIPE_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: STRIPE_SECRET_KEY
+                name: eks-secrets
+          - name: STRIPE_PRICE_ID
+            valueFrom:
+              secretKeyRef:
+                key: STRIPE_PRICE_ID
+                name: eks-secrets
+          - name: STRIPE_WEBHOOK_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: STRIPE_WEBHOOK_SECRET
+                name: eks-secrets
+          - name: STRIPE_SUCCESS_URL
+            valueFrom:
+              secretKeyRef:
+                key: STRIPE_SUCCESS_URL
+                name: eks-secrets
+          - name: STRIPE_CANCEL_URL
+            valueFrom:
+              secretKeyRef:
+                key: STRIPE_CANCEL_URL
+                name: eks-secrets
+        livenessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+      restartPolicy: Always
+status: {}

@@ -1,5 +1,6 @@
 import grpc
 import pika
+import ssl
 import os
 import re
 import json
@@ -8,6 +9,8 @@ from itertools import cycle
 from dotenv import load_dotenv
 from openai import OpenAI
 import tiktoken
+import time
+
 # Ensure these imports point to the correct location in your project structure
 from content_pb2 import CreateTemporaryFlashcardRequest, CreateTemporaryMultipleChoiceQuestionRequest, MultipleChoiceQuestionOption
 from content_pb2_grpc import ContentStub
@@ -42,12 +45,23 @@ class ContentFetcher:
 
     def initialize_rabbitmq(self):
         """Initializes the RabbitMQ connection and channels."""
+
+        ssl_context = None
+        if os.getenv("ENVIRONMENT") == "production":
+            ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+            ssl_context.set_ciphers('ECDHE+AESGCM:!ECDSA')
+            
         credentials = pika.PlainCredentials(self.RABBITMQ_USERNAME, self.RABBITMQ_PASSWORD)
-        connection_parameters = pika.ConnectionParameters(host=self.RABBITMQ_SERVER, credentials=credentials)
+        connection_parameters = pika.ConnectionParameters(
+            host=self.RABBITMQ_SERVER, 
+            credentials=credentials,
+            ssl_options=pika.SSLOptions(context=ssl_context) if ssl_context else None
+        )
+
         self.connection = pika.BlockingConnection(connection_parameters)
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=self.QUEUE_NAME_1, durable=True)
-        self.channel.queue_declare(queue=self.QUEUE_NAME_2, durable=True)
+        # self.channel.queue_declare(queue=self.QUEUE_NAME_2, durable=True)
 
     def initialize_grpc(self):
         """Initializes the gRPC channel and stub for content service communication."""
@@ -66,21 +80,52 @@ class ContentFetcher:
         logging.info(f"Message data: {message_data}")
         generate_type = message_data.get("metadata", {}).get("generateType", "")
         note_id = message_data.get("fileId", "")
+        # get all "content" key from various jsons in messages_from_queue2 which is a list of json objects
+        additional_context = ", ".join([json.loads(message)["content"] for message in messages_from_queue2])
+        logging.info(f"Additional context: {additional_context}")
         strategy = PromptStrategyFactory.get_strategy(generate_type)
-        return strategy.construct_prompt(message_from_queue1, messages_from_queue2),generate_type,note_id
+        prompt,content = strategy.construct_prompt(message_from_queue1, additional_context)
+        return prompt,content,generate_type,note_id
 
     def match_messages_and_call_api(self, ch, method, properties, body):
         """Processes messages from queue1, matches them with messages from queue2, and calls the OpenAI API."""
         message_from_queue1 = body.decode()
+        message_data = json.loads(message_from_queue1)
+        if "fileId" not in message_data:
+            logging.error("No fileId found in message data. Skipping message.")
+            return
+        
         messages_from_queue2 = []
-        for method_frame, properties, body in self.channel.consume(queue=self.QUEUE_NAME_2, auto_ack=True, inactivity_timeout=1):
-            if method_frame:
-                messages_from_queue2.append(body.decode())
-            else:
-                break
+        consumer_tag = None
 
-        prompt,generate_type,note_id = self.construct_prompt(message_from_queue1, messages_from_queue2)
-        token_count = self.count_tokens_with_tiktoken(prompt)
+        retries = 5
+        while retries > 0:
+            try:
+                temporary_channel = self.connection.channel()
+                for method_frame, properties, body in temporary_channel.consume(queue=message_data["fileId"], auto_ack=True, inactivity_timeout=1):
+                    if method_frame:
+                        consumer_tag = method_frame.consumer_tag
+                        messages_from_queue2.append(body.decode())
+                    else:
+                        break
+                
+                if consumer_tag:
+                    temporary_channel.basic_cancel(consumer_tag)
+                
+                temporary_channel.close()
+                break
+            except Exception as e:
+                logging.error(f"Error consuming messages from temporary channel: {str(e)}")
+                retries -= 1
+                time.sleep(1)
+                continue
+        
+        if not messages_from_queue2:
+            logging.error(f"Unable to retrieve chunks from temporary queue {message_data['fileId']}: queue does not exist or does not have associated chunks")
+            return
+
+        prompt,content,generate_type,note_id = self.construct_prompt(message_from_queue1, messages_from_queue2)
+        token_count = self.count_tokens_with_tiktoken(prompt+content)
         logging.info(f"Estimated token count for prompt: {token_count}")
         if token_count > self.max_tokens:
             # Calculate 2% of the max token limit
@@ -89,8 +134,8 @@ class ContentFetcher:
             new_max_length = self.max_tokens - reduction_amount
             # Adjust the prompt to the new max length
             # Assuming prompt is a string, this will cut off the end to fit. Adjust as necessary for your data structure.
-            prompt = prompt[:new_max_length]
-            logging.info(f"Prompt adjusted to within token limit. New length: {len(prompt)}")
+            content = content[:new_max_length]
+            logging.info(f"Prompt adjusted to within token limit. New length: {len(content)+len(prompt)}")
 
 
 
@@ -101,7 +146,10 @@ class ContentFetcher:
         try:
             response = client.chat.completions.create(
                 model=self.model,
-                messages=[{"role": "system", "content": prompt}]
+                messages=[{"role": "system", "content": prompt},
+                          {"role": "user", "content": content}],
+                temperature=0.3,
+                top_p=0.8,
             )
         except Exception as e:
             logging.error(f"Error during OpenAI API call or response handling: {str(e)}")
@@ -147,6 +195,7 @@ if __name__ == "__main__":
     content_fetcher_builder = ContentFetcherBuilder()
     content_fetcher = (content_fetcher_builder
                        .setup_logging()
-                       .with_model("gpt-3.5-turbo-16k")
+                       .with_model("gpt-3.5-turbo")
                        .build())
     content_fetcher.start_consuming()
+    

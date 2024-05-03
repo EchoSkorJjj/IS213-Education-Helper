@@ -1,7 +1,29 @@
 import React, { useState } from "react";
-import { Box, Button, Checkbox, Flex, Spacer } from "@chakra-ui/react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  AddIcon,
+  CheckIcon,
+  DeleteIcon,
+  EditIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  IconButton,
+  Spacer,
+  Text,
+  Tooltip,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 
-import { MultipleChoiceQuestionOption } from "~shared/types/data";
+interface MultipleChoiceQuestionOption {
+  option: string;
+  is_correct: boolean;
+}
 
 interface PreMCQProps {
   id: string;
@@ -25,9 +47,22 @@ const PreMCQ: React.FC<PreMCQProps> = ({
   const [editOptions, setEditOptions] =
     useState<MultipleChoiceQuestionOption[]>(options);
   const [pressState, setPressState] = useState(false);
+  const toast = useToast();
+  const bg = useColorModeValue("gray.50", "gray.700");
 
-  const handleQuestionEdit = (content: string) => {
-    setEditQuestion(content);
+  const onDragEnd = (result: any) => {
+    if (!pressState) return; // Only allow drag and drop in edit mode
+
+    const { destination, source } = result;
+    if (!destination || destination.index === source.index) {
+      return; // dropped outside the list or in the same position
+    }
+
+    const items = Array.from(editOptions);
+    const [reorderedItem] = items.splice(source.index, 1);
+    items.splice(destination.index, 0, reorderedItem);
+
+    setEditOptions(items);
   };
 
   const handleOptionTextChange = (optionIndex: number, newText: string) => {
@@ -44,78 +79,204 @@ const PreMCQ: React.FC<PreMCQProps> = ({
     setEditOptions(updatedOptions);
   };
 
+  const addOption = () => {
+    setEditOptions([...editOptions, { option: "", is_correct: false }]);
+  };
+
+  const deleteOption = (optionIndex: number) => {
+    const updatedOptions = editOptions.filter(
+      (_, index) => index !== optionIndex,
+    );
+    setEditOptions(updatedOptions);
+  };
+
+  const validateMCQ = () => {
+    if (!editQuestion.trim()) {
+      toast({
+        title: "Error",
+        description: "The question cannot be empty or just spaces.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    }
+
+    const hasValidOptions = editOptions.every((opt) => opt.option.trim());
+    if (!hasValidOptions) {
+      toast({
+        title: "Error",
+        description: "All options must contain text.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    }
+
+    const hasCorrectAnswer = editOptions.some((opt) => opt.is_correct);
+    if (!hasCorrectAnswer) {
+      toast({
+        title: "Error",
+        description: "There must be at least one correct answer.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleOnClick = () => {
-    if (pressState == false) {
+    if (!pressState) {
       setPressState(true);
     } else {
-      setPressState(false);
-      onUpdate?.(id, { question: editQuestion, options: editOptions });
+      if (validateMCQ()) {
+        onUpdate?.(id, { question: editQuestion, options: editOptions });
+        setPressState(false);
+      }
     }
   };
 
   return (
-    <Box width="100%">
-      <Flex py={4}>
-        <Box p={4}>MCQ {id}</Box>
-        <Spacer />
-        <Button
-          colorScheme="gray"
-          variant={pressState ? "solid" : "ghost"}
-          onClick={handleOnClick}
-          mr={5}
-        >
-          {pressState ? "Confirm your changes" : "Edit this MCQ"}
-        </Button>
-        <Button colorScheme="red" variant="ghost" onClick={() => onDelete(id)}>
-          Delete this MCQ
-        </Button>
-      </Flex>
-
-      <Box bg="midBlue.500" w="100%" p={20} color="white" rounded="lg">
-        <Box
-          p={4}
-          mb={4}
-          contentEditable={pressState}
-          suppressContentEditableWarning
-          rounded="lg"
-          border="1px"
-          borderColor="gray.200"
-          onBlur={(event: any) => handleQuestionEdit(event.target.innerText)}
-        >
-          {editQuestion}
-        </Box>
-
-        {editOptions.map((opt, index) => (
-          <Flex key={index} align="center" mb={4}>
-            <Checkbox
-              isChecked={opt.is_correct}
-              isReadOnly={!pressState}
-              onChange={(event: any) =>
-                handleCorrectnessToggle(index, event.target.checked)
-              }
-              p={4}
-              rounded="lg"
-              flex="1"
-              border="1px"
+    <DragDropContext onDragEnd={pressState ? onDragEnd : () => {}}>
+      <Box width="60vw" p={4} bg={bg} mb={4} boxShadow="md" rounded="lg">
+        <Flex align="center">
+          <Text fontSize="lg" fontWeight="bold" flex="1">
+            MCQ {id}
+          </Text>
+          <Spacer />
+          <Tooltip label={pressState ? "Confirm Changes" : "Edit MCQ"}>
+            <IconButton
+              aria-label="Edit MCQ"
+              icon={pressState ? <CheckIcon /> : <EditIcon />}
+              onClick={handleOnClick}
+              colorScheme={pressState ? "green" : "blue"}
+              mr={2}
             />
-            <Box
-              p={4}
-              ml={3}
-              flex="100"
-              rounded="lg"
-              border="1px"
-              contentEditable={pressState}
-              suppressContentEditableWarning
-              onBlur={(event: any) =>
-                handleOptionTextChange(index, event.target.innerText)
-              }
-            >
-              {opt.option}
-            </Box>
-          </Flex>
-        ))}
+          </Tooltip>
+          <Tooltip label="Delete MCQ">
+            <IconButton
+              aria-label="Delete MCQ"
+              icon={<DeleteIcon />}
+              onClick={() => onDelete(id)}
+              colorScheme="red"
+            />
+          </Tooltip>
+        </Flex>
+        <Box mt={4}>
+          <Text mb={2} fontSize="md" fontWeight="semibold" color="blue.600">
+            Question:
+          </Text>
+          <Box
+            p={3}
+            bg="white"
+            rounded="md"
+            border="1px"
+            borderColor="gray.200"
+            contentEditable={pressState}
+            suppressContentEditableWarning
+            onBlur={(event: React.FocusEvent<HTMLDivElement>) =>
+              setEditQuestion(event.target.innerText)
+            }
+            style={{
+              minHeight: "60px",
+              cursor: pressState ? "text" : "default",
+            }}
+          >
+            {editQuestion}
+          </Box>
+          <Droppable droppableId="options" isDropDisabled={!pressState}>
+            {(provided) => (
+              <Box {...provided.droppableProps} ref={provided.innerRef}>
+                {editOptions.map((opt, index) => (
+                  <Draggable
+                    key={index}
+                    draggableId={index.toString()}
+                    index={index}
+                    isDragDisabled={!pressState}
+                  >
+                    {(provided) => (
+                      <Flex
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        align="center"
+                        mt={4}
+                      >
+                        {pressState && (
+                          <Box {...provided.dragHandleProps} mr={2}>
+                            <HamburgerIcon cursor="grab" />
+                          </Box>
+                        )}
+                        <Checkbox
+                          isChecked={opt.is_correct}
+                          onChange={(e) =>
+                            handleCorrectnessToggle(index, e.target.checked)
+                          }
+                          isDisabled={!pressState}
+                          size="lg"
+                          colorScheme="green"
+                          pr={5}
+                          w="0%"
+                        />
+                        <Box
+                          p={3}
+                          ml={3}
+                          bg="white"
+                          flex="1"
+                          rounded="md"
+                          border="1px"
+                          borderColor="gray.300"
+                          contentEditable={pressState}
+                          suppressContentEditableWarning
+                          onBlur={(event: any) =>
+                            handleOptionTextChange(
+                              index,
+                              event.target.innerText,
+                            )
+                          }
+                          style={{
+                            minHeight: "40px",
+                            cursor: pressState ? "text" : "default",
+                          }}
+                        >
+                          {opt.option}
+                        </Box>
+                        {pressState && (
+                          <IconButton
+                            aria-label="Delete Option"
+                            icon={<DeleteIcon />}
+                            onClick={() => deleteOption(index)}
+                            colorScheme="red"
+                            size="sm"
+                            ml={2}
+                          />
+                        )}
+                      </Flex>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </Box>
+            )}
+          </Droppable>
+          {pressState && (
+            <Flex justifyContent="flex-end" mt={2}>
+              <Button
+                rightIcon={<AddIcon />}
+                colorScheme="teal"
+                variant="solid"
+                onClick={addOption}
+              >
+                Add Option
+              </Button>
+            </Flex>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </DragDropContext>
   );
 };
 

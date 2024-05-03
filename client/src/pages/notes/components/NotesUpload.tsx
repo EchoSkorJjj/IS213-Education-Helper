@@ -1,5 +1,13 @@
 import { LockIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, HStack, Stack, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Stack,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { Attachment } from "@opengovsg/design-system-react";
 
 interface NotesUploadProps {
@@ -48,7 +56,7 @@ const NotesUpload = ({
       duration: 3000,
       isClosable: true,
     });
-  }
+  };
 
   const handleFileValidation = (file: File) => {
     console.log("Validating file:", file.name);
@@ -73,9 +81,11 @@ const NotesUpload = ({
     }
   };
 
-  // const onDelete = () => {
-  //   handleDelete(); // Call the provided handleDelete method to remove the selected file
-  // };
+  /*
+   * const onDelete = () => {
+   *   handleDelete(); // Call the provided handleDelete method to remove the selected file
+   * };
+   */
 
   const generateFlashcard = generateType === "flashcard";
 

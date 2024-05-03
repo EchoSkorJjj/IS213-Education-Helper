@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: process-chunks
+  namespace: eduhelper
+spec:
+  selector:
+    app: process-chunks
+  ports:
+  - protocol: TCP
+    port: 50051  
+    targetPort: 50051

@@ -3,3 +3,10 @@
 node_modules
 **/log.txt
 **/user-storage.log
+# Ignore Terraform state files and directories
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform*
+# Ignore other generated files or directories
+**/secret.yaml

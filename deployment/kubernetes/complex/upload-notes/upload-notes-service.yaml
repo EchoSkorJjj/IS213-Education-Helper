@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: upload-notes
+  namespace: eduhelper
+spec:
+  selector:
+    app: upload-notes
+  ports:
+  - protocol: TCP
+    port: 8080 
+    targetPort: 8080

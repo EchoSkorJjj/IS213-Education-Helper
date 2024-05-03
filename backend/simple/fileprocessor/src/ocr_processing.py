@@ -7,6 +7,14 @@ import tempfile
 import subprocess
 import fitz
 from utilities import detect_locale
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+import nltk
+
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+lemmatizer = WordNetLemmatizer()
+stemmer = PorterStemmer()
 
 # Setup logging based on the environment
 environment = os.getenv("ENVIRONMENT_MODE", "development")
@@ -117,14 +125,39 @@ def ocr_pdf(input_stream):
         return extract_text_from_pdf(tmp_output.name), tmp_output.name
 
 @log_time
+def process_text(text, process_flag=True):
+    """
+    Process the text by lemmatizing and stemming if process_flag is True.
+
+    Args:
+        text (str): Text content to process.
+        process_flag (bool): Flag to control whether to apply text processing.
+
+    Returns:
+        str: The original or processed text depending on the process_flag.
+    """
+    if process_flag:
+        # Lemmatization
+        words = text.split()
+        lemmatized_text = ' '.join([lemmatizer.lemmatize(word) for word in words])
+
+        # Stemming
+        stemmed_text = ' '.join([stemmer.stem(word) for word in lemmatized_text.split()])
+        return stemmed_text
+    else:
+        return text
+
+@log_time
 def extract_text_from_pdf(pdf_path):
     texts = []
     try:
         doc = fitz.open(pdf_path)  # Open the PDF with fitz
         for page_num in range(len(doc)):
             page = doc.load_page(page_num)  # Load the current page
-            text = page.get_text()  # Extract text from the current page
-            texts.append({"pageId": page_num + 1, "content": text})
+            raw_text = page.get_text() 
+            processed_text = process_text(raw_text, True)  
+            texts.append({"pageId": page_num + 1, "content": processed_text,})
+ 
     finally:
         doc.close()  # Make sure to close the document to free resources
     return texts

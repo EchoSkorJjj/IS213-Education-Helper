@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kong-gateway
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/EchoSkorJjj/IS213-Education-Helper-Kube.git'
+    path: kubernetes/kong-gateway
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: eduhelper
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

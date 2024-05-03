@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contents
+  namespace: eduhelper
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: contents
+  template:
+    metadata:
+      labels:
+        app: contents
+    spec:
+      containers:
+      - name: contents
+        image: 397789365835.dkr.ecr.ap-southeast-1.amazonaws.com/esd-eduhelper-eks-ecr-production:contents
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50051
+        env:
+          - name: GRPC_PORT
+            value: "50051"
+          - name: GRPC_MAX_WORKERS
+            value: "2"
+          - name: ENVIRONMENT_MODE
+            value: "development"
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                key: DB_NAME
+                name: eks-secrets
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                key: DB_HOST
+                name: eks-secrets
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: DB_USERNAME
+                name: eks-secrets
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: DB_PASSWORD
+                name: eks-secrets
+          - name: CACHE_SSL
+            value: "true"
+          - name: CACHE_HOST
+            valueFrom:
+              secretKeyRef:
+                key: CACHE_HOST
+                name: eks-secrets
+          - name: CACHE_PORT
+            value: "6379"
+          - name: CACHE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: CACHE_USERNAME
+                name: eks-secrets
+          - name: CACHE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: CACHE_PASSWORD
+                name: eks-secrets
+        livenessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:50051"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+      restartPolicy: Always
+status: {}

@@ -97,7 +97,10 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
             db = Database()
             limit, offset, page, user_id, notesTitle = request.limit, request.offset, request.page, request.userId, request.notesTitle
             if offset == 0 and page == 0:
-                raise ValueError('Offset and page cannot be 0 at the same time')
+                logger.error('Offset and Page are 0 at the same time. Reverting to default offset = 0 and page = 1')
+                offset = 0
+                page = 1
+                # raise ValueError('Offset and page cannot be 0 at the same time')
             if offset == 0:
                 offset = (page - 1) * limit
             
@@ -164,19 +167,20 @@ class NoteServiceServicer(notes_pb2_grpc.NoteServiceServicer):
         try:
             db = Database()
             note_preview = request.notePreview
-            note = db.get_note(note_preview.fileId)
+            note = db.get_note_metadata(note_preview.fileId)
             if not note:
                 raise ValueError(f'Note with ID {note_preview.fileId} not found')
             
             note_to_update = {
                 'id': note_preview.fileId, # Assume file itself cannot change
-                'user_id': note.user_id,
-                'file_name': note_preview.fileName if note_preview.fileName else note.file_name,
-                'size_in_bytes': note.size_in_bytes, # Assume file itself cannot change
-                'num_pages': note.num_pages, # Assume file itself cannot change
-                'title': note_preview.title if note_preview.title else note.title,
-                'topic': note_preview.topic if note_preview.topic else note.topic,
-                'generate_type': note.generate_type
+                'user_id': note["user_id"],
+                'file_name': note_preview.fileName if note_preview.fileName else note["file_name"],
+                'size_in_bytes': note["size_in_bytes"], # Assume file itself cannot change
+                'num_pages': note["num_pages"], # Assume file itself cannot change
+                'title': note_preview.title if note_preview.title else note["title"],
+                'topic': note_preview.topic if note_preview.topic else note["topic"],
+                'generate_type': note["generate_type"],
+                'ready_to_view': request.readyToView
             }
 
             db.update_note(note_to_update)

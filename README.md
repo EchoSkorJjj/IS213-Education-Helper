@@ -1,5 +1,10 @@
-## 🏢 EduHelper
-Democratising Education For All, One Student at a Time
+# 🏢 EduHelper
+Democratising education for all, one student at a time.
+
+## 🏆 2024 VMWare Tanzu Award Winner 🏆 
+We're immensely grateful to Professor Alan Megargel and Instructor Swetha Gottipati for their guidance and expertise during the development of EduHelper. Their strategic insights and focus on user-centric design have been pivotal in shaping the project.
+
+We are also extremely grateful to Professor Rafael J. Barros for his guidance and support throughout the semester, especially during the periods where we pushed our projects for the Tanzu award. His advice and insights played a critical role in allowing us to showcase EduHelper in the best way possible.
 
 ## 📚 Table of Contents
 1. [Quick Start](#quick-start)
@@ -8,8 +13,6 @@ Democratising Education For All, One Student at a Time
 4. [Frameworks and Databases Utilised](#frameworks-and-databases-utilised)
 5. [Makefile](#makefile)
 6. [Contributors](#contributors)
-
-We're immensely grateful to Professor Alan Megargel and Professor Swetha Gottipati for their guidance and expertise during the development of EduHelper. Their strategic insights and focus on user-centric design have been pivotal in shaping the project. 😊
 
 ## Quick Start
 ### Prerequisites
@@ -37,7 +40,7 @@ $ make down-clean
 Do note that this will remove all containers associated with the project, orphaned containers, and Docker volumes. Do not run this command if you would like to keep your volumes.
 
 ### Instructions (Docker Compose)
-These instructions are if you do not have `Make` on your system, and do not want to install it.
+Follow these instructions if you do not have `Make` on your system, and do not want to install it.
 
 1. To start the docker deployment, run the following command:
 ```bash
@@ -64,6 +67,13 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 ## Technical Overview Diagram
 <img width="1508" alt="Architecture" src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/69960711/5711ba9a-715a-4e6d-9e44-c746c30a6552">
 
+## Solution View
+![ESD Education Helper-Cloud overview drawio](https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/87757354/7072b0e0-3176-4184-9fb1-b91ce277cf85)
+![image](https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/87757354/688643a7-c940-4b81-a862-d8402081e545)
+
+## Development View
+![image](https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/69960711/1d374f50-b8bf-413c-965a-04f9c3af2828)
+
 ## Frameworks and Databases Utilised
 
 <p align="center"><strong>Services and UI</strong></p>
@@ -75,6 +85,8 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 <a href="https://www.lua.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Lua-Logo.svg/1200px-Lua-Logo.svg.png" alt="Lua" height="40"/></a>&nbsp;&nbsp;
 <a href="https://www.ruby-lang.org/en/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Ruby_logo.svg/1200px-Ruby_logo.svg.png" alt="Ruby" height="40"/></a>&nbsp;&nbsp;
 <a href="https://www.python.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1024px-Python-logo-notext.svg.png" alt="Python" height="40"/></a>&nbsp;&nbsp;
+<br>
+<i>Golang · C++ · Spring Boot · Typescript · Lua · Ruby · Python</i>
 </p>
 <br>
 <p align="center"><strong>API Gateway</strong></p>
@@ -85,21 +97,25 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 </p>
 <br>  
 
-<p align="center"><strong>Databases</strong></p>  
+<p align="center"><strong>Storage Solutions</strong></p>  
 <p align="center">
 <a href="https://www.postgresql.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PostgreSQL" height="50"/></a>&nbsp;&nbsp;
 <a href="https://redis.com/"><img src="https://redis.com/wp-content/themes/wpx/assets/images/logo-redis.svg?auto=webp&quality=85,75&width=120" alt="Redis" width="88"/></a>&nbsp;&nbsp;
 <a href="https://aws.amazon.com/s3/"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/AmazonWebservices_Logo.svg" alt="S3" height="40"/></a>&nbsp;&nbsp;
-<a href="https://www.mysql.com/"><img src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="MySQL" height="50"/></a>
-</p>
-
-<p align="center"><strong>AMQP</strong></p>
-<p align="center">
-<a href="https://www.rabbitmq.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/RabbitMQ_logo.svg/2560px-RabbitMQ_logo.svg.png" alt="RabbitMQ" width="100"/></a>
+<br>
+<i>postgreSQL · Redis · S3</i>
 </p>
 <br> 
 
-<p align="center"><strong>Communication</strong></p>
+<p align="center"><strong>Message Brokers</strong></p>
+<p align="center">
+<a href="https://www.rabbitmq.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/RabbitMQ_logo.svg/2560px-RabbitMQ_logo.svg.png" alt="RabbitMQ" width="100"/></a>
+<br>
+<i>rabbitMQ</i>
+</p>
+<br> 
+
+<p align="center"><strong>Inter-service Communications</strong></p>
 <p align="center">
 <a href="https://grpc.io/"><img src="https://grpc.io/img/logos/grpc-icon-color.png" alt="gRPC" height="60"/></a>&nbsp;&nbsp;
 <a href="https://restfulapi.net/"><img src="https://keenethics.com/wp-content/uploads/2022/01/rest-api-1.svg" alt="REST API" height="40"/></a>
@@ -108,10 +124,13 @@ EduHelper helps you learn about anything you want, at your own pace. We believe 
 <p align="center"><strong>Other Technologies</strong></p>
 <p align="center">
 <a href="https://stripe.com/en-gb-sg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/1280px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe Payment API" height="40"/></a>&nbsp;&nbsp;
-<a href="https://www.docker.com/"><img src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" alt="Docker" height="30"/></a>
+<a href="https://www.docker.com/"><img src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" alt="Docker" height="30"/></a>&nbsp;&nbsp;
+<a href="https://kubernetes.io/"><img src="https://gcloud.devoteam.com/wp-content/uploads/sites/32/2021/10/kubernetes-logo-1-1.svg" alt="Kubernetes" height="44"/></a>&nbsp;&nbsp;
+<a href="https://argoproj.github.io/cd/"><img src="https://www.opsmx.com/wp-content/uploads/2022/07/Argo-1-e1630327305635-1.png" alt="ArgoCD" height="50"/></a>&nbsp;&nbsp;
+<a href="https://www.terraform.io/"><img src="https://logodix.com/logo/1686023.png" alt="Terraform" height="50"/></a>&nbsp;&nbsp;
 </p>
 <p align="center">
-<i>Docker Compose · Docker Hub Image Registry</i>
+<i>Docker Compose · Docker Hub · Kubernetes · argoCD · Terraform</i>
 </p>
 <br>  
 
@@ -121,7 +140,8 @@ For instructions on installing `Make` on Windows and Ubuntu, refer to [`/Makefil
 
 ## Contributors
 
-G9 Team 8
+**G9 Team 8**
+
 <div align="center">
     <table>
         <tr>
@@ -132,12 +152,13 @@ G9 Team 8
             <th>Yue Zheng Ting</th>
         </tr>
         <tr>
-            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/141646738/59ec50c5-ed73-448a-b29c-b8ed81f296ff" alt="NeilSharma" width="100" height="100" style="display:block; margin:auto;"></td>
-            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/141646738/d43a0cd2-dabb-4d54-a28a-ac890d403fce" alt="SongJihoon" width="100" height="100" style="display:block; margin:auto;"></td>
-            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/141646738/3ab1643f-9e29-4524-affb-82c4e4594c87" alt="LouisTeo" width="100" height="100" style="display:block; margin:auto;"></td>
-            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/141646738/6eebd8ca-fe9c-4847-b51c-543a65d400bc" alt="ThaddeausLow" width="100" height="100" style="display:block; margin:auto;"></td>
-            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/69960711/b83709b1-339f-43f8-bdeb-0f59f6d6673d" alt="YueZhengTing" width="100" height="100" style="display:block; margin:auto;"></td>
+            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/141646738/59ec50c5-ed73-448a-b29c-b8ed81f296ff" alt="NeilSharma" width="120" height="120" style="display:block; margin:0 auto;"></td>
+            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/87757354/c31e8b69-4aab-403a-95a6-7c568d1e8468" alt="SongJihoon" width="120" height="120" style="display:block; margin: 0 auto;"></td>
+            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/141646738/3ab1643f-9e29-4524-affb-82c4e4594c87" alt="LouisTeo" width="120" height="120" style="display:block; margin: 0 auto;"></td>
+            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/141646738/6eebd8ca-fe9c-4847-b51c-543a65d400bc" alt="ThaddeausLow" width="120" height="120" style="display:block; margin: 0 auto;"></td>
+            <td><img src="https://github.com/EchoSkorJjj/IS213-Education-Helper/assets/87757354/27cc57c0-406a-4061-a5d6-3864a0b2387c" alt="YueZhengTing" width="120" height="120" style="display:block; margin: 0 auto;"></td>
         </tr>
     </table>
 </div>
 
+** Note: The keys were uploaded for submission purposes. The keys have been revoked, and replaced with placeholder values.

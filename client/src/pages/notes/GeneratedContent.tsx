@@ -36,6 +36,7 @@ import {
   getTemporaryContents,
   getTopics,
   updateTemporaryContent,
+  canViewNote,
 } from "~features/api";
 import { useAuth } from "~features/auth";
 
@@ -49,7 +50,7 @@ const GeneratedContent: React.FC = () => {
   const toast = useToast();
   const { noteId } = useParams<{ noteId: string }>();
   const [topics, setTopics] = useState<Topic[]>([]);
-  const { authorization } = useAuth();
+  const { authorization, user } = useAuth();
 
   const [GPTContent, setFlashcards] = useState<FlashcardType[]>([]);
   const [MCQs, setMCQs] = useState<MultipleChoiceQuestion[]>([]); // Initialize state for MCQs
@@ -62,6 +63,8 @@ const GeneratedContent: React.FC = () => {
   const intervalIdRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const filename = localStorage.getItem("filename") || "No file uploaded";
   const [isLoading, setIsLoading] = useState(true);
+
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const pulseAnimation = keyframes`
   0% { opacity: 0.5; }
   50% { opacity: 1; }
@@ -69,7 +72,39 @@ const GeneratedContent: React.FC = () => {
 `;
 
   useEffect(() => {
+    const checkAuthorization = async () => {
+      try {
+        const userCanView = await userCanViewNote(noteId, authorization);
+        if (!userCanView) {
+          toast({
+            title: "Unauthorized",
+            description: "You do not have access to this note.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          navigate("/generator"); // Redirect to an unauthorized page or any other route
+        } else {
+          setIsAuthorized(true);
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch user notes.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        navigate("/generator"); // Redirect or handle errors
+      }
+    };
+
+    checkAuthorization();
+  }, [user?.user_id, noteId, navigate, toast]);
+
+  useEffect(() => {
     // Call once to fetch immediately
+
     const fetchTopics = async () => {
       const fetchedTopics = await getTopics();
       if (!fetchedTopics || fetchedTopics.length === 0) {
@@ -99,7 +134,19 @@ const GeneratedContent: React.FC = () => {
 
     return () =>
       clearInterval(intervalIdRef.current as ReturnType<typeof setInterval>); // Clean up on component unmount
-  }, [noteId, authorization]);
+  }, [noteId, authorization, isAuthorized]);
+
+  const userCanViewNote = async (
+    noteId: string | undefined,
+    authorization: string | null,
+  ) => {
+    if (!noteId || !authorization || !user) {
+      return;
+    }
+
+    const response = await canViewNote(authorization, user.user_id, noteId);
+    return response.can_view;
+  };
 
   const handleGetTemporaryContents = async (
     noteId: string | undefined,
@@ -159,6 +206,32 @@ const GeneratedContent: React.FC = () => {
   ) => {
     if (!noteId || !authorization || !contentId) {
       return;
+    }
+    if (type === "flashcard") {
+      // if gtpcontent.length is 1 do not let it delete anymore
+      if (GPTContent.length === 1) {
+        // create toast
+        toast({
+          title: "Cannot delete last flashcard",
+          status: "error",
+          position: "top",
+          duration: 3000,
+        });
+        return;
+      }
+    }
+    if (type === "mcq") {
+      // if gtpcontent.length is 1 do not let it delete anymore
+      if (GPTContent.length === 1) {
+        // create toast
+        toast({
+          title: "Cannot delete last MCQ",
+          status: "error",
+          position: "top",
+          duration: 3000,
+        });
+        return;
+      }
     }
     const response = await deleteTemporaryContent(
       noteId,
@@ -323,6 +396,38 @@ const GeneratedContent: React.FC = () => {
     if (!noteId || !authorization) {
       return;
     }
+    if (title.trim() === "") {
+      toast({
+        title: "Error",
+        description: "You must enter a title before adding new content.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    // if there is no flash card or no mcq throw error
+    if (GPTContent.length === 0 && MCQs.length === 0) {
+      toast({
+        title: "Error",
+        description: "You must have at least one content.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!selectedTopic) {
+      toast({
+        title: "Error",
+        description: "You must select a topic before adding new content.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
 
     const response = await commitTemporaryContents(
       noteId,
@@ -399,7 +504,8 @@ const GeneratedContent: React.FC = () => {
               border="1px"
               borderColor="gray.200"
             >
-              {title}
+              {/* title if its not empty string other wise "placeholder" */}
+              {title ? title : "Enter a title"}
             </Box>
           </Box>
 
@@ -531,7 +637,7 @@ const GeneratedContent: React.FC = () => {
         )}
         <Button
           m={10}
-          bg="blue"
+          bg="darkBlue.500"
           color="white"
           width="100%"
           size="lg"
@@ -545,7 +651,7 @@ const GeneratedContent: React.FC = () => {
       <Container maxW="6xl" mb={10}>
         <Flex justifyContent="flex-end">
           <Button
-            bg="blue"
+            bg="darkBlue.500"
             color="white"
             onClick={handleCommitTemporaryContents}
             isDisabled={isLoading}

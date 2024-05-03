@@ -27,3 +27,4 @@ function RawStringAdapterHandler:access(config)
 end
 
 return RawStringAdapterHandler
+
